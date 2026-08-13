@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEDIHEAL PDP QA TC 뷰어 (38건)</title>
+<style>
+  :root{
+    --bg:#f5f6f8; --panel:#ffffff; --text:#1f2430; --muted:#6b7280;
+    --border:#e2e5ea; --accent:#2f7d5c; --accent2:#1d5f45;
+    --p1:#e0503a; --p2:#e0a03a; --p3:#5b8fd6;
+    --pass:#2f9e5c; --fail:#e0503a; --blocked:#e0a03a; --na:#9aa0ab; --none:#c8cbd1;
+    --headbg:#eef1f4;
+  }
+  html[data-theme="dark"]{
+    --bg:#14161a; --panel:#1d2026; --text:#e7e9ee; --muted:#9aa0ab;
+    --border:#2c3038; --accent:#59c290; --accent2:#3fae7a;
+    --headbg:#22262d;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--bg);color:var(--text);}
+  header{position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  header h1{font-size:18px;margin:0;}
+  header .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+  .header-actions{display:flex;gap:8px;flex-wrap:wrap;}
+  button{cursor:pointer;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:8px;padding:8px 12px;font-size:13px;}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+  button.primary:hover{background:var(--accent2);}
+  button:hover{filter:brightness(0.97);}
+  .container{padding:16px 20px 60px;max-width:1600px;margin:0 auto;}
+
+  .kpis{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0;}
+  .kpi{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px 16px;}
+  .kpi .num{font-size:22px;font-weight:700;}
+  .kpi .label{font-size:12px;color:var(--muted);}
+  .kpi.p1 .num{color:var(--p1);} .kpi.p2 .num{color:var(--p2);} .kpi.p3 .num{color:var(--p3);}
+
+  .stats-wrap{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:16px;overflow-x:auto;}
+  .stats-wrap h3{margin:0 0 10px;font-size:14px;}
+  table.stats{width:100%;border-collapse:collapse;font-size:12px;}
+  table.stats th,table.stats td{border:1px solid var(--border);padding:6px 8px;text-align:center;white-space:nowrap;}
+  table.stats th{background:var(--headbg);}
+  table.stats td.modname{text-align:left;}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+  .tab-btn{border-radius:20px;font-size:12px;padding:6px 12px;}
+  .tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+  .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+  .toolbar .count{font-size:13px;color:var(--muted);}
+
+  .table-wrap{background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+  table.tc{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px;}
+  table.tc th,table.tc td{border:1px solid var(--border);padding:6px 7px;vertical-align:top;word-break:break-word;overflow-wrap:break-word;white-space:pre-wrap;}
+  table.tc th{background:var(--headbg);position:sticky;top:57px;z-index:10;font-size:11.5px;}
+  table.tc td.center{text-align:center;}
+  .badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:11px;color:#fff;}
+  .badge.P1{background:var(--p1);} .badge.P2{background:var(--p2);} .badge.P3{background:var(--p3);}
+  select.result-select{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+  select.result-select[data-val="Pass"]{color:var(--pass);font-weight:600;}
+  select.result-select[data-val="Fail"]{color:var(--fail);font-weight:600;}
+  select.result-select[data-val="Blocked"]{color:var(--blocked);font-weight:600;}
+  input.free-input{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+
+  .col-id{width:5%} .col-cat{width:4%} .col-mod{width:7%} .col-sub{width:6%}
+  .col-platform{width:3%} .col-type{width:3%} .col-title{width:16%} .col-ref{width:3%}
+  .col-priority{width:3%} .col-precond{width:9%} .col-proc{width:14%} .col-expected{width:9%}
+  .col-result{width:5%} .col-assignee{width:4%} .col-issue{width:5%} .col-issuelink{width:4%}
+
+  .footnote{font-size:11.5px;color:var(--muted);margin-top:14px;line-height:1.6;}
+
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:100;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--panel);border-radius:12px;max-width:720px;width:92%;max-height:80vh;overflow-y:auto;padding:20px;}
+  .modal h2{margin-top:0;font-size:16px;}
+  .modal table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px;}
+  .modal table th,.modal table td{border:1px solid var(--border);padding:6px 8px;text-align:left;}
+  .modal table th{background:var(--headbg);}
+  .modal-close{float:right;}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>🧪 MEDIHEAL Essential Mask Sheet 10ea Set PDP QA TC 뷰어</h1>
+    <div class="sub">TC_Skill v0.5 기준 · 총 38건 · 근거: 실제 화면 직접 캡처(prdtNo=GA240824996, dataSource=best_sellers)</div>
+  </div>
+  <div class="header-actions">
+    <button id="btnAccMatrix">테스트 계정 매트릭스</button>
+    <button id="btnFlowMap">User Flow Map</button>
+    <button id="btnCsv" class="primary">CSV 다운로드</button>
+    <button id="btnJsonSave" class="primary">JSON 저장</button>
+    <button id="btnJsonLoad">JSON 불러오기</button>
+    <input type="file" id="jsonFileInput" accept=".json" style="display:none;">
+    <button id="btnTheme">🌙 다크모드</button>
+  </div>
+</header>
+<div id="jsonMsg" style="display:none;position:fixed;top:70px;right:20px;z-index:200;padding:10px 16px;border-radius:8px;font-size:13px;color:#fff;"></div>
+
+<div class="container">
+
+  <div class="stats-wrap">
+    <h3>모듈별 실행현황 통계</h3>
+    <div style="overflow-x:auto;">
+    <table class="stats" id="statsTable">
+      <thead>
+        <tr><th>모듈</th><th>전체</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>Fail율</th></tr>
+      </thead>
+      <tbody id="statsBody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis">
+    <div class="kpi"><div class="num" id="kpiTotal">0</div><div class="label">전체 TC</div></div>
+    <div class="kpi p1"><div class="num" id="kpiP1">0</div><div class="label">P1</div></div>
+    <div class="kpi p2"><div class="num" id="kpiP2">0</div><div class="label">P2</div></div>
+    <div class="kpi p3"><div class="num" id="kpiP3">0</div><div class="label">P3</div></div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="toolbar">
+    <div class="count" id="filteredCount"></div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="tc">
+      <thead>
+        <tr>
+          <th class="col-id">TC ID</th>
+          <th class="col-cat">대분류</th>
+          <th class="col-mod">중분류</th>
+          <th class="col-sub">소분류</th>
+          <th class="col-platform">플랫폼</th>
+          <th class="col-type">유형</th>
+          <th class="col-title">테스트 항목</th>
+          <th class="col-ref">기준문서</th>
+          <th class="col-priority">우선순위</th>
+          <th class="col-precond">사전조건</th>
+          <th class="col-proc">테스트 수행 절차</th>
+          <th class="col-expected">기대 결과</th>
+          <th class="col-result">실행결과</th>
+          <th class="col-assignee">담당자</th>
+          <th class="col-issue">이슈내용</th>
+          <th class="col-issuelink">이슈링크</th>
+        </tr>
+      </thead>
+      <tbody id="tcBody"></tbody>
+    </table>
+  </div>
+
+  <div class="footnote">
+    ※ 13~16번 컬럼(실행결과/담당자/이슈내용/이슈링크)은 브라우저 메모리에만 저장됩니다. 새로고침 시 초기화되며, <b>CSV 다운로드(읽기전용 백업)</b> 또는 <b>JSON 저장(재불러오기 가능한 작업파일)</b>으로 백업할 수 있습니다.<br>
+    ※ 기준문서 없이 해당 상품 상세페이지(prdtNo=GA240824996)를 직접 캡처한 근거로 작성되었습니다. 재고/구성품 수량 등 백엔드 데이터 의존 항목은 실행 시점의 실제 값으로 재검증이 필요합니다.
+  </div>
+</div>
+
+<div class="modal-overlay" id="accModalOverlay">
+  <div class="modal">
+    <button class="modal-close" data-close="acc">닫기</button>
+    <h2>테스트 계정 매트릭스</h2>
+    <table>
+      <thead><tr><th>계정</th><th>정의</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td>Acc_Guest</td><td>비회원, Shipping Location=Global, Currency=USD</td><td>Sign In/Sign Up 모달 확인(로그인 전 상태 존재)</td></tr>
+        <tr><td>Acc_Member</td><td>로그인 회원(일반)</td><td>Track Orders/My Wishlist 메뉴가 회원 전제 기능으로 노출</td></tr>
+        <tr><td>Acc_Member_ShipCountry</td><td>특정 배송가능국(예: Japan) 선택 회원</td><td>Shipping Location 팝업(국가별 배송정책 상이)</td></tr>
+        <tr><td>Acc_BlockedRegion</td><td>배송 불가 지역으로 감지된 사용자</td><td>"does not ship to the U.S." / "not possible to deliver" 문구 확인</td></tr>
+        <tr><td>Acc_Member_Grade</td><td>멤버십 등급별 회원(BABY OLIVE 등)</td><td>"higher tier, bigger discount" 등급 쿠폰 안내문 확인</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal-overlay" id="flowModalOverlay">
+  <div class="modal">
+    <button class="modal-close" data-close="flow">닫기</button>
+    <h2>User Flow Map (회원유형별 5단계)</h2>
+    <table>
+      <thead><tr><th>단계</th><th>Acc_Guest (비회원)</th><th>Acc_Member (회원)</th></tr></thead>
+      <tbody>
+        <tr><td>1. 유입</td><td>메인 접속 → 배송지 자동감지 팝업 확인</td><td>메인 접속(로그인 상태 유지) → 위시리스트/최근본상품 노출</td></tr>
+        <tr><td>2. 탐색/검색</td><td>PLP/검색 필터·정렬 자유 이용</td><td>동일 + 찜 아이콘 클릭 시 즉시 위시리스트 반영</td></tr>
+        <tr><td>3. 상품상세</td><td>옵션 선택, 담기/찜은 가능하나 쿠폰 다운로드 시 로그인 유도</td><td>쿠폰 다운로드/재입고 알림 신청 가능</td></tr>
+        <tr><td>4. 장바구니/쿠폰</td><td>Cart 유지되나 Sign in 유도 문구 노출, Cart Coupon만 자동적용</td><td>Product/Cart 쿠폰 조합 적용, 포인트 확인 가능</td></tr>
+        <tr><td>5. 결제/주문완료</td><td>Guest Checkout으로 비회원 주문 진행</td><td>포인트 사용, 등급 혜택 반영 후 결제, Track Orders 즉시 반영</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const TC_DATA = [
+{
+"id": "PD_01",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "기본정보",
+"platform": "PC",
+"type": "UI",
+"title": "브랜드명/상품명/서브타이틀 노출 검증",
+"refdoc": "-",
+"priority": "P1",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) PDP(prdtNo=GA240824996) 진입",
+"expected": "브랜드명 \"MEDIHEAL\", 상품명 \"Essential Mask Sheet 10ea Set (+1ea) (OY-Exclusive)\", 서브타이틀이 각각 별도 영역에 노출됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_02",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "기본정보",
+"platform": "PC",
+"type": "기능",
+"title": "dataSource=best_sellers 파라미터 진입 시 정상 렌더링 검증",
+"refdoc": "-",
+"priority": "P2",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)\n2) URL에 ?dataSource=best_sellers 쿼리 포함",
+"procedure": "3) 해당 쿼리스트링이 포함된 URL로 직접 진입",
+"expected": "쿼리 미포함 URL과 동일하게 상품 정보가 정상 렌더링되며, 페이지 오류나 빈 화면이 발생하지 않음",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_03",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "리뷰요약",
+"platform": "PC",
+"type": "데이터",
+"title": "글로벌+한국 리뷰수 합산 표기 정확도 검증",
+"refdoc": "-",
+"priority": "P2",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)\n2) 글로벌 리뷰수·한국 리뷰수를 별도 채널(관리자/DB)에서 각각 확인 가능한 상태",
+"procedure": "3) PDP 상단 평점/리뷰수 영역 확인",
+"expected": "표기된 총 리뷰수가 (글로벌 리뷰수 + 한국 리뷰수) 합산값과 일치함",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_04",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "리뷰요약",
+"platform": "PC",
+"type": "기능",
+"title": "리뷰 앵커 클릭 시 리뷰 섹션 이동 검증",
+"refdoc": "-",
+"priority": "P3",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) 상단 리뷰수 텍스트(\"N Reviews\") 클릭",
+"expected": "페이지가 하단 리뷰 섹션(#prd-detail-review)으로 스크롤 이동함",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_05",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "가격표기",
+"platform": "PC",
+"type": "UI",
+"title": "Price/Best Deal/Set value 3단 가격 동시노출 검증",
+"refdoc": "-",
+"priority": "P1",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) PDP 진입 후 가격 영역 확인",
+"expected": "Price(정상가), Best Deal(할인가), Set value(세트 정상가) 3개 값이 각각 라벨과 함께 동시에 노출됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_06",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "가격표기",
+"platform": "PC",
+"type": "데이터",
+"title": "현지통화 환산가+USD 병기 검증",
+"refdoc": "-",
+"priority": "P1",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)\n2) Shipping Location=Japan, Currency=JPY로 사전 변경",
+"procedure": "3) PDP 진입 후 가격 영역 확인",
+"expected": "현지통화(¥) 환산 금액과 US$ 환산 금액이 괄호 등으로 함께 표기됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_07",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "가격표기",
+"platform": "PC",
+"type": "UI",
+"title": "환율변동 고지문구 노출 검증",
+"refdoc": "-",
+"priority": "P3",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) 가격 영역 하단 고지문구 확인",
+"expected": "\"final payment is based on US$ or ¥ and the charge amount may vary with the exchange rate\" 문구가 노출됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_08",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "쿠폰",
+"platform": "PC",
+"type": "UI",
+"title": "상품쿠폰명 노출 검증",
+"refdoc": "-",
+"priority": "P2",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) 가격 영역 하단 쿠폰 배지 확인",
+"expected": "상품쿠폰명(product.downCpn.cpnName)이 굵은 글씨로 노출됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_09",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "쿠폰",
+"platform": "PC",
+"type": "기능",
+"title": "쿠폰 다운로드 적용 검증",
+"refdoc": "-",
+"priority": "P2",
+"precondition": "1) Acc_Member (로그인 회원)\n2) 해당 상품쿠폰을 아직 다운로드하지 않은 상태",
+"procedure": "3) 쿠폰 배지 클릭\n4) My Account > Coupons 진입",
+"expected": "1) 쿠폰이 정상 다운로드됨(성공 토스트/문구 노출) 2) 보유쿠폰 목록에 해당 쿠폰이 추가되어 있음",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_10",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "쿠폰",
+"platform": "PC",
+"type": "예외",
+"title": "비회원 쿠폰 다운로드 시 로그인 유도 검증",
+"refdoc": "-",
+"priority": "P2",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) 쿠폰 배지 클릭",
+"expected": "로그인 유도 모달(Sign In/Sign Up)이 노출되며 쿠폰은 다운로드되지 않음",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_11",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "배송지체크",
+"platform": "PC",
+"type": "기능",
+"title": "Shipping Location 확인 기능 검증",
+"refdoc": "-",
+"priority": "P1",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) \"Check Your Shipping Location\" 클릭",
+"expected": "현재 설정된 배송지 기준 배송 가능 여부가 즉시 표시됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_12",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "배송지체크",
+"platform": "PC",
+"type": "기능",
+"title": "미국 배송불가 안내 노출 검증",
+"refdoc": "-",
+"priority": "P1",
+"precondition": "1) Acc_BlockedRegion, 접속지 미국(US) 감지 상태",
+"procedure": "2) PDP 진입 후 배송지 확인 영역 확인",
+"expected": "\"This site does not ship to the U.S. (50 U.S. states and D.C.)\" 문구가 노출됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_13",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "사은품",
+"platform": "PC",
+"type": "UI",
+"title": "Gift with Purchase 2 Offers 목록 노출 검증",
+"refdoc": "-",
+"priority": "P2",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) 사은품 영역(\"Gift with Purchase\") 확인",
+"expected": "\"2 Offers\" 표기와 함께 사은품 옵션 2건이 목록으로 노출됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_14",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "사은품",
+"platform": "PC",
+"type": "데이터",
+"title": "사은품명/프로모션명 정확 표기 검증",
+"refdoc": "-",
+"priority": "P3",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)\n2) 사은품 마스터데이터에 등록된 정식 명칭 확보",
+"procedure": "3) 사은품 목록 각 항목의 명칭 확인",
+"expected": "freeGiftName 및 giftPrmtnNm 값이 사은품 마스터데이터의 정식 명칭과 일치함",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_15",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "번들정보",
+"platform": "PC",
+"type": "기능",
+"title": "구성품 목록 노출 검증",
+"refdoc": "-",
+"priority": "P1",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) \"What's inside the bundle?\" 클릭",
+"expected": "번들 구성품 목록(10ea 본품 + 1ea 보너스)이 펼쳐지며 노출됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_16",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "번들정보",
+"platform": "PC",
+"type": "데이터",
+"title": "구성품별 수량 표기 정확도 검증",
+"refdoc": "-",
+"priority": "P2",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) 번들 구성품 목록에서 각 구성품의 Qty 값 확인",
+"expected": "각 구성품의 표기 수량 합이 상품명에 명시된 \"10ea Set (+1ea)\"(총 11ea)와 일치함",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_17",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "옵션선택",
+"platform": "PC",
+"type": "UI",
+"title": "Type 미선택 시 기본문구 노출 검증",
+"refdoc": "-",
+"priority": "P2",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) PDP 진입 직후 옵션 영역 확인(옵션 미선택 상태)",
+"expected": "옵션 드롭다운에 \"Select a Type\" 기본 문구가 노출됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_18",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "옵션선택",
+"platform": "PC",
+"type": "기능",
+"title": "옵션 선택 시 가격 갱신 검증",
+"refdoc": "-",
+"priority": "P1",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)\n2) 옵션별로 가격이 상이하게 설정된 상태",
+"procedure": "3) 옵션 드롭다운에서 임의 옵션 1개 선택",
+"expected": "선택한 옵션에 해당하는 가격으로 화면의 가격 표시가 즉시 갱신됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_19",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "옵션선택",
+"platform": "PC",
+"type": "UI",
+"title": "프로모션 플래그 옵션 표기 검증",
+"refdoc": "-",
+"priority": "P3",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)\n2) 프로모션이 걸린 옵션이 1개 이상 존재하는 상태",
+"procedure": "3) 옵션 드롭다운 목록 확인",
+"expected": "프로모션이 걸린 옵션명 옆에 별도 플래그(뱃지/아이콘)가 표기됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_20",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "수량조절",
+"platform": "PC",
+"type": "Boundary",
+"title": "Minus 클릭 최소수량(1) 경계 검증",
+"refdoc": "-",
+"priority": "P2",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) 수량을 1로 설정\n3) Minus 버튼 클릭",
+"expected": "1) 초기 수량 1 확인 2) 수량이 1 미만으로 내려가지 않고 Minus 버튼이 비활성화되거나 무반응임",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_21",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "수량조절",
+"platform": "PC",
+"type": "Boundary",
+"title": "Plus 클릭 재고초과 제한 검증",
+"refdoc": "-",
+"priority": "P2",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)\n2) 해당 옵션의 재고수량을 사전에 확인",
+"procedure": "3) Plus 버튼을 재고수량 이상으로 연속 클릭",
+"expected": "수량이 실제 재고수량을 초과해 증가하지 않고, 재고수량 도달 시 안내 문구 또는 버튼 비활성화가 발생함",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_22",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "재고상태",
+"platform": "PC",
+"type": "기능",
+"title": "품절 시 out of stock 및 담기버튼 비활성 검증",
+"refdoc": "-",
+"priority": "P1",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)\n2) 해당 옵션의 재고를 0으로 설정",
+"procedure": "3) 재고 0인 옵션 선택",
+"expected": "\"out of stock\" 문구가 노출되고 \"Add to Cart\" 버튼이 비활성화됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_23",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "위시리스트",
+"platform": "PC",
+"type": "기능",
+"title": "Add to Wish List 아이콘 상태토글 검증",
+"refdoc": "-",
+"priority": "P1",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) 위시리스트 아이콘 클릭(찜 전 상태)\n3) 동일 아이콘 재클릭(찜 후 상태)",
+"expected": "1) 아이콘이 찜 완료 상태(채워진 아이콘)로 전환됨 2) 재클릭 시 찜 해제 상태(빈 아이콘)로 되돌아감",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_24",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "장바구니담기",
+"platform": "PC",
+"type": "기능",
+"title": "Added to Your Cart 팝업 노출 검증",
+"refdoc": "-",
+"priority": "P1",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)\n2) 옵션 1개 선택 완료 상태",
+"procedure": "3) \"Add to Cart\" 버튼 클릭",
+"expected": "\"Added to Your Cart\" 제목의 팝업이 화면에 노출됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_25",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "장바구니담기",
+"platform": "PC",
+"type": "데이터",
+"title": "팝업 내 번들 구성품 목록/수량 정확도 검증",
+"refdoc": "-",
+"priority": "P1",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)\n2) 옵션 1개 선택 완료 상태",
+"procedure": "3) \"Add to Cart\" 클릭\n4) 팝업 내 구성품 목록 확인",
+"expected": "1) 팝업 노출 확인 2) 팝업 내 cmpntPrdt 목록의 상품명·수량이 PD_16에서 확인한 번들 구성 정보와 동일함",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_26",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "장바구니담기",
+"platform": "PC",
+"type": "데이터",
+"title": "팝업 내 합계금액 정확도 검증",
+"refdoc": "-",
+"priority": "P1",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)\n2) 수량 2로 설정 후 담기",
+"procedure": "3) \"Add to Cart\" 클릭\n4) 팝업 내 합계금액(total.amt) 확인",
+"expected": "1) 팝업 노출 확인 2) 합계금액이 (선택 옵션 단가 × 수량 2)와 일치함",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_27",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "장바구니담기",
+"platform": "PC",
+"type": "기능",
+"title": "View Cart 클릭 이동 검증",
+"refdoc": "-",
+"priority": "P2",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) Added to Your Cart 팝업에서 \"View Cart\" 클릭",
+"expected": "Cart 페이지로 이동하며 방금 담은 상품이 목록에 반영되어 있음",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_28",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "장바구니담기",
+"platform": "PC",
+"type": "기능",
+"title": "Continue Shopping 클릭 팝업닫힘 검증",
+"refdoc": "-",
+"priority": "P3",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) Added to Your Cart 팝업에서 \"Continue Shopping\" 클릭",
+"expected": "팝업만 닫히고 현재 PDP 화면이 그대로 유지됨(페이지 이동 없음)",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_29",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "재입고알림",
+"platform": "PC",
+"type": "기능",
+"title": "Email/앱푸시 선택 신청 검증",
+"refdoc": "-",
+"priority": "P2",
+"precondition": "1) Acc_Member (로그인 회원)\n2) 재고 0인 옵션 선택 상태",
+"procedure": "3) \"Restock Notification\" 팝업 오픈\n4) Email 및 Mobile app push 체크박스 선택\n5) Submit 클릭",
+"expected": "신청이 정상 접수되며, 해당 상품이 위시리스트에 자동 추가됨(안내문구 기준)",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_30",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "재입고알림",
+"platform": "PC",
+"type": "예외",
+"title": "최대 10개 제한 초과 예외처리 검증",
+"refdoc": "-",
+"priority": "P3",
+"precondition": "1) Acc_Member (로그인 회원)\n2) 이미 9개 상품에 재입고 알림을 신청해 둔 상태",
+"procedure": "3) 10번째 상품에서 재입고 알림 신청 시도\n4) 11번째 상품에서 재입고 알림 신청 시도",
+"expected": "1) 10번째 신청은 정상 처리됨 2) 11번째 신청 시 \"최대 10개까지 신청 가능\" 안내와 함께 신청이 차단됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_31",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "재입고알림",
+"platform": "PC",
+"type": "데이터",
+"title": "앱푸시 미동의 회원 1회성 수신 검증",
+"refdoc": "-",
+"priority": "P3",
+"precondition": "1) Acc_Member (로그인 회원)\n2) 앱 푸시 수신에 동의하지 않은 회원 계정",
+"procedure": "3) 재입고 알림 신청(Email만 체크)\n4) 실제 재입고 발생 후 알림 발송 이력 확인",
+"expected": "앱 푸시 미동의 회원도 재입고 시점에 알림 메시지를 1회에 한해 수신함",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_32",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "정책팝업",
+"platform": "PC",
+"type": "UI",
+"title": "Shipping Information 팝업 오픈 검증",
+"refdoc": "-",
+"priority": "P3",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) \"Shipping Information\" 링크 클릭",
+"expected": "배송 관련 정책 팝업이 정상적으로 열림",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_33",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "정책팝업",
+"platform": "PC",
+"type": "UI",
+"title": "Specific Item Info 팝업 오픈 검증",
+"refdoc": "-",
+"priority": "P3",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) \"Specific Item Info\" 링크 클릭",
+"expected": "상품 상세 고지(성분/용량 등) 팝업이 정상적으로 열림",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_34",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "정책팝업",
+"platform": "PC",
+"type": "UI",
+"title": "Refunds&Exchanges/Before you shop 팝업 오픈 검증",
+"refdoc": "-",
+"priority": "P3",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) \"Refunds & Exchanges\" 링크 클릭\n3) \"Before you shop\" 링크 클릭",
+"expected": "1) 환불/교환 정책 팝업이 정상적으로 열림 2) 구매 전 안내 팝업이 정상적으로 열림",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_35",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "리뷰필터",
+"platform": "PC",
+"type": "기능",
+"title": "Rating/Contents 필터 적용 검증",
+"refdoc": "-",
+"priority": "P2",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)\n2) 다양한 평점·미디어 포함 리뷰가 등록된 상태",
+"procedure": "3) 리뷰 Filter 팝업 오픈\n4) Rating ★4 체크\n5) Contents \"Photo\" 체크\n6) DONE 클릭",
+"expected": "평점 4점 이상이면서 사진이 첨부된 리뷰만 목록에 노출됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_36",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "리뷰필터",
+"platform": "PC",
+"type": "기능",
+"title": "Beauty Profile 기반 필터 적용 검증",
+"refdoc": "-",
+"priority": "P3",
+"precondition": "1) Acc_Member (로그인 회원)\n2) 마이페이지에 Beauty Profile(피부타입 등)이 등록된 상태",
+"procedure": "3) \"See the reviews based on my Beauty Profile\" 체크\n4) DONE 클릭",
+"expected": "로그인 회원의 Beauty Profile과 일치하는 속성의 작성자 리뷰만 필터링되어 노출됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_37",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "리뷰작성",
+"platform": "PC",
+"type": "기능",
+"title": "Write a Review 로그인회원 전용 노출 검증",
+"refdoc": "-",
+"priority": "P2",
+"precondition": "1) Acc_Member (로그인 회원)",
+"procedure": "2) 로그인 상태에서 \"Write a Review\" 버튼 확인\n3) 비로그인 상태에서 동일 버튼 확인",
+"expected": "1) 로그인 상태에서는 버튼이 노출되고 클릭 시 작성 팝업이 열림 2) 비로그인 상태에서는 버튼이 숨김 처리되거나 클릭 시 로그인 유도로 전환됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+},
+{
+"id": "PD_38",
+"cat": "상품",
+"module": "상품상세(PDP) - MEDIHEAL Essential Mask Sheet Set",
+"sub": "공유",
+"platform": "PC",
+"type": "기능",
+"title": "SNS Share 동작 검증",
+"refdoc": "-",
+"priority": "P3",
+"precondition": "1) Acc_Guest (비회원, Shipping Location=Global, Currency=USD)",
+"procedure": "2) \"Share\" 아이콘 클릭\n3) facebook 아이콘 클릭\n4) Copy 클릭",
+"expected": "1) 공유 팝업(facebook/tweeter/Copy)이 열림 2) facebook 공유 페이지가 새 창으로 열림 3) 현재 페이지 URL이 클립보드에 복사됨",
+"result": "미실행",
+"assignee": "",
+"issue": "",
+"issuelink": ""
+}
+];
+
+const RESULT_OPTIONS = ["미실행","Pass","Fail","Blocked","N/A"];
+const state = {
+  activeTab: "전체",
+  results: {} // id -> {result, assignee, issue, issuelink}
+};
+
+TC_DATA.forEach(r => { state.results[r.id] = {result:"미실행", assignee:"", issue:"", issuelink:""}; });
+
+function getModules(){
+  const set = [];
+  TC_DATA.forEach(r => { if(!set.includes(r.module)) set.push(r.module); });
+  return set;
+}
+const MODULES = getModules();
+
+function renderTabs(){
+  const tabsEl = document.getElementById("tabs");
+  const all = ["전체", ...MODULES];
+  tabsEl.innerHTML = all.map(m =>
+    `<button class="tab-btn${m===state.activeTab?' active':''}" data-tab="${m}">${m}</button>`
+  ).join("");
+}
+
+function filteredData(){
+  if(state.activeTab === "전체") return TC_DATA;
+  return TC_DATA.filter(r => r.module === state.activeTab);
+}
+
+function renderKpis(){
+  const data = filteredData();
+  document.getElementById("kpiTotal").textContent = data.length;
+  document.getElementById("kpiP1").textContent = data.filter(r=>r.priority==="P1").length;
+  document.getElementById("kpiP2").textContent = data.filter(r=>r.priority==="P2").length;
+  document.getElementById("kpiP3").textContent = data.filter(r=>r.priority==="P3").length;
+}
+
+function renderStats(){
+  const body = document.getElementById("statsBody");
+  const rows = MODULES.map(mod => {
+    const items = TC_DATA.filter(r => r.module === mod);
+    const total = items.length;
+    let pass=0, fail=0, blocked=0, na=0, none=0;
+    items.forEach(r => {
+      const res = state.results[r.id].result;
+      if(res==="Pass") pass++;
+      else if(res==="Fail") fail++;
+      else if(res==="Blocked") blocked++;
+      else if(res==="N/A") na++;
+      else none++;
+    });
+    const executed = pass+fail+blocked+na;
+    const execRate = total ? ((executed/total)*100).toFixed(1)+"%" : "0%";
+    const passRate = executed ? ((pass/executed)*100).toFixed(1)+"%" : "-";
+    const failRate = executed ? ((fail/executed)*100).toFixed(1)+"%" : "-";
+    return `<tr><td class="modname">${mod}</td><td>${total}</td><td>${pass}</td><td>${fail}</td><td>${blocked}</td><td>${na}</td><td>${none}</td><td>${execRate}</td><td>${passRate}</td><td>${failRate}</td></tr>`;
+  });
+  // total row
+  const total = TC_DATA.length;
+  let pass=0, fail=0, blocked=0, na=0, none=0;
+  TC_DATA.forEach(r => {
+    const res = state.results[r.id].result;
+    if(res==="Pass") pass++;
+    else if(res==="Fail") fail++;
+    else if(res==="Blocked") blocked++;
+    else if(res==="N/A") na++;
+    else none++;
+  });
+  const executed = pass+fail+blocked+na;
+  const execRate = total ? ((executed/total)*100).toFixed(1)+"%" : "0%";
+  const passRate = executed ? ((pass/executed)*100).toFixed(1)+"%" : "-";
+  const failRate = executed ? ((fail/executed)*100).toFixed(1)+"%" : "-";
+  rows.push(`<tr style="font-weight:700;background:var(--headbg);"><td class="modname">전체</td><td>${total}</td><td>${pass}</td><td>${fail}</td><td>${blocked}</td><td>${na}</td><td>${none}</td><td>${execRate}</td><td>${passRate}</td><td>${failRate}</td></tr>`);
+  body.innerHTML = rows.join("");
+}
+
+function renderTable(){
+  const data = filteredData();
+  document.getElementById("filteredCount").textContent = `${state.activeTab} · ${data.length}건 표시 중 (전체 ${TC_DATA.length}건)`;
+  const body = document.getElementById("tcBody");
+  body.innerHTML = data.map(r => {
+    const res = state.results[r.id];
+    const opts = RESULT_OPTIONS.map(o => `<option value="${o}"${res.result===o?' selected':''}>${o}</option>`).join("");
+    return `<tr data-row-id="${r.id}">
+      <td>${r.id}</td>
+      <td>${r.cat}</td>
+      <td>${r.module}</td>
+      <td>${r.sub}</td>
+      <td class="center">${r.platform}</td>
+      <td class="center">${r.type}</td>
+      <td>${r.title}</td>
+      <td class="center">${r.refdoc}</td>
+      <td class="center"><span class="badge ${r.priority}">${r.priority}</span></td>
+      <td>${r.precondition}</td>
+      <td>${r.procedure}</td>
+      <td>${r.expected}</td>
+      <td><select class="result-select" data-id="${r.id}" data-field="result" data-val="${res.result}">${opts}</select></td>
+      <td><input class="free-input" data-id="${r.id}" data-field="assignee" value="${res.assignee}"></td>
+      <td><input class="free-input" data-id="${r.id}" data-field="issue" value="${res.issue}"></td>
+      <td><input class="free-input" data-id="${r.id}" data-field="issuelink" value="${res.issuelink}"></td>
+    </tr>`;
+  }).join("");
+}
+
+function renderAll(){
+  renderTabs();
+  renderKpis();
+  renderStats();
+  renderTable();
+}
+
+function csvEscape(v){
+  if(v===undefined || v===null) v="";
+  v = String(v).replace(/"/g,'""');
+  return `"${v}"`;
+}
+
+function downloadCsv(){
+  const data = filteredData();
+  const headers = ["TC ID","대분류","중분류","소분류","플랫폼","유형","테스트 항목","기준문서","우선순위","사전조건","테스트 수행 절차","기대 결과","실행결과","담당자","이슈내용","이슈링크"];
+  const lines = [headers.map(csvEscape).join(",")];
+  data.forEach(r => {
+    const res = state.results[r.id];
+    lines.push([
+      r.id, r.cat, r.module, r.sub, r.platform, r.type, r.title, r.refdoc, r.priority,
+      r.precondition, r.procedure, r.expected, res.result, res.assignee, res.issue, res.issuelink
+    ].map(csvEscape).join(","));
+  });
+  const csvContent = "\uFEFF" + lines.join("\r\n");
+  const blob = new Blob([csvContent], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `oliveyoung_global_qa_tc_${state.activeTab}_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+const PROJECT_NAME = "mediheal_pdp";
+const REQUIRED_FIELDS = ["id","cat","module","sub","platform","type","title","refdoc","priority","precondition","procedure","expected"];
+
+function showJsonMsg(text, isError){
+  const el = document.getElementById("jsonMsg");
+  el.textContent = text;
+  el.style.background = isError ? "var(--fail)" : "var(--accent)";
+  el.style.display = "block";
+  clearTimeout(showJsonMsg._t);
+  showJsonMsg._t = setTimeout(() => { el.style.display = "none"; }, 3500);
+}
+
+function saveJson(){
+  const items = TC_DATA.map(r => ({...r, ...state.results[r.id]}));
+  const payload = {
+    meta: {
+      project: PROJECT_NAME,
+      generatedAt: new Date().toISOString(),
+      totalCount: items.length
+    },
+    items: items
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${PROJECT_NAME}_tc_${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showJsonMsg(`JSON 저장 완료 (${items.length}건)`, false);
+}
+
+function validateJsonPayload(payload){
+  if(!payload || typeof payload !== "object") return "최상위 객체가 아닙니다";
+  if(!Array.isArray(payload.items)) return "items 배열이 없습니다";
+  if(payload.items.length === 0) return "items가 비어 있습니다";
+  const first = payload.items[0];
+  for(const f of REQUIRED_FIELDS){
+    if(!(f in first)) return `필수 컬럼 누락: ${f}`;
+  }
+  return null;
+}
+
+function loadJsonFile(file){
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    let payload;
+    try {
+      payload = JSON.parse(e.target.result);
+    } catch(err){
+      showJsonMsg("JSON 파싱 실패: 올바른 JSON 파일이 아닙니다. 기존 데이터를 유지합니다.", true);
+      return;
+    }
+    const err = validateJsonPayload(payload);
+    if(err){
+      showJsonMsg(`형식 오류(${err}): 기존 데이터를 유지합니다.`, true);
+      return;
+    }
+    TC_DATA.length = 0;
+    state.results = {};
+    payload.items.forEach(it => {
+      TC_DATA.push({
+        id: it.id, cat: it.cat, module: it.module, sub: it.sub, platform: it.platform,
+        type: it.type, title: it.title, refdoc: it.refdoc, priority: it.priority,
+        precondition: it.precondition, procedure: it.procedure, expected: it.expected
+      });
+      state.results[it.id] = {
+        result: it.result || "미실행",
+        assignee: it.assignee || "",
+        issue: it.issue || "",
+        issuelink: it.issuelink || ""
+      };
+    });
+    MODULES.length = 0;
+    getModules().forEach(m => MODULES.push(m));
+    state.activeTab = "전체";
+    renderAll();
+    showJsonMsg(`JSON 불러오기 완료 (${payload.items.length}건 반영)`, false);
+  };
+  reader.onerror = () => showJsonMsg("파일 읽기 실패: 기존 데이터를 유지합니다.", true);
+  reader.readAsText(file, "utf-8");
+}
+
+function toggleTheme(){
+  const html = document.documentElement;
+  const cur = html.getAttribute("data-theme");
+  const next = cur === "dark" ? "light" : "dark";
+  html.setAttribute("data-theme", next);
+  document.getElementById("btnTheme").textContent = next === "dark" ? "☀️ 라이트모드" : "🌙 다크모드";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderAll();
+
+  document.getElementById("tabs").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-tab]");
+    if(!btn) return;
+    state.activeTab = btn.getAttribute("data-tab");
+    renderTabs();
+    renderKpis();
+    renderTable();
+  });
+
+  document.getElementById("tcBody").addEventListener("change", (e) => {
+    const el = e.target.closest("[data-id][data-field]");
+    if(!el) return;
+    const id = el.getAttribute("data-id");
+    const field = el.getAttribute("data-field");
+    state.results[id][field] = el.value;
+    if(field === "result"){
+      el.setAttribute("data-val", el.value);
+      renderStats();
+    }
+  });
+
+  document.getElementById("btnCsv").addEventListener("click", downloadCsv);
+  document.getElementById("btnJsonSave").addEventListener("click", saveJson);
+  document.getElementById("btnJsonLoad").addEventListener("click", () => {
+    document.getElementById("jsonFileInput").click();
+  });
+  document.getElementById("jsonFileInput").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if(file) loadJsonFile(file);
+    e.target.value = "";
+  });
+  document.getElementById("btnTheme").addEventListener("click", toggleTheme);
+
+  document.getElementById("btnAccMatrix").addEventListener("click", () => {
+    document.getElementById("accModalOverlay").classList.add("open");
+  });
+  document.getElementById("btnFlowMap").addEventListener("click", () => {
+    document.getElementById("flowModalOverlay").classList.add("open");
+  });
+  document.querySelectorAll("[data-close]").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.target.closest(".modal-overlay").classList.remove("open");
+    });
+  });
+  document.querySelectorAll(".modal-overlay").forEach(ov => {
+    ov.addEventListener("click", (e) => {
+      if(e.target === ov) ov.classList.remove("open");
+    });
+  });
+});
+</script>
+</body>
+</html>
