@@ -114,6 +114,7 @@ Anthropic이 제공하는 공식 Slack 통합 기능(`Claude Tag`, `claude.ai/ad
 | 발화 유형 | 형식 예시 |
 |---|---|
 | TC 생성 요청 | `/tc-generate 프로젝트=ABC마트 모듈=장바구니 목표건수=50` |
+| TC 생성 요청 (URL 기반, 코드형) | `/tc-generate 프로젝트=ABC마트 모듈=장바구니 URL=https://abc-mart.example.com/cart` — Playwright로 실제 화면을 관찰해 근거로 삼고, 승인 시 자동화 테스트(AGENTS.md 19항)까지 실행 후 Pass/Fail 리포트 |
 | TC 수정 요청 (스레드 내) | `TC_CRT_012 우선순위를 P1로 변경해줘` |
 | 승인 | `승인` / ✅ 버튼 |
 | 반려·재작업 | `반려: 사유` / ✏️ 버튼 |

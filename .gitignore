@@ -9,8 +9,8 @@ Thumbs.db
 # Claude Code local (per-machine) settings - not shared
 **/.claude/settings.local.json
 
-# docx/xlsx 임시 추출 작업용 스크래치 (커밋 대상 아님)
-/_scratch/*
+# 임시 추출/관찰 스크래치 작업 전체 (커밋 대상 아님) - 최상위 및 프로젝트 하위 어디든
+**/_scratch/*
 !/_scratch/.gitkeep
 
 # Playwright / Node
