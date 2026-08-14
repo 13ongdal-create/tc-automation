@@ -115,6 +115,8 @@ Anthropic이 제공하는 공식 Slack 통합 기능(`Claude Tag`, `claude.ai/ad
 |---|---|
 | TC 생성 요청 | `/tc-generate 프로젝트=ABC마트 모듈=장바구니 목표건수=50` |
 | TC 생성 요청 (URL 기반, 코드형) | `/tc-generate 프로젝트=ABC마트 모듈=장바구니 URL=https://abc-mart.example.com/cart` — Playwright로 실제 화면을 관찰해 근거로 삼고, 승인 시 자동화 테스트(AGENTS.md 19항)까지 실행 후 Pass/Fail 리포트 |
+
+**콘솔 에러 + 스크린샷 자동 첨부**: 자동화 테스트는 공통 fixture(`_shared/testFixtures.js`)를 통해 브라우저 콘솔 에러/실패 API 요청을 자동 감지하며, 감지 시 어서션 통과 여부와 무관하게 해당 TC를 실패 처리하고 스크린샷을 남깁니다. Claude는 최종 응답에 `SCREENSHOT: {경로}` 줄을 남기고, `slack-bridge/src/resultReporter.js`가 이를 파싱해 Slack 스레드에 이미지 파일로 첨부합니다 (Slack App에 `files:write` 스코프 필요).
 | TC 수정 요청 (스레드 내) | `TC_CRT_012 우선순위를 P1로 변경해줘` |
 | 승인 | `승인` / ✅ 버튼 |
 | 반려·재작업 | `반려: 사유` / ✏️ 버튼 |
