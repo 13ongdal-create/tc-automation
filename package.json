@@ -1,0 +1,12 @@
+{
+  "name": "tc-automation",
+  "version": "0.1.0",
+  "private": true,
+  "description": "프로젝트별 TC 문서 + Playwright 기반 자동화 테스트 저장소",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0"
+  }
+}
