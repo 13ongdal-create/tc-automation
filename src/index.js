@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require('fs');
 const { App } = require('@slack/bolt');
 const claudeRunner = require('./claudeRunner');
 const sessionStore = require('./sessionStore');
@@ -32,11 +33,34 @@ const activeRuns = new Map();
 const runKey = (channel, threadTs) => `${channel}:${threadTs}`;
 const CANCEL_WORDS = /^(중단|취소|그만|stop|cancel)$/i;
 const STATUS_WORDS = /^(상태|진행상황|진행 상황|진행률|status|progress)$/i;
+const DEFECT_QUERY_WORDS = /(결함|defect)/i;
 
 function formatElapsed(ms) {
   const min = Math.floor(ms / 60000);
   const sec = Math.round((ms % 60000) / 1000);
   return min > 0 ? `${min}분 ${sec}초` : `${sec}초`;
+}
+
+/** tc-automation 아래 실제 프로젝트 폴더명이 텍스트에 포함돼 있는지 확인 (Claude 호출 없이, 토큰 미사용) */
+function findProjectNameInText(text) {
+  let entries;
+  try {
+    entries = fs.readdirSync(TC_AUTOMATION_ROOT, { withFileTypes: true });
+  } catch {
+    return null;
+  }
+  const projects = entries
+    .filter((d) => d.isDirectory() && !d.name.startsWith('_') && !d.name.startsWith('.') && d.name !== 'node_modules')
+    // 실제 온보딩된 프로젝트인지(= _template 구조를 따르는지) TC 서브폴더 존재로 검증 - 빈 폴더/찌꺼기 제외
+    .filter((d) => {
+      try {
+        return fs.statSync(`${TC_AUTOMATION_ROOT}/${d.name}/TC`).isDirectory();
+      } catch {
+        return false;
+      }
+    })
+    .map((d) => d.name);
+  return projects.find((p) => text.includes(p)) || null;
 }
 
 function buildInitialPrompt(params) {
@@ -48,30 +72,39 @@ function buildInitialPrompt(params) {
     `tc-automation 저장소 경로: "${TC_AUTOMATION_ROOT}"`,
     `해당 저장소 내 "${project}" 프로젝트(${TC_AUTOMATION_ROOT}/${project})의 "${module_}" 모듈에 대한 TC 생성 요청입니다.`,
     `AGENTS.md, skills/qa-test-case-generator/SKILL.md 규칙을 그대로 따라주세요.`,
-    url ? `URL이 함께 제공되었습니다: ${url} — AGENTS.md 19항(URL 기반 코드형 TC)에 따라 Playwright로 직접 접속해 관찰한 화면 구조를 근거로 사용하세요.` : null,
+    `AGENTS.md 13항의 Phase 워크플로우(Phase 0~8)를 단계별로 따르세요 — 이 프로젝트의 project.json이 없으면 먼저 Phase 0(URL, 단위/통합 구분, 코드/정책기반 질의)부터 진행하고, 있으면 건너뜁니다.`,
+    url ? `URL이 함께 제공되었습니다: ${url} — Phase 0 질의에 참고하고, AGENTS.md 19항(URL 기반 코드형 TC)에 따라 Playwright로 직접 접속해 관찰한 화면 구조를 근거로 사용하세요.` : null,
     `목표 건수: ${count}건.`,
-    `이번 응답에서는 Phase 1~3(근거 확보, 계정 매트릭스/User Flow, 시나리오 검토표 + 배분 계획)까지만 진행하고,`,
-    `Phase 4(실제 TC 대량 생성) 및 자동화 테스트 코드 실행은 이 스레드에서 "승인"을 받기 전까지 시작하지 마세요.`,
+    `이번 응답에서는 (Phase 0 질의가 필요하면 그것만, 아니면) **Phase 1(분석) 한 단계만** 진행하고 승인을 기다려주세요. Phase 2~8은 각각 별도의 승인/요청을 받은 뒤에만 진행합니다 (한 번에 여러 Phase를 묶어 진행하지 않습니다).`,
     `결과는 Slack 메시지로 바로 붙여넣을 수 있도록 마크다운 표/목록 형태로 간결하게 정리해주세요.`,
   ].filter(Boolean).join('\n');
 }
 
+const TEST_RUN_WORDS = /^(테스트\s*실행|테스트\s*수행|테스트해줘|run test|test run)해?줘?\.?$/i;
+
 function buildFollowupPrompt(text) {
   const trimmed = (text || '').trim();
+  if (TEST_RUN_WORDS.test(trimmed)) {
+    return [
+      '사용자가 테스트 실행(Phase 5)을 명시적으로 요청했습니다.',
+      'Phase 4(TC 작성)가 아직 승인되지 않았다면 먼저 그 사실을 알리고 멈추세요. 승인되어 있다면 AGENTS.md 19항 규칙대로 Playwright 자동화 테스트를 실행하고,',
+      'Phase 6(오류 공유: 콘솔 에러/실패 스크린샷)과 Phase 7(결함 관리: defects.json 등록/갱신)을 거쳐 Phase 8(Pass/Fail 결과 요약)까지 보고해주세요.',
+      '이 단계에서는 아직 git 커밋을 하지 마세요 — 결과를 본 사용자가 최종 승인해야 커밋합니다.',
+    ].join('\n');
+  }
   if (/^(승인|approve|yes|ok)$/i.test(trimmed)) {
     return [
-      '사용자가 이 요청을 승인했습니다.',
-      '다음 Phase로 진행해주세요 (검토표 승인이었다면 Phase 3.5 자체검증 후 Phase 4 HTML 생성, HTML 생성 결과였다면 최종 확정).',
-      '이번 요청이 URL 기반(AGENTS.md 19항)이었다면, 최종 확정 단계에서 Playwright 자동화 테스트 코드 실행까지 마치고 Pass/Fail 요약을 알려주세요.',
-      `최종 확정 단계라면 AGENTS.md 18항 규칙에 따라 "${TC_AUTOMATION_ROOT}" 저장소에 git add/commit/push까지 수행하고,`,
-      '커밋 메시지와 커밋 해시를 알려주세요.',
+      '사용자가 방금 제시한 내용을 승인했습니다.',
+      'AGENTS.md 13항 Phase 워크플로우의 **바로 다음 Phase 하나만** 진행하고 다시 승인을 기다리세요 (여러 Phase를 한 번에 진행하지 마세요).',
+      '단, Phase 4(TC 작성)까지 승인됐다고 해서 Phase 5(테스트 실행)를 자동으로 시작하지 마세요 — 테스트 실행은 사용자가 "테스트 실행해줘" 등으로 별도 요청할 때만 시작합니다.',
+      `Phase 8(결과 도출) 이후의 승인이라면 AGENTS.md 18항 규칙에 따라 "${TC_AUTOMATION_ROOT}" 저장소에 git add(해당 프로젝트 경로만)/commit/push까지 수행하고, 커밋 메시지와 해시를 알려주세요.`,
     ].join('\n');
   }
   if (/^(반려|거절|no)\b/i.test(trimmed)) {
     const reason = trimmed.replace(/^(반려|거절|no)[:\s]*/i, '');
     return `사용자가 반려했습니다. 사유: ${reason || '(사유 미기재)'}\n이 사유를 반영해서 다시 제시해주세요. 아직 Git 커밋은 하지 마세요.`;
   }
-  return `사용자 요청: ${trimmed}\n이 요청을 처리해주세요 (TC 수정 요청이면 다시 제시, 결함 관리 요청(AGENTS.md 20-4항)이면 defects.json 조회/수정). 명시적으로 "승인"하기 전까지는 Git 커밋을 하지 마세요.`;
+  return `사용자 요청: ${trimmed}\n이 요청을 처리해주세요 (TC 수정 요청이면 다시 제시, 결함 관리 요청(AGENTS.md 20-4항)이면 defects.json 조회/수정). 명시적으로 "승인"하거나 테스트 실행을 요청하기 전까지는 Git 커밋이나 자동화 테스트 실행을 하지 마세요.`;
 }
 
 /** 새 스레드를 열고 첫 프롬프트로 Claude Code 세션을 시작한 뒤 결과를 올리는 공통 로직 (/tc-generate, /tc-defects 공용) */
@@ -165,6 +198,18 @@ app.event('app_mention', async ({ event, client }) => {
   const text = event.text.replace(/<@[^>]+>\s*/g, '').trim();
   if (!text) return;
 
+  // 자연어로 와도 "{프로젝트명} ... 결함 ..." 형태로 명확히 읽히면 Claude 없이 바로 응답합니다
+  // (토큰 미사용 — /tc-defects와 동일한 경로. AGENTS.md/PIPELINE.md 참조).
+  if (DEFECT_QUERY_WORDS.test(text)) {
+    const project = findProjectNameInText(text);
+    if (project) {
+      const posted = await client.chat.postMessage({ channel: event.channel, text: defectStore.summarize(project) });
+      sessionStore.set(event.channel, posted.ts, { sessionId: null, mode: 'lazy', kind: 'tc-defects', project });
+      return;
+    }
+    // 프로젝트명을 못 찾으면(예: 오타, 신규 프로젝트) 아래 Claude 경로로 폴백해 되묻게 합니다.
+  }
+
   await startNewThread(client, {
     channelId: event.channel,
     ackText: `:hourglass_flowing_sand: <@${event.user}> 님의 요청을 처리 중입니다...\n> ${text}`,
@@ -172,7 +217,7 @@ app.event('app_mention', async ({ event, client }) => {
       `tc-automation 저장소 경로: "${TC_AUTOMATION_ROOT}"`,
       `Slack에서 자연어로 들어온 요청입니다: "${text}"`,
       `이 요청이 TC 생성 요청인지, 결함 현황 조회/관리 요청인지 스스로 판단해서 그에 맞는 워크플로우를 시작해주세요.`,
-      `- TC 생성 요청이면: AGENTS.md/SKILL.md 규칙대로 Phase 1~3까지만 진행하고, Phase 4(대량 생성) 및 자동화 테스트 실행은 이 스레드에서 "승인"을 받기 전까지 시작하지 마세요. URL이 언급되어 있으면 19항(URL 기반 코드형 TC)을 따르세요.`,
+      `- TC 생성 요청이면: AGENTS.md 13항 Phase 워크플로우(Phase 0~8)를 단계별로 따르세요. 이번 응답에서는 (Phase 0 질의가 필요하면 그것만, 아니면) Phase 1(분석) 한 단계만 진행하고 승인을 기다리세요. URL이 언급되어 있으면 19항(URL 기반 코드형 TC)을 따르세요.`,
       `- 결함 현황 조회/관리 요청이면: AGENTS.md 20항 규칙대로 해당 프로젝트의 defects.json을 조회/응답하세요.`,
       `요청에 프로젝트명이 없거나 모호하면 추측하지 말고 먼저 "어떤 프로젝트인가요?"라고 되물어주세요.`,
       `결과는 Slack 메시지로 바로 붙여넣을 수 있도록 마크다운 표/목록 형태로 간결하게 정리해주세요.`,
