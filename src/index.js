@@ -66,10 +66,12 @@ function findProjectNameInText(text) {
 function buildInitialPrompt(params) {
   const project = params['프로젝트'] || '[확인필요: 프로젝트명 없음]';
   const module_ = params['모듈'] || '[확인필요: 모듈 미지정]';
+  const feature = params['기능'];
   const url = params['URL'] || params['url'];
   return [
     `tc-automation 저장소 경로: "${TC_AUTOMATION_ROOT}"`,
-    `해당 저장소 내 "${project}" 프로젝트(${TC_AUTOMATION_ROOT}/${project})의 "${module_}" 모듈에 대한 TC 생성 요청입니다.`,
+    `해당 저장소 내 "${project}" 프로젝트(${TC_AUTOMATION_ROOT}/${project})의 "${module_}" 모듈${feature ? ` 중 "${feature}" 기능만` : ''}에 대한 TC 생성 요청입니다.`,
+    feature ? `기능 단위 요청입니다 — AGENTS.md 19-1항에 따라 해당 모듈의 누적 TC 파일(10항)을 Read한 뒤 "${feature}" 기능(소분류)에 해당하는 TC만 추가/수정하고, 다른 기능의 기존 TC는 그대로 둡니다.` : null,
     `AGENTS.md, skills/qa-test-case-generator/SKILL.md 규칙을 그대로 따라주세요.`,
     `AGENTS.md 13항의 Phase 워크플로우(Phase 0~8)를 단계별로 따르세요 — 이 프로젝트의 project.json이 없으면 먼저 Phase 0(URL, 단위/통합 구분, 코드/정책기반 질의)부터 진행하고, 있으면 건너뜁니다.`,
     url ? `URL이 함께 제공되었습니다: ${url} — Phase 0 질의에 참고하고, AGENTS.md 19항(URL 기반 코드형 TC)에 따라 Playwright로 직접 접속해 관찰한 화면 구조를 근거로 사용하세요.` : null,
@@ -157,9 +159,9 @@ app.command('/tc-generate', async ({ command, ack, client }) => {
 
   await startNewThread(client, {
     channelId: command.channel_id,
-    ackText: `:hourglass_flowing_sand: <@${command.user_id}> 님의 TC 생성 요청을 처리 중입니다...\n(프로젝트=${params['프로젝트'] || '?'}, 모듈=${params['모듈'] || '?'})`,
+    ackText: `:hourglass_flowing_sand: <@${command.user_id}> 님의 TC 생성 요청을 처리 중입니다...\n(프로젝트=${params['프로젝트'] || '?'}, 모듈=${params['모듈'] || '?'}${params['기능'] ? `, 기능=${params['기능']}` : ''})`,
     prompt: buildInitialPrompt(params),
-    meta: { kind: 'tc-generate', project: params['프로젝트'] || null, module: params['모듈'] || null },
+    meta: { kind: 'tc-generate', project: params['프로젝트'] || null, module: params['모듈'] || null, feature: params['기능'] || null },
   });
 });
 
@@ -195,29 +197,36 @@ app.command('/tc-test', async ({ command, ack, client }) => {
   const params = parseParams(command.text);
   const project = params['프로젝트'];
   const module_ = params['모듈'];
+  const feature = params['기능'];
+  const tcId = params['TC'] || params['tc'];
 
   if (!project) {
     await client.chat.postMessage({
       channel: command.channel_id,
-      text: `:warning: <@${command.user_id}> 프로젝트명이 필요합니다. 예: \`/tc-test 프로젝트=ABC마트 모듈=장바구니\` (모듈 생략 시 해당 프로젝트의 전체 자동화 테스트 실행)`,
+      text: `:warning: <@${command.user_id}> 프로젝트명이 필요합니다. 예: \`/tc-test 프로젝트=ABC마트 모듈=장바구니 [기능=쿠폰적용] [TC=TC_CRT_012]\` (모듈 생략 시 전체 실행)`,
     });
     return;
   }
+
+  const scopeLabel = tcId ? `TC ${tcId} 1건` : feature ? `${module_ || '전체'} > ${feature} 기능` : module_ || '전체';
+  const grepTarget = tcId || feature;
 
   // TC 생성 스레드와 별개로, 이미 만들어져 있는 자동화 테스트 코드를 재실행(회귀 테스트 등)할 때 쓰는
   // 독립 진입점입니다. Phase 5(테스트 수행)부터 바로 시작합니다.
   await startNewThread(client, {
     channelId: command.channel_id,
-    ackText: `:hourglass_flowing_sand: <@${command.user_id}> 님의 테스트 실행 요청을 처리 중입니다...\n(프로젝트=${project}, 모듈=${module_ || '전체'})`,
+    ackText: `:hourglass_flowing_sand: <@${command.user_id}> 님의 테스트 실행 요청을 처리 중입니다...\n(프로젝트=${project}, 범위=${scopeLabel})`,
     prompt: [
       `tc-automation 저장소 경로: "${TC_AUTOMATION_ROOT}"`,
-      `"${project}" 프로젝트${module_ ? `의 "${module_}" 모듈` : ' 전체'}에 대한 테스트 실행(Phase 5) 요청입니다.`,
+      `"${project}" 프로젝트, 실행 범위: ${scopeLabel} 에 대한 테스트 실행(Phase 5) 요청입니다.`,
       `"${TC_AUTOMATION_ROOT}/${project}/TC/automation/tests/${module_ ? module_ + '.spec.js' : ''}" 경로에 이미 생성되어 있는 Playwright 자동화 테스트를 실행해주세요 (없다면 그렇게 보고하고 멈추세요 — 먼저 /tc-generate로 TC를 생성해야 합니다).`,
+      grepTarget ? `AGENTS.md 19-1항에 따라 \`--grep "${grepTarget}"\` 옵션을 추가해 해당 ${tcId ? 'TC ID' : '기능'}만 실행하세요 (테스트 제목에 [TC_ID][기능명]이 포함되어 있어야 매칭됩니다).` : null,
       `AGENTS.md 19항(실행), 13항 Phase 5~8(테스트 수행 → 오류 공유 → 결함 관리 → 결과 도출) 규칙을 그대로 따라주세요.`,
+      `결과 보고 시 실제 실행 범위(${scopeLabel})를 명시해주세요.`,
       `결과 도출 후 최종 승인을 받기 전까지 git 커밋은 하지 마세요.`,
       `결과는 Slack 메시지로 바로 붙여넣을 수 있도록 마크다운 표/목록 형태로 간결하게 정리해주세요.`,
-    ].join('\n'),
-    meta: { kind: 'tc-test', project, module: module_ || null },
+    ].filter(Boolean).join('\n'),
+    meta: { kind: 'tc-test', project, module: module_ || null, feature: feature || null, tcId: tcId || null },
   });
 });
 
