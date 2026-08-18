@@ -1,0 +1,363 @@
+require('dotenv').config();
+const { App } = require('@slack/bolt');
+const claudeRunner = require('./claudeRunner');
+const sessionStore = require('./sessionStore');
+const resultReporter = require('./resultReporter');
+const alert = require('./alert');
+const defectStore = require('./defectStore');
+const defectFastPath = require('./defectFastPath');
+
+const app = new App({
+  token: process.env.SLACK_BOT_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  socketMode: process.env.USE_SOCKET_MODE !== 'false',
+  appToken: process.env.SLACK_APP_TOKEN,
+});
+
+function parseParams(text) {
+  // "프로젝트=ABC마트 모듈=장바구니 목표건수=50" -> { 프로젝트: 'ABC마트', 모듈: '장바구니', 목표건수: '50' }
+  const params = {};
+  const re = /(\S+?)=(\S+)/g;
+  let m;
+  while ((m = re.exec(text || ''))) {
+    params[m[1]] = m[2];
+  }
+  return params;
+}
+
+const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || 'D:/E-Commerce Service Planning Academy/tc-automation';
+
+// 스레드(channel+thread_ts)별로 현재 실행 중인 claude CLI 프로세스를 추적 - "중단" 요청 시 찾아서 종료
+const activeRuns = new Map();
+const runKey = (channel, threadTs) => `${channel}:${threadTs}`;
+const CANCEL_WORDS = /^(중단|취소|그만|stop|cancel)$/i;
+const STATUS_WORDS = /^(상태|진행상황|진행 상황|진행률|status|progress)$/i;
+
+function formatElapsed(ms) {
+  const min = Math.floor(ms / 60000);
+  const sec = Math.round((ms % 60000) / 1000);
+  return min > 0 ? `${min}분 ${sec}초` : `${sec}초`;
+}
+
+function buildInitialPrompt(params) {
+  const project = params['프로젝트'] || '[확인필요: 프로젝트명 없음]';
+  const module_ = params['모듈'] || '[확인필요: 모듈 미지정]';
+  const count = params['목표건수'] || '150~200';
+  const url = params['URL'] || params['url'];
+  return [
+    `tc-automation 저장소 경로: "${TC_AUTOMATION_ROOT}"`,
+    `해당 저장소 내 "${project}" 프로젝트(${TC_AUTOMATION_ROOT}/${project})의 "${module_}" 모듈에 대한 TC 생성 요청입니다.`,
+    `AGENTS.md, skills/qa-test-case-generator/SKILL.md 규칙을 그대로 따라주세요.`,
+    url ? `URL이 함께 제공되었습니다: ${url} — AGENTS.md 19항(URL 기반 코드형 TC)에 따라 Playwright로 직접 접속해 관찰한 화면 구조를 근거로 사용하세요.` : null,
+    `목표 건수: ${count}건.`,
+    `이번 응답에서는 Phase 1~3(근거 확보, 계정 매트릭스/User Flow, 시나리오 검토표 + 배분 계획)까지만 진행하고,`,
+    `Phase 4(실제 TC 대량 생성) 및 자동화 테스트 코드 실행은 이 스레드에서 "승인"을 받기 전까지 시작하지 마세요.`,
+    `결과는 Slack 메시지로 바로 붙여넣을 수 있도록 마크다운 표/목록 형태로 간결하게 정리해주세요.`,
+  ].filter(Boolean).join('\n');
+}
+
+function buildFollowupPrompt(text) {
+  const trimmed = (text || '').trim();
+  if (/^(승인|approve|yes|ok)$/i.test(trimmed)) {
+    return [
+      '사용자가 이 요청을 승인했습니다.',
+      '다음 Phase로 진행해주세요 (검토표 승인이었다면 Phase 3.5 자체검증 후 Phase 4 HTML 생성, HTML 생성 결과였다면 최종 확정).',
+      '이번 요청이 URL 기반(AGENTS.md 19항)이었다면, 최종 확정 단계에서 Playwright 자동화 테스트 코드 실행까지 마치고 Pass/Fail 요약을 알려주세요.',
+      `최종 확정 단계라면 AGENTS.md 18항 규칙에 따라 "${TC_AUTOMATION_ROOT}" 저장소에 git add/commit/push까지 수행하고,`,
+      '커밋 메시지와 커밋 해시를 알려주세요.',
+    ].join('\n');
+  }
+  if (/^(반려|거절|no)\b/i.test(trimmed)) {
+    const reason = trimmed.replace(/^(반려|거절|no)[:\s]*/i, '');
+    return `사용자가 반려했습니다. 사유: ${reason || '(사유 미기재)'}\n이 사유를 반영해서 다시 제시해주세요. 아직 Git 커밋은 하지 마세요.`;
+  }
+  return `사용자 요청: ${trimmed}\n이 요청을 처리해주세요 (TC 수정 요청이면 다시 제시, 결함 관리 요청(AGENTS.md 20-4항)이면 defects.json 조회/수정). 명시적으로 "승인"하기 전까지는 Git 커밋을 하지 마세요.`;
+}
+
+/** 새 스레드를 열고 첫 프롬프트로 Claude Code 세션을 시작한 뒤 결과를 올리는 공통 로직 (/tc-generate, /tc-defects 공용) */
+async function startNewThread(client, { channelId, ackText, prompt, meta }) {
+  const posted = await client.chat.postMessage({ channel: channelId, text: ackText });
+  const threadTs = posted.ts;
+  const key = runKey(channelId, threadTs);
+
+  // 첫 요청이 아직 완료 전이라도(=sessionId 모름) 이 스레드를 "우리가 아는 스레드"로 즉시 기록해둡니다.
+  // 이렇게 안 하면, 완료되기 전에 중단될 경우 sessionStore에는 끝내 아무것도 안 남아 이 스레드의 어떤
+  // 후속 메시지도 인식되지 않는(조용히 무시되는) 문제가 생깁니다.
+  sessionStore.set(channelId, threadTs, { sessionId: null, ...meta });
+
+  try {
+    const result = await claudeRunner.startSession(prompt, {
+      onProcess: (handle) => activeRuns.set(key, handle),
+    });
+
+    sessionStore.set(channelId, threadTs, { sessionId: result.sessionId, ...meta });
+
+    await resultReporter.postResult(client, { channel: channelId, threadTs, text: result.resultText });
+
+    if (!result.sessionId) {
+      await client.chat.postMessage({
+        channel: channelId,
+        thread_ts: threadTs,
+        text: ':warning: 세션 ID를 확인하지 못했습니다. 이 스레드에서의 후속 대화는 이어지지 않을 수 있습니다 (claude CLI 버전에 따라 --output-format json 스키마가 다를 수 있음).',
+      });
+    }
+    if (result.isError) {
+      alert.alertResultFlaggedError({ channel: channelId, threadTs, project: meta && meta.project, resultText: result.resultText });
+    }
+  } catch (err) {
+    if (!err.cancelled) {
+      await client.chat.postMessage({
+        channel: channelId,
+        thread_ts: threadTs,
+        text: `:x: 처리 중 오류가 발생했습니다: ${err.message}`,
+      });
+      alert.alertRequestError({ channel: channelId, threadTs, project: meta && meta.project, kind: meta && meta.kind, errorMessage: err.message });
+    }
+    // err.cancelled === true인 경우: '중단' 처리 핸들러가 이미 안내 메시지를 올렸으므로 여기서는 조용히 넘어갑니다.
+  } finally {
+    activeRuns.delete(key);
+  }
+}
+
+app.command('/tc-generate', async ({ command, ack, client }) => {
+  await ack();
+  const params = parseParams(command.text);
+
+  await startNewThread(client, {
+    channelId: command.channel_id,
+    ackText: `:hourglass_flowing_sand: <@${command.user_id}> 님의 TC 생성 요청을 처리 중입니다...\n(프로젝트=${params['프로젝트'] || '?'}, 모듈=${params['모듈'] || '?'})`,
+    prompt: buildInitialPrompt(params),
+    meta: { kind: 'tc-generate', project: params['프로젝트'] || null, module: params['모듈'] || null },
+  });
+});
+
+app.command('/tc-defects', async ({ command, ack, client }) => {
+  await ack();
+  const params = parseParams(command.text);
+  const project = params['프로젝트'];
+
+  if (!project) {
+    await client.chat.postMessage({
+      channel: command.channel_id,
+      text: `:warning: <@${command.user_id}> 프로젝트명이 필요합니다. 예: \`/tc-defects 프로젝트=ABC마트\``,
+    });
+    return;
+  }
+
+  // 결함 현황 조회는 defects.json을 읽어 표로 정리하는 단순 작업이라 Claude 없이 코드로 바로 처리합니다
+  // (토큰 미사용). 세션은 아직 시작하지 않고, 담당자 지정 등 실제로 필요할 때만 지연 시작합니다.
+  const posted = await client.chat.postMessage({
+    channel: command.channel_id,
+    text: defectStore.summarize(project),
+  });
+  sessionStore.set(command.channel_id, posted.ts, {
+    sessionId: null,
+    mode: 'lazy',
+    kind: 'tc-defects',
+    project,
+  });
+});
+
+app.event('app_mention', async ({ event, client }) => {
+  // 이미 열려있는 스레드 안에서의 멘션은 아래 'message' 핸들러(후속 답장)가 처리하므로 여기서는 건너뜁니다.
+  if (event.thread_ts && event.thread_ts !== event.ts) return;
+
+  const text = event.text.replace(/<@[^>]+>\s*/g, '').trim();
+  if (!text) return;
+
+  await startNewThread(client, {
+    channelId: event.channel,
+    ackText: `:hourglass_flowing_sand: <@${event.user}> 님의 요청을 처리 중입니다...\n> ${text}`,
+    prompt: [
+      `tc-automation 저장소 경로: "${TC_AUTOMATION_ROOT}"`,
+      `Slack에서 자연어로 들어온 요청입니다: "${text}"`,
+      `이 요청이 TC 생성 요청인지, 결함 현황 조회/관리 요청인지 스스로 판단해서 그에 맞는 워크플로우를 시작해주세요.`,
+      `- TC 생성 요청이면: AGENTS.md/SKILL.md 규칙대로 Phase 1~3까지만 진행하고, Phase 4(대량 생성) 및 자동화 테스트 실행은 이 스레드에서 "승인"을 받기 전까지 시작하지 마세요. URL이 언급되어 있으면 19항(URL 기반 코드형 TC)을 따르세요.`,
+      `- 결함 현황 조회/관리 요청이면: AGENTS.md 20항 규칙대로 해당 프로젝트의 defects.json을 조회/응답하세요.`,
+      `요청에 프로젝트명이 없거나 모호하면 추측하지 말고 먼저 "어떤 프로젝트인가요?"라고 되물어주세요.`,
+      `결과는 Slack 메시지로 바로 붙여넣을 수 있도록 마크다운 표/목록 형태로 간결하게 정리해주세요.`,
+    ].join('\n'),
+    meta: { kind: 'natural-language', rawText: text },
+  });
+});
+
+app.event('message', async ({ event, client }) => {
+  // 봇 자신의 메시지, 서브타입 있는 메시지(수정/삭제/입장 등), 스레드 답장이 아닌 메시지는 무시
+  if (event.bot_id || event.subtype || !event.thread_ts || event.thread_ts === event.ts) return;
+
+  const key = runKey(event.channel, event.thread_ts);
+  const session = sessionStore.get(event.channel, event.thread_ts);
+  const trimmed = (event.text || '').trim();
+
+  // 우리가 만든 스레드가 아니면 무시합니다. startNewThread가 첫 응답 완료 전에도(=sessionId 모르는 상태로)
+  // 즉시 sessionStore에 기록해두므로, "우리 스레드인지"는 이 존재 여부만으로 판단하면 됩니다.
+  if (!session) return;
+
+  if (CANCEL_WORDS.test(trimmed)) {
+    const run = activeRuns.get(key);
+    if (run) {
+      run.cancel();
+      await client.chat.postMessage({
+        channel: event.channel,
+        thread_ts: event.thread_ts,
+        text: ':octagonal_sign: 진행 중이던 요청을 중단했습니다. 이어서 다른 요청을 입력해주세요.',
+      });
+    } else {
+      await client.chat.postMessage({
+        channel: event.channel,
+        thread_ts: event.thread_ts,
+        text: '현재 이 스레드에서 진행 중인 작업이 없습니다.',
+      });
+    }
+    return;
+  }
+
+  if (STATUS_WORDS.test(trimmed)) {
+    // 진행 상태는 여기서 즉시 답합니다 - Claude를 다시 호출하지 않고, 이미 스트리밍되고 있는
+    // claude CLI 출력에서 뽑아둔 "마지막 작업 내용"을 그대로 보여주는 것이라 토큰 소모가 없습니다.
+    const run = activeRuns.get(key);
+    const text = run
+      ? `:mag: 진행 중 (경과 ${formatElapsed(Date.now() - run.startedAt)})\n현재 작업: ${run.status || '(아직 첫 작업 시작 전)'}`
+      : '현재 이 스레드에서 진행 중인 작업이 없습니다.';
+    await client.chat.postMessage({ channel: event.channel, thread_ts: event.thread_ts, text });
+    return;
+  }
+
+  if (activeRuns.has(key)) {
+    // 이미 처리 중인 요청이 있는데 또 새 메시지가 오면, 같은 세션에 동시에 두 프로세스를 붙이지 않습니다.
+    // (첫 요청이 아직 진행 중이라 session이 없는 경우도 포함됩니다.)
+    const run = activeRuns.get(key);
+    await client.chat.postMessage({
+      channel: event.channel,
+      thread_ts: event.thread_ts,
+      text: `:hourglass_flowing_sand: 아직 이전 요청을 처리 중입니다 (현재 작업: ${run.status || '확인 중'}). 완료된 뒤에 다시 보내주시거나, \`상태\`로 진행 상황을, \`중단\`으로 취소할 수 있습니다.`,
+    });
+    return;
+  }
+
+  if (session.kind === 'tc-defects') {
+    // 담당자 지정/상태 변경처럼 정형화된 결함 관리 요청은 Claude 없이 코드로 바로 처리합니다 (토큰 미사용).
+    const fast = defectFastPath.tryHandle(session.project, trimmed);
+    if (fast) {
+      await client.chat.postMessage({ channel: event.channel, thread_ts: event.thread_ts, text: fast.text });
+      return;
+    }
+  }
+
+  const isLazyStart = !session.sessionId && session.mode === 'lazy';
+  if (!session.sessionId && !isLazyStart) {
+    // 첫 요청이 중단되었거나 세션 ID를 받기 전에 실패해, 이어갈 대상 자체가 없는 경우입니다.
+    // (조용히 무시하면 "왜 반응이 없지"로 보이므로 명시적으로 안내합니다.)
+    await client.chat.postMessage({
+      channel: event.channel,
+      thread_ts: event.thread_ts,
+      text: ':warning: 이 스레드는 이어갈 수 있는 세션이 없습니다 (중단되었거나 첫 요청이 완료되지 못했습니다). 새로 `/tc-generate` 또는 봇 멘션으로 요청을 다시 시작해주세요.',
+    });
+    return;
+  }
+
+  try {
+    await client.chat.postMessage({
+      channel: event.channel,
+      thread_ts: event.thread_ts,
+      text: ':hourglass_flowing_sand: 요청을 처리 중입니다...',
+    });
+    await client.reactions.add({
+      channel: event.channel,
+      timestamp: event.ts,
+      name: 'hourglass_flowing_sand',
+    });
+
+    // 결함 관리 스레드는 자연어 판단이 필요해질 때(=fast-path에 안 걸릴 때)만 그제서야 Claude 세션을
+    // 새로 시작합니다 (lazy). 그 외에는 기존 세션을 이어갑니다(resume).
+    const result = isLazyStart
+      ? await claudeRunner.startSession(
+          [
+            `tc-automation 저장소 경로: "${TC_AUTOMATION_ROOT}"`,
+            `"${session.project}" 프로젝트의 결함 관리 요청입니다: "${trimmed}"`,
+            `AGENTS.md 20항(결함 관리) 규칙에 따라 "${session.project}/TC/defects.json"을 조회/수정해주세요. 파일 수정은 즉시 반영하되, Git 커밋은 사용자가 "승인"하기 전까지 하지 마세요.`,
+          ].join('\n'),
+          { onProcess: (handle) => activeRuns.set(key, handle) }
+        )
+      : await claudeRunner.resumeSession(session.sessionId, buildFollowupPrompt(event.text), {
+          onProcess: (handle) => activeRuns.set(key, handle),
+        });
+
+    await resultReporter.postResult(client, {
+      channel: event.channel,
+      threadTs: event.thread_ts,
+      text: result.resultText,
+    });
+
+    if (result.sessionId) {
+      sessionStore.set(event.channel, event.thread_ts, { ...session, sessionId: result.sessionId });
+    }
+    if (result.isError) {
+      alert.alertResultFlaggedError({ channel: event.channel, threadTs: event.thread_ts, project: session.project, resultText: result.resultText });
+    }
+  } catch (err) {
+    if (!err.cancelled) {
+      await client.chat.postMessage({
+        channel: event.channel,
+        thread_ts: event.thread_ts,
+        text: `:x: 처리 중 오류가 발생했습니다: ${err.message}`,
+      });
+      alert.alertRequestError({ channel: event.channel, threadTs: event.thread_ts, project: session.project, kind: session.kind, errorMessage: err.message });
+    }
+  } finally {
+    activeRuns.delete(key);
+    await client.reactions.remove({
+      channel: event.channel,
+      timestamp: event.ts,
+      name: 'hourglass_flowing_sand',
+    }).catch(() => {});
+  }
+});
+
+// 서버 자체가 죽는 경우(처리되지 않은 예외 등) - 스레드 안 에러 보고와 달리, 이건 채널 어디에도 보고될 곳이
+// 없으므로 별도 웹훅으로 알립니다. 이런 경우가 실제로 응답 없는 요청(고아 프로세스)의 원인이 됩니다.
+process.on('uncaughtException', async (err) => {
+  console.error('[uncaughtException]', err);
+  await alert.sendAlert(`:rotating_light: tc-automation 브릿지 서버에 처리되지 않은 오류가 발생해 곧 종료됩니다:\n\`\`\`${err.stack || err.message}\`\`\``);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', async (reason) => {
+  console.error('[unhandledRejection]', reason);
+  await alert.sendAlert(`:rotating_light: tc-automation 브릿지 서버에서 처리되지 않은 Promise 거부가 발생했습니다:\n\`\`\`${reason && reason.stack ? reason.stack : reason}\`\`\``);
+});
+
+// 프로세스는 살아있는데 네트워크만 끊긴 경우(예: PC 슬립/네트워크 장애) 대비 - 이런 경우는 크래시가 아니라서
+// uncaughtException/unhandledRejection으로는 안 잡히고, Socket Mode는 끊긴 동안 온 이벤트를 재전달해주지도
+// 않아 "며칠째 응답 없음"으로 조용히 방치될 수 있습니다. 주기적으로 Slack API 연결을 확인해 연속 실패 시 알립니다.
+const HEALTH_CHECK_MS = 5 * 60 * 1000; // 5분마다
+const HEALTH_FAILURE_THRESHOLD = 3; // 연속 3회(약 15분) 실패 시 알림
+let consecutiveHealthFailures = 0;
+let disconnectAlertSent = false;
+
+setInterval(async () => {
+  try {
+    await app.client.auth.test();
+    if (disconnectAlertSent) {
+      await alert.sendAlert(':white_check_mark: tc-automation 브릿지 서버의 Slack 연결이 복구되었습니다.');
+      disconnectAlertSent = false;
+    }
+    consecutiveHealthFailures = 0;
+  } catch (err) {
+    consecutiveHealthFailures += 1;
+    console.error(`[health-check] Slack API 호출 실패 (연속 ${consecutiveHealthFailures}회):`, err.message);
+    if (consecutiveHealthFailures >= HEALTH_FAILURE_THRESHOLD && !disconnectAlertSent) {
+      disconnectAlertSent = true;
+      await alert.sendAlert(
+        `:rotating_light: tc-automation 브릿지 서버가 Slack에 ${Math.round((HEALTH_CHECK_MS * consecutiveHealthFailures) / 60000)}분 이상 연결하지 못하고 있습니다 (네트워크 장애 가능성). 마지막 오류: ${err.message}`
+      );
+    }
+  }
+}, HEALTH_CHECK_MS);
+
+(async () => {
+  await app.start();
+  console.log('tc-automation slack-bridge 가 실행 중입니다 (Socket Mode).');
+  // 시작 성공 알림은 보내지 않습니다 (개발 중 재시작마다 알림이 쌓이는 걸 피하기 위함) -
+  // 실제로 문제가 되는 경우(크래시/연결 끊김)만 위 핸들러들이 알립니다.
+})();
