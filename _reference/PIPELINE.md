@@ -150,9 +150,10 @@ Anthropic이 제공하는 공식 Slack 통합 기능(`Claude Tag`, `claude.ai/ad
 
 | 발화 유형 | 형식 예시 |
 |---|---|
-| TC 생성 요청 | `/tc-generate 프로젝트=ABC마트 모듈=장바구니 목표건수=50` |
+| TC 생성 요청 | `/tc-generate 프로젝트=ABC마트 모듈=장바구니` (목표 건수는 미리 정하지 않음 — 도출 가능한 최대치를 그대로 산출) |
 | TC 생성 요청 (URL 기반, 코드형) | `/tc-generate 프로젝트=ABC마트 모듈=장바구니 URL=https://abc-mart.example.com/cart` — Playwright로 실제 화면을 관찰해 근거로 삼음. Phase 4(TC 작성)까지만 진행되며, **자동화 테스트 실행은 아래 "테스트 실행 요청"을 별도로 해야 시작됨** |
-| 테스트 실행 요청 (Phase 5) | `테스트 실행해줘` / `테스트 수행해줘` / `test run` — Phase 4가 승인된 뒤 이 발화가 있어야만 Playwright 자동화 테스트를 실행. Phase 4 승인만으로는 자동 실행되지 않음 |
+| 테스트 실행 요청 (Phase 5, 스레드 내) | `테스트 실행해줘` / `테스트 수행해줘` / `test run` — Phase 4가 승인된 뒤 이 발화가 있어야만 Playwright 자동화 테스트를 실행. Phase 4 승인만으로는 자동 실행되지 않음 |
+| 테스트 실행 요청 (Phase 5, 독립 진입점) | `/tc-test 프로젝트=ABC마트 모듈=장바구니` — TC 생성 스레드 없이도, 이미 생성된 자동화 테스트 코드를 그대로 재실행 (회귀 테스트 등) |
 
 **콘솔 에러 + 스크린샷 자동 첨부**: 자동화 테스트는 공통 fixture(`_shared/testFixtures.js`)를 통해 브라우저 콘솔 에러/실패 API 요청을 자동 감지하며, 감지 시 어서션 통과 여부와 무관하게 해당 TC를 실패 처리하고 스크린샷을 남깁니다. Claude는 최종 응답에 `SCREENSHOT: {경로}` 줄을 남기고, `slack-bridge/src/resultReporter.js`가 이를 파싱해 Slack 스레드에 이미지 파일로 첨부합니다 (Slack App에 `files:write` 스코프 필요).
 | TC 수정 요청 (스레드 내) | `TC_CRT_012 우선순위를 P1로 변경해줘` |
