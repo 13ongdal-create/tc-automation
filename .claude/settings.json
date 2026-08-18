@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//d/E-Commerce Service Planning Academy/**)",
+      "Write(//d/E-Commerce Service Planning Academy/tc-automation/**)",
+      "Edit(//d/E-Commerce Service Planning Academy/tc-automation/**)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git diff*)",
+      "Bash(cd *tc-automation* && git *)",
+      "Bash(git -C *tc-automation* *)",
+      "Bash(node *)",
+      "Bash(pandoc *)",
+      "Bash(mkdir -p *)",
+      "Bash(unzip *)",
+      "Bash(npx playwright test*)"
+    ]
+  }
+}
