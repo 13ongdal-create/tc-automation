@@ -1,0 +1,650 @@
+<title>TC 자동화 시스템 개요</title>
+<style>
+  @font-face {
+    font-family: 'ui-serif-stack';
+    src: local('Iowan Old Style'), local('Palatino Linotype'), local('Georgia');
+  }
+
+  :root {
+    --ink: #15191f;
+    --paper: #f7f4ee;
+    --panel: #ffffff;
+    --border: #ddd8ca;
+    --muted: #6b6656;
+    --text: #23271f;
+    --accent: #0c8377;
+    --accent-soft: #e3f2ef;
+    --good: #1f7a45;
+    --good-soft: #e5f3ea;
+    --warn: #9a6400;
+    --warn-soft: #fbf0dd;
+    --bad: #b23a30;
+    --bad-soft: #fbe9e6;
+    --mono-bg: #efece1;
+    --shadow: 0 1px 2px rgba(21, 25, 31, 0.04), 0 8px 24px rgba(21, 25, 31, 0.06);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #eef0ee;
+      --paper: #14171b;
+      --panel: #1b1f24;
+      --border: #313742;
+      --muted: #9aa1a6;
+      --text: #e7e9e6;
+      --accent: #3fcdbb;
+      --accent-soft: #163330;
+      --good: #4bbf7c;
+      --good-soft: #16281d;
+      --warn: #e0ac4c;
+      --warn-soft: #2e2610;
+      --bad: #e2685c;
+      --bad-soft: #331d1a;
+      --mono-bg: #22262c;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 28px rgba(0, 0, 0, 0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #eef0ee; --paper: #14171b; --panel: #1b1f24; --border: #313742; --muted: #9aa1a6; --text: #e7e9e6;
+    --accent: #3fcdbb; --accent-soft: #163330; --good: #4bbf7c; --good-soft: #16281d;
+    --warn: #e0ac4c; --warn-soft: #2e2610; --bad: #e2685c; --bad-soft: #331d1a; --mono-bg: #22262c;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35);
+  }
+  :root[data-theme="light"] {
+    --ink: #15191f; --paper: #f7f4ee; --panel: #ffffff; --border: #ddd8ca; --muted: #6b6656; --text: #23271f;
+    --accent: #0c8377; --accent-soft: #e3f2ef; --good: #1f7a45; --good-soft: #e5f3ea;
+    --warn: #9a6400; --warn-soft: #fbf0dd; --bad: #b23a30; --bad-soft: #fbe9e6; --mono-bg: #efece1;
+    --shadow: 0 1px 2px rgba(21,25,31,.04), 0 8px 24px rgba(21,25,31,.06);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", "Noto Sans KR", system-ui, sans-serif;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent-soft); }
+
+  .wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 64px 28px 120px;
+  }
+
+  h1, h2, h3 {
+    font-family: 'ui-serif-stack', Georgia, "Noto Serif KR", serif;
+    font-weight: 600;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  .kicker {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .kicker::before {
+    content: "";
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  header.masthead {
+    margin-bottom: 56px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  header.masthead h1 {
+    font-size: clamp(28px, 4vw, 38px);
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+  }
+  header.masthead p.lede {
+    max-width: 62ch;
+    color: var(--muted);
+    font-size: 16.5px;
+    margin: 0;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-top: 22px;
+    font-size: 13px;
+    color: var(--muted);
+    font-family: ui-monospace, Consolas, monospace;
+  }
+  .meta-row span b { color: var(--text); font-weight: 600; }
+
+  nav.toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 56px;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  nav.toc ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 6px 24px;
+  }
+  nav.toc a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 14.5px;
+    display: flex;
+    gap: 10px;
+  }
+  nav.toc a:hover { color: var(--accent); }
+  nav.toc a .n {
+    font-family: ui-monospace, Consolas, monospace;
+    color: var(--accent);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  section.block { margin-bottom: 68px; scroll-margin-top: 24px; }
+  section.block h2 {
+    font-size: 23px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin: 0 0 8px;
+  }
+  section.block h2 .num {
+    color: var(--accent);
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  section.block > p.intro {
+    color: var(--muted);
+    margin: 0 0 26px;
+    max-width: 68ch;
+    font-size: 15.5px;
+  }
+
+  .table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    font-size: 14.5px;
+  }
+  thead th {
+    text-align: left;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: color-mix(in srgb, var(--accent) 4%, transparent); }
+  td code, p code, li code {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    background: var(--mono-bg);
+    padding: 1.5px 6px;
+    border-radius: 5px;
+    font-size: 0.92em;
+    color: var(--text);
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px 3px 8px;
+    border-radius: 100px;
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    font-family: ui-monospace, Consolas, monospace;
+  }
+  .pill.good { background: var(--good-soft); color: var(--good); }
+  .pill.bad { background: var(--bad-soft); color: var(--bad); }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  .sev {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: ui-monospace, Consolas, monospace;
+    letter-spacing: 0.02em;
+  }
+  .sev.critical { background: var(--bad-soft); color: var(--bad); }
+  .sev.medium { background: var(--warn-soft); color: var(--warn); }
+  .sev.minor { background: var(--accent-soft); color: var(--accent); }
+
+  /* flow diagram */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 28px 0 8px;
+  }
+  .flow-step {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 18px;
+  }
+  .flow-rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .flow-dot {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: ui-monospace, Consolas, monospace;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .flow-line {
+    width: 1px;
+    flex: 1;
+    background: var(--border);
+    min-height: 22px;
+  }
+  .flow-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    box-shadow: var(--shadow);
+  }
+  .flow-card .flow-title {
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+    font-size: 15px;
+  }
+  .flow-card .flow-desc { color: var(--muted); font-size: 13.8px; }
+  .flow-card .flow-gate {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 12px;
+    font-family: ui-monospace, Consolas, monospace;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 2px 9px;
+    border-radius: 6px;
+  }
+  .flow-branch {
+    margin-top: 6px;
+    padding-left: 14px;
+    border-left: 2px dashed var(--border);
+  }
+  .flow-branch .flow-desc { font-size: 13.2px; }
+
+  .cmd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin: 20px 0 4px;
+  }
+  .cmd-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+  .cmd-card code.cmd {
+    display: block;
+    font-family: ui-monospace, Consolas, monospace;
+    background: var(--mono-bg);
+    padding: 8px 10px;
+    border-radius: 7px;
+    font-size: 13px;
+    margin-bottom: 10px;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .cmd-card .cmd-desc { color: var(--muted); font-size: 13.6px; }
+
+  footer.colophon {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12.5px;
+    font-family: ui-monospace, Consolas, monospace;
+  }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 40px 18px 90px; }
+    nav.toc ol { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="kicker">tc-automation · 내부 레퍼런스</div>
+    <h1>TC 자동화 시스템 개요</h1>
+    <p class="lede">Slack에서 프로젝트 단위로 TC(테스트 케이스)를 요청하면 Claude Code가 정책서/화면을 근거로 케이스를 설계하고, 승인 후 Playwright로 직접 실행까지 마치는 시스템입니다. 아래는 이 시스템을 처음 보는 동료에게 설명하기 위한 구조·프로세스·사용법 정리입니다.</p>
+    <div class="meta-row">
+      <span>운영 채널: <b>#tc-automation</b></span>
+      <span>봇 이름: <b>큐돌이</b></span>
+      <span>저장소: <b>tc-automation</b> (Git)</span>
+      <span>버전: <b>v0.2</b></span>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <div class="toc-title">목차</div>
+    <ol>
+      <li><a href="#tokens"><span class="n">01</span> 토큰 사용 영역</a></li>
+      <li><a href="#process"><span class="n">02</span> TC 생성·실행 프로세스</a></li>
+      <li><a href="#docs"><span class="n">03</span> 문서(MD) 관리 위치</a></li>
+      <li><a href="#issues"><span class="n">04</span> 알려진 문제·중복</a></li>
+      <li><a href="#workflow"><span class="n">05</span> 사용자 워크플로우</a></li>
+      <li><a href="#glossary"><span class="n">06</span> 한눈에 보는 용어</a></li>
+    </ol>
+  </nav>
+
+  <section class="block" id="tokens">
+    <h2><span class="num">01</span> 토큰 사용 영역 및 기능</h2>
+    <p class="intro">Claude를 실제로 호출(=비용 발생)하는 기능과, 코드만으로 처리되어 호출하지 않는 기능을 나눴습니다. 결정적으로 정형화할 수 있는 작업은 전부 토큰을 쓰지 않도록 설계되어 있습니다.</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>기능</th><th>토큰</th><th>이유</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>/tc-generate</code> TC 생성 (Phase 1~4)</td>
+            <td><span class="pill bad">사용</span></td>
+            <td>정책서·화면 분석, 시나리오 설계 등 실제 추론이 필요한 핵심 기능</td>
+          </tr>
+          <tr>
+            <td>승인 후 자동화 테스트 실행 + git 커밋</td>
+            <td><span class="pill bad">사용</span></td>
+            <td>Claude가 테스트 실행·결과 해석·커밋 메시지 작성까지 수행</td>
+          </tr>
+          <tr>
+            <td><code>@큐돌이</code> 자연어 멘션 (의도 판별)</td>
+            <td><span class="pill bad">사용</span></td>
+            <td>자유 텍스트에서 TC 생성/결함조회 의도와 프로젝트명을 추출해야 함</td>
+          </tr>
+          <tr>
+            <td>스레드 내 자유 수정요청 / 승인 / 반려</td>
+            <td><span class="pill bad">사용</span></td>
+            <td>실제로 TC를 다시 쓰거나 다음 단계로 진행해야 함</td>
+          </tr>
+          <tr>
+            <td>결함관리 중 자유 형식 질문 (예: "이 결함 원인이 뭐야?")</td>
+            <td><span class="pill bad">사용 (지연 시작)</span></td>
+            <td>정형 패턴에 안 걸릴 때만, 그 시점에 처음 세션을 엶</td>
+          </tr>
+          <tr>
+            <td><code>/tc-defects</code> 최초 결함 현황 조회</td>
+            <td><span class="pill good">미사용</span></td>
+            <td><code>defects.json</code> 집계 후 표로 정리 — 브릿지 코드가 직접 처리</td>
+          </tr>
+          <tr>
+            <td>결함 담당자·상태·이슈링크 변경 (정형 문장)</td>
+            <td><span class="pill good">미사용</span></td>
+            <td><code>defectFastPath.js</code> 정규식 매칭 후 파일 직접 수정</td>
+          </tr>
+          <tr>
+            <td><code>상태</code> / <code>진행상황</code> 조회</td>
+            <td><span class="pill good">미사용</span></td>
+            <td>이미 실행 중인 프로세스의 스트리밍 출력에서 마지막 작업만 추출</td>
+          </tr>
+          <tr>
+            <td><code>중단</code></td>
+            <td><span class="pill good">미사용</span></td>
+            <td>실행 중인 프로세스를 종료하는 것 뿐, Claude 호출 없음</td>
+          </tr>
+          <tr>
+            <td>웹훅 알림 4종 (크래시 / 연결끊김 / 개별오류 / is_error)</td>
+            <td><span class="pill good">미사용</span></td>
+            <td>순수 프로세스·네트워크 이벤트이거나 이미 나온 결과를 재전송하는 것뿐</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" id="process">
+    <h2><span class="num">02</span> 신규 프로젝트 TC 요청 → 실행 프로세스</h2>
+    <p class="intro">프로젝트 온보딩부터 결함 등록까지 이어지는 전체 흐름입니다. 굵게 표시된 지점은 사람의 "승인"이 있어야만 다음 단계로 넘어갑니다.</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-rail"><div class="flow-dot">1</div><div class="flow-line"></div></div>
+        <div class="flow-card">
+          <div class="flow-title">프로젝트 온보딩</div>
+          <div class="flow-desc"><code>tc-automation/_template/</code>을 <code>{프로젝트명}/</code>으로 복사 (Policy·SB·Requirements·TC). 다른 프로젝트를 복사하거나 참고하지 않음.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-rail"><div class="flow-dot">2</div><div class="flow-line"></div></div>
+        <div class="flow-card">
+          <div class="flow-title">근거 자료 투입</div>
+          <div class="flow-desc">정책서→<code>Policy</code>, 화면설계서→<code>SB</code>, 요구사항→<code>Requirements</code>, 기존 TC→<code>TC/legacy</code></div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-rail"><div class="flow-dot">3</div><div class="flow-line"></div></div>
+        <div class="flow-card">
+          <div class="flow-title">Slack에서 요청</div>
+          <div class="flow-desc"><code>/tc-generate 프로젝트=X 모듈=Y</code> 또는 URL 포함, 또는 <code>@큐돌이</code> 자연어</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-rail"><div class="flow-dot">4</div><div class="flow-line"></div></div>
+        <div class="flow-card">
+          <div class="flow-title">Phase 1~3 — 근거 확보 &amp; 시나리오 검토표</div>
+          <div class="flow-desc">정책서 분석 또는 URL 관찰(Playwright) → 계정 매트릭스/User Flow → 시나리오 검토표 제시</div>
+          <span class="flow-gate">⏸ 1차 승인 대기</span>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-rail"><div class="flow-dot">5</div><div class="flow-line"></div></div>
+        <div class="flow-card">
+          <div class="flow-title">Phase 3.5~4 — 자체검증 &amp; TC 산출물 생성</div>
+          <div class="flow-desc">TC HTML/JSON 뷰어 생성. URL 기반이면 Playwright 테스트 코드도 함께 생성</div>
+          <span class="flow-gate">⏸ 2차 승인 대기</span>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-rail"><div class="flow-dot">6</div><div class="flow-line"></div></div>
+        <div class="flow-card">
+          <div class="flow-title">테스트 실행 &amp; 커밋</div>
+          <div class="flow-desc">Playwright 자동화 테스트 실행 → 콘솔 에러/실패 감지 시 스크린샷 캡처 → 결과 리포트</div>
+          <div class="flow-branch">
+            <div class="flow-desc">✅ 통과: 실행결과 반영 후 <code>git add {프로젝트명}</code> → commit → push</div>
+            <div class="flow-desc">❌ 실패: <code>defects.json</code>에 결함 자동 등록/갱신 (재발생 시 상태 복원)</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-rail"><div class="flow-dot">7</div></div>
+        <div class="flow-card">
+          <div class="flow-title">이후 결함 관리</div>
+          <div class="flow-desc"><code>/tc-defects</code> 또는 스레드 내 자연어로 담당자 지정·상태 변경·재검증 지속</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="docs">
+    <h2><span class="num">03</span> 문서(MD) 관리 위치</h2>
+    <p class="intro">규칙과 스펙은 4개 문서에 나뉘어 있습니다. <b>이 중 Git으로 관리되는 건 PIPELINE.md 하나뿐</b>이라는 점을 04번에서 문제로 짚었습니다.</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>파일</th><th>위치</th><th>용도</th><th>Git 관리</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>AGENTS.md</code></td>
+            <td><code>.agents/AGENTS.md</code></td>
+            <td>전체 행동 규칙 (TC 스키마, 우선순위, 근거원칙, Git 규칙, URL 자동화, 결함관리 등 0~20항)</td>
+            <td><span class="pill bad">미관리</span></td>
+          </tr>
+          <tr>
+            <td><code>SKILL.md</code></td>
+            <td><code>.agents/skills/qa-test-case-generator/SKILL.md</code></td>
+            <td>TC 생성 스킬의 상세 실행 스펙 (컬럼 정의, Phase 워크플로우, HTML 뷰어 스펙)</td>
+            <td><span class="pill bad">미관리</span></td>
+          </tr>
+          <tr>
+            <td><code>role-definition.md</code></td>
+            <td><code>.agents/skills/.../references/</code></td>
+            <td>페르소나·역량·테스트 설계 기법 참조문서</td>
+            <td><span class="pill bad">미관리</span></td>
+          </tr>
+          <tr>
+            <td><code>PIPELINE.md</code></td>
+            <td><code>tc-automation/_reference/PIPELINE.md</code></td>
+            <td>Slack 연동 아키텍처, 발화 규칙, 토큰 최적화 정책</td>
+            <td><span class="pill good">tc-automation repo</span></td>
+          </tr>
+          <tr>
+            <td><code>slack-bridge/README.md</code> + 소스코드</td>
+            <td><code>slack-bridge/</code></td>
+            <td>브릿지 서버 설치/운영 가이드 + 실제 봇 서버 코드 전체</td>
+            <td><span class="pill bad">미관리</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" id="issues">
+    <h2><span class="num">04</span> 알려진 문제·중복 프로세스</h2>
+    <p class="intro">현재 구조를 점검하며 발견한 실제 이슈입니다. 심각도는 데이터 손실 가능성과 사용자 혼동 정도 기준입니다.</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>이슈</th><th>심각도</th><th>설명</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>행동 규칙(<code>.agents</code>)과 봇 서버 코드(<code>slack-bridge</code>)가 버전관리 안 됨</td>
+            <td><span class="sev critical">Critical</span></td>
+            <td>이 PC 디스크 장애 시 규칙·서버 코드 전체가 복구 불가. TC 데이터(<code>tc-automation</code>)만 Git으로 보호되고 있음</td>
+          </tr>
+          <tr>
+            <td>자연어 결함 요청은 fast-path 혜택을 못 받음</td>
+            <td><span class="sev medium">Medium</span></td>
+            <td><code>@큐돌이 결함현황 보여줘</code>처럼 자연어로 오면 <code>/tc-defects</code>와 같은 작업인데도 항상 토큰을 쓰고, 이후 담당자 변경도 fast-path 대상에서 빠짐</td>
+          </tr>
+          <tr>
+            <td>"승인" 키워드가 두 단계 게이트에 재사용됨</td>
+            <td><span class="sev minor">Minor</span></td>
+            <td>검토표 승인과 최종 실행/커밋 승인이 같은 문구라, "한 번 승인했는데 왜 또?"로 혼동 가능 (실제 문의 있었음)</td>
+          </tr>
+          <tr>
+            <td><code>defects.json</code> 동시 수정 경합 가능성</td>
+            <td><span class="sev minor">Minor</span></td>
+            <td>fast-path(코드)와 Claude(같은 파일)가 이론상 겹칠 수 있음. 실제로는 진행 중 상태 체크로 대부분 방지되나 완전한 락은 아님</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" id="workflow">
+    <h2><span class="num">05</span> 사용자 워크플로우 (Slack 사용법)</h2>
+    <p class="intro">새 요청을 여는 명령과, 열린 스레드 안에서 쓰는 답장으로 나뉩니다.</p>
+
+    <h3 style="font-size:16px;margin:28px 0 4px;">새 스레드를 여는 명령</h3>
+    <div class="cmd-grid">
+      <div class="cmd-card">
+        <code class="cmd">/tc-generate 프로젝트=X 모듈=Y 목표건수=50</code>
+        <div class="cmd-desc">정책서 기반 TC 생성 요청</div>
+      </div>
+      <div class="cmd-card">
+        <code class="cmd">/tc-generate 프로젝트=X 모듈=Y URL=https://...</code>
+        <div class="cmd-desc">실제 화면 관찰(Playwright) 기반 + 승인 시 자동화 테스트까지 실행</div>
+      </div>
+      <div class="cmd-card">
+        <code class="cmd">/tc-defects 프로젝트=X</code>
+        <div class="cmd-desc">결함 현황 조회 (토큰 미사용, 즉시 응답)</div>
+      </div>
+      <div class="cmd-card">
+        <code class="cmd">@큐돌이 X 프로젝트 장바구니 TC 만들어줘</code>
+        <div class="cmd-desc">자연어 멘션 — 의도를 스스로 판별 (TC생성 vs 결함조회)</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:16px;margin:32px 0 4px;">열린 스레드 안 답장</h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>답장</th><th>동작</th></tr></thead>
+        <tbody>
+          <tr><td><code>승인</code> / <code>approve</code></td><td>다음 단계 진행 (검토표→생성, 생성→실행+커밋)</td></tr>
+          <tr><td><code>반려: 사유</code> / <code>거절: 사유</code></td><td>사유 반영해 재작성, 커밋 안 함</td></tr>
+          <tr><td>자유 문장 (예: "쿠폰 케이스 더 추가해줘")</td><td>내용 반영해 다시 제시</td></tr>
+          <tr><td><code>상태</code> / <code>진행상황</code></td><td>지금 어떤 작업 중인지 즉시 응답 (토큰 미사용)</td></tr>
+          <tr><td><code>중단</code> / <code>취소</code></td><td>실행 중인 프로세스 강제 종료</td></tr>
+          <tr><td><code>DEF_xxx 담당자를 홍길동으로 지정해줘</code></td><td>결함 담당자 변경 (토큰 미사용)</td></tr>
+          <tr><td><code>DEF_xxx 완료 처리해줘</code></td><td>결함 상태 변경 (토큰 미사용)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" id="glossary">
+    <h2><span class="num">06</span> 한눈에 보는 용어</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>용어</th><th>의미</th></tr></thead>
+        <tbody>
+          <tr><td>큐돌이</td><td>이 시스템의 Slack 봇 이름 (Socket Mode로 연결된 브릿지 서버가 구동)</td></tr>
+          <tr><td>Phase 1~4</td><td>근거확보 → 계정매트릭스 → 시나리오 검토표 → TC 산출물 생성의 4단계</td></tr>
+          <tr><td>fast-path</td><td>정형화된 요청을 Claude 없이 코드로 직접 처리하는 경로 (토큰 절약)</td></tr>
+          <tr><td>lazy start</td><td>결함관리 스레드가 fast-path에 안 걸릴 때만 그제서야 Claude 세션을 여는 방식</td></tr>
+          <tr><td><code>_template</code></td><td>신규 프로젝트가 반드시 복사해서 시작해야 하는 빈 스캐폴드</td></tr>
+          <tr><td>defects.json</td><td>프로젝트별 결함 대장 (자동/수동 등록, 상태 이력 포함)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    tc-automation/_reference/system-overview.html · 내부 공유용
+  </footer>
+
+</div>

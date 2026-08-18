@@ -14,9 +14,9 @@
 
 ---
 
-## 2. 전체 흐름 (개념도)
+<!-- [수정 전 2026-08-18] Phase1~3을 한 번에 진행하고 Phase4 전에만 승인받던 2-게이트 버전.
+사용자 요청으로 모든 Phase를 개별 요청/승인 기반으로 세분화 (AGENTS.md 13항 Phase 0~8).
 
-```mermaid
 flowchart TD
     A["Slack: TC 생성 요청\n(@Claude 또는 슬래시커맨드)"] --> B["근거 문서 확보\nPolicy / SB / Requirements 스캔"]
     B --> C["Phase 1~3: 시나리오 검토표 제출"]
@@ -31,11 +31,48 @@ flowchart TD
     J --> H
     I -- "승인" --> K["git commit & push\n(AGENTS.md 18항 커밋 규칙)"]
     K --> L["Slack에 커밋/PR 링크 회신"]
+
+핵심 설계 원칙:
+- Phase 3(시나리오 검토표) 승인 없이 Phase 4(실제 TC 대량 생성)로 넘어가지 않는다.
+- Git 커밋은 사용자가 Slack에서 명시적으로 승인한 시점에만 발생한다 (자동 커밋 금지).
+- 모든 요청/수정/승인 발화는 Slack 스레드에 그대로 남아 감사 로그(audit log) 역할을 한다.
+-->
+
+## 2. 전체 흐름 (개념도)
+
+AGENTS.md 13항의 Phase 0~8을 그대로 따른다. **모든 화살표가 개별 승인/요청 게이트**이며, 특히 Phase 4 → Phase 5(테스트 실행)는 자동으로 이어지지 않고 **반드시 별도 요청**이 있어야 한다.
+
+```mermaid
+flowchart TD
+    A["Slack: TC 생성 요청"] --> P0{"project.json\n있음?"}
+    P0 -- "없음" --> Q["Phase 0: 질의\nURL / 단위·통합 / 코드·정책기반"]
+    Q --> P1
+    P0 -- "있음" --> P1["Phase 1: 분석"]
+    P1 --> G1{"승인?"}
+    G1 -- "수정 요청" --> P1
+    G1 -- "승인" --> P2["Phase 2: 테스트 범위 산정"]
+    P2 --> G2{"승인?"}
+    G2 -- "수정 요청" --> P2
+    G2 -- "승인" --> P3["Phase 3: 테스트 케이스 산출"]
+    P3 --> G3{"승인?"}
+    G3 -- "수정 요청" --> P3
+    G3 -- "승인" --> P4["Phase 4: 테스트 케이스 작성\n(TC 산출물 + 자동화 코드, 미실행)"]
+    P4 --> G4{"승인?"}
+    G4 -- "수정 요청" --> P4
+    G4 -- "승인" --> WAIT["대기 — 여기서 자동 진행 없음"]
+    WAIT -- "'테스트 실행해줘' 요청" --> P5["Phase 5: 테스트 수행"]
+    P5 --> P6["Phase 6: 오류 공유\n(콘솔 에러/스크린샷)"]
+    P6 --> P7["Phase 7: 결함 관리\ndefects.json"]
+    P7 --> P8["Phase 8: 결과 도출\nPass/Fail 요약"]
+    P8 --> G5{"최종 승인?"}
+    G5 -- "승인" --> K["git commit & push\n(18항, 프로젝트 경로만 add)"]
+    K --> L["Slack에 커밋 해시 회신"]
 ```
 
 **핵심 설계 원칙**
-- Phase 3(시나리오 검토표) 승인 없이 Phase 4(실제 TC 대량 생성)로 넘어가지 않는다 — 기존 스킬 규칙(SKILL.md 0항)을 Slack 흐름에도 그대로 적용.
-- Git 커밋은 **사용자가 Slack에서 명시적으로 승인한 시점**에만 발생한다 (자동 커밋 금지).
+- Phase 0~8 각각이 독립된 요청/승인 게이트다. 여러 Phase를 한 응답에 묶어 진행하지 않는다.
+- **Phase 4(TC 작성) 승인 ≠ Phase 5(테스트 실행) 시작.** 테스트 실행은 `테스트 실행해줘`/`테스트 수행해줘` 같은 별도 발화가 있어야만 시작된다 (6장 발화 규칙 참조).
+- Git 커밋은 **Phase 8(결과 도출) 이후 사용자가 명시적으로 승인한 시점**에만 발생한다 (자동 커밋 금지).
 - 모든 요청/수정/승인 발화는 Slack 스레드에 그대로 남아 감사 로그(audit log) 역할을 한다.
 
 ---
@@ -114,7 +151,8 @@ Anthropic이 제공하는 공식 Slack 통합 기능(`Claude Tag`, `claude.ai/ad
 | 발화 유형 | 형식 예시 |
 |---|---|
 | TC 생성 요청 | `/tc-generate 프로젝트=ABC마트 모듈=장바구니 목표건수=50` |
-| TC 생성 요청 (URL 기반, 코드형) | `/tc-generate 프로젝트=ABC마트 모듈=장바구니 URL=https://abc-mart.example.com/cart` — Playwright로 실제 화면을 관찰해 근거로 삼고, 승인 시 자동화 테스트(AGENTS.md 19항)까지 실행 후 Pass/Fail 리포트 |
+| TC 생성 요청 (URL 기반, 코드형) | `/tc-generate 프로젝트=ABC마트 모듈=장바구니 URL=https://abc-mart.example.com/cart` — Playwright로 실제 화면을 관찰해 근거로 삼음. Phase 4(TC 작성)까지만 진행되며, **자동화 테스트 실행은 아래 "테스트 실행 요청"을 별도로 해야 시작됨** |
+| 테스트 실행 요청 (Phase 5) | `테스트 실행해줘` / `테스트 수행해줘` / `test run` — Phase 4가 승인된 뒤 이 발화가 있어야만 Playwright 자동화 테스트를 실행. Phase 4 승인만으로는 자동 실행되지 않음 |
 
 **콘솔 에러 + 스크린샷 자동 첨부**: 자동화 테스트는 공통 fixture(`_shared/testFixtures.js`)를 통해 브라우저 콘솔 에러/실패 API 요청을 자동 감지하며, 감지 시 어서션 통과 여부와 무관하게 해당 TC를 실패 처리하고 스크린샷을 남깁니다. Claude는 최종 응답에 `SCREENSHOT: {경로}` 줄을 남기고, `slack-bridge/src/resultReporter.js`가 이를 파싱해 Slack 스레드에 이미지 파일로 첨부합니다 (Slack App에 `files:write` 스코프 필요).
 | TC 수정 요청 (스레드 내) | `TC_CRT_012 우선순위를 P1로 변경해줘` |
