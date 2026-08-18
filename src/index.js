@@ -16,7 +16,7 @@ const app = new App({
 });
 
 function parseParams(text) {
-  // "프로젝트=ABC마트 모듈=장바구니 목표건수=50" -> { 프로젝트: 'ABC마트', 모듈: '장바구니', 목표건수: '50' }
+  // "프로젝트=ABC마트 모듈=장바구니 URL=https://..." -> { 프로젝트: 'ABC마트', 모듈: '장바구니', URL: 'https://...' }
   const params = {};
   const re = /(\S+?)=(\S+)/g;
   let m;
@@ -66,7 +66,6 @@ function findProjectNameInText(text) {
 function buildInitialPrompt(params) {
   const project = params['프로젝트'] || '[확인필요: 프로젝트명 없음]';
   const module_ = params['모듈'] || '[확인필요: 모듈 미지정]';
-  const count = params['목표건수'] || '150~200';
   const url = params['URL'] || params['url'];
   return [
     `tc-automation 저장소 경로: "${TC_AUTOMATION_ROOT}"`,
@@ -74,7 +73,7 @@ function buildInitialPrompt(params) {
     `AGENTS.md, skills/qa-test-case-generator/SKILL.md 규칙을 그대로 따라주세요.`,
     `AGENTS.md 13항의 Phase 워크플로우(Phase 0~8)를 단계별로 따르세요 — 이 프로젝트의 project.json이 없으면 먼저 Phase 0(URL, 단위/통합 구분, 코드/정책기반 질의)부터 진행하고, 있으면 건너뜁니다.`,
     url ? `URL이 함께 제공되었습니다: ${url} — Phase 0 질의에 참고하고, AGENTS.md 19항(URL 기반 코드형 TC)에 따라 Playwright로 직접 접속해 관찰한 화면 구조를 근거로 사용하세요.` : null,
-    `목표 건수: ${count}건.`,
+    `목표 건수는 미리 정하지 않습니다 — 근거에서 도출 가능한 시나리오를 최대한 뽑아내고, 실제 도출된 개수를 있는 그대로 보고해주세요 (AGENTS.md 13항).`,
     `이번 응답에서는 (Phase 0 질의가 필요하면 그것만, 아니면) **Phase 1(분석) 한 단계만** 진행하고 승인을 기다려주세요. Phase 2~8은 각각 별도의 승인/요청을 받은 뒤에만 진행합니다 (한 번에 여러 Phase를 묶어 진행하지 않습니다).`,
     `결과는 Slack 메시지로 바로 붙여넣을 수 있도록 마크다운 표/목록 형태로 간결하게 정리해주세요.`,
   ].filter(Boolean).join('\n');
@@ -188,6 +187,37 @@ app.command('/tc-defects', async ({ command, ack, client }) => {
     mode: 'lazy',
     kind: 'tc-defects',
     project,
+  });
+});
+
+app.command('/tc-test', async ({ command, ack, client }) => {
+  await ack();
+  const params = parseParams(command.text);
+  const project = params['프로젝트'];
+  const module_ = params['모듈'];
+
+  if (!project) {
+    await client.chat.postMessage({
+      channel: command.channel_id,
+      text: `:warning: <@${command.user_id}> 프로젝트명이 필요합니다. 예: \`/tc-test 프로젝트=ABC마트 모듈=장바구니\` (모듈 생략 시 해당 프로젝트의 전체 자동화 테스트 실행)`,
+    });
+    return;
+  }
+
+  // TC 생성 스레드와 별개로, 이미 만들어져 있는 자동화 테스트 코드를 재실행(회귀 테스트 등)할 때 쓰는
+  // 독립 진입점입니다. Phase 5(테스트 수행)부터 바로 시작합니다.
+  await startNewThread(client, {
+    channelId: command.channel_id,
+    ackText: `:hourglass_flowing_sand: <@${command.user_id}> 님의 테스트 실행 요청을 처리 중입니다...\n(프로젝트=${project}, 모듈=${module_ || '전체'})`,
+    prompt: [
+      `tc-automation 저장소 경로: "${TC_AUTOMATION_ROOT}"`,
+      `"${project}" 프로젝트${module_ ? `의 "${module_}" 모듈` : ' 전체'}에 대한 테스트 실행(Phase 5) 요청입니다.`,
+      `"${TC_AUTOMATION_ROOT}/${project}/TC/automation/tests/${module_ ? module_ + '.spec.js' : ''}" 경로에 이미 생성되어 있는 Playwright 자동화 테스트를 실행해주세요 (없다면 그렇게 보고하고 멈추세요 — 먼저 /tc-generate로 TC를 생성해야 합니다).`,
+      `AGENTS.md 19항(실행), 13항 Phase 5~8(테스트 수행 → 오류 공유 → 결함 관리 → 결과 도출) 규칙을 그대로 따라주세요.`,
+      `결과 도출 후 최종 승인을 받기 전까지 git 커밋은 하지 마세요.`,
+      `결과는 Slack 메시지로 바로 붙여넣을 수 있도록 마크다운 표/목록 형태로 간결하게 정리해주세요.`,
+    ].join('\n'),
+    meta: { kind: 'tc-test', project, module: module_ || null },
   });
 });
 

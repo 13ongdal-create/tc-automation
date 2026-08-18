@@ -16,11 +16,15 @@ features:
   slash_commands:
     - command: /tc-generate
       description: 프로젝트/모듈 기준으로 TC 생성을 요청합니다
-      usage_hint: 프로젝트=ABC마트 모듈=장바구니 목표건수=50
+      usage_hint: 프로젝트=ABC마트 모듈=장바구니 [URL=https://...]
       should_escape: false
     - command: /tc-defects
       description: 프로젝트의 결함 현황을 조회/관리합니다
       usage_hint: 프로젝트=ABC마트
+      should_escape: false
+    - command: /tc-test
+      description: 이미 생성된 자동화 테스트를 실행합니다 (Phase 5)
+      usage_hint: 프로젝트=ABC마트 모듈=장바구니
       should_escape: false
 
 oauth_config:
