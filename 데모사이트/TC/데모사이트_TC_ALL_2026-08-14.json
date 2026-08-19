@@ -2,7 +2,42 @@
   "meta": {
     "project": "데모사이트",
     "generatedAt": "2026-08-14T00:00:00+09:00",
-    "totalCount": 165
+    "totalCount": 165,
+    "migratedTo": [
+      {
+        "module": "PD",
+        "file": "데모사이트_TC_PD.json",
+        "tcIds": [
+          "TC_PD_001",
+          "TC_PD_002",
+          "TC_PD_003",
+          "TC_PD_028",
+          "TC_PD_029",
+          "TC_PD_030",
+          "TC_PD_031",
+          "TC_PD_032",
+          "TC_PD_033",
+          "TC_PD_034",
+          "TC_PD_035",
+          "TC_PD_036",
+          "TC_PD_037",
+          "TC_PD_038",
+          "TC_PD_039",
+          "TC_PD_040",
+          "TC_PD_041",
+          "TC_PD_042",
+          "TC_PD_043",
+          "TC_PD_044",
+          "TC_PD_045",
+          "TC_PD_046",
+          "TC_PD_047",
+          "TC_PD_048",
+          "TC_PD_049",
+          "TC_PD_050"
+        ],
+        "migratedAt": "2026-08-18"
+      }
+    ]
   },
   "items": [
     {

@@ -22,6 +22,9 @@ module.exports = defineConfig({
     headless: true,
     screenshot: 'only-on-failure',
     trace: 'retain-on-failure',
+    // locale 미지정 시 브라우저 기본 로케일(en-US 등)로 렌더링되어 한국어 사이트가 영어로 표시되는
+    // 경우가 있어 명시적으로 고정 (2026-08-19, 데모사이트 상품상세 테스트에서 발견)
+    locale: 'ko-KR',
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },

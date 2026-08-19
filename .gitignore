@@ -17,3 +17,11 @@ Thumbs.db
 node_modules/
 test-results/
 playwright-report/
+
+# 테스트 계정/자격증명 (git 미추적 - AGENTS.md 7항)
+**/TC/testAccounts.json
+
+# agents-config, slack-bridge는 각각 독립된 별도 Git 저장소라 tc-automation 쪽에서는 추적하지 않음
+# (파일시스템상 편의를 위해 이 폴더 안에 같이 두지만, 버전관리는 각자 저장소에서 별도로 함)
+/agents-config/
+/slack-bridge/

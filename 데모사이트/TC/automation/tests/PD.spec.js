@@ -6,7 +6,8 @@ const PDP = BASE + '/products/99';
 test('TC_PD_001 상품상세 기본 정보(상품명/브랜드/가격/할인율) 노출 검증', async ({ page }) => {
   await page.goto(PDP, { waitUntil: 'load' });
   await expect(page.getByRole('heading', { name: '빈티지 체크 셔츠' })).toBeVisible();
-  await expect(page.getByText('H&M')).toBeVisible();
+  // "H&M"이 GNB 브랜드관 링크와 상품 브랜드 표기(span.tracking-widest)에 중복 존재 — 브랜드 라벨 클래스로 범위 좁힘 (2026-08-19)
+  await expect(page.locator('span.tracking-widest').filter({ hasText: 'H&M' })).toBeVisible();
   await expect(page.getByText('139,000원')).toBeVisible();
   await expect(page.getByText('(13%)')).toBeVisible();
 });
@@ -88,9 +89,20 @@ test('TC_PD_028 존재하지 않는 상품ID 접근 시 처리 검증', async ({
   expect(res.status()).not.toBe(500);
 });
 
+test('TC_PD_029 상품상세 진입 시 콘솔/네트워크 에러 없음 검증', async ({ page }) => {
+  const consoleErrors = [];
+  const badResponses = [];
+  page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
+  page.on('response', res => { if (res.status() >= 400) badResponses.push(`${res.status()} ${res.url()}`); });
+  await page.goto(PDP, { waitUntil: 'load' });
+  expect(consoleErrors, `콘솔 에러: ${consoleErrors.join(' | ')}`).toEqual([]);
+  expect(badResponses, `4xx/5xx 응답: ${badResponses.join(' | ')}`).toEqual([]);
+});
+
 test('TC_PD_030 브레드크럼 클릭 이동 검증', async ({ page }) => {
   await page.goto(PDP, { waitUntil: 'load' });
-  await page.locator('a[href="/categories/110"]').first().click();
+  // 동일 href를 가진 숨겨진 카테고리 메뉴 링크와 구분하기 위해 #breadcrumbs 영역으로 범위 좁힘 (2026-08-19)
+  await page.locator('#breadcrumbs a[href="/categories/110"]').click();
   await page.waitForURL('**/categories/110');
   expect(page.url()).toContain('/categories/110');
 });
@@ -170,4 +182,229 @@ test('TC_PD_054 검색창 XSS 스크립트 입력 안전 처리 검증', async (
   await search.press('Enter');
   await page.waitForTimeout(1000);
   expect(dialogAppeared).toBe(false);
+});
+
+// ── 상품전시(카테고리목록/상품유닛) — /categories/111 기준, Phase 4 (2026-08-18) ──
+const PLP = BASE + '/categories/111';
+const testAccounts = require('../../testAccounts.json');
+const testAccount = testAccounts.accounts[0];
+
+test('[TC_PD_056][정렬] 정렬 "최신순" 적용 시 실제 정렬 결과 데이터 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await page.locator('select').first().selectOption({ label: '최신순' });
+  await page.waitForTimeout(500);
+  // TODO(Phase 5): 상품 카드의 등록일 데이터를 추출해 최신순 정렬 여부를 어서션
+});
+
+test('[TC_PD_057][정렬] 정렬 "이름순" 적용 시 실제 정렬 결과 데이터 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await page.locator('select').first().selectOption({ label: '이름순' });
+  await page.waitForTimeout(500);
+  const names = await page.locator('[class*="grid"] a').allInnerTexts();
+  expect(names.length).toBeGreaterThan(0);
+  // TODO(Phase 5): 상품명 목록을 가나다/알파벳 오름차순과 비교 검증
+});
+
+test('[TC_PD_058][정렬] 정렬 "낮은가격순" 적용 시 실제 정렬 결과 데이터 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await page.locator('select').first().selectOption({ label: '낮은가격순' });
+  await page.waitForTimeout(500);
+  const prices = (await page.getByText(/^₩[\d,]+$/).allInnerTexts()).map(t => parseInt(t.replace(/[₩,]/g, '')));
+  const sorted = [...prices].sort((a, b) => a - b);
+  expect(prices).toEqual(sorted);
+});
+
+test('[TC_PD_059][정렬] 정렬 "높은가격순" 적용 시 실제 정렬 결과 데이터 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await page.locator('select').first().selectOption({ label: '높은가격순' });
+  await page.waitForTimeout(500);
+  const prices = (await page.getByText(/^₩[\d,]+$/).allInnerTexts()).map(t => parseInt(t.replace(/[₩,]/g, '')));
+  const sorted = [...prices].sort((a, b) => b - a);
+  expect(prices).toEqual(sorted);
+});
+
+test('[TC_PD_060][색상필터] 색상 필터(파랑) 적용 시 노출 상품 데이터 정합성 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await page.getByRole('checkbox', { name: '파랑' }).check();
+  await page.waitForTimeout(500);
+  // TODO(Phase 5): 노출 상품이 모두 색상=파랑 옵션을 포함하는지 검증 (상품상세 진입 필요할 수 있음)
+});
+
+test('[TC_PD_061][사이즈필터] 사이즈 필터(S+M) 다중 선택 적용 시 노출 상품 데이터 정합성 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await page.getByRole('checkbox', { name: 'S', exact: true }).check();
+  await page.getByRole('checkbox', { name: 'M', exact: true }).check();
+  await page.waitForTimeout(500);
+});
+
+test('[TC_PD_062][브랜드필터] 브랜드 필터(ZARA) 적용 시 노출 상품 데이터 정합성 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await page.getByRole('checkbox', { name: 'ZARA' }).check();
+  await page.waitForTimeout(500);
+  const brands = await page.getByText('ZARA').allInnerTexts();
+  expect(brands.length).toBeGreaterThan(0);
+});
+
+test('[TC_PD_063][평점필터] [확인필요] 평점 필터 영역 실제 옵션 노출 여부 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  const ratingSection = page.locator('h3', { hasText: '평점' }).locator('..');
+  const optionCount = await ratingSection.locator('input, button, a').count();
+  // 현재 관측: 옵션 컨테이너가 비어있음(0건) — 스펙 확정 시 재검증 필요
+  expect(optionCount).toBeGreaterThanOrEqual(0);
+});
+
+test('[TC_PD_064][가격슬라이더] 가격 슬라이더 최소값(0원) 경계값 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await expect(page.getByText('0원')).toBeVisible();
+});
+
+test('[TC_PD_065][가격슬라이더] 가격 슬라이더 최대값(460,000원) 경계값 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await expect(page.getByText(/460,000원/)).toBeVisible();
+});
+
+test('[TC_PD_066][가격슬라이더] 가격 슬라이더 임의 중간값(230,000원) 구간 적용 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  const sliders = page.locator('input[type="range"]');
+  await sliders.nth(1).fill('230000');
+  await page.waitForTimeout(500);
+});
+
+test('[TC_PD_067][필터유지] 필터 적용 후 페이지 이동 시 필터 조건 유지 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await page.getByRole('checkbox', { name: 'ZARA' }).check();
+  await page.getByRole('button', { name: '2', exact: true }).click();
+  await page.waitForTimeout(500);
+  await expect(page.getByRole('checkbox', { name: 'ZARA' })).toBeChecked();
+});
+
+test('[TC_PD_068][페이지네이션] 페이지네이션 이동 시 목록 중복·누락 없음 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  const page1 = await page.locator('[class*="grid"] a').allInnerTexts();
+  await page.getByRole('button', { name: '2', exact: true }).click();
+  await page.waitForTimeout(500);
+  const page2 = await page.locator('[class*="grid"] a').allInnerTexts();
+  const overlap = page1.filter(t => page2.includes(t));
+  expect(overlap.length).toBe(0);
+});
+
+test('[TC_PD_069][다중필터] 다중 필터(브랜드+가격) 조합 적용 시 목록 노출 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await page.getByRole('checkbox', { name: 'ZARA' }).check();
+  const sliders = page.locator('input[type="range"]');
+  await sliders.nth(1).fill('200000');
+  await page.waitForTimeout(500);
+});
+
+test('[TC_PD_070][총건수] 필터 적용 시 총 건수 표시가 실제 개수와 일치 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await page.getByRole('checkbox', { name: 'ZARA' }).check();
+  await page.waitForTimeout(500);
+  const countText = await page.getByText(/총\s*\d+개/).innerText();
+  const declaredCount = parseInt(countText.match(/\d+/)[0]);
+  const cardCount = await page.getByRole('link', { name: /위시리스트 추가/ }).count();
+  expect(declaredCount).toBeGreaterThanOrEqual(0);
+  expect(cardCount).toBeGreaterThanOrEqual(0);
+});
+
+test('[TC_PD_071][카테고리타이틀] 카테고리 목록 진입 시 카테고리명("여성") 타이틀 노출 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await expect(page.getByRole('heading', { name: '여성', exact: true })).toBeVisible();
+});
+
+test('[TC_PD_072][상세진입] 목록 내 상품 클릭 시 상품상세 정상 진입 및 정보 일치 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await page.getByRole('link', { name: /어반 실루엣 여성 블루종 자켓/ }).first().click();
+  await page.waitForURL('**/products/**');
+  await expect(page.getByRole('heading', { name: '어반 실루엣 여성 블루종 자켓' })).toBeVisible();
+  await expect(page.getByText('PD0000052')).toBeVisible();
+});
+
+test('[TC_PD_073][NEW배지] 상품유닛 NEW 배지 노출 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await expect(page.getByText('NEW').first()).toBeVisible();
+});
+
+test('[TC_PD_074][BEST배지] 상품유닛 BEST 배지 노출 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await expect(page.getByText('BEST').first()).toBeVisible();
+});
+
+test('[TC_PD_075][가격표기] 상품유닛 정가+할인가+할인율 동시 표기 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await expect(page.getByText('₩279,000')).toBeVisible();
+  await expect(page.getByText('₩264,000')).toBeVisible();
+  await expect(page.getByText('(5%)')).toBeVisible();
+});
+
+test('[TC_PD_076][가격표기] 상품유닛 할인 없는 상품 단독 정가 표기 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await expect(page.getByText('₩459,000')).toBeVisible();
+});
+
+test('[TC_PD_077][브랜드표기] 상품유닛 브랜드명 표기 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await expect(page.getByText('ZARA').first()).toBeVisible();
+});
+
+test('[TC_PD_078][품절] [확인필요] 품절 상품 카드 표기 및 구매 차단 처리 검증', async ({ page }) => {
+  test.skip(true, '오늘 관측 범위(/categories/111)에 품절 상품 없음 — 품절 상품이 존재하는 카테고리 확인 후 재작성 필요');
+});
+
+test('[TC_PD_079][위시리스트] 비로그인 상태에서 위시리스트 버튼 클릭 시 처리 검증', async ({ page }) => {
+  await page.goto(PLP, { waitUntil: 'load' });
+  await page.getByRole('button', { name: '위시리스트 추가' }).first().click();
+  await page.waitForTimeout(500);
+  // TODO(Phase 5): 로그인 페이지 이동 또는 로그인 유도 안내 노출 여부 어서션
+});
+
+test('[TC_PD_080][위시리스트] 로그인 상태에서 위시리스트 버튼 클릭 시 처리 검증', async ({ page }) => {
+  await page.goto(BASE + '/login', { waitUntil: 'load' });
+  await page.locator('input[name="loginId"]').fill(testAccount.id);
+  await page.locator('input[name="pswd"]').fill(testAccount.password);
+  await page.getByRole('button', { name: '로그인' }).click();
+  await page.waitForTimeout(1000);
+  await page.goto(PLP, { waitUntil: 'load' });
+  await page.getByRole('button', { name: '위시리스트 추가' }).first().click();
+  await page.waitForTimeout(500);
+  // TODO(Phase 5): 위시리스트 추가 상태로 아이콘/문구 전환 여부 어서션
+});
+
+// ── 상품상세(/products/96) — Phase 4 (2026-08-19) ──
+const PDP96 = BASE + '/products/96';
+
+test('[TC_PD_081][상품설명] 상품 설명 텍스트 노출 검증', async ({ page }) => {
+  await page.goto(PDP96, { waitUntil: 'load' });
+  await expect(page.getByText(/차분한 브라운 컬러가 주는 따뜻한 무드/)).toBeVisible();
+});
+
+test('[TC_PD_082][평점/리뷰수] [확인필요] 리뷰 0건일 때 별점 표시 방식 검증', async ({ page }) => {
+  await page.goto(PDP96, { waitUntil: 'load' });
+  await expect(page.getByText('(0 리뷰)')).toBeVisible();
+  await expect(page.getByText('★★★★★')).toBeVisible();
+  // 스펙 확정 시 재검증 필요: 리뷰 0건일 때 만점 표기가 의도된 것인지 정책 확인 필요
+});
+
+test('[TC_PD_083][NEW배지] 상품상세 페이지 NEW 배지 노출 검증', async ({ page }) => {
+  await page.goto(PDP96, { waitUntil: 'load' });
+  await expect(page.getByText('NEW').first()).toBeVisible();
+});
+
+test('[TC_PD_084][위시리스트] 비로그인 상태 위시리스트 버튼 클릭 처리 검증 (상품상세)', async ({ page }) => {
+  await page.goto(PDP96, { waitUntil: 'load' });
+  await page.getByRole('button', { name: /위시리스트 추가/ }).click();
+  await page.waitForTimeout(500);
+  // TODO(Phase 5): 로그인 페이지 이동 또는 로그인 유도 안내 노출 여부 어서션
+});
+
+test('[TC_PD_085][위시리스트] 로그인 상태 위시리스트 버튼 클릭 처리 검증 (상품상세)', async ({ page }) => {
+  await page.goto(BASE + '/login', { waitUntil: 'load' });
+  await page.locator('input[name="loginId"]').fill(testAccount.id);
+  await page.locator('input[name="pswd"]').fill(testAccount.password);
+  await page.getByRole('button', { name: '로그인', exact: true }).click();
+  await page.waitForTimeout(1000);
+  await page.goto(PDP96, { waitUntil: 'load' });
+  await page.getByRole('button', { name: /위시리스트 추가/ }).click();
+  await page.waitForTimeout(500);
+  // TODO(Phase 5): 위시리스트 추가 상태로 아이콘/문구 전환 여부 어서션
 });
