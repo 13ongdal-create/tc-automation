@@ -155,9 +155,15 @@
 
 ## 참조 파일
 
+<!-- [수정 전 2026-08-18] oliveyoung_global_qa_tc_viewer.html / TC_Skill_v0.5.md 를 file:// 링크로 직접 참조하던 버전.
+사용자 확인 결과 "템플릿/조건"으로 오인될 소지가 있어 두 파일을 git에서 삭제하고, 아래처럼 문서 내 명문화된 스펙만 남김.
 - **표준 뷰어 참조**: [oliveyoung_global_qa_tc_viewer.html](file:///d:/E-Commerce%20Service%20Planning%20Academy/tc-automation/_reference/oliveyoung_global_qa_tc_viewer.html)
 - **버튼 세트 참조**: [mediheal_pdp_qa_tc_viewer.html](file:///d:/E-Commerce%20Service%20Planning%20Academy/tc-automation/_reference/mediheal_pdp_qa_tc_viewer.html)
 - **스킬 원본**: [TC_Skill_v0.5.md](file:///d:/E-Commerce%20Service%20Planning%20Academy/tc-automation/_reference/TC_Skill_v0.5.md)
+-->
+<!-- [수정 전 2026-08-19] tc-automation 경로 이동 전 (구 d:/E-Commerce Service Planning Academy/tc-automation/) -->
+- **버튼 세트 참조**: [mediheal_pdp_qa_tc_viewer.html](file:///d:/tc-automation/_reference/mediheal_pdp_qa_tc_viewer.html)
+- 뷰어 표준 스타일(색상/테마/버튼셋)은 위 "HTML 뷰어 표준" 절에 명문화된 값을 기준으로 하며, 별도 외부 템플릿 파일을 조건으로 참조하지 않습니다.
 
 ---
 

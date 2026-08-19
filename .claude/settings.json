@@ -1,9 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Read(//d/E-Commerce Service Planning Academy/**)",
-      "Write(//d/E-Commerce Service Planning Academy/tc-automation/**)",
-      "Edit(//d/E-Commerce Service Planning Academy/tc-automation/**)",
+      "Read(//d/tc-automation/**)",
+      "Write(//d/tc-automation/**)",
+      "Edit(//d/tc-automation/**)",
       "Bash(git status*)",
       "Bash(git log*)",
       "Bash(git add *)",

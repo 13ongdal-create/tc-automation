@@ -16,7 +16,10 @@ description: |
 
 # QA 테스트 케이스 자동 생성 스킬 (v1.0)
 
+<!-- [수정 전 2026-08-18] 기반 문서/참조 뷰어를 외부 파일명으로 지칭하던 버전. 해당 파일들을 git에서 삭제하여 문구 갱신.
 > 기반 문서: TC_Skill_v0.5.md | 스타일: GitHub Dark 테마 (옵션A) | 참조 뷰어: oliveyoung_global_qa_tc_viewer.html
+-->
+> 스타일: GitHub Dark 테마 (옵션A, 색상코드는 본 문서 10항에 명문화)
 
 ---
 
@@ -507,12 +510,26 @@ d:\E-Commerce Service Planning Academy\tc-automation\
 ```
 -->
 
-```
+<!-- [수정 전 2026-08-18] oliveyoung_global_qa_tc_viewer.html / TC_Skill_v0.5.md 를 _reference 트리에 포함하던 버전 (두 파일 git 삭제로 갱신)
 d:\E-Commerce Service Planning Academy\tc-automation\
 ├── _reference\                              <- 프로젝트 공통 참조 (모든 프로젝트가 공유, 특정 프로젝트 내용 아님)
 │   ├── oliveyoung_global_qa_tc_viewer.html  <- 표준 참조 뷰어 (버튼 세트/레이아웃)
 │   ├── mediheal_pdp_qa_tc_viewer.html       <- 버튼 세트 참조 (JSON 저장/불러오기)
 │   └── TC_Skill_v0.5.md                    <- 스킬 원본 참조문서
+├── _template\                                <- 신규 프로젝트 온보딩용 빈 스캐폴드 — 모든 프로젝트는 반드시 여기서만 시작
+-->
+<!-- [수정 전 2026-08-19] tc-automation이 "d:\E-Commerce Service Planning Academy\" 아래 있던 시절 경로.
+사용자 요청으로 tc-automation을 D:\tc-automation으로, .agents를 D:\agents-config로 이동(둘 다 D:\ 바로 아래 독립 폴더).
+d:\E-Commerce Service Planning Academy\tc-automation\
+├── _reference\                              <- 프로젝트 공통 참조 (모든 프로젝트가 공유, 특정 프로젝트 내용 아님)
+│   ├── mediheal_pdp_qa_tc_viewer.html       <- 버튼 세트 참조 (JSON 저장/불러오기)
+│   └── 이커머스_공통정책_유형정의.md          <- 유형별 정의 참고 용어집 (강제 조건 아님, AGENTS.md 7-1항)
+-->
+```
+D:\tc-automation\
+├── _reference\                              <- 프로젝트 공통 참조 (모든 프로젝트가 공유, 특정 프로젝트 내용 아님)
+│   ├── mediheal_pdp_qa_tc_viewer.html       <- 버튼 세트 참조 (JSON 저장/불러오기)
+│   └── 이커머스_공통정책_유형정의.md          <- 유형별 정의 참고 용어집 (강제 조건 아님, AGENTS.md 7-1항)
 ├── _template\                                <- 신규 프로젝트 온보딩용 빈 스캐폴드 — 모든 프로젝트는 반드시 여기서만 시작
 └── {프로젝트명}\                              <- _template\ 복사로 생성. 프로젝트마다 독립적, 서로 내용 참조/재사용 없음
     ├── Policy\
