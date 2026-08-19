@@ -17,20 +17,28 @@ const app = new App({
 
 function parseParams(text) {
   // "프로젝트=ABC마트 모듈=장바구니 URL=https://..." -> { 프로젝트: 'ABC마트', 모듈: '장바구니', URL: 'https://...' }
+  // "프로젝트 = ABC마트"처럼 "=" 앞뒤 공백 허용 + "프로젝트='데모 사이트'"처럼 공백 포함 값을
+  // 작은따옴표/큰따옴표로 감싼 경우도 인식 (2026-08-18, 실사용 중 두 가지 파싱 실패 발견)
   const params = {};
-  const re = /(\S+?)=(\S+)/g;
+  const re = /(\S+?)\s*=\s*(?:'([^']*)'|"([^"]*)"|(\S+))/g;
   let m;
   while ((m = re.exec(text || ''))) {
-    params[m[1]] = m[2];
+    params[m[1]] = m[2] !== undefined ? m[2] : (m[3] !== undefined ? m[3] : m[4]);
   }
   return params;
 }
 
-const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || 'D:/E-Commerce Service Planning Academy/tc-automation';
+const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || 'D:/tc-automation';
 
 // 스레드(channel+thread_ts)별로 현재 실행 중인 claude CLI 프로세스를 추적 - "중단" 요청 시 찾아서 종료
 const activeRuns = new Map();
 const runKey = (channel, threadTs) => `${channel}:${threadTs}`;
+
+// 프로젝트+모듈 단위로 "지금 실제로 실행 중인(claude 프로세스가 떠 있는)" 스레드가 있는지 추적합니다.
+// activeRuns는 스레드 단위 락이라 "다른 스레드에서 같은 프로젝트/모듈을 동시에 요청"하는 건 못 막았는데,
+// 그 경우 같은 캐노니컬 TC 파일에 두 프로세스가 동시에 쓰기 시도해 내용이 꼬일 수 있어 추가함 (2026-08-19).
+const activeProjectModules = new Map();
+const pmKey = (project, module_) => `${project || ''}::${module_ || ''}`;
 const CANCEL_WORDS = /^(중단|취소|그만|stop|cancel)$/i;
 const STATUS_WORDS = /^(상태|진행상황|진행 상황|진행률|status|progress)$/i;
 const DEFECT_QUERY_WORDS = /(결함|defect)/i;
@@ -65,13 +73,23 @@ function findProjectNameInText(text) {
 
 function buildInitialPrompt(params) {
   const project = params['프로젝트'] || '[확인필요: 프로젝트명 없음]';
-  const module_ = params['모듈'] || '[확인필요: 모듈 미지정]';
-  const feature = params['기능'];
+  let module_ = params['모듈'] || '[확인필요: 모듈 미지정]';
+  let feature = params['기능'];
   const url = params['URL'] || params['url'];
+  // "모듈=회원>회원가입"처럼 ">"로 하위 기능을 함께 표기한 경우, 별도 기능= 파라미터가 없어도
+  // 자동으로 모듈/기능을 분리해 좁은 범위 지시 문구가 빠지지 않도록 함
+  // (2026-08-18, 이 분리가 없어 Phase 1 관찰이 상위 모듈 전체로 확장되며 느려지는 문제 발견)
+  if (!feature && module_.includes('>')) {
+    const [parent, child] = module_.split('>').map((s) => s.trim());
+    if (parent && child) {
+      module_ = parent;
+      feature = child;
+    }
+  }
   return [
     `tc-automation 저장소 경로: "${TC_AUTOMATION_ROOT}"`,
     `해당 저장소 내 "${project}" 프로젝트(${TC_AUTOMATION_ROOT}/${project})의 "${module_}" 모듈${feature ? ` 중 "${feature}" 기능만` : ''}에 대한 TC 생성 요청입니다.`,
-    feature ? `기능 단위 요청입니다 — AGENTS.md 19-1항에 따라 해당 모듈의 누적 TC 파일(10항)을 Read한 뒤 "${feature}" 기능(소분류)에 해당하는 TC만 추가/수정하고, 다른 기능의 기존 TC는 그대로 둡니다.` : null,
+    feature ? `기능 단위 요청입니다 — AGENTS.md 19-1항에 따라 해당 모듈의 누적 TC 파일(10항)을 Read한 뒤 "${feature}" 기능(소분류)에 해당하는 TC만 추가/수정하고, 다른 기능의 기존 TC는 그대로 둡니다. **Phase 1 관찰도 "${feature}" 기능과 직접 관련된 화면/플로우로만 한정**하고, 같은 상위 모듈에 속한 다른 기능(예: 로그인, 마이페이지 등)까지 넓혀서 관찰하지 않습니다.` : null,
     `AGENTS.md, skills/qa-test-case-generator/SKILL.md 규칙을 그대로 따라주세요.`,
     `AGENTS.md 13항의 Phase 워크플로우(Phase 0~8)를 단계별로 따르세요 — 이 프로젝트의 project.json이 없으면 먼저 Phase 0(URL, 단위/통합 구분, 코드/정책기반 질의)부터 진행하고, 있으면 건너뜁니다.`,
     url ? `URL이 함께 제공되었습니다: ${url} — Phase 0 질의에 참고하고, AGENTS.md 19항(URL 기반 코드형 TC)에 따라 Playwright로 직접 접속해 관찰한 화면 구조를 근거로 사용하세요.` : null,
@@ -113,6 +131,7 @@ async function startNewThread(client, { channelId, ackText, prompt, meta }) {
   const posted = await client.chat.postMessage({ channel: channelId, text: ackText });
   const threadTs = posted.ts;
   const key = runKey(channelId, threadTs);
+  const lockKey = meta && meta.project ? pmKey(meta.project, meta.module) : null;
 
   // 첫 요청이 아직 완료 전이라도(=sessionId 모름) 이 스레드를 "우리가 아는 스레드"로 즉시 기록해둡니다.
   // 이렇게 안 하면, 완료되기 전에 중단될 경우 sessionStore에는 끝내 아무것도 안 남아 이 스레드의 어떤
@@ -121,7 +140,10 @@ async function startNewThread(client, { channelId, ackText, prompt, meta }) {
 
   try {
     const result = await claudeRunner.startSession(prompt, {
-      onProcess: (handle) => activeRuns.set(key, handle),
+      onProcess: (handle) => {
+        activeRuns.set(key, handle);
+        if (lockKey) activeProjectModules.set(lockKey, key);
+      },
     });
 
     sessionStore.set(channelId, threadTs, { sessionId: result.sessionId, ...meta });
@@ -150,6 +172,7 @@ async function startNewThread(client, { channelId, ackText, prompt, meta }) {
     // err.cancelled === true인 경우: '중단' 처리 핸들러가 이미 안내 메시지를 올렸으므로 여기서는 조용히 넘어갑니다.
   } finally {
     activeRuns.delete(key);
+    if (lockKey && activeProjectModules.get(lockKey) === key) activeProjectModules.delete(lockKey);
   }
 }
 
@@ -157,9 +180,18 @@ app.command('/tc-generate', async ({ command, ack, client }) => {
   await ack();
   const params = parseParams(command.text);
 
+  const lockKey = pmKey(params['프로젝트'], params['모듈']);
+  if (params['프로젝트'] && activeProjectModules.has(lockKey)) {
+    await client.chat.postMessage({
+      channel: command.channel_id,
+      text: `:warning: <@${command.user_id}> "${params['프로젝트']}" 프로젝트의 "${params['모듈'] || '(모듈 미지정)'}" 는 다른 스레드에서 이미 처리 중입니다. 같은 캐노니컬 TC 파일에 동시에 쓰면 내용이 꼬일 수 있어, 그 요청이 끝난 뒤 다시 시도해주세요.`,
+    });
+    return;
+  }
+
   await startNewThread(client, {
     channelId: command.channel_id,
-    ackText: `:hourglass_flowing_sand: <@${command.user_id}> 님의 TC 생성 요청을 처리 중입니다...\n(프로젝트=${params['프로젝트'] || '?'}, 모듈=${params['모듈'] || '?'}${params['기능'] ? `, 기능=${params['기능']}` : ''})`,
+    ackText: `:hourglass_flowing_sand: <@${command.user_id}> 님의 TC 생성 요청을 처리 중입니다...\n요청사항: \`${command.text}\`\n인식됨: (프로젝트=${params['프로젝트'] || '?'}, 모듈=${params['모듈'] || '?'}${params['기능'] ? `, 기능=${params['기능']}` : ''}${params['URL'] ? `, URL=${params['URL']}` : ''})`,
     prompt: buildInitialPrompt(params),
     meta: { kind: 'tc-generate', project: params['프로젝트'] || null, module: params['모듈'] || null, feature: params['기능'] || null },
   });
@@ -215,7 +247,7 @@ app.command('/tc-test', async ({ command, ack, client }) => {
   // 독립 진입점입니다. Phase 5(테스트 수행)부터 바로 시작합니다.
   await startNewThread(client, {
     channelId: command.channel_id,
-    ackText: `:hourglass_flowing_sand: <@${command.user_id}> 님의 테스트 실행 요청을 처리 중입니다...\n(프로젝트=${project}, 범위=${scopeLabel})`,
+    ackText: `:hourglass_flowing_sand: <@${command.user_id}> 님의 테스트 실행 요청을 처리 중입니다...\n요청사항: \`${command.text}\`\n인식됨: (프로젝트=${project}, 범위=${scopeLabel})`,
     prompt: [
       `tc-automation 저장소 경로: "${TC_AUTOMATION_ROOT}"`,
       `"${project}" 프로젝트, 실행 범위: ${scopeLabel} 에 대한 테스트 실행(Phase 5) 요청입니다.`,
@@ -319,6 +351,16 @@ app.event('message', async ({ event, client }) => {
     return;
   }
 
+  const lockKey = session.kind === 'tc-generate' && session.project ? pmKey(session.project, session.module) : null;
+  if (lockKey && activeProjectModules.has(lockKey) && activeProjectModules.get(lockKey) !== key) {
+    await client.chat.postMessage({
+      channel: event.channel,
+      thread_ts: event.thread_ts,
+      text: `:warning: "${session.project}" 프로젝트의 "${session.module || '(모듈 미지정)'}" 는 다른 스레드에서 이미 처리 중입니다. 그 요청이 끝난 뒤 다시 시도해주세요.`,
+    });
+    return;
+  }
+
   if (session.kind === 'tc-defects') {
     // 담당자 지정/상태 변경처럼 정형화된 결함 관리 요청은 Claude 없이 코드로 바로 처리합니다 (토큰 미사용).
     const fast = defectFastPath.tryHandle(session.project, trimmed);
@@ -361,10 +403,10 @@ app.event('message', async ({ event, client }) => {
             `"${session.project}" 프로젝트의 결함 관리 요청입니다: "${trimmed}"`,
             `AGENTS.md 20항(결함 관리) 규칙에 따라 "${session.project}/TC/defects.json"을 조회/수정해주세요. 파일 수정은 즉시 반영하되, Git 커밋은 사용자가 "승인"하기 전까지 하지 마세요.`,
           ].join('\n'),
-          { onProcess: (handle) => activeRuns.set(key, handle) }
+          { onProcess: (handle) => { activeRuns.set(key, handle); if (lockKey) activeProjectModules.set(lockKey, key); } }
         )
       : await claudeRunner.resumeSession(session.sessionId, buildFollowupPrompt(event.text), {
-          onProcess: (handle) => activeRuns.set(key, handle),
+          onProcess: (handle) => { activeRuns.set(key, handle); if (lockKey) activeProjectModules.set(lockKey, key); },
         });
 
     await resultReporter.postResult(client, {
@@ -390,6 +432,7 @@ app.event('message', async ({ event, client }) => {
     }
   } finally {
     activeRuns.delete(key);
+    if (lockKey && activeProjectModules.get(lockKey) === key) activeProjectModules.delete(lockKey);
     await client.reactions.remove({
       channel: event.channel,
       timestamp: event.ts,

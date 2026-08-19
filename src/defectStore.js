@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || 'D:/E-Commerce Service Planning Academy/tc-automation';
+const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || 'D:/tc-automation';
 const STATUS_ORDER = ['신규', '처리중', '재검증대기', '완료', '보류', '재발생'];
 
 function defectsPath(project) {

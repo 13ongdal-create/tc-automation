@@ -4,8 +4,59 @@
 # Socket Mode를 사용하므로 별도의 공개 URL(터널/도메인)이 필요 없습니다.
 # 이 방식은 지금(로컬 PC) 뿐 아니라 나중에 클라우드 서버로 옮겨도 그대로 동작합니다.
 
+# [수정 전 2026-08-18] 아래는 최초 생성 시점 버전 (앱 이름 영문, 목표건수 포함 usage_hint, incoming-webhook 스코프 누락).
+# 실제 라이브 앱은 이후 이름이 "큐돌이"로 변경되고 incoming-webhook 스코프(alert.js 알림용)가 추가되었으며,
+# usage_hint도 공백 포함 값을 위해 따옴표 문법으로 변경됨. 문서를 실제 상태에 맞춰 갱신함.
+#
+# display_information:
+#   name: TC Automation Bot
+#   description: tc-automation TC 생성/수정/컨펌 요청을 처리하는 봇
+#   background_color: "#1a1a1a"
+#
+# features:
+#   bot_user:
+#     display_name: tc-bot
+#     always_online: true
+#   slash_commands:
+#     - command: /tc-generate
+#       description: 프로젝트/모듈 기준으로 TC 생성을 요청합니다
+#       usage_hint: 프로젝트=ABC마트 모듈=장바구니 [URL=https://...]
+#       should_escape: false
+#     - command: /tc-defects
+#       description: 프로젝트의 결함 현황을 조회/관리합니다
+#       usage_hint: 프로젝트=ABC마트
+#       should_escape: false
+#     - command: /tc-test
+#       description: 이미 생성된 자동화 테스트를 실행합니다 (Phase 5)
+#       usage_hint: 프로젝트=ABC마트 모듈=장바구니
+#       should_escape: false
+#
+# oauth_config:
+#   scopes:
+#     bot:
+#       - chat:write
+#       - commands
+#       - channels:history
+#       - groups:history
+#       - im:history
+#       - reactions:write
+#       - files:write
+#       - app_mentions:read
+#
+# settings:
+#   event_subscriptions:
+#     bot_events:
+#       - message.channels
+#       - message.groups
+#       - app_mention
+#   interactivity:
+#     is_enabled: true
+#   org_deploy_enabled: false
+#   socket_mode_enabled: true
+#   token_rotation_enabled: false
+
 display_information:
-  name: TC Automation Bot
+  name: 큐돌이
   description: tc-automation TC 생성/수정/컨펌 요청을 처리하는 봇
   background_color: "#1a1a1a"
 
@@ -16,15 +67,15 @@ features:
   slash_commands:
     - command: /tc-generate
       description: 프로젝트/모듈 기준으로 TC 생성을 요청합니다
-      usage_hint: 프로젝트=ABC마트 모듈=장바구니 [URL=https://...]
+      usage_hint: 프로젝트='{프로젝트명}' 모듈='{모듈명}' [URL='{URL}']
       should_escape: false
     - command: /tc-defects
       description: 프로젝트의 결함 현황을 조회/관리합니다
-      usage_hint: 프로젝트=ABC마트
+      usage_hint: 프로젝트='{프로젝트명}'
       should_escape: false
     - command: /tc-test
       description: 이미 생성된 자동화 테스트를 실행합니다 (Phase 5)
-      usage_hint: 프로젝트=ABC마트 모듈=장바구니
+      usage_hint: 프로젝트='{프로젝트명}' 모듈='{모듈명}' [기능='{기능명}'] [TC='{TC_ID}']
       should_escape: false
 
 oauth_config:
@@ -35,6 +86,7 @@ oauth_config:
       - channels:history
       - groups:history
       - im:history
+      - incoming-webhook
       - reactions:write
       - files:write
       - app_mentions:read
@@ -50,3 +102,4 @@ settings:
   org_deploy_enabled: false
   socket_mode_enabled: true
   token_rotation_enabled: false
+  is_mcp_enabled: false
