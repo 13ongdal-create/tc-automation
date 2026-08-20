@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>데모사이트 QA TC 뷰어 - 시스템(공통)(CO)</title>
+<title>데모사이트 QA TC 뷰어 - 마이페이지(MY)</title>
 <style>
   :root{
     --bg:#f6f8fa; --panel:#ffffff; --text:#1f2328; --muted:#656d76;
@@ -78,10 +78,10 @@
   select.result-select[data-val="Blocked"]{color:var(--blocked);font-weight:600;}
   input.free-input{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
 
-  .col-no{width:2.5%} .col-id{width:5.5%} .col-system{width:2.5%} .col-cat{width:3%} .col-mod{width:3.5%} .col-sub{width:3.5%}
-  .col-platform{width:2.5%} .col-type{width:2.5%} .col-title{width:10%} .col-ref{width:3.5%}
-  .col-priority{width:2.5%} .col-testdata{width:5%} .col-precond{width:5.5%} .col-proc{width:8.5%} .col-expected{width:8.5%}
-  .col-result{width:4.5%} .col-assignee{width:3.5%} .col-issue{width:8%} .col-issuelink{width:8%} .col-remark{width:8%}
+  .col-no{width:3%} .col-id{width:6%} .col-system{width:3%} .col-cat{width:3%} .col-mod{width:4%} .col-sub{width:4%}
+  .col-platform{width:3%} .col-type{width:3%} .col-title{width:11%} .col-origin{width:3%} .col-ref{width:4%}
+  .col-priority{width:3%} .col-precond{width:6%} .col-proc{width:9%} .col-expected{width:9%}
+  .col-testdata{width:6%} .col-result{width:5%} .col-assignee{width:4%} .col-issue{width:9%} .col-issuelink{width:9%}
 
   .col-def-id{width:9%} .col-def-mod{width:6%} .col-def-sev{width:5%} .col-def-status{width:8%}
   .col-def-summary{width:18%} .col-def-detail{width:24%} .col-def-thumb{width:8%} .col-def-date{width:7%} .col-def-tc{width:7%} .col-def-link{width:8%}
@@ -120,8 +120,8 @@
   <div class="header-title">
     <div class="header-badge">🧪</div>
     <div>
-      <h1>데모사이트 QA TC 뷰어 <span style="color:var(--accent);">v2</span> — 시스템(공통)(CO)</h1>
-      <div class="sub">Interactive TC Viewer · 총 20건 (기존 20 / 신규 0)</div>
+      <h1>데모사이트 QA TC 뷰어 <span style="color:var(--accent);">v1</span> — 마이페이지(MY)</h1>
+      <div class="sub">Interactive TC Viewer · 총 25건 (기존 0 / 신규 25)</div>
     </div>
   </div>
   <div class="header-actions">
@@ -129,7 +129,7 @@
     <button id="btnFlowMap">🧭 User Flow Map</button>
     <a href="http://192.168.10.116:30180/" target="_blank" rel="noopener"><button type="button">🔗 테스트사이트 바로가기</button></a>
     <a href="results/index.html"><button type="button">📜 실행결과 이력</button></a>
-    <button id="btnXlsx" class="primary">📊 XLSX 다운로드</button>
+    <button id="btnCsv" class="primary">📥 CSV 다운로드</button>
     <button id="btnJsonSave" class="primary">💾 JSON 저장</button>
     <button id="btnJsonLoad">📂 JSON 파일 연결/불러오기</button>
     <input type="file" id="jsonFileInput" accept="application/json" style="display:none;">
@@ -141,10 +141,8 @@
 <div class="container">
 
   <div class="stats-wrap" id="statsWrapBlock">
-    <h3 id="statsToggle" style="cursor:pointer;user-select:none;display:flex;align-items:center;gap:6px;">
-      <span id="statsToggleIcon">▶</span> 소분류별 실행현황 통계
-    </h3>
-    <div style="overflow-x:auto;display:none;" id="statsTableWrap">
+    <h3>소분류별 실행현황 통계</h3>
+    <div style="overflow-x:auto;">
     <table class="stats" id="statsTable">
       <thead>
         <tr><th>소분류</th><th>전체</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>Fail율</th></tr>
@@ -188,17 +186,17 @@
           <th class="col-platform">플랫폼</th>
           <th class="col-type">유형</th>
           <th class="col-title">테스트 항목</th>
+          <th class="col-origin">구분</th>
           <th class="col-ref">기준문서</th>
           <th class="col-priority">우선순위</th>
-          <th class="col-testdata">테스트 데이터</th>
           <th class="col-precond">사전조건</th>
           <th class="col-proc">테스트 수행 절차</th>
           <th class="col-expected">기대 결과</th>
+          <th class="col-testdata">테스트 데이터</th>
           <th class="col-result">실행결과</th>
           <th class="col-assignee">담당자</th>
           <th class="col-issue">이슈내용</th>
           <th class="col-issuelink">이슈링크</th>
-          <th class="col-remark">비고</th>
         </tr>
       </thead>
       <tbody id="tcBody"></tbody>
@@ -250,7 +248,7 @@
   <div class="footnote">
     ※ 실행결과/담당자/이슈내용/이슈링크/결함 상태는 기본적으로 브라우저 메모리에만 저장되어 새로고침 시 초기화됩니다. "JSON 파일 연결/불러오기"로 원본 파일을 한 번 연결하면, 이후 "저장" 클릭 시 다운로드 없이 그 파일에 바로 반영됩니다(Chrome/Edge 등 File System Access API 지원 브라우저 한정 — 미지원 브라우저는 다운로드로 대체).<br>
     ※ [확인필요] 태그가 붙은 TC는 근거 문서/화면이 아직 확보되지 않은 항목입니다 (AGENTS.md 7항). 스펙 확정 시 재검증이 필요합니다.<br>
-    <span class="version-note">meta.changeHistory: v1(2026-08-20) 레거시 파일 데모사이트_TC_ALL_2026-08-14.json에서 이전 (언어선택/검색/헤더공통/반응형/접근성/네트워크예외 범위, 20건) — 모듈코드 체계 재정의(patterns.md)로 SYS→CO 코드 사용 / v2(2026-08-20) 뷰어 스키마 정비: testData 플레이스홀더("특이 테스트 데이터 없음"/"-") 빈 값으로 정정, remark(비고) 필드 신규 추가(기본값 빈 문자열) — 뷰어 컬럼 구조 개편(구분→비고, 테스트데이터 위치 이동)에 따른 데이터 정합</span>
+    <span class="version-note">meta.changeHistory: v1(2026-08-20) Phase 4: 마이페이지 서브 9개 화면(주문내역/SNS연결설정/위시리스트/배송주소록관리/쿠폰/1:1문의/리뷰목록/개인정보수정/회원탈퇴) 신규 작성 (25건) — jspark81 계정 기준 관측, SNS연결설정 500 에러 결함 발견(DEF_데모사이트_004)</span>
   </div>
 </div>
 
@@ -271,10 +269,9 @@
     <button class="modal-close" data-close="acc">닫기</button>
     <h2>테스트 계정 매트릭스</h2>
     <table>
-      <thead><tr><th>대상</th><th>유형</th><th>계정</th><th>비고</th></tr></thead>
+      <thead><tr><th>계정 ID</th><th>역할</th><th>비고</th></tr></thead>
       <tbody>
-        <tr><td>Front</td><td>일반회원</td><td>jspark81</td><td>사용자 제공 (2026-08-18), 로그인 상태 검증용</td></tr>
-        <tr><td>Admin</td><td>관리자</td><td>devel</td><td>사용자 제공 (2026-08-20), Admin(BO) 관측용</td></tr>
+        <tr><td>jspark81</td><td>일반회원</td><td>사용자 제공 (2026-08-18), 로그인 상태 검증용</td></tr>
       </tbody>
     </table>
     <div class="modal-note">※ 비밀번호는 보안상 이 화면에 표기하지 않습니다 — <code>tc-automation데모사이트TC	estAccounts.json</code>에서 확인 (git 미추적).</div>
@@ -299,9 +296,8 @@
   </div>
 </div>
 
-<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script>
-const TC_DATA = [{"tcId":"TC_CO_001","majorCategory":"시스템","midCategory":"언어선택","minorCategory":"드롭다운","platform":"Web","type":"UI","item":"언어선택 버튼 클릭 시 드롭다운 노출 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 헤더 \"🇰🇷 한국어\" 버튼 클릭","expected":"1) 지원 언어 목록이 드롭다운으로 노출된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":1,"remark":""},{"tcId":"TC_CO_002","majorCategory":"시스템","midCategory":"언어선택","minorCategory":"전환","platform":"Web","type":"기능","item":"[확인필요] 언어 전환 시 화면 언어 반영 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 언어선택 드롭다운에서 한국어 외 다른 언어 선택","expected":"1) 화면 텍스트가 선택한 언어로 전환된다\n* [확인필요] 실제 지원 언어 목록 및 전환 범위 확인 필요","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":2,"remark":""},{"tcId":"TC_CO_003","majorCategory":"시스템","midCategory":"언어선택","minorCategory":"유지","platform":"Web","type":"기능","item":"[확인필요] 언어 전환 후 새로고침 시 선택값 유지 검증","baseDoc":"-","priority":"P3","precondition":"언어를 한국어 외 다른 언어로 전환한 상태","steps":"1) 언어 전환 후 브라우저 새로고침(F5)","expected":"1) 새로고침 후에도 전환된 언어가 유지된다\n* [확인필요] 저장 방식(쿠키/localStorage) 확인 필요","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":3,"remark":""},{"tcId":"TC_CO_004","majorCategory":"시스템","midCategory":"검색","minorCategory":"아이콘","platform":"Web","type":"UI","item":"헤더 검색 아이콘 클릭 시 검색창 포커스 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 헤더 검색 아이콘 클릭","expected":"1) 검색 입력창이 노출되고 포커스가 이동한다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":4,"remark":""},{"tcId":"TC_CO_005","majorCategory":"시스템","midCategory":"이미지검색","minorCategory":"아이콘","platform":"Web","type":"기능","item":"[확인필요] 헤더 이미지검색 아이콘 클릭 시 파일선택 트리거 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 헤더 이미지검색(카메라) 아이콘 클릭","expected":"1) 파일 선택 다이얼로그가 트리거된다\n* [확인필요] 실제 동작 방식 미확인","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":5,"remark":""},{"tcId":"TC_CO_006","majorCategory":"시스템","midCategory":"이미지검색","minorCategory":"유효성","platform":"Web","type":"유효성","item":"[확인필요] 지원하지 않는 파일 형식 업로드 시 에러 안내 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 이미지검색 업로드에 .txt 등 비이미지 파일 선택","expected":"1) \"이미지 파일만 업로드 가능합니다\" 등 에러 안내가 노출된다\n* [확인필요] 실제 안내 문구 및 허용 확장자 확인 필요","testData":"업로드 파일=sample.txt","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":6,"remark":""},{"tcId":"TC_CO_007","majorCategory":"시스템","midCategory":"이미지검색","minorCategory":"검색결과","platform":"Web","type":"기능","item":"[확인필요] 정상 이미지 업로드 후 검색 결과 노출 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 이미지검색 업로드에 상품 이미지(.jpg) 선택","expected":"1) 유사 상품 검색 결과가 노출된다\n* [확인필요] 실제 이미지 인식/매칭 로직 미확인","testData":"업로드 파일=product.jpg","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":7,"remark":""},{"tcId":"TC_CO_008","majorCategory":"시스템","midCategory":"헤더","minorCategory":"장바구니아이콘","platform":"Web","type":"기능","item":"헤더 장바구니 아이콘 클릭 시 이동 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 헤더 장바구니 아이콘 클릭","expected":"1) /cart 페이지로 이동한다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":8,"remark":""},{"tcId":"TC_CO_009","majorCategory":"시스템","midCategory":"헤더","minorCategory":"메뉴순서","platform":"Web","type":"UI","item":"헤더 주요 메뉴(카테고리/SALE/MD's PICK/BRAND) 노출 순서 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 메인(/) 진입\n2) 헤더 메뉴 순서 확인","expected":"1) \"전체카테고리 - SALE - MD's PICK - BRAND\" 순서로 노출된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":9,"remark":""},{"tcId":"TC_CO_010","majorCategory":"시스템","midCategory":"반응형","minorCategory":"헤더","platform":"Web","type":"UI","item":"[확인필요] 모바일 뷰포트 헤더 햄버거 메뉴 전환 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 뷰포트를 375x812(모바일)로 축소\n2) 헤더 영역 확인","expected":"1) 헤더 메뉴가 햄버거 아이콘으로 축소되어 노출된다\n* [확인필요] 모바일 헤더 UI 존재 여부 실측 필요","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":10,"remark":""},{"tcId":"TC_CO_011","majorCategory":"품질·비기능","midCategory":"크로스브라우저","minorCategory":"헤더푸터","platform":"Web","type":"크로스브라우저","item":"Chrome 기준 헤더/푸터 레이아웃 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) Chromium 브라우저로 메인(/) 진입\n2) 헤더/푸터 레이아웃 확인","expected":"1) 요소 겹침이나 깨짐 없이 정상 렌더링된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":11,"remark":""},{"tcId":"TC_CO_012","majorCategory":"품질·비기능","midCategory":"네트워크예외","minorCategory":"오프라인","platform":"Web","type":"성능","item":"[확인필요] 네트워크 Offline 전환 시 처리 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 개발자도구 Network에서 Offline 체크\n2) 페이지 새로고침 시도","expected":"1) 오프라인 안내 화면 또는 재시도 UI가 노출된다\n* [확인필요] 실제 오프라인 처리 UX 미확인","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":12,"remark":""},{"tcId":"TC_CO_013","majorCategory":"품질·비기능","midCategory":"네트워크예외","minorCategory":"저속회선","platform":"Web","type":"성능","item":"[확인필요] Slow 3G 환경 이미지 로딩 Skeleton UI 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 개발자도구 Network에서 Throttling: Slow 3G 설정\n2) 메인(/) 새로고침","expected":"1) 이미지 로딩 완료 전 Skeleton/blur placeholder가 노출된다\n* [확인필요] 실제 적용 여부 미확인","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":13,"remark":""},{"tcId":"TC_CO_014","majorCategory":"예외·회귀","midCategory":"공통","minorCategory":"404처리","platform":"Web","type":"기능","item":"미존재 경로 접근 시 404 페이지 노출 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 존재하지 않는 경로(/no-such-page) 접속","expected":"1) 404 Not Found 안내 페이지가 노출되고 500 서버 에러가 발생하지 않는다","testData":"접속 경로=/no-such-page","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":14,"remark":""},{"tcId":"TC_CO_015","majorCategory":"품질·비기능","midCategory":"접근성","minorCategory":"키보드내비게이션","platform":"Web","type":"접근성","item":"헤더 주요 버튼 키보드 Tab 이동 및 포커스 표시 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 메인(/) 진입\n2) Tab 키로 검색/장바구니/언어선택 버튼 순차 이동","expected":"1) 각 요소에 포커스 시 시각적 포커스 표시(outline 등)가 노출된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":15,"remark":""},{"tcId":"TC_CO_016","majorCategory":"품질·비기능","midCategory":"접근성","minorCategory":"alt속성","platform":"Web","type":"접근성","item":"[확인필요] 상품 이미지 alt 속성 누락 여부 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 메인(/) 진입\n2) 개발자도구로 상품 이미지 alt 속성 전수 확인","expected":"1) 모든 상품 이미지에 상품명을 설명하는 alt 텍스트가 존재한다\n* [확인필요] 일부 이미지 alt가 상품명이 아닌 파일명으로 노출됨(TC_SYS_017 참조)","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":16,"remark":""},{"tcId":"TC_CO_017","majorCategory":"예외·회귀","midCategory":"접근성","minorCategory":"alt파일명","platform":"Web","type":"접근성","item":"[확인필요][결함] 배너 이미지 alt 텍스트가 파일명(UUID)으로 노출되는 결함 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 메인(/) 배너 이미지의 alt 속성 확인","expected":"1) 배너 내용을 설명하는 alt 텍스트가 노출되어야 하나, 실제로는 \"df23cd0d-c7f9-4611-abaf-21353e05b873.png\" 형태의 원본 파일명이 그대로 노출됨 — 스크린리더 사용성 저하","testData":"관측 alt=\"df23cd0d-c7f9-4611-abaf-21353e05b873.png\"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":17,"remark":""},{"tcId":"TC_CO_018","majorCategory":"예외·회귀","midCategory":"전시","minorCategory":"인코딩오류","platform":"Web","type":"UI","item":"[결함] 브랜드 로고 alt 텍스트 앰퍼샌드 다중 인코딩 오류 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 메인(/) \"입점 브랜드\" 섹션에서 H&M 로고 alt 속성 확인","expected":"1) alt 텍스트가 \"H&M\"으로 노출되어야 하나, 실제로는 \"H&amp;amp;amp;amp;M\" 형태로 앰퍼샌드가 4중 인코딩되어 노출됨 — HTML 이스케이프 처리 로직 결함","testData":"관측 alt=\"H&amp;amp;amp;amp;M\"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":18,"remark":""},{"tcId":"TC_CO_019","majorCategory":"예외·회귀","midCategory":"공통","minorCategory":"페이지타이틀","platform":"Web","type":"UI","item":"로그인 에러 화면 페이지 타이틀 공란 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /login 접속(500 에러 화면 노출)\n2) 브라우저 탭 타이틀 확인","expected":"1) 정상 화면은 타이틀이 노출되어야 하나, /login 에러 화면은 탭 타이틀이 공란으로 노출된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":19,"remark":""},{"tcId":"TC_CO_020","majorCategory":"전시","midCategory":"UI","minorCategory":"다크모드","platform":"Web","type":"UI","item":"[확인필요] 사이트 다크모드 지원 여부 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) OS/브라우저 다크모드 설정 활성화 후 메인(/) 접속","expected":"1) 사이트가 다크 테마로 전환되어 노출된다\n* [확인필요] 다크모드 지원 여부 자체가 미확인 — 미지원 시 라이트 테마 고정 노출이 정상","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","system":"FO","origin":"기존","displayNo":20,"remark":""}];
+const TC_DATA = [{"tcId":"TC_MY_001","majorCategory":"회원","midCategory":"주문내역","minorCategory":"EmptyState","platform":"Web","type":"UI","item":"주문 내역 없음 시 Empty State 및 \"쇼핑하러 가기\" 노출 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태 (jspark81, 주문 이력 없음)","steps":"1) /mypage/order 진입","expected":"1) \"최근 주문 내역이 없습니다\" 문구와 \"쇼핑하러 가기\" 버튼이 노출된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":1},{"tcId":"TC_MY_002","majorCategory":"회원","midCategory":"주문내역","minorCategory":"조회필터","platform":"Web","type":"UI","item":"조회기간 필터(오늘/7일/1개월/3개월/6개월/전체) 노출 검증","baseDoc":"-","priority":"P3","precondition":"로그인 회원 상태","steps":"1) /mypage/order 진입 2) 조회기간 필터 영역 확인","expected":"1) \"오늘/최근 7일/최근 1개월/최근 3개월/최근 6개월/전체\" 6개 옵션이 노출된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":2},{"tcId":"TC_MY_003","majorCategory":"회원","midCategory":"주문내역","minorCategory":"주문상태필터","platform":"Web","type":"UI","item":"주문상태 드롭다운 전체 옵션 노출 검증","baseDoc":"-","priority":"P3","precondition":"로그인 회원 상태","steps":"1) /mypage/order 진입 2) 주문상태 드롭다운 클릭","expected":"1) \"전체/주문완료/결제완료/출하지시/출고완료/배송완료/구매확정/주문취소/주문실패\" 9개 옵션이 노출된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":3},{"tcId":"TC_MY_004","majorCategory":"회원","midCategory":"주문내역","minorCategory":"이동","platform":"Web","type":"기능","item":"\"쇼핑하러 가기\" 버튼 클릭 시 메인 이동 검증","baseDoc":"-","priority":"P3","precondition":"로그인 회원 상태, 주문내역 Empty State 노출 상태","steps":"1) \"쇼핑하러 가기\" 버튼 클릭","expected":"1) 메인(/) 페이지로 이동한다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":4},{"tcId":"TC_MY_005","majorCategory":"회원","midCategory":"SNS연결설정","minorCategory":"서버에러","platform":"Web","type":"기능","item":"[확인필요][결함] SNS 연결설정 화면 500 에러 재현 검증","baseDoc":"-","priority":"P1","precondition":"로그인 회원 상태","steps":"1) /mypage/social 진입","expected":"1) SNS 연동 상태 화면이 정상 노출되어야 하나, 실제로는 \"시스템 오류가 발생했습니다\" 500 Internal Server Error 화면이 노출됨\n* [확인필요] 서버 컴포넌트 렌더링 에러 원인 파악 및 수정 필요 — DEF 결함 등록 대상","testData":"접속 URL=/mypage/social, 응답코드=500","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":5},{"tcId":"TC_MY_006","majorCategory":"회원","midCategory":"위시리스트","minorCategory":"목록노출","platform":"Web","type":"UI","item":"위시리스트 보유 상품 목록 노출 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태 (jspark81, 위시리스트에 2건 보유)","steps":"1) /mypage/wishlist 진입","expected":"1) 총 2건(\"Dior 소프트 브라운 니트 가디건\", \"H&M 빈티지 체크 셔츠\")이 가격/할인율과 함께 노출된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":6},{"tcId":"TC_MY_007","majorCategory":"회원","midCategory":"위시리스트","minorCategory":"전체삭제","platform":"Web","type":"기능","item":"\"전체 삭제\" 버튼 클릭 시 위시리스트 비움 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태, 위시리스트에 1건 이상 보유","steps":"1) /mypage/wishlist 진입 2) \"전체 삭제\" 버튼 클릭","expected":"1) 위시리스트 항목이 모두 삭제되고 Empty State가 노출된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":7},{"tcId":"TC_MY_008","majorCategory":"회원","midCategory":"위시리스트","minorCategory":"정책안내","platform":"Web","type":"UI","item":"위시리스트 최대 보유 개수(100개) 안내 문구 노출 검증","baseDoc":"-","priority":"P3","precondition":"로그인 회원 상태","steps":"1) /mypage/wishlist 진입 2) 하단 안내 영역 확인","expected":"1) \"찜한 상품은 최대 100개까지 저장됩니다\" 안내 문구가 노출된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":8},{"tcId":"TC_MY_009","majorCategory":"회원","midCategory":"배송주소록","minorCategory":"EmptyState","platform":"Web","type":"UI","item":"배송지 미등록 시 Empty State 노출 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태 (jspark81, 등록된 배송지 없음)","steps":"1) /mypage/address 진입","expected":"1) \"등록된 배송지가 없습니다\" 문구가 노출된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":9},{"tcId":"TC_MY_010","majorCategory":"회원","midCategory":"배송주소록","minorCategory":"등록","platform":"Web","type":"기능","item":"\"새 배송지 등록\" 버튼 클릭 시 등록 폼 노출 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태","steps":"1) /mypage/address 진입 2) \"+ 새 배송지 등록\" 버튼 클릭","expected":"1) 배송지 등록 폼(모달 또는 화면)이 노출된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":10},{"tcId":"TC_MY_011","majorCategory":"회원","midCategory":"배송주소록","minorCategory":"정책안내","platform":"Web","type":"UI","item":"배송지 최대 등록 개수(5개) 및 기본배송지 자동입력 안내 노출 검증","baseDoc":"-","priority":"P3","precondition":"로그인 회원 상태","steps":"1) /mypage/address 진입 2) 하단 안내 영역 확인","expected":"1) \"배송지는 최대 5개까지 등록이 가능합니다\", \"기본 배송지를 설정하시면 주문 시 해당 주소가 자동으로 입력됩니다\" 안내 문구가 노출된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":11},{"tcId":"TC_MY_012","majorCategory":"회원","midCategory":"쿠폰","minorCategory":"EmptyState","platform":"Web","type":"UI","item":"보유 쿠폰 없음 시 Empty State 노출 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태 (jspark81, 보유 쿠폰 없음)","steps":"1) /mypage/coupon 진입","expected":"1) \"보유한 쿠폰이 없습니다\" 문구가 노출된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":12},{"tcId":"TC_MY_013","majorCategory":"회원","midCategory":"쿠폰","minorCategory":"탭필터","platform":"Web","type":"UI","item":"전체/사용가능/사용완료·만료 탭 전환 동작 검증","baseDoc":"-","priority":"P3","precondition":"로그인 회원 상태","steps":"1) /mypage/coupon 진입 2) \"사용가능\" 탭 클릭 3) \"사용완료/만료\" 탭 클릭","expected":"1) 2) 3) 각 탭 클릭 시 해당 조건의 쿠폰만 필터링되어 노출된다(전체 항목 개수와 합이 일치)","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":13},{"tcId":"TC_MY_014","majorCategory":"회원","midCategory":"1:1문의","minorCategory":"EmptyState","platform":"Web","type":"UI","item":"문의 내역 없음 시 총 건수 및 Empty State 노출 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태 (jspark81, 문의 이력 없음)","steps":"1) /mypage/inquiry 진입","expected":"1) \"총 0건\", \"조건에 맞는 문의 내역이 없습니다\" 문구가 노출된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":14},{"tcId":"TC_MY_015","majorCategory":"회원","midCategory":"1:1문의","minorCategory":"문의작성","platform":"Web","type":"기능","item":"\"문의하기\" 버튼 클릭 시 작성 화면 이동 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태","steps":"1) /mypage/inquiry 진입 2) \"문의하기\" 버튼 클릭","expected":"1) 1:1 문의 작성 화면(또는 모달)로 이동한다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":15},{"tcId":"TC_MY_016","majorCategory":"회원","midCategory":"리뷰목록","minorCategory":"탭전환","platform":"Web","type":"UI","item":"\"작성 가능한 리뷰\"/\"작성한 리뷰\" 탭 전환 동작 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태","steps":"1) /mypage/review 진입 2) \"작성한 리뷰\" 탭 클릭","expected":"1) 2) 탭에 따라 각각 다른 목록(작성 가능/작성 완료)이 노출된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":16},{"tcId":"TC_MY_017","majorCategory":"회원","midCategory":"리뷰목록","minorCategory":"EmptyState","platform":"Web","type":"UI","item":"작성 가능한 리뷰 없음 시 Empty State 노출 검증","baseDoc":"-","priority":"P3","precondition":"로그인 회원 상태 (jspark81, 구매/배송완료 상품 없음)","steps":"1) /mypage/review 진입 (\"작성 가능한 리뷰\" 탭 기본 선택)","expected":"1) \"작성 가능한 리뷰가 없습니다\" 문구가 노출된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":17},{"tcId":"TC_MY_018","majorCategory":"회원","midCategory":"개인정보수정","minorCategory":"기본정보노출","platform":"Web","type":"데이터","item":"개인정보 수정 화면 기본정보 초기값 노출 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태 (jspark81 계정)","steps":"1) /mypage/edit 진입","expected":"1) 이름=박지숙, 아이디=jspark81(수정불가 추정), 생년월일=2026.08.18이 초기값으로 노출된다\n* [확인필요] 아이디 필드의 실제 수정 가능 여부 미확인","testData":"jspark81 계정 프로필: 이름=박지숙, 아이디=jspark81","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":18},{"tcId":"TC_MY_019","majorCategory":"회원","midCategory":"개인정보수정","minorCategory":"정보수정","platform":"Web","type":"기능","item":"전화번호/이메일 수정 후 저장 동작 검증","baseDoc":"-","priority":"P1","precondition":"로그인 회원 상태","steps":"1) /mypage/edit 진입 2) 전화번호/이메일 필드 값 변경 3) \"저장\" 버튼 클릭","expected":"1) 2) 변경한 값이 입력된다 3) 저장 성공 안내와 함께 변경된 값이 반영된다","testData":"전화번호=01099998888, 이메일=jspark81_test@3top.co.kr","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":19},{"tcId":"TC_MY_020","majorCategory":"회원","midCategory":"개인정보수정","minorCategory":"수신동의","platform":"Web","type":"기능","item":"이메일/SMS/PUSH 수신동의 라디오 변경 후 저장 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태","steps":"1) /mypage/edit 진입 2) 이메일 수신 동의 \"미동의\"로 변경 3) \"저장\" 버튼 클릭","expected":"1) 2) 3) 변경한 수신동의 상태가 저장되고 재진입 시에도 유지된다","testData":"이메일 수신동의=미동의","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":20},{"tcId":"TC_MY_021","majorCategory":"회원","midCategory":"개인정보수정","minorCategory":"취소","platform":"Web","type":"기능","item":"\"취소\" 버튼 클릭 시 변경사항 미반영 검증","baseDoc":"-","priority":"P3","precondition":"로그인 회원 상태","steps":"1) /mypage/edit 진입 2) 전화번호 값 변경 3) \"취소\" 버튼 클릭 4) 재진입","expected":"1) 2) 3) 4) 변경 전 원래 값이 그대로 유지된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":21},{"tcId":"TC_MY_022","majorCategory":"회원","midCategory":"개인정보수정","minorCategory":"비밀번호변경","platform":"Web","type":"기능","item":"\"변경하기\" 버튼 클릭 시 비밀번호 변경 폼 노출 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태","steps":"1) /mypage/edit 진입 2) 비밀번호 영역 \"변경하기\" 버튼 클릭","expected":"1) 현재 비밀번호/새 비밀번호 입력 폼(모달 또는 화면)이 노출된다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":22},{"tcId":"TC_MY_023","majorCategory":"회원","midCategory":"회원탈퇴","minorCategory":"비밀번호검증","platform":"Web","type":"유효성","item":"[확인필요] 비밀번호 미입력 시 \"확인\" 버튼 클릭 차단 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태","steps":"1) /mypage/withdraw 진입 2) 비밀번호 미입력 상태로 \"확인\" 버튼 클릭","expected":"1) 2) \"비밀번호를 입력해주세요\" 등 안내와 함께 진행이 차단된다\n* [확인필요] 실제 안내 문구 및 차단 여부 확인 필요","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":23},{"tcId":"TC_MY_024","majorCategory":"회원","midCategory":"회원탈퇴","minorCategory":"비밀번호검증","platform":"Web","type":"유효성","item":"[확인필요] 잘못된 비밀번호 입력 시 탈퇴 차단 검증","baseDoc":"-","priority":"P1","precondition":"로그인 회원 상태","steps":"1) /mypage/withdraw 진입 2) 잘못된 비밀번호 입력 후 \"확인\" 클릭","expected":"1) 2) \"비밀번호가 일치하지 않습니다\" 안내와 함께 탈퇴가 차단된다\n* [확인필요] 실제 안내 문구 확인 필요","testData":"비밀번호=wrongpassword","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":24},{"tcId":"TC_MY_025","majorCategory":"회원","midCategory":"회원탈퇴","minorCategory":"취소","platform":"Web","type":"기능","item":"\"취소\" 버튼 클릭 시 마이페이지 복귀 검증","baseDoc":"-","priority":"P3","precondition":"로그인 회원 상태","steps":"1) /mypage/withdraw 진입 2) \"취소\" 버튼 클릭","expected":"1) 2) 회원 탈퇴가 진행되지 않고 이전 화면(마이페이지)으로 복귀한다","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","displayNo":25}];
 const DEFECT_DATA = [{"defectId":"DEF_데모사이트_001","tcId":"TC_PD_084","module":"상품상세","severity":"P2","status":"신규","summary":"비로그인 상태에서 위시리스트 버튼 클릭 시 /login으로 이동되는데, 그 /login 페이지 자체에서 리소스 3건이 404로 실패함 (/forgot-password, /policy, /service 프리페치 요청)","detectedAt":"2026-08-19","source":"automation","screenshot":"TC/defects/DEF_데모사이트_001.png","assignee":"","issueLink":"","history":[{"at":"2026-08-19","status":"신규","note":"Playwright 자동 실행 중 최초 발견 (TC_PD_084)"}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) 비로그인 상태로 /products/96 진입\n2) \"위시리스트 추가\" 버튼 클릭 → /login으로 이동","actualResult":"이동된 /login 페이지에서 /forgot-password, /policy, /service 리소스 3건이 404로 실패 (콘솔/네트워크 에러 자동감지로 실패 처리됨)","expectedResult":"로그인 페이지로 정상 이동하고, 콘솔 에러/4xx·5xx 응답 없이 로그인 유도 화면이 노출되어야 함"},{"defectId":"DEF_데모사이트_002","tcId":"TC_PD_085","module":"상품상세","severity":"P2","status":"신규","summary":"로그인 페이지(/login) 진입 시 리소스 3건이 404로 실패함 (/forgot-password, /policy, /service 프리페치 요청) — DEF_데모사이트_001과 동일 근본 원인, 로그인 플로우를 거치는 모든 테스트에 영향","detectedAt":"2026-08-19","source":"automation","screenshot":"TC/defects/DEF_데모사이트_002.png","assignee":"","issueLink":"","history":[{"at":"2026-08-19","status":"신규","note":"Playwright 자동 실행 중 최초 발견 (TC_PD_085). 8/18 상품전시 테스트 관찰 시에도 동일 현상 발견된 바 있음 (그때는 결함 등록 보류)."}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) jspark81 계정으로 로그인 (로그인 페이지 진입 포함)\n2) /products/96 진입\n3) \"위시리스트 추가\" 버튼 클릭","actualResult":"로그인 과정에서 진입한 /login 페이지에서 /forgot-password, /policy, /service 리소스 3건이 404로 실패 (콘솔/네트워크 에러 자동감지로 실패 처리됨)","expectedResult":"콘솔 에러 및 4xx/5xx 응답 없이 로그인 및 위시리스트 추가가 정상 완료되어야 함"},{"defectId":"DEF_데모사이트_003","tcId":"TC_PD_028","module":"상품상세","severity":"P2","status":"신규","summary":"존재하지 않는 상품ID(/products/999999)로 접근 시 404 또는 안내 화면 대신 HTTP 500 에러가 발생함 (Next.js Server Components render 단계에서 예외 발생)","detectedAt":"2026-08-19","source":"automation","screenshot":"TC/defects/DEF_데모사이트_003.png","assignee":"","issueLink":"","history":[{"at":"2026-08-19","status":"신규","note":"Playwright 자동 실행 중 최초 발견 (TC_PD_028). /login 500 결함(DEF_데모사이트_001/002 근본 원인과 별개, 존재하지 않는 리소스 접근 시 서버 컴포넌트 렌더링 예외)과 동일한 크래시 유형."}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) /products/999999 (존재하지 않는 상품ID) 접속","actualResult":"HTTP 500 에러 발생 (Next.js Server Components render 단계에서 예외 발생)","expectedResult":"404 또는 \"상품을 찾을 수 없습니다\" 안내 화면이 노출되고 500 서버 에러가 발생하지 않아야 함"},{"defectId":"DEF_데모사이트_004","tcId":"TC_MY_005","module":"마이페이지","severity":"P1","status":"신규","summary":"마이페이지 > SNS 연결설정(/mypage/social) 화면 진입 시 HTTP 500 서버 에러 발생 (Next.js Server Components render 단계에서 예외 발생)","detectedAt":"2026-08-20","source":"observation","screenshot":"","assignee":"","issueLink":"","history":[{"at":"2026-08-20","status":"신규","note":"Phase 1 재관찰(배치2, 마이페이지 서브 화면 전수 확인) 중 최초 발견"}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) jspark81 계정으로 로그인\n2) /mypage/social 진입","actualResult":"\"시스템 오류가 발생했습니다\" 500 Internal Server Error 화면 노출 (Error Digest: 2806040409)","expectedResult":"SNS 연동 상태(연동/미연동) 화면이 정상 노출되어야 함"},{"defectId":"DEF_데모사이트_005","tcId":"TC_CS_005","module":"고객센터","severity":"P1","status":"신규","summary":"푸터 \"개인정보처리방침\" 링크가 가리키는 /policy 경로가 실제로는 존재하지 않아 404 에러 발생","detectedAt":"2026-08-20","source":"observation","screenshot":"","assignee":"","issueLink":"","history":[{"at":"2026-08-20","status":"신규","note":"Phase 1 재관찰(배치2, 고객센터/정책 화면 전수 확인) 중 최초 발견. 기존 DEF_데모사이트_001/002에서도 /login 페이지 프리페치 리소스로 /policy 404가 부수적으로 관측된 바 있음 — 동일 원인으로 추정"}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) 푸터 \"개인정보처리방침\" 링크 클릭 또는 /policy 직접 접속","actualResult":"\"404 - 페이지를 찾을 수 없습니다\" 화면 노출","expectedResult":"개인정보처리방침 전문이 노출되어야 함"},{"defectId":"DEF_데모사이트_006","tcId":"TC_CS_006","module":"고객센터","severity":"P1","status":"신규","summary":"푸터 \"이용약관\" 링크가 가리키는 /service 경로가 실제로는 존재하지 않아 404 에러 발생","detectedAt":"2026-08-20","source":"observation","screenshot":"","assignee":"","issueLink":"","history":[{"at":"2026-08-20","status":"신규","note":"Phase 1 재관찰(배치2, 고객센터/정책 화면 전수 확인) 중 최초 발견. DEF_데모사이트_005와 동일 패턴(푸터 링크 목적지 미구현)"}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) 푸터 \"이용약관\" 링크 클릭 또는 /service 직접 접속","actualResult":"\"404 - 페이지를 찾을 수 없습니다\" 화면 노출","expectedResult":"이용약관 전문이 노출되어야 함"}];
 const DEFECT_TAB = '🐞 결함현황';
 let currentTab = '전체';
@@ -311,30 +307,6 @@ let defectFilterStatus = '전체';
 function esc(s) {
   return String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-// 검색어를 하이라이트(배경 마킹) 처리. esc() 이후 텍스트에 <mark>를 삽입.
-function hl(s, kw) {
-  const escaped = esc(s);
-  if (!kw) return escaped;
-  const idx = escaped.toLowerCase().indexOf(kw.toLowerCase());
-  if (idx === -1) return escaped;
-  return escaped.slice(0, idx) + '<mark>' + escaped.slice(idx, idx + kw.length) + '</mark>' + escaped.slice(idx + kw.length);
-}
-
-// "비"+검색어(예: 검색어="회원" → "비회원")로 매칭된 항목은 일반 매칭보다 후순위로 정렬.
-// 하나의 항목(tcId+item)에 일반 매칭이 하나라도 있으면 우선순위로 취급.
-function isSecondaryMatch(t, kw) {
-  const text = (t.tcId + ' ' + t.item).toLowerCase();
-  const k = kw.toLowerCase();
-  let idx = text.indexOf(k);
-  let hasPrimary = false, hasSecondary = false;
-  while (idx !== -1) {
-    if (idx > 0 && text[idx - 1] === '비') hasSecondary = true;
-    else hasPrimary = true;
-    idx = text.indexOf(k, idx + 1);
-  }
-  return hasSecondary && !hasPrimary;
 }
 
 function setupFilterBar() {
@@ -378,10 +350,7 @@ function render() {
 
   let filtered = currentTab === '전체' ? TC_DATA : TC_DATA.filter(t => t.midCategory === currentTab);
   if (filterState.keyword) {
-    const kw = filterState.keyword;
-    filtered = filtered.filter(t => (t.tcId + ' ' + t.item).toLowerCase().includes(kw));
-    // "비"+검색어 매칭은 후순위 정렬 (예: 검색어 "회원" → "비회원" 항목은 뒤로)
-    filtered = [...filtered].sort((a, b) => isSecondaryMatch(a, kw) - isSecondaryMatch(b, kw));
+    filtered = filtered.filter(t => (t.tcId + ' ' + t.item).toLowerCase().includes(filterState.keyword));
   }
   if (filterState.priority) filtered = filtered.filter(t => t.priority === filterState.priority);
   if (filterState.type) filtered = filtered.filter(t => t.type === filterState.type);
@@ -411,32 +380,30 @@ function render() {
   }).join('');
 
   const tbody = document.getElementById('tcBody');
-  const kw = filterState.keyword;
   tbody.innerHTML = filtered.map(t => `
     <tr data-id="${esc(t.tcId)}">
       <td class="center">${esc(t.displayNo)}</td>
-      <td>${hl(t.tcId, kw)}</td>
+      <td>${esc(t.tcId)}</td>
       <td class="center"><span class="badge ${t.system==='BO'?'P1':'P3'}">${esc(t.system||'FO')}</span></td>
       <td>${esc(t.majorCategory)}</td>
       <td>${esc(t.midCategory)}</td>
       <td>${esc(t.minorCategory||'')}</td>
       <td class="center">${esc(t.platform)}</td>
       <td class="center">${esc(t.type)}</td>
-      <td>${hl(t.item, kw)}</td>
+      <td>${esc(t.item)}</td>
+      <td class="center"><span class="badge ${t.origin==='신규'?'P3':'P2'}">${esc(t.origin||'')}</span></td>
       <td>${esc(t.baseDoc||'-')}</td>
       <td class="center"><span class="badge ${esc(t.priority)}">${esc(t.priority)}</span></td>
-      <td>${esc(t.testData||'')}</td>
       <td>${esc(t.precondition === '특이 사전조건 없음' ? '' : t.precondition)}</td>
       <td>${esc(t.steps)}</td>
       <td>${esc(t.expected)}</td>
+      <td>${esc(t.testData)}</td>
       <td>${resultSelect(t)}</td>
       <td><input class="free-input assignee" value="${esc(t.assignee||'')}"></td>
       <td>${esc(t.issueSummary||'')}</td>
       <td><input class="free-input issuelink" value="${esc(t.issueLink||'')}"></td>
-      <td><input class="free-input remark" value="${esc(t.remark||'')}"></td>
     </tr>
   `).join('');
-  tbody.querySelectorAll('input.remark').forEach(inp => inp.onchange = () => { TC_DATA.find(t=>t.tcId===inp.closest('tr').dataset.id).remark = inp.value; });
 
   tbody.querySelectorAll('select.result-select').forEach(sel => {
     sel.onchange = () => {
@@ -564,64 +531,21 @@ document.getElementById('btnTheme').onclick = () => {
   html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
 };
 
-document.getElementById('statsToggle').onclick = () => {
-  const wrap = document.getElementById('statsTableWrap');
-  const icon = document.getElementById('statsToggleIcon');
-  const open = wrap.style.display !== 'none';
-  wrap.style.display = open ? 'none' : '';
-  icon.textContent = open ? '▶' : '▼';
-};
-
 document.getElementById('btnAccMatrix').onclick = () => document.getElementById('accModalOverlay').classList.add('open');
 document.getElementById('btnFlowMap').onclick = () => document.getElementById('flowModalOverlay').classList.add('open');
 document.querySelectorAll('.modal-close').forEach(btn => btn.onclick = (e) => e.target.closest('.modal-overlay').classList.remove('open'));
 document.querySelectorAll('.modal-overlay').forEach(ov => ov.onclick = (e) => { if (e.target === ov) ov.classList.remove('open'); });
 
-function buildSummaryRows() {
-  const mods = [...new Set(TC_DATA.map(t => t.midCategory))];
-  return mods.map(m => {
-    const items = TC_DATA.filter(t => t.midCategory === m);
-    const total = items.length;
-    const pass = items.filter(t => t.result === 'Pass').length;
-    const fail = items.filter(t => t.result === 'Fail').length;
-    const blocked = items.filter(t => t.result === 'Blocked').length;
-    const na = items.filter(t => t.result === 'N/A').length;
-    const none = items.filter(t => !t.result).length;
-    const executed = total - none;
-    return {
-      '소분류': m, '전체': total, 'Pass': pass, 'Fail': fail, 'Blocked': blocked, 'N/A': na, '미실행': none,
-      '수행율': total ? Math.round((executed/total)*100)+'%' : '0%',
-      'Pass율': executed ? Math.round((pass/executed)*100)+'%' : '0%',
-      'Fail율': executed ? Math.round((fail/executed)*100)+'%' : '0%',
-    };
-  });
-}
-
-document.getElementById('btnXlsx').onclick = () => {
-  const wb = XLSX.utils.book_new();
-
-  const summarySheet = XLSX.utils.json_to_sheet(buildSummaryRows());
-  XLSX.utils.book_append_sheet(wb, summarySheet, 'Summary');
-
-  const tcRows = TC_DATA.map(t => ({
-    'No.': t.displayNo, 'TC ID': t.tcId, 'system': t.system, '대분류': t.majorCategory, '중분류': t.midCategory,
-    '소분류': t.minorCategory, '플랫폼': t.platform, '유형': t.type, '테스트 항목': t.item, '기준문서': t.baseDoc,
-    '우선순위': t.priority, '테스트 데이터': t.testData, '사전조건': t.precondition, '테스트 수행 절차': t.steps,
-    '기대 결과': t.expected, '실행결과': t.result, '담당자': t.assignee, '이슈내용': t.issueSummary,
-    '이슈링크': t.issueLink, '비고': t.remark,
-  }));
-  const tcSheet = XLSX.utils.json_to_sheet(tcRows);
-  XLSX.utils.book_append_sheet(wb, tcSheet, 'TC');
-
-  const defectRows = DEFECT_DATA.map(d => ({
-    '결함ID': d.defectId, '모듈': d.module, '심각도': d.severity, '상태': d.status, '요약': d.summary,
-    '환경': d.testEnv, '절차': d.testSteps, '실제결과': d.actualResult, '기대결과': d.expectedResult,
-    '발견일': d.detectedAt, '관련TC': d.tcId, '이슈링크': d.issueLink,
-  }));
-  const defectSheet = XLSX.utils.json_to_sheet(defectRows);
-  XLSX.utils.book_append_sheet(wb, defectSheet, 'Defect');
-
-  XLSX.writeFile(wb, '데모사이트_TC_CO.xlsx');
+document.getElementById('btnCsv').onclick = () => {
+  const headers = ['No.','TC ID','system','대분류','중분류','소분류','플랫폼','유형','테스트 항목','구분','기준문서','우선순위','사전조건','절차','기대결과','테스트데이터','실행결과','담당자','이슈내용','이슈링크'];
+  const rows = TC_DATA.map(t => [t.displayNo,t.tcId,t.system,t.majorCategory,t.midCategory,t.minorCategory,t.platform,t.type,t.item,t.origin,t.baseDoc,t.priority,t.precondition,t.steps,t.expected,t.testData,t.result,t.assignee,t.issueSummary,t.issueLink]
+    .map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv = '\uFEFF' + [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '데모사이트_TC_MY.csv';
+  a.click();
 };
 
 const FS_ACCESS_SUPPORTED = 'showOpenFilePicker' in window;
@@ -647,20 +571,20 @@ function applyLoadedTcItems(items) {
   let n = 0;
   items.forEach(li => {
     const t = TC_DATA.find(x => x.tcId === li.tcId);
-    if (t) { t.result = li.result; t.assignee = li.assignee; t.issueSummary = li.issueSummary; t.issueLink = li.issueLink; t.remark = li.remark; n++; }
+    if (t) { t.result = li.result; t.assignee = li.assignee; t.issueSummary = li.issueSummary; t.issueLink = li.issueLink; n++; }
   });
   render();
   return n;
 }
 
 document.getElementById('btnJsonSave').onclick = async () => {
-  const out = { meta: { project: '데모사이트', module: 'CO', moduleName: '회원', version: 2 }, items: TC_DATA };
+  const out = { meta: { project: '데모사이트', module: 'MY', moduleName: '회원', version: 1 }, items: TC_DATA };
   const content = JSON.stringify(out, null, 2);
   if (tcFileHandle) {
     try { await writeToHandle(tcFileHandle, content); alert('저장 완료: ' + tcFileHandle.name); return; }
     catch (err) { alert('직접 저장 실패, 다운로드로 대체합니다: ' + err.message); }
   }
-  downloadJson(content, '데모사이트_TC_CO.json');
+  downloadJson(content, '데모사이트_TC_MY.json');
 };
 
 document.getElementById('btnJsonLoad').onclick = async () => {

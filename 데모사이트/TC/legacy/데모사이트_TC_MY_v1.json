@@ -3,17 +3,12 @@
     "project": "데모사이트",
     "module": "MY",
     "moduleName": "마이페이지",
-    "version": 2,
+    "version": 1,
     "changeHistory": [
       {
         "version": 1,
         "date": "2026-08-20",
         "summary": "Phase 4: 마이페이지 서브 9개 화면(주문내역/SNS연결설정/위시리스트/배송주소록관리/쿠폰/1:1문의/리뷰목록/개인정보수정/회원탈퇴) 신규 작성 (25건) — jspark81 계정 기준 관측, SNS연결설정 500 에러 결함 발견(DEF_데모사이트_004)"
-      },
-      {
-        "version": 2,
-        "date": "2026-08-20",
-        "summary": "뷰어 스키마 정비: testData 플레이스홀더(\"특이 테스트 데이터 없음\"/\"-\") 빈 값으로 정정, remark(비고) 필드 신규 추가(기본값 빈 문자열) — 뷰어 컬럼 구조 개편(구분→비고, 테스트데이터 위치 이동)에 따른 데이터 정합"
       }
     ]
   },
@@ -31,15 +26,14 @@
       "precondition": "로그인 회원 상태 (jspark81, 주문 이력 없음)",
       "steps": "1) /mypage/order 진입",
       "expected": "1) \"최근 주문 내역이 없습니다\" 문구와 \"쇼핑하러 가기\" 버튼이 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 1,
-      "remark": ""
+      "displayNo": 1
     },
     {
       "tcId": "TC_MY_002",
@@ -54,15 +48,14 @@
       "precondition": "로그인 회원 상태",
       "steps": "1) /mypage/order 진입 2) 조회기간 필터 영역 확인",
       "expected": "1) \"오늘/최근 7일/최근 1개월/최근 3개월/최근 6개월/전체\" 6개 옵션이 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 2,
-      "remark": ""
+      "displayNo": 2
     },
     {
       "tcId": "TC_MY_003",
@@ -77,15 +70,14 @@
       "precondition": "로그인 회원 상태",
       "steps": "1) /mypage/order 진입 2) 주문상태 드롭다운 클릭",
       "expected": "1) \"전체/주문완료/결제완료/출하지시/출고완료/배송완료/구매확정/주문취소/주문실패\" 9개 옵션이 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 3,
-      "remark": ""
+      "displayNo": 3
     },
     {
       "tcId": "TC_MY_004",
@@ -100,15 +92,14 @@
       "precondition": "로그인 회원 상태, 주문내역 Empty State 노출 상태",
       "steps": "1) \"쇼핑하러 가기\" 버튼 클릭",
       "expected": "1) 메인(/) 페이지로 이동한다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 4,
-      "remark": ""
+      "displayNo": 4
     },
     {
       "tcId": "TC_MY_005",
@@ -130,8 +121,7 @@
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 5,
-      "remark": ""
+      "displayNo": 5
     },
     {
       "tcId": "TC_MY_006",
@@ -146,15 +136,14 @@
       "precondition": "로그인 회원 상태 (jspark81, 위시리스트에 2건 보유)",
       "steps": "1) /mypage/wishlist 진입",
       "expected": "1) 총 2건(\"Dior 소프트 브라운 니트 가디건\", \"H&M 빈티지 체크 셔츠\")이 가격/할인율과 함께 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 6,
-      "remark": ""
+      "displayNo": 6
     },
     {
       "tcId": "TC_MY_007",
@@ -169,15 +158,14 @@
       "precondition": "로그인 회원 상태, 위시리스트에 1건 이상 보유",
       "steps": "1) /mypage/wishlist 진입 2) \"전체 삭제\" 버튼 클릭",
       "expected": "1) 위시리스트 항목이 모두 삭제되고 Empty State가 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 7,
-      "remark": ""
+      "displayNo": 7
     },
     {
       "tcId": "TC_MY_008",
@@ -192,15 +180,14 @@
       "precondition": "로그인 회원 상태",
       "steps": "1) /mypage/wishlist 진입 2) 하단 안내 영역 확인",
       "expected": "1) \"찜한 상품은 최대 100개까지 저장됩니다\" 안내 문구가 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 8,
-      "remark": ""
+      "displayNo": 8
     },
     {
       "tcId": "TC_MY_009",
@@ -215,15 +202,14 @@
       "precondition": "로그인 회원 상태 (jspark81, 등록된 배송지 없음)",
       "steps": "1) /mypage/address 진입",
       "expected": "1) \"등록된 배송지가 없습니다\" 문구가 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 9,
-      "remark": ""
+      "displayNo": 9
     },
     {
       "tcId": "TC_MY_010",
@@ -238,15 +224,14 @@
       "precondition": "로그인 회원 상태",
       "steps": "1) /mypage/address 진입 2) \"+ 새 배송지 등록\" 버튼 클릭",
       "expected": "1) 배송지 등록 폼(모달 또는 화면)이 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 10,
-      "remark": ""
+      "displayNo": 10
     },
     {
       "tcId": "TC_MY_011",
@@ -261,15 +246,14 @@
       "precondition": "로그인 회원 상태",
       "steps": "1) /mypage/address 진입 2) 하단 안내 영역 확인",
       "expected": "1) \"배송지는 최대 5개까지 등록이 가능합니다\", \"기본 배송지를 설정하시면 주문 시 해당 주소가 자동으로 입력됩니다\" 안내 문구가 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 11,
-      "remark": ""
+      "displayNo": 11
     },
     {
       "tcId": "TC_MY_012",
@@ -284,15 +268,14 @@
       "precondition": "로그인 회원 상태 (jspark81, 보유 쿠폰 없음)",
       "steps": "1) /mypage/coupon 진입",
       "expected": "1) \"보유한 쿠폰이 없습니다\" 문구가 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 12,
-      "remark": ""
+      "displayNo": 12
     },
     {
       "tcId": "TC_MY_013",
@@ -307,15 +290,14 @@
       "precondition": "로그인 회원 상태",
       "steps": "1) /mypage/coupon 진입 2) \"사용가능\" 탭 클릭 3) \"사용완료/만료\" 탭 클릭",
       "expected": "1) 2) 3) 각 탭 클릭 시 해당 조건의 쿠폰만 필터링되어 노출된다(전체 항목 개수와 합이 일치)",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 13,
-      "remark": ""
+      "displayNo": 13
     },
     {
       "tcId": "TC_MY_014",
@@ -330,15 +312,14 @@
       "precondition": "로그인 회원 상태 (jspark81, 문의 이력 없음)",
       "steps": "1) /mypage/inquiry 진입",
       "expected": "1) \"총 0건\", \"조건에 맞는 문의 내역이 없습니다\" 문구가 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 14,
-      "remark": ""
+      "displayNo": 14
     },
     {
       "tcId": "TC_MY_015",
@@ -353,15 +334,14 @@
       "precondition": "로그인 회원 상태",
       "steps": "1) /mypage/inquiry 진입 2) \"문의하기\" 버튼 클릭",
       "expected": "1) 1:1 문의 작성 화면(또는 모달)로 이동한다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 15,
-      "remark": ""
+      "displayNo": 15
     },
     {
       "tcId": "TC_MY_016",
@@ -376,15 +356,14 @@
       "precondition": "로그인 회원 상태",
       "steps": "1) /mypage/review 진입 2) \"작성한 리뷰\" 탭 클릭",
       "expected": "1) 2) 탭에 따라 각각 다른 목록(작성 가능/작성 완료)이 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 16,
-      "remark": ""
+      "displayNo": 16
     },
     {
       "tcId": "TC_MY_017",
@@ -399,15 +378,14 @@
       "precondition": "로그인 회원 상태 (jspark81, 구매/배송완료 상품 없음)",
       "steps": "1) /mypage/review 진입 (\"작성 가능한 리뷰\" 탭 기본 선택)",
       "expected": "1) \"작성 가능한 리뷰가 없습니다\" 문구가 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 17,
-      "remark": ""
+      "displayNo": 17
     },
     {
       "tcId": "TC_MY_018",
@@ -429,8 +407,7 @@
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 18,
-      "remark": ""
+      "displayNo": 18
     },
     {
       "tcId": "TC_MY_019",
@@ -452,8 +429,7 @@
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 19,
-      "remark": ""
+      "displayNo": 19
     },
     {
       "tcId": "TC_MY_020",
@@ -475,8 +451,7 @@
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 20,
-      "remark": ""
+      "displayNo": 20
     },
     {
       "tcId": "TC_MY_021",
@@ -491,15 +466,14 @@
       "precondition": "로그인 회원 상태",
       "steps": "1) /mypage/edit 진입 2) 전화번호 값 변경 3) \"취소\" 버튼 클릭 4) 재진입",
       "expected": "1) 2) 3) 4) 변경 전 원래 값이 그대로 유지된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 21,
-      "remark": ""
+      "displayNo": 21
     },
     {
       "tcId": "TC_MY_022",
@@ -514,15 +488,14 @@
       "precondition": "로그인 회원 상태",
       "steps": "1) /mypage/edit 진입 2) 비밀번호 영역 \"변경하기\" 버튼 클릭",
       "expected": "1) 현재 비밀번호/새 비밀번호 입력 폼(모달 또는 화면)이 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 22,
-      "remark": ""
+      "displayNo": 22
     },
     {
       "tcId": "TC_MY_023",
@@ -537,15 +510,14 @@
       "precondition": "로그인 회원 상태",
       "steps": "1) /mypage/withdraw 진입 2) 비밀번호 미입력 상태로 \"확인\" 버튼 클릭",
       "expected": "1) 2) \"비밀번호를 입력해주세요\" 등 안내와 함께 진행이 차단된다\n* [확인필요] 실제 안내 문구 및 차단 여부 확인 필요",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 23,
-      "remark": ""
+      "displayNo": 23
     },
     {
       "tcId": "TC_MY_024",
@@ -567,8 +539,7 @@
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 24,
-      "remark": ""
+      "displayNo": 24
     },
     {
       "tcId": "TC_MY_025",
@@ -583,15 +554,14 @@
       "precondition": "로그인 회원 상태",
       "steps": "1) /mypage/withdraw 진입 2) \"취소\" 버튼 클릭",
       "expected": "1) 2) 회원 탈퇴가 진행되지 않고 이전 화면(마이페이지)으로 복귀한다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "displayNo": 25,
-      "remark": ""
+      "displayNo": 25
     }
   ]
 }

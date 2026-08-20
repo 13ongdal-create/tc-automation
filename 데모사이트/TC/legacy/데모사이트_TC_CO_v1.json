@@ -3,17 +3,12 @@
     "project": "데모사이트",
     "module": "CO",
     "moduleName": "시스템(공통)",
-    "version": 2,
+    "version": 1,
     "changeHistory": [
       {
         "version": 1,
         "date": "2026-08-20",
         "summary": "레거시 파일 데모사이트_TC_ALL_2026-08-14.json에서 이전 (언어선택/검색/헤더공통/반응형/접근성/네트워크예외 범위, 20건) — 모듈코드 체계 재정의(patterns.md)로 SYS→CO 코드 사용"
-      },
-      {
-        "version": 2,
-        "date": "2026-08-20",
-        "summary": "뷰어 스키마 정비: testData 플레이스홀더(\"특이 테스트 데이터 없음\"/\"-\") 빈 값으로 정정, remark(비고) 필드 신규 추가(기본값 빈 문자열) — 뷰어 컬럼 구조 개편(구분→비고, 테스트데이터 위치 이동)에 따른 데이터 정합"
       }
     ]
   },
@@ -31,15 +26,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 헤더 \"🇰🇷 한국어\" 버튼 클릭",
       "expected": "1) 지원 언어 목록이 드롭다운으로 노출된다",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 1,
-      "remark": ""
+      "displayNo": 1
     },
     {
       "tcId": "TC_CO_002",
@@ -54,15 +48,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 언어선택 드롭다운에서 한국어 외 다른 언어 선택",
       "expected": "1) 화면 텍스트가 선택한 언어로 전환된다\n* [확인필요] 실제 지원 언어 목록 및 전환 범위 확인 필요",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 2,
-      "remark": ""
+      "displayNo": 2
     },
     {
       "tcId": "TC_CO_003",
@@ -77,15 +70,14 @@
       "precondition": "언어를 한국어 외 다른 언어로 전환한 상태",
       "steps": "1) 언어 전환 후 브라우저 새로고침(F5)",
       "expected": "1) 새로고침 후에도 전환된 언어가 유지된다\n* [확인필요] 저장 방식(쿠키/localStorage) 확인 필요",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 3,
-      "remark": ""
+      "displayNo": 3
     },
     {
       "tcId": "TC_CO_004",
@@ -100,15 +92,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 헤더 검색 아이콘 클릭",
       "expected": "1) 검색 입력창이 노출되고 포커스가 이동한다",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 4,
-      "remark": ""
+      "displayNo": 4
     },
     {
       "tcId": "TC_CO_005",
@@ -123,15 +114,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 헤더 이미지검색(카메라) 아이콘 클릭",
       "expected": "1) 파일 선택 다이얼로그가 트리거된다\n* [확인필요] 실제 동작 방식 미확인",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 5,
-      "remark": ""
+      "displayNo": 5
     },
     {
       "tcId": "TC_CO_006",
@@ -153,8 +143,7 @@
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 6,
-      "remark": ""
+      "displayNo": 6
     },
     {
       "tcId": "TC_CO_007",
@@ -176,8 +165,7 @@
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 7,
-      "remark": ""
+      "displayNo": 7
     },
     {
       "tcId": "TC_CO_008",
@@ -192,15 +180,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 헤더 장바구니 아이콘 클릭",
       "expected": "1) /cart 페이지로 이동한다",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 8,
-      "remark": ""
+      "displayNo": 8
     },
     {
       "tcId": "TC_CO_009",
@@ -215,15 +202,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 헤더 메뉴 순서 확인",
       "expected": "1) \"전체카테고리 - SALE - MD's PICK - BRAND\" 순서로 노출된다",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 9,
-      "remark": ""
+      "displayNo": 9
     },
     {
       "tcId": "TC_CO_010",
@@ -238,15 +224,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 뷰포트를 375x812(모바일)로 축소\n2) 헤더 영역 확인",
       "expected": "1) 헤더 메뉴가 햄버거 아이콘으로 축소되어 노출된다\n* [확인필요] 모바일 헤더 UI 존재 여부 실측 필요",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 10,
-      "remark": ""
+      "displayNo": 10
     },
     {
       "tcId": "TC_CO_011",
@@ -261,15 +246,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) Chromium 브라우저로 메인(/) 진입\n2) 헤더/푸터 레이아웃 확인",
       "expected": "1) 요소 겹침이나 깨짐 없이 정상 렌더링된다",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 11,
-      "remark": ""
+      "displayNo": 11
     },
     {
       "tcId": "TC_CO_012",
@@ -284,15 +268,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 개발자도구 Network에서 Offline 체크\n2) 페이지 새로고침 시도",
       "expected": "1) 오프라인 안내 화면 또는 재시도 UI가 노출된다\n* [확인필요] 실제 오프라인 처리 UX 미확인",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 12,
-      "remark": ""
+      "displayNo": 12
     },
     {
       "tcId": "TC_CO_013",
@@ -307,15 +290,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 개발자도구 Network에서 Throttling: Slow 3G 설정\n2) 메인(/) 새로고침",
       "expected": "1) 이미지 로딩 완료 전 Skeleton/blur placeholder가 노출된다\n* [확인필요] 실제 적용 여부 미확인",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 13,
-      "remark": ""
+      "displayNo": 13
     },
     {
       "tcId": "TC_CO_014",
@@ -337,8 +319,7 @@
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 14,
-      "remark": ""
+      "displayNo": 14
     },
     {
       "tcId": "TC_CO_015",
@@ -353,15 +334,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) Tab 키로 검색/장바구니/언어선택 버튼 순차 이동",
       "expected": "1) 각 요소에 포커스 시 시각적 포커스 표시(outline 등)가 노출된다",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 15,
-      "remark": ""
+      "displayNo": 15
     },
     {
       "tcId": "TC_CO_016",
@@ -376,15 +356,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 개발자도구로 상품 이미지 alt 속성 전수 확인",
       "expected": "1) 모든 상품 이미지에 상품명을 설명하는 alt 텍스트가 존재한다\n* [확인필요] 일부 이미지 alt가 상품명이 아닌 파일명으로 노출됨(TC_SYS_017 참조)",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 16,
-      "remark": ""
+      "displayNo": 16
     },
     {
       "tcId": "TC_CO_017",
@@ -406,8 +385,7 @@
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 17,
-      "remark": ""
+      "displayNo": 17
     },
     {
       "tcId": "TC_CO_018",
@@ -429,8 +407,7 @@
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 18,
-      "remark": ""
+      "displayNo": 18
     },
     {
       "tcId": "TC_CO_019",
@@ -445,15 +422,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) /login 접속(500 에러 화면 노출)\n2) 브라우저 탭 타이틀 확인",
       "expected": "1) 정상 화면은 타이틀이 노출되어야 하나, /login 에러 화면은 탭 타이틀이 공란으로 노출된다",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 19,
-      "remark": ""
+      "displayNo": 19
     },
     {
       "tcId": "TC_CO_020",
@@ -468,15 +444,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) OS/브라우저 다크모드 설정 활성화 후 메인(/) 접속",
       "expected": "1) 사이트가 다크 테마로 전환되어 노출된다\n* [확인필요] 다크모드 지원 여부 자체가 미확인 — 미지원 시 라이트 테마 고정 노출이 정상",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
-      "displayNo": 20,
-      "remark": ""
+      "displayNo": 20
     }
   ]
 }

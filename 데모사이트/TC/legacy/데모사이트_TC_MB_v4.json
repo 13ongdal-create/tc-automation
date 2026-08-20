@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "MB",
     "moduleName": "회원",
-    "version": 5,
+    "version": 4,
     "changeHistory": [
       {
         "version": 1,
@@ -24,11 +24,6 @@
         "version": 4,
         "date": "2026-08-20",
         "summary": "Phase 4(배치3): Admin 회원관리 신규 4건 추가(system:BO) — jspark81 계정이 Admin 목록에서 확인되지 않는 데이터정합성 이슈 발견"
-      },
-      {
-        "version": 5,
-        "date": "2026-08-20",
-        "summary": "뷰어 스키마 정비: testData 플레이스홀더(\"특이 테스트 데이터 없음\"/\"-\") 빈 값으로 정정, remark(비고) 필드 신규 추가(기본값 빈 문자열) — 뷰어 컬럼 구조 개편(구분→비고, 테스트데이터 위치 이동)에 따른 데이터 정합"
       }
     ]
   },
@@ -46,15 +41,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) /register 진입(전체 필드 공란)\n2) \"회원가입\" 버튼 클릭",
       "expected": "1) 제출이 차단되고 미입력 필드에 안내 문구가 노출된다\n* [확인필요] 화면상 \"*\" 필수 표시는 있으나 HTML required 속성이 없어 실제 차단 로직(JS) 존재 여부 확인 필요",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 1,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_002",
@@ -69,15 +63,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) /register 진입, 이름만 공란으로 두고 나머지 입력\n2) \"회원가입\" 버튼 클릭",
       "expected": "1) \"이름을 입력해주세요\" 등 안내와 함께 제출이 차단된다\n* [확인필요] 실제 안내 문구 확인 필요",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 2,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_003",
@@ -92,15 +85,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) /register 진입, 아이디만 공란으로 두고 나머지 입력\n2) \"회원가입\" 버튼 클릭",
       "expected": "1) \"아이디를 입력해주세요\" 등 안내와 함께 제출이 차단된다\n* [확인필요] 실제 안내 문구 확인 필요",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 3,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_004",
@@ -115,15 +107,14 @@
       "precondition": "이미 가입된 아이디 존재(가정)",
       "steps": "1) /register 진입\n2) 기존 가입된 아이디와 동일한 값 입력",
       "expected": "1) \"이미 사용중인 아이디입니다\" 등 중복 안내가 노출된다\n* [확인필요] 실시간 중복체크 UI(버튼/자동체크) 제공 여부 미확인",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 4,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_005",
@@ -145,8 +136,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 5,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_006",
@@ -168,8 +158,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 6,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_007",
@@ -191,8 +180,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 7,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_008",
@@ -214,8 +202,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 8,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_009",
@@ -237,8 +224,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 9,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_010",
@@ -260,8 +246,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 10,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_011",
@@ -283,8 +268,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 11,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_012",
@@ -299,15 +283,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) /register 진입\n2) \"주소 찾기\" 버튼 클릭",
       "expected": "1) 우편번호/주소 검색 팝업(다음 우편번호 서비스 등)이 노출된다\n* [확인필요] 연동 서비스 및 팝업 방식 미확인",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 12,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_013",
@@ -322,15 +305,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) \"주소 찾기\" 팝업에서 임의 주소 선택",
       "expected": "1) 우편번호(postCode)와 주소(address) 필드가 자동으로 채워진다\n* [확인필요] 연동 동작 미확인",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 13,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_014",
@@ -352,8 +334,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 14,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_015",
@@ -368,15 +349,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) /register 진입\n2) 성별 \"남\" 라디오 선택",
       "expected": "1) \"남\" 라디오 버튼이 선택 상태로 표시된다",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 15,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_016",
@@ -391,15 +371,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) /register 진입\n2) 성별 \"여\" 라디오 선택",
       "expected": "1) \"여\" 라디오 버튼이 선택 상태로 표시된다",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 16,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_017",
@@ -414,15 +393,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) /register 진입(성별 미선택), 나머지 필드 입력 후 제출",
       "expected": "1) 성별 미선택 시 제출이 차단된다\n* [확인필요] 실제 차단 여부 확인 필요",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 17,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_018",
@@ -444,8 +422,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 18,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_019",
@@ -467,8 +444,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 19,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_020",
@@ -483,15 +459,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) /register 진입, 개인정보수집동의 체크박스 미체크 상태로 나머지 필드 입력\n2) \"회원가입\" 버튼 클릭",
       "expected": "1) \"개인정보 수집에 동의해주세요\" 안내와 함께 제출이 차단된다\n* [확인필요] 실제 안내 문구 확인 필요",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 20,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_021",
@@ -513,8 +488,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 21,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_022",
@@ -529,15 +503,14 @@
       "precondition": "회원가입 성공 처리됨",
       "steps": "1) 회원가입 완료 후 화면 확인",
       "expected": "1) 로그인 페이지 또는 메인으로 자동 이동한다\n* [확인필요] 로그인 자동 처리 여부 및 이동 경로 확인 필요",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 22,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_023",
@@ -552,15 +525,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) /register 진입\n2) \"로그인\" 링크 클릭",
       "expected": "1) /login 경로로 이동은 되나, 로그인 페이지 자체가 500 에러(TC_MB_029)로 화면이 정상 노출되지 않는다",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 23,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_024",
@@ -582,8 +554,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 24,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_025",
@@ -605,8 +576,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 25,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_026",
@@ -628,8 +598,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 26,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_027",
@@ -644,15 +613,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 헤더 \"회원가입\" 링크 클릭",
       "expected": "1) /register 페이지로 이동한다",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 27,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_028",
@@ -667,15 +635,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 헤더 \"로그인\" 링크 클릭",
       "expected": "1) /login?callbackUrl=%2F 경로로 이동은 되나, 500 에러(TC_MB_029)로 로그인 화면이 노출되지 않는다",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 28,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_029",
@@ -697,8 +664,7 @@
       "issueLink": "",
       "origin": "기존",
       "displayNo": 29,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_030",
@@ -713,15 +679,14 @@
       "precondition": "/login 접속하여 500 에러 화면 노출 상태",
       "steps": "1) 에러 화면의 \"다시 시도하기\" 버튼 클릭",
       "expected": "1) 재시도 시에도 동일하게 500 에러가 재현된다(서버 측 결함이므로 클라이언트 재시도로 해결되지 않음)",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 30,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_031",
@@ -736,15 +701,14 @@
       "precondition": "/login 접속하여 500 에러 화면 노출 상태",
       "steps": "1) 에러 화면의 \"홈으로 이동\" 버튼 클릭",
       "expected": "1) 메인(/) 페이지로 정상 이동한다",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 31,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_032",
@@ -759,15 +723,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 위시리스트/리뷰작성/마이페이지/주문결제 등 로그인 필요 기능 각각 접근 시도",
       "expected": "1) 로그인 필요 안내 또는 로그인 페이지로 유도되어야 하나, 로그인 페이지 자체가 500 에러 상태라 전체 회원 전용 기능이 사실상 사용 불가함\n* [확인필요] 결함 수정 후 전체 회원 기능 재검증 필요",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 32,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_033",
@@ -782,15 +745,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) /register 진입, 일부 필드 입력\n2) 브라우저 새로고침(F5)",
       "expected": "1) 입력값이 초기화되고 공란 폼이 노출된다\n* [확인필요] 임시 저장(draft) 기능 존재 여부 확인 필요",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 33,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_034",
@@ -805,15 +767,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) 뷰포트를 375x812(모바일)로 축소\n2) /register 폼 레이아웃 확인",
       "expected": "1) 입력 필드가 가로 스크롤 없이 세로로 재배치된다\n* [확인필요] 모바일 시안 기준값 없어 실측 확정 필요",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 34,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_035",
@@ -828,15 +789,14 @@
       "precondition": "특이 사전조건 없음",
       "steps": "1) /register 진입 후 개발자도구 Console/Network 탭 확인",
       "expected": "1) 콘솔 에러 및 4xx/5xx 응답이 없다 (대조: /login은 TC_MB_029에서 500 에러로 실패 확인됨)",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 35,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_036",
@@ -851,15 +811,14 @@
       "precondition": "비로그인(Guest) 상태",
       "steps": "1) 메인 페이지(/) 접속\n2) GNB 우측 영역 확인",
       "expected": "1) \"회원가입\", \"로그인\" 링크가 노출된다",
-      "testData": "",
+      "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "displayNo": 36,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_037",
@@ -874,15 +833,14 @@
       "precondition": "로그인 회원 상태 (testAccounts.json의 jspark81 계정)",
       "steps": "1) jspark81 계정으로 로그인\n2) 메인 페이지(/) GNB 우측 영역 확인",
       "expected": "1) \"OOO님 안녕하세요\", \"로그아웃\" 링크가 노출되고 \"회원가입/로그인\"은 더 이상 노출되지 않는다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "displayNo": 37,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_038",
@@ -897,15 +855,14 @@
       "precondition": "비로그인(Guest) 상태",
       "steps": "1) /mypage URL 직접 접속",
       "expected": "1) /login?callbackUrl=%2Fmypage 로 리다이렉트되어 로그인 페이지가 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "displayNo": 38,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_039",
@@ -920,15 +877,14 @@
       "precondition": "로그인 회원 상태 (testAccounts.json의 jspark81 계정)",
       "steps": "1) jspark81 계정으로 로그인\n2) /mypage 진입",
       "expected": "1) 주문내역/SNS 연결설정/위시리스트/배송주소록 관리/쿠폰/1:1 문의/리뷰 목록 서브메뉴가 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "displayNo": 39,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_040",
@@ -950,8 +906,7 @@
       "issueLink": "",
       "origin": "신규",
       "displayNo": 40,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_041",
@@ -966,15 +921,14 @@
       "precondition": "로그인 회원 상태 (jspark81 계정), 장바구니에 상품 1건 이상 담긴 상태",
       "steps": "1) jspark81 계정으로 로그인\n2) 상품 장바구니 담기 후 장바구니 진입\n3) \"주문하기\" 클릭",
       "expected": "1) 체크아웃 배송정보의 이름/이메일/전화번호 필드가 마이페이지에 저장된 회원 정보로 자동 채워진다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "displayNo": 41,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_042",
@@ -989,15 +943,14 @@
       "precondition": "비로그인(Guest) 상태, 장바구니에 상품 1건 이상 담긴 상태",
       "steps": "1) 비로그인 상태로 상품 장바구니 담기 후 장바구니 진입\n2) \"주문하기\" 클릭",
       "expected": "1) 체크아웃 배송정보의 이름/이메일/전화번호/주소 필드가 모두 공란으로 노출되어 직접 입력이 필요하다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "displayNo": 42,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "tcId": "TC_MB_043",
@@ -1012,15 +965,14 @@
       "precondition": "로그인 회원 상태 (testAccounts.json의 jspark81 계정)",
       "steps": "1) jspark81 계정으로 로그인\n2) GNB \"로그아웃\" 클릭",
       "expected": "1) GNB가 즉시 \"회원가입/로그인\" 상태로 전환된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "displayNo": 43,
-      "system": "FO",
-      "remark": ""
+      "system": "FO"
     },
     {
       "majorCategory": "회원",
@@ -1034,7 +986,7 @@
       "precondition": "Admin 로그인 상태 (devel 계정)",
       "steps": "1) /member 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 회원번호/회원명/회원상태/Login ID/Email/휴대폰번호/성별/생년월일/마지막로그인일시/비밀번호에러횟수/가입일시 컬럼과 함께 회원 목록이 노출된다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
@@ -1042,8 +994,7 @@
       "origin": "신규",
       "system": "BO",
       "displayNo": 44,
-      "tcId": "TC_MB_044",
-      "remark": ""
+      "tcId": "TC_MB_044"
     },
     {
       "majorCategory": "회원",
@@ -1065,8 +1016,7 @@
       "origin": "신규",
       "system": "BO",
       "displayNo": 45,
-      "tcId": "TC_MB_045",
-      "remark": ""
+      "tcId": "TC_MB_045"
     },
     {
       "majorCategory": "예외·회귀",
@@ -1088,8 +1038,7 @@
       "origin": "신규",
       "system": "BO",
       "displayNo": 46,
-      "tcId": "TC_MB_046",
-      "remark": ""
+      "tcId": "TC_MB_046"
     },
     {
       "majorCategory": "회원",
@@ -1103,7 +1052,7 @@
       "precondition": "Admin 로그인 상태",
       "steps": "1) /member 진입 (\"조회\" 클릭 전)",
       "expected": "1) 목록이 비어있는 초기 상태로 노출되며, \"조회\" 버튼 클릭 전까지 데이터가 자동 조회되지 않는다",
-      "testData": "",
+      "testData": "-",
       "result": "",
       "assignee": "",
       "issueSummary": "",
@@ -1111,8 +1060,7 @@
       "origin": "신규",
       "system": "BO",
       "displayNo": 47,
-      "tcId": "TC_MB_047",
-      "remark": ""
+      "tcId": "TC_MB_047"
     }
   ]
 }
