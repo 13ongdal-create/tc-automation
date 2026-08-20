@@ -70,5 +70,65 @@
     "testSteps": "1) /products/999999 (존재하지 않는 상품ID) 접속",
     "actualResult": "HTTP 500 에러 발생 (Next.js Server Components render 단계에서 예외 발생)",
     "expectedResult": "404 또는 \"상품을 찾을 수 없습니다\" 안내 화면이 노출되고 500 서버 에러가 발생하지 않아야 함"
+  },
+  {
+    "defectId": "DEF_데모사이트_004",
+    "tcId": "TC_MY_005",
+    "module": "마이페이지",
+    "severity": "P1",
+    "status": "신규",
+    "summary": "마이페이지 > SNS 연결설정(/mypage/social) 화면 진입 시 HTTP 500 서버 에러 발생 (Next.js Server Components render 단계에서 예외 발생)",
+    "detectedAt": "2026-08-20",
+    "source": "observation",
+    "screenshot": "",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      { "at": "2026-08-20", "status": "신규", "note": "Phase 1 재관찰(배치2, 마이페이지 서브 화면 전수 확인) 중 최초 발견" }
+    ],
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) jspark81 계정으로 로그인\n2) /mypage/social 진입",
+    "actualResult": "\"시스템 오류가 발생했습니다\" 500 Internal Server Error 화면 노출 (Error Digest: 2806040409)",
+    "expectedResult": "SNS 연동 상태(연동/미연동) 화면이 정상 노출되어야 함"
+  },
+  {
+    "defectId": "DEF_데모사이트_005",
+    "tcId": "TC_CS_005",
+    "module": "고객센터",
+    "severity": "P1",
+    "status": "신규",
+    "summary": "푸터 \"개인정보처리방침\" 링크가 가리키는 /policy 경로가 실제로는 존재하지 않아 404 에러 발생",
+    "detectedAt": "2026-08-20",
+    "source": "observation",
+    "screenshot": "",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      { "at": "2026-08-20", "status": "신규", "note": "Phase 1 재관찰(배치2, 고객센터/정책 화면 전수 확인) 중 최초 발견. 기존 DEF_데모사이트_001/002에서도 /login 페이지 프리페치 리소스로 /policy 404가 부수적으로 관측된 바 있음 — 동일 원인으로 추정" }
+    ],
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) 푸터 \"개인정보처리방침\" 링크 클릭 또는 /policy 직접 접속",
+    "actualResult": "\"404 - 페이지를 찾을 수 없습니다\" 화면 노출",
+    "expectedResult": "개인정보처리방침 전문이 노출되어야 함"
+  },
+  {
+    "defectId": "DEF_데모사이트_006",
+    "tcId": "TC_CS_006",
+    "module": "고객센터",
+    "severity": "P1",
+    "status": "신규",
+    "summary": "푸터 \"이용약관\" 링크가 가리키는 /service 경로가 실제로는 존재하지 않아 404 에러 발생",
+    "detectedAt": "2026-08-20",
+    "source": "observation",
+    "screenshot": "",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      { "at": "2026-08-20", "status": "신규", "note": "Phase 1 재관찰(배치2, 고객센터/정책 화면 전수 확인) 중 최초 발견. DEF_데모사이트_005와 동일 패턴(푸터 링크 목적지 미구현)" }
+    ],
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) 푸터 \"이용약관\" 링크 클릭 또는 /service 직접 접속",
+    "actualResult": "\"404 - 페이지를 찾을 수 없습니다\" 화면 노출",
+    "expectedResult": "이용약관 전문이 노출되어야 함"
   }
 ]
