@@ -53,9 +53,12 @@
 </style>
 </head>
 <body>
-<header>
-  <h1>🔍 데모사이트 사이트 분석 & TC 계획</h1>
-  <div class="sub">Front(192.168.10.116:30180) + Admin/BO(192.168.10.116:30280) 전체화면 재관찰 결과 · Phase 1~2 산출물 · 2026-08-20</div>
+<header style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+  <div>
+    <h1>🔍 데모사이트 사이트 분석 & TC 계획</h1>
+    <div class="sub">Front(192.168.10.116:30180) + Admin/BO(192.168.10.116:30280) 전체화면 재관찰 결과 · Phase 1~3 산출물 · 2026-08-20</div>
+  </div>
+  <a href="데모사이트_TC_전체.html" style="text-decoration:none;"><button type="button" style="cursor:pointer;border:1px solid var(--border);background:var(--accent);color:#fff;border-radius:20px;padding:9px 16px;font-size:13px;font-weight:600;">🗂️ Full TC 통합 뷰어 열기 (237건)</button></a>
 </header>
 
 <div class="container">
@@ -147,7 +150,7 @@
     <table>
       <thead><tr><th>배치</th><th>범위</th><th>상세</th><th>상태</th></tr></thead>
       <tbody>
-        <tr><td><b>배치 1</b></td><td>PD 카테고리 갭 보완 + OP/CO 캐노니컬 이전</td><td>PD에 카테고리 113~117 신규 6건 보완(TC_PD_126~131), DSP legacy 40건→PD로 통합 이전(TC_PD_086~125), CRT legacy 15건→OP로 이전(TC_OP_001~015), SYS legacy 20건→CO로 이전(TC_CO_001~020). PD/MB 기존 항목 포함 전체 system:FO backfill. 자동화 코드도 함께 이전(OP.spec.js 신설, DSP분 PD.spec.js에 병합).</td><td><span class="pill wait">완료</span></td></tr><tr><td><b>배치 2</b></td><td>MY(마이페이지) + CS(고객센터/정책) 신규</td><td>마이페이지 서브 9개 화면 상세 관찰 및 TC 작성(25건), 고객센터/정책 4개 페이지 TC 작성(6건). SNS연결설정 500 에러(DEF_004), 정책/약관 페이지 404 에러 2건(DEF_005/006) 신규 발견.</td><td><span class="pill wait">완료</span></td></tr><tr><td><b>배치 3~</b></td><td>Admin(BO) 1차 우선순위</td><td>회원관리(MB) · 상품관리(PD) · 주문리스트(OP) · 클레임리스트 · 쿠폰관리(PR) · 전시관리(PD) — 메뉴별 상세 관찰 후 순차 진행. 이후 시스템/워크플로우 등 2차 메뉴는 별도 요청 시 진행.</td><td><span class="pill wait">대기</span></td></tr>
+        <tr><td><b>배치 1</b></td><td>PD 카테고리 갭 보완 + OP/CO 캐노니컬 이전</td><td>PD에 카테고리 113~117 신규 6건 보완(TC_PD_126~131), DSP legacy 40건→PD로 통합 이전(TC_PD_086~125), CRT legacy 15건→OP로 이전(TC_OP_001~015), SYS legacy 20건→CO로 이전(TC_CO_001~020). PD/MB 기존 항목 포함 전체 system:FO backfill. 자동화 코드도 함께 이전(OP.spec.js 신설, DSP분 PD.spec.js에 병합).</td><td><span class="pill wait">완료</span></td></tr><tr><td><b>배치 2</b></td><td>MY(마이페이지) + CS(고객센터/정책) 신규</td><td>마이페이지 서브 9개 화면 상세 관찰 및 TC 작성(25건), 고객센터/정책 4개 페이지 TC 작성(6건). SNS연결설정 500 에러(DEF_004), 정책/약관 페이지 404 에러 2건(DEF_005/006) 신규 발견.</td><td><span class="pill wait">완료</span></td></tr><tr><td><b>배치 3</b></td><td>Admin(BO) 1차 우선순위</td><td>회원관리(MB+4건) · 상품관리+전시관리(PD+10건) · 주문리스트(OP+4건) · 클레임리스트(CS+3건) · 쿠폰관리(PR 신규 5건) 작성 완료. jspark81 Admin 미노출, Admin쿠폰↔Front쿠폰함 미연동 등 [확인필요] 2건 발견. 이후 시스템/워크플로우 등 2차 메뉴는 별도 요청 시 진행.</td><td><span class="pill wait">완료</span></td></tr>
       </tbody>
     </table>
   </section>

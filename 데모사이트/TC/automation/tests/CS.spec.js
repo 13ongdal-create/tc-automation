@@ -37,3 +37,37 @@ test('[TC_CS_006][정책] [확인필요][결함] 이용약관 페이지 접근 �
   const res = await page.goto(BASE + '/service', { waitUntil: 'load' });
   expect(res.status()).toBe(404);
 });
+
+
+const ADMIN_BASE = 'http://192.168.10.116:30280';
+const ADMIN_ACCOUNT = { id: 'devel', pw: 'test' };
+
+async function adminLogin(page) {
+  await page.goto(ADMIN_BASE + '/login', { waitUntil: 'networkidle' });
+  await page.locator('input[type="text"]').first().fill(ADMIN_ACCOUNT.id);
+  await page.locator('input[type="password"]').first().fill(ADMIN_ACCOUNT.pw);
+  await page.locator('button:has-text("LOG IN")').click();
+  await page.waitForURL(ADMIN_BASE + '/', { timeout: 15000 });
+}
+
+test('[TC_CS_007][Admin클레임리스트] 클레임 데이터 없음 시 Empty State 노출 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/claim/list', { waitUntil: 'load' });
+  await page.getByRole('button', { name: '조회', exact: true }).click();
+  await page.waitForTimeout(1000);
+  await expect(page.getByText('데이터가 없습니다')).toBeVisible();
+});
+
+test('[TC_CS_008][Admin클레임리스트] 목록 컬럼 노출 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/claim/list', { waitUntil: 'load' });
+  await expect(page.getByText('클레임목록')).toBeVisible();
+});
+
+test('[TC_CS_009][Admin클레임리스트] 클레임상태 필터 옵션 노출 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/claim/list', { waitUntil: 'load' });
+  for (const label of ['취소신청', '취소완료', '반품신청', '반품완료', '배송중지', '교환신청', '교환완료']) {
+    await expect(page.getByText(label, { exact: true }).first()).toBeVisible();
+  }
+});

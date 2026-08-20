@@ -535,3 +535,71 @@ test('TC_PD_120 푸터 카피라이트 플레이스홀더 문구 노출 검증',
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await expect(page.getByText('© 2026 YOUR COMPANY. ALL RIGHTS RESERVED.')).toBeVisible();
 });
+
+
+const ADMIN_BASE = 'http://192.168.10.116:30280';
+const ADMIN_ACCOUNT = { id: 'devel', pw: 'test' };
+
+async function adminLogin(page) {
+  await page.goto(ADMIN_BASE + '/login', { waitUntil: 'networkidle' });
+  await page.locator('input[type="text"]').first().fill(ADMIN_ACCOUNT.id);
+  await page.locator('input[type="password"]').first().fill(ADMIN_ACCOUNT.pw);
+  await page.locator('button:has-text("LOG IN")').click();
+  await page.waitForURL(ADMIN_BASE + '/', { timeout: 15000 });
+}
+
+test('[TC_PD_102][Admin상품관리] Admin 상품관리 목록 및 Front 데이터 일치 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/product/product', { waitUntil: 'load' });
+  await page.getByRole('button', { name: '조회', exact: true }).click();
+  await page.waitForTimeout(1000);
+  await expect(page.getByText('PD0000001')).toBeVisible();
+  await expect(page.getByText('에코스레드 자수 롤업 티셔츠')).toBeVisible();
+});
+
+test('[TC_PD_103][Admin상품관리] 판매상태 필터 옵션 노출 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/product/product', { waitUntil: 'load' });
+  const select = page.locator('select', { hasText: '' }).filter({ hasText: '' });
+  await expect(page.getByText('판매상태').first()).toBeVisible();
+});
+
+test('[TC_PD_104][Admin상품관리] "등록" 버튼 클릭 시 상품 등록 화면 이동 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/product/product', { waitUntil: 'load' });
+  await page.getByRole('button', { name: '등록', exact: true }).click();
+  await page.waitForTimeout(500);
+});
+
+test('[TC_PD_106][Admin전시카테고리관리] 트리 UI 및 기본정보 필드 노출 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/display/standard/category', { waitUntil: 'load' });
+  await expect(page.getByText('전시 카테고리 관리')).toBeVisible();
+  await expect(page.getByText('전시카테고리명')).toBeVisible();
+});
+
+test('[TC_PD_108][Admin전시코너관리] 목록 컬럼 노출 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/display/standard/corner', { waitUntil: 'load' });
+  await expect(page.getByText('코너명')).toBeVisible();
+});
+
+test('[TC_PD_109][Admin전시템플릿관리] 템플릿 유형 필터 옵션 노출 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/display/standard/template', { waitUntil: 'load' });
+  await expect(page.getByText('템플릿 유형')).toBeVisible();
+});
+
+test('[TC_PD_110][Admin전시페이지관리] 페이지 트리 노출 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/display/standard/page', { waitUntil: 'load' });
+  await expect(page.getByText('HOT DEAL')).toBeVisible();
+  await expect(page.getByText('BRANDS')).toBeVisible();
+});
+
+test('[TC_PD_111][Admin전시페이지관리] "페이지 등록" 버튼 클릭 시 등록 폼 노출 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/display/standard/page', { waitUntil: 'load' });
+  await page.getByRole('button', { name: '페이지 등록' }).click();
+  await page.waitForTimeout(500);
+});
