@@ -36,6 +36,48 @@
           "TC_PD_050"
         ],
         "migratedAt": "2026-08-18"
+      },
+      {
+        "module": "MBR",
+        "file": "데모사이트_TC_MBR.json",
+        "tcIds": [
+          "TC_MBR_001",
+          "TC_MBR_002",
+          "TC_MBR_003",
+          "TC_MBR_004",
+          "TC_MBR_005",
+          "TC_MBR_006",
+          "TC_MBR_007",
+          "TC_MBR_008",
+          "TC_MBR_009",
+          "TC_MBR_010",
+          "TC_MBR_011",
+          "TC_MBR_012",
+          "TC_MBR_013",
+          "TC_MBR_014",
+          "TC_MBR_015",
+          "TC_MBR_016",
+          "TC_MBR_017",
+          "TC_MBR_018",
+          "TC_MBR_019",
+          "TC_MBR_020",
+          "TC_MBR_021",
+          "TC_MBR_022",
+          "TC_MBR_023",
+          "TC_MBR_024",
+          "TC_MBR_025",
+          "TC_MBR_026",
+          "TC_MBR_027",
+          "TC_MBR_028",
+          "TC_MBR_029",
+          "TC_MBR_030",
+          "TC_MBR_031",
+          "TC_MBR_032",
+          "TC_MBR_033",
+          "TC_MBR_034",
+          "TC_MBR_035"
+        ],
+        "migratedAt": "2026-08-21"
       }
     ]
   },
