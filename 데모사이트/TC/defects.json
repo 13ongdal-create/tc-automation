@@ -151,5 +151,45 @@
     "testSteps": "1) 메인(/) 진입\n2) 배너 1~3번 각각의 \"상세보기\" 버튼 클릭\n3) /event, /events, /promotion, /campaign, /coupon, /coupon-event 직접 접속 시도",
     "actualResult": "배너 클릭 시 3건 모두 404, 대체 경로 6개도 전부 404",
     "expectedResult": "각 배너에 대응하는 이벤트/기획전 상세 페이지로 정상 이동해야 함"
+  },
+  {
+    "defectId": "DEF_데모사이트_008",
+    "tcId": "TC_MY_026",
+    "module": "마이페이지",
+    "severity": "P1",
+    "status": "신규",
+    "summary": "jspark81 계정으로 Front에서 실제 완료한 주문(주문번호 O260820790055, lululemon 상품, 109,000원, 결제완료)이 Admin 주문리스트에는 정상 노출되나, Front 마이페이지 > 주문내역 화면에는 조회기간을 \"전체\"로 선택해도 노출되지 않음 (\"최근 주문 내역이 없습니다\")",
+    "detectedAt": "2026-08-20",
+    "source": "observation",
+    "screenshot": "",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      { "at": "2026-08-20", "status": "신규", "note": "Front-Admin 데이터 정합성 재검토(배치5) 중 발견 — 조회기간 필터를 \"전체\"로 명시 선택 후 재조회해도 동일 현상 재현 확인" }
+    ],
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180 (Front) / http://192.168.10.116:30280 (Admin)",
+    "testSteps": "1) jspark81 Front 로그인 후 /mypage/order 진입\n2) 조회기간 \"전체\" 선택 후 \"조회\" 클릭\n3) Admin devel 로그인 후 /order/list에서 동일 계정 주문 확인",
+    "actualResult": "Front: \"최근 주문 내역이 없습니다\" / Admin: 주문번호 O260820790055 1건 정상 조회됨",
+    "expectedResult": "Front 마이페이지 주문내역에도 동일한 주문 1건이 노출되어야 함"
+  },
+  {
+    "defectId": "DEF_데모사이트_009",
+    "tcId": "TC_MB_046",
+    "module": "회원",
+    "severity": "P1",
+    "status": "신규",
+    "summary": "Front에 가입되어 로그인·주문·마이페이지 정상 이용 중인 jspark81 계정이 Admin 회원관리 목록에서 로그인아이디로 필터 조회해도 확인되지 않음 — Front와 Admin의 회원 데이터가 분리되어 있거나 동기화되지 않는 것으로 추정",
+    "detectedAt": "2026-08-20",
+    "source": "observation",
+    "screenshot": "",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      { "at": "2026-08-20", "status": "신규", "note": "배치3에서 [확인필요]로 최초 발견(TC_MB_046). Front-Admin 데이터 정합성 재검토(배치5) 중 정식 결함으로 승격 — DEF_데모사이트_008(주문내역 미동기화)과 함께 Front/Admin 데이터베이스 분리 가능성을 시사하는 연관 결함으로 판단" }
+    ],
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180 (Front) / http://192.168.10.116:30280 (Admin)",
+    "testSteps": "1) jspark81 Front 로그인 확인(정상 동작)\n2) Admin devel 로그인 후 /member 진입\n3) 로그인아이디에 \"jspark81\" 입력 후 \"조회\" 클릭",
+    "actualResult": "회원 목록에 jspark81이 조회되지 않음(0건)",
+    "expectedResult": "jspark81 계정 정보가 Admin 회원관리 목록에 정상 조회되어야 함"
   }
 ]

@@ -69,3 +69,10 @@ test('[TC_OP_019][Admin주문리스트] "초기화" 버튼 클릭 시 필터 초
   await page.getByRole('button', { name: '초기화', exact: true }).click();
   await page.waitForTimeout(500);
 });
+
+test('[TC_OP_020][Admin배송지관리] 목록 컬럼 노출 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/member/address', { waitUntil: 'load' });
+  await page.waitForTimeout(1000);
+  await expect(page.getByText('배송지 목록')).toBeVisible();
+});

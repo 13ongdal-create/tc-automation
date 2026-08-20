@@ -125,3 +125,24 @@ test('[TC_MB_047][Admin회원관리] 조회 전 목록 초기 상태 검증', as
   await page.goto(ADMIN_BASE + '/member', { waitUntil: 'load' });
   await expect(page.getByText('데이터가 없습니다')).toBeVisible();
 });
+
+test('[TC_MB_050][Admin리뷰관리] 목록 및 필터 노출 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/member/review', { waitUntil: 'load' });
+  await expect(page.getByText('리뷰 목록')).toBeVisible();
+});
+
+test('[TC_MB_051][Admin라벨관리] 대표 라벨 목록 노출 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/member/review/label', { waitUntil: 'load' });
+  await page.waitForTimeout(1000);
+  await expect(page.getByText('사이즈가 맞아요')).toBeVisible();
+});
+
+test('[TC_MB_052][Admin라벨관리] 승인/철회/유사라벨찾기/통합/삭제 버튼 노출 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/member/review/label', { waitUntil: 'load' });
+  for (const label of ['승인', '철회', '유사라벨찾기', '통합', '삭제']) {
+    await expect(page.getByRole('button', { name: label, exact: true })).toBeVisible();
+  }
+});

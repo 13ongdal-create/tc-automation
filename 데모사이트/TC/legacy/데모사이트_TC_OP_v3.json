@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "OP",
     "moduleName": "구매프로세스",
-    "version": 4,
+    "version": 3,
     "changeHistory": [
       {
         "version": 1,
@@ -19,11 +19,6 @@
         "version": 3,
         "date": "2026-08-20",
         "summary": "뷰어 스키마 정비: testData 플레이스홀더(\"특이 테스트 데이터 없음\"/\"-\") 빈 값으로 정정, remark(비고) 필드 신규 추가(기본값 빈 문자열) — 뷰어 컬럼 구조 개편(구분→비고, 테스트데이터 위치 이동)에 따른 데이터 정합"
-      },
-      {
-        "version": 4,
-        "date": "2026-08-20",
-        "summary": "Phase 4(배치5): Admin 배송지관리 신규 관찰(누락됐던 회원 그룹 메뉴) + Front-Admin 배송지·주문상태 정합성 검증 2건 추가"
       }
     ]
   },
@@ -464,75 +459,6 @@
       "displayNo": 19,
       "tcId": "TC_OP_019",
       "remark": ""
-    },
-    {
-      "majorCategory": "구매프로세스",
-      "midCategory": "Admin배송지관리",
-      "minorCategory": "목록조회",
-      "platform": "Admin",
-      "type": "UI",
-      "item": "Admin 배송지관리 목록 컬럼 노출 검증",
-      "baseDoc": "-",
-      "priority": "P2",
-      "precondition": "Admin 로그인 상태",
-      "steps": "1) /member/address 진입 2) \"조회\" 버튼 클릭",
-      "expected": "1) 2) 회원번호/회원명/배송지명/수령인명/휴대폰번호/우편번호/주소/상세주소/기본배송지여부 컬럼과 함께 목록이 노출된다(현재 0건)",
-      "testData": "",
-      "result": "",
-      "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
-      "origin": "신규",
-      "system": "BO",
-      "remark": "",
-      "displayNo": 20,
-      "tcId": "TC_OP_020"
-    },
-    {
-      "majorCategory": "구매프로세스",
-      "midCategory": "Front-Admin정합성",
-      "minorCategory": "배송지동기화",
-      "platform": "Web",
-      "type": "데이터",
-      "item": "[확인필요] Front 마이페이지 배송지 등록 시 Admin 배송지관리에 반영되는지 검증",
-      "baseDoc": "-",
-      "priority": "P2",
-      "precondition": "Front jspark81 계정, 배송지 미등록 상태",
-      "steps": "1) [FO] Front /mypage/address에서 배송지 신규 등록\n2) [BO] Admin /member/address에서 해당 회원의 배송지 조회",
-      "expected": "1) 2) Front에서 등록한 배송지가 Admin 배송지관리 목록에도 동일하게 노출되어야 함\n* [확인필요] 실제 등록 테스트 미실행 — jspark81이 Admin 회원 목록 자체에서 조회되지 않는 상태(DEF_데모사이트_009)라 연동 여부 확인이 어려울 것으로 예상됨",
-      "testData": "-",
-      "result": "",
-      "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
-      "origin": "신규",
-      "system": "BO",
-      "remark": "",
-      "displayNo": 21,
-      "tcId": "TC_OP_021"
-    },
-    {
-      "majorCategory": "구매프로세스",
-      "midCategory": "Front-Admin정합성",
-      "minorCategory": "주문상태동기화",
-      "platform": "Web",
-      "type": "기능",
-      "item": "[확인필요] Admin 주문상태 변경 시 Front 마이페이지 주문내역 상태 갱신 여부 검증",
-      "baseDoc": "-",
-      "priority": "P1",
-      "precondition": "Admin에 처리 가능한 주문 존재(O260820790055, 현재 결제완료)",
-      "steps": "1) [BO] Admin /order/list에서 해당 주문 상태를 \"배송완료\"로 변경\n2) [FO] Front jspark81 /mypage/order에서 상태 확인",
-      "expected": "1) 2) Front 주문내역에 \"배송완료\" 상태로 갱신되어 노출되어야 함\n* [확인필요] DEF_데모사이트_008(주문 자체가 Front에 미노출)로 인해 상태 동기화 여부 검증이 선행 결함 해결 후에나 가능한 상태",
-      "testData": "주문번호=O260820790055",
-      "result": "",
-      "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
-      "origin": "신규",
-      "system": "FO",
-      "remark": "",
-      "displayNo": 22,
-      "tcId": "TC_OP_022"
     }
   ]
 }

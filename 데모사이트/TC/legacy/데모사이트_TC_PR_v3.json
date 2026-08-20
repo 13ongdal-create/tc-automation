@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PR",
     "moduleName": "이벤트/기획전/쿠폰행사",
-    "version": 4,
+    "version": 3,
     "changeHistory": [
       {
         "version": 1,
@@ -19,11 +19,6 @@
         "version": 3,
         "date": "2026-08-20",
         "summary": "PD 모듈에서 배너 CTA 이동 경로 검증 3건 이관(TC_PR_006~008, 원본 TC_PD_089~091). /event /promotion /campaign /coupon 등 대체 경로 전수 확인 결과 전부 404 — 이벤트/기획전 페이지 자체 미구현으로 결론, 정식 결함 등록(DEF_데모사이트_007)"
-      },
-      {
-        "version": 4,
-        "date": "2026-08-20",
-        "summary": "Phase 4(배치5): Admin 대행사관리 신규 관찰(누락됐던 프로모션 그룹 메뉴) + Front-Admin 가격할인 정합성 검증 1건 추가"
       }
     ]
   },
@@ -211,52 +206,6 @@
       "origin": "기존",
       "displayNo": 8,
       "remark": ""
-    },
-    {
-      "majorCategory": "이벤트",
-      "midCategory": "Admin대행사관리",
-      "minorCategory": "목록조회",
-      "platform": "Admin",
-      "type": "UI",
-      "item": "Admin 대행사관리 목록 컬럼 노출 검증",
-      "baseDoc": "-",
-      "priority": "P3",
-      "precondition": "Admin 로그인 상태",
-      "steps": "1) /promotion/master 진입 2) \"조회\" 버튼 클릭",
-      "expected": "1) 2) 프로모션 대행사 아이디/명/시작일시/종료일시/사용여부/작성자/등록일시 컬럼과 \"등록\" 버튼이 노출된다(현재 0건)",
-      "testData": "",
-      "result": "",
-      "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
-      "origin": "신규",
-      "system": "BO",
-      "remark": "",
-      "displayNo": 9,
-      "tcId": "TC_PR_009"
-    },
-    {
-      "majorCategory": "이벤트",
-      "midCategory": "Front-Admin정합성",
-      "minorCategory": "가격할인동기화",
-      "platform": "Web",
-      "type": "데이터",
-      "item": "[확인필요] Admin 가격할인관리(소행사관리) 등록 행사가 Front 상품 할인가에 반영되는지 검증",
-      "baseDoc": "-",
-      "priority": "P2",
-      "precondition": "Admin 로그인 상태, 등록 가능한 상품 존재",
-      "steps": "1) [BO] Admin /promotion/sale에서 임의 상품에 가격할인 행사 등록\n2) [FO] Front 해당 상품 PDP·카테고리 목록에서 할인가/할인율 배지 확인",
-      "expected": "1) 2) Admin에 등록한 할인율이 Front 상품가·배지(예: \"-32%\")에 정확히 반영되어야 함\n* [확인필요] 실제 등록 테스트 미실행 — 현재 Front에 노출 중인 할인 상품들이 이 Admin 화면을 통해 설정된 것인지 배경 확인 필요",
-      "testData": "-",
-      "result": "",
-      "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
-      "origin": "신규",
-      "system": "FO",
-      "remark": "",
-      "displayNo": 10,
-      "tcId": "TC_PR_010"
     }
   ]
 }

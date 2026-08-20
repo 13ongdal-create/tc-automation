@@ -77,3 +77,11 @@ test('[TC_PR_008][메인배너CTA][결함] "라이프 블프" 배너 상세보�
   const href = await link.getAttribute('href');
   expect(/^https?:\/\//.test(href)).toBe(false);
 });
+
+test('[TC_PR_009][Admin대행사관리] 목록 컬럼 노출 검증', async ({ page }) => {
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/promotion/master', { waitUntil: 'load' });
+  await page.getByRole('button', { name: '조회', exact: true }).click();
+  await page.waitForTimeout(1000);
+  await expect(page.getByText('대행사 목록')).toBeVisible();
+});

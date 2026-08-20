@@ -195,3 +195,13 @@ test('[TC_MY_025][회원탈퇴] "취소" 버튼 클릭 시 마이페이지 복�
   await page.getByRole('button', { name: '취소' }).click();
   await page.waitForTimeout(500);
 });
+
+test('[TC_MY_026][주문내역][결함] Front 마이페이지 주문내역에 실제 완료 주문 미노출 검증', async ({ page }) => {
+  await login(page);
+  await page.goto(BASE + '/mypage/order', { waitUntil: 'load' });
+  await page.getByRole('button', { name: '전체', exact: true }).click();
+  await page.getByRole('button', { name: '조회', exact: true }).click();
+  await page.waitForTimeout(1000);
+  // DEF_데모사이트_008: Admin 주문리스트에는 O260820790055 주문이 존재하나 Front에는 미노출 확인됨
+  await expect(page.getByText('O260820790055')).toBeVisible();
+});
