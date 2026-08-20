@@ -16,7 +16,10 @@
       "Bash(pandoc *)",
       "Bash(mkdir -p *)",
       "Bash(unzip *)",
-      "Bash(npx playwright test*)"
+      "Bash(npx playwright test*)",
+      "Bash(cd *tc-automation* && npx playwright test*)",
+      "Bash(cd *tc-automation* && PW_RUN_ID=* npx playwright test*)",
+      "Bash(PW_RUN_ID=* npx playwright test*)"
     ]
   }
 }
