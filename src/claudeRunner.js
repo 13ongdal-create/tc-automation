@@ -41,12 +41,18 @@ const ISSUE_ALERT_RE = /^ISSUE_ALERT:\s*(.+)$/;
  * 스트림에서 "지금 어떤 tool을 쓰고 있는지"를 그때그때 추출해두므로, 별도로 Claude를 다시 호출(=토큰 소모)
  * 하지 않고도 handle.status로 현재 진행 상황을 즉시 조회할 수 있습니다.
  * @param {string[]} args - 예: ['-p', prompt] 또는 ['--resume', sessionId, '-p', prompt]
- * @param {{ onProcess?: (handle: { pid: number, cancel: () => void, status: string|null, startedAt: number }) => void, onIssue?: (message: string) => void }} [opts]
+ * @param {{ onProcess?: (handle: { pid: number, cancel: () => void, status: string|null, startedAt: number }) => void, onIssue?: (message: string) => void, allowedTools?: string[] }} [opts]
  */
 function runClaude(args, opts = {}) {
   return new Promise((resolve, reject) => {
     const startedAt = Date.now();
     const fullArgs = [...args, '--output-format', 'stream-json', '--verbose'];
+    // 특정 호출(예: 일일 현황 보고의 Notion MCP 도구)만 명시적으로 허용 목록에 추가 —
+    // MCP 도구 사용 승인은 .claude/settings.json의 Bash 허용 패턴과 별개 체계라, 헤드리스
+    // 세션에서는 이렇게 --allowedTools로 직접 지정하지 않으면 승인 대기로 막힘 (2026-08-20 확인).
+    if (opts.allowedTools && opts.allowedTools.length) {
+      fullArgs.push('--allowedTools', ...opts.allowedTools);
+    }
     const child = spawn(CLAUDE_BIN, fullArgs, {
       cwd: CLAUDE_WORKDIR,
       // shell:false - args를 그대로 argv로 전달해 셸 인젝션 위험 없이 안전하게 실행 (Slack 사용자 입력이 그대로 들어오므로 중요)

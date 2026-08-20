@@ -7,6 +7,7 @@ const resultReporter = require('./resultReporter');
 const alert = require('./alert');
 const defectStore = require('./defectStore');
 const defectFastPath = require('./defectFastPath');
+const dailyReport = require('./dailyReport');
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -504,6 +505,7 @@ setInterval(async () => {
 (async () => {
   await app.start();
   console.log('tc-automation slack-bridge 가 실행 중입니다 (Socket Mode).');
+  dailyReport.start();
   // 시작 성공 알림은 보내지 않습니다 (개발 중 재시작마다 알림이 쌓이는 걸 피하기 위함) -
   // 실제로 문제가 되는 경우(크래시/연결 끊김)만 위 핸들러들이 알립니다.
 })();
