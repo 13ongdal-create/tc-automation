@@ -12,8 +12,16 @@
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-19", "status": "신규", "note": "Playwright 자동 실행 중 최초 발견 (TC_PD_084)" }
-    ]
+      {
+        "at": "2026-08-19",
+        "status": "신규",
+        "note": "Playwright 자동 실행 중 최초 발견 (TC_PD_084)"
+      }
+    ],
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) 비로그인 상태로 /products/96 진입\n2) \"위시리스트 추가\" 버튼 클릭 → /login으로 이동",
+    "actualResult": "이동된 /login 페이지에서 /forgot-password, /policy, /service 리소스 3건이 404로 실패 (콘솔/네트워크 에러 자동감지로 실패 처리됨)",
+    "expectedResult": "로그인 페이지로 정상 이동하고, 콘솔 에러/4xx·5xx 응답 없이 로그인 유도 화면이 노출되어야 함"
   },
   {
     "defectId": "DEF_데모사이트_002",
@@ -28,8 +36,16 @@
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-19", "status": "신규", "note": "Playwright 자동 실행 중 최초 발견 (TC_PD_085). 8/18 상품전시 테스트 관찰 시에도 동일 현상 발견된 바 있음 (그때는 결함 등록 보류)." }
-    ]
+      {
+        "at": "2026-08-19",
+        "status": "신규",
+        "note": "Playwright 자동 실행 중 최초 발견 (TC_PD_085). 8/18 상품전시 테스트 관찰 시에도 동일 현상 발견된 바 있음 (그때는 결함 등록 보류)."
+      }
+    ],
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) jspark81 계정으로 로그인 (로그인 페이지 진입 포함)\n2) /products/96 진입\n3) \"위시리스트 추가\" 버튼 클릭",
+    "actualResult": "로그인 과정에서 진입한 /login 페이지에서 /forgot-password, /policy, /service 리소스 3건이 404로 실패 (콘솔/네트워크 에러 자동감지로 실패 처리됨)",
+    "expectedResult": "콘솔 에러 및 4xx/5xx 응답 없이 로그인 및 위시리스트 추가가 정상 완료되어야 함"
   },
   {
     "defectId": "DEF_데모사이트_003",
@@ -44,7 +60,15 @@
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-19", "status": "신규", "note": "Playwright 자동 실행 중 최초 발견 (TC_PD_028). /login 500 결함(DEF_데모사이트_001/002 근본 원인과 별개, 존재하지 않는 리소스 접근 시 서버 컴포넌트 렌더링 예외)과 동일한 크래시 유형." }
-    ]
+      {
+        "at": "2026-08-19",
+        "status": "신규",
+        "note": "Playwright 자동 실행 중 최초 발견 (TC_PD_028). /login 500 결함(DEF_데모사이트_001/002 근본 원인과 별개, 존재하지 않는 리소스 접근 시 서버 컴포넌트 렌더링 예외)과 동일한 크래시 유형."
+      }
+    ],
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) /products/999999 (존재하지 않는 상품ID) 접속",
+    "actualResult": "HTTP 500 에러 발생 (Next.js Server Components render 단계에서 예외 발생)",
+    "expectedResult": "404 또는 \"상품을 찾을 수 없습니다\" 안내 화면이 노출되고 500 서버 에러가 발생하지 않아야 함"
   }
 ]
