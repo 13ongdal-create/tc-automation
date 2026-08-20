@@ -619,7 +619,15 @@ D:\tc-automation\                     <- 이 프로젝트 관련 모든 것의 �
 -->
 2. **TC 문서 생성(Phase 3~4)**: 관찰된 요소를 근거로 기존 컬럼 스키마(SKILL.md 3항)에 맞춰 TC를 작성합니다. **기준문서 컬럼은 정책서/화면설계서 등 실제 문서가 존재하는 경우에만 그 문서명을 기재하고, 그 외(Playwright 관측만으로 작성한 경우)에는 `-`로 둡니다.** Playwright 관측 근거(URL/날짜)는 `tc-automation\_scratch\{프로젝트명}\`의 관찰 결과 파일로 이미 추적되므로 TC 행에 중복 기재하지 않습니다.
 3. **자동화 테스트 코드 생성(Phase 4)**: 각 TC의 수행절차/기대결과를 Playwright 테스트로 변환해 `{프로젝트명}\TC\automation\tests\{모듈}.spec.js`에 저장합니다 (1 TC ≈ 1 `test(...)` 블록 원칙). **테스트 제목에 TC ID와 기능명(소분류)을 모두 포함**합니다: `test('[TC_CRT_012][쿠폰적용] 쿠폰 코드 입력 시 즉시 할인 적용 검증', ...)` — 이 형식이어야 특정 TC 하나 또는 특정 기능만 골라 재실행(`--grep`)할 수 있습니다 (19-1항). **반드시 `@playwright/test`가 아니라 `tc-automation\_shared\testFixtures.js`에서 `test`/`expect`를 가져옵니다** (경로는 항상 고정: `require('../../../../_shared/testFixtures')`). 이 공통 fixture가 모든 테스트에 브라우저 콘솔 에러(JS 예외)·실패한 API 요청(4xx/5xx) 자동 감지 + 실패 시 스크린샷 캡처를 적용해줍니다 — 어서션이 통과해도 콘솔/네트워크 에러가 있으면 해당 TC는 자동으로 실패 처리됩니다. **이 시점에는 코드만 생성하고 실행하지 않습니다** — Phase 4 산출물(TC 문서 + 테스트 코드)에 대한 승인까지만 받습니다.
-4. **실행(Phase 5 — 별도 요청 시에만)**: 사용자가 "테스트 실행해줘"/"테스트 수행해줘" 등으로 **명시적으로 요청한 경우에만** 저장소 루트(`tc-automation\`)에서 **`PW_RUN_ID={프로젝트명}`을 지정해** `npx playwright test {프로젝트명}/TC/automation/tests/{모듈}.spec.js` 실행 (예: `PW_RUN_ID=ABC마트 npx playwright test ...`). Phase 4 승인 직후 자동으로 실행하지 않습니다. **다른 프로젝트의 요청이 동시에 Playwright를 실행 중일 수 있으므로 이 환경변수를 반드시 지정합니다** — 지정하지 않으면 리포트 경로가 겹쳐 다른 프로젝트의 실행 결과를 덮어씁니다. 결과는 `_scratch\playwright-report\{프로젝트명}\results.json`(JSON)과 HTML 리포트로 생성됩니다 (스크래치 경로 — Git 비대상).
+4. **실행(Phase 5 — 별도 요청 시에만)**: 사용자가 "테스트 실행해줘"/"테스트 수행해줘" 등으로 **명시적으로 요청한 경우에만** **`PW_RUN_ID={프로젝트명}`을 지정해** `npx playwright test --config="{tc-automation 저장소 절대경로}/playwright.config.js" {프로젝트명}/TC/automation/tests/{모듈}.spec.js` 실행 (예: `PW_RUN_ID=ABC마트 npx playwright test --config="D:/tc-automation/playwright.config.js" ABC마트/TC/automation/tests/CRT.spec.js`).
+   <!-- [수정 전 2026-08-20] "저장소 루트(tc-automation\)에서" 실행하도록(cd 후 실행) 지시하던 버전.
+   현재 작업 디렉터리가 agents-config라 저장소 루트로 매번 cd해야 했는데, Slack 헤드리스 세션에서
+   "cd ... && npx playwright test..." 형태의 복합 명령이 .claude/settings.json 허용 패턴과 정확히
+   일치하지 않으면 승인 대기로 막혀(사람이 없어 응답 불가) Phase 5가 영구히 진행되지 않는 문제가
+   실제로 발생함. `--config` 플래그로 프로젝트 루트를 명시하면 cd 없이 현재 디렉터리 그대로 실행
+   가능해 이 문제를 근본적으로 없앨 수 있음 (동작 검증 완료: 테스트 경로/출력 경로 모두 config
+   파일 기준으로 정상 해석됨). -->
+   **`cd`로 디렉터리를 이동한 뒤 실행하지 않습니다** — 항상 `--config` 플래그로 절대경로를 지정해, 현재 작업 디렉터리가 어디든(예: `agents-config\`) 그대로 실행합니다. Phase 4 승인 직후 자동으로 실행하지 않습니다. **다른 프로젝트의 요청이 동시에 Playwright를 실행 중일 수 있으므로 `PW_RUN_ID` 환경변수를 반드시 지정합니다** — 지정하지 않으면 리포트 경로가 겹쳐 다른 프로젝트의 실행 결과를 덮어씁니다. 결과는 `_scratch\playwright-report\{프로젝트명}\results.json`(JSON)과 HTML 리포트로 생성됩니다 (스크래치 경로 — Git 비대상).
 
 ### 19-1. 기능/TC 단위 세분화 (모듈보다 더 좁은 범위)
 
