@@ -453,29 +453,6 @@ test('[TC_PD_131][필터구성] 카테고리별 노출 필터 항목 구성 차�
   await expect(page.getByText('스타일', { exact: true })).not.toBeVisible();
 });
 
-test('TC_PD_089 [확인필요] "99% 쿠폰 드로우" 배너 상세보기 CTA href 프로토콜 누락 결함 검증', async ({ page }) => {
-  await page.goto(BASE + '/', { waitUntil: 'load' });
-  const link = page.locator('a[href="www.naver.com!"]').first();
-  await expect(link).toBeVisible();
-  const href = await link.getAttribute('href');
-  expect(/^https?:\/\//.test(href)).toBe(false);
-});
-
-test('TC_PD_090 [확인필요] "지금 사야 입어요" 배너 상세보기 CTA href 프로토콜 누락 결함 검증', async ({ page }) => {
-  await page.goto(BASE + '/', { waitUntil: 'load' });
-  const link = page.locator('a[href="www.3top.co.kr"]').first();
-  await expect(link).toBeVisible();
-  const href = await link.getAttribute('href');
-  expect(/^https?:\/\//.test(href)).toBe(false);
-});
-
-test('TC_PD_091 [확인필요] "라이프 블프" 배너 상세보기 CTA href 프로토콜 누락 결함 검증', async ({ page }) => {
-  await page.goto(BASE + '/', { waitUntil: 'load' });
-  const link = page.locator('a[href="www.google.com"]').first();
-  await expect(link).toBeVisible();
-  const href = await link.getAttribute('href');
-  expect(/^https?:\/\//.test(href)).toBe(false);
-});
 
 test('TC_PD_092 카테고리 하이라이트 "남자" 배너 이동 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });

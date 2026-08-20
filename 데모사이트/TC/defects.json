@@ -130,5 +130,26 @@
     "testSteps": "1) 푸터 \"이용약관\" 링크 클릭 또는 /service 직접 접속",
     "actualResult": "\"404 - 페이지를 찾을 수 없습니다\" 화면 노출",
     "expectedResult": "이용약관 전문이 노출되어야 함"
+  },
+  {
+    "defectId": "DEF_데모사이트_007",
+    "tcId": "TC_PR_006",
+    "module": "이벤트",
+    "severity": "P2",
+    "status": "신규",
+    "summary": "홈 메인배너 3종(\"99% 쿠폰 드로우\"/\"지금 사야 입어요\"/\"라이프 블프\") 모두 \"상세보기\" CTA의 href가 프로토콜 없는 외부 도메인 문자열(www.naver.com!, www.3top.co.kr, www.google.com)로 설정되어 있어, 클릭 시 사이트 내부 상대경로로 오인식되어 전부 404 발생. 대체 목적지 경로(/event, /events, /promotion, /campaign, /coupon, /coupon-event)도 전수 확인했으나 모두 404 — 이벤트/기획전 페이지 자체가 아예 구현되지 않은 것으로 결론",
+    "detectedAt": "2026-08-20",
+    "source": "observation",
+    "screenshot": "",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      { "at": "2026-08-19", "status": "신규", "note": "legacy DSP 관측 시 최초 발견(당시 [확인필요] 상태로 TC_PD_089~091에 기록)" },
+      { "at": "2026-08-20", "status": "신규", "note": "PR 모듈 재분류(TC_PR_006~008) 및 대체 경로 전수 확인 후 정식 결함으로 등록. 이벤트 페이지 자체 부재로 결론" }
+    ],
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) 메인(/) 진입\n2) 배너 1~3번 각각의 \"상세보기\" 버튼 클릭\n3) /event, /events, /promotion, /campaign, /coupon, /coupon-event 직접 접속 시도",
+    "actualResult": "배너 클릭 시 3건 모두 404, 대체 경로 6개도 전부 404",
+    "expectedResult": "각 배너에 대응하는 이벤트/기획전 상세 페이지로 정상 이동해야 함"
   }
 ]

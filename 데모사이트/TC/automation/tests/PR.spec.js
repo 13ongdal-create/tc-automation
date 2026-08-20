@@ -1,5 +1,6 @@
 const { test, expect } = require('../../../../_shared/testFixtures');
 
+const BASE = 'http://192.168.10.116:30180';
 const ADMIN_BASE = 'http://192.168.10.116:30280';
 const ADMIN_ACCOUNT = { id: 'devel', pw: 'test' };
 
@@ -51,4 +52,28 @@ test('[TC_PR_005][Admin쿠폰관리] [확인필요] Admin 등록 쿠폰의 Front
   await page.goto('http://192.168.10.116:30180/mypage/coupon', { waitUntil: 'load' });
   const hasCoupon = await page.getByText('보유한 쿠폰이 없습니다').count();
   console.log('Front 쿠폰함 비어있음:', hasCoupon > 0, '(Admin에는 유효기간 내 쿠폰 4건 존재)');
+});
+
+test('[TC_PR_006][메인배너CTA][결함] "99% 쿠폰 드로우" 배너 상세보기 CTA href 프로토콜 누락 결함 검증', async ({ page }) => {
+  await page.goto(BASE + '/', { waitUntil: 'load' });
+  const link = page.locator('a[href="www.naver.com!"]').first();
+  await expect(link).toBeVisible();
+  const href = await link.getAttribute('href');
+  expect(/^https?:\/\//.test(href)).toBe(false);
+});
+
+test('[TC_PR_007][메인배너CTA][결함] "지금 사야 입어요" 배너 상세보기 CTA href 프로토콜 누락 결함 검증', async ({ page }) => {
+  await page.goto(BASE + '/', { waitUntil: 'load' });
+  const link = page.locator('a[href="www.3top.co.kr"]').first();
+  await expect(link).toBeVisible();
+  const href = await link.getAttribute('href');
+  expect(/^https?:\/\//.test(href)).toBe(false);
+});
+
+test('[TC_PR_008][메인배너CTA][결함] "라이프 블프" 배너 상세보기 CTA href 프로토콜 누락 결함 검증', async ({ page }) => {
+  await page.goto(BASE + '/', { waitUntil: 'load' });
+  const link = page.locator('a[href="www.google.com"]').first();
+  await expect(link).toBeVisible();
+  const href = await link.getAttribute('href');
+  expect(/^https?:\/\//.test(href)).toBe(false);
 });
