@@ -157,39 +157,41 @@
     "tcId": "TC_MY_026",
     "module": "마이페이지",
     "severity": "P1",
-    "status": "신규",
-    "summary": "jspark81 계정으로 Front에서 실제 완료한 주문(주문번호 O260820790055, lululemon 상품, 109,000원, 결제완료)이 Admin 주문리스트에는 정상 노출되나, Front 마이페이지 > 주문내역 화면에는 조회기간을 \"전체\"로 선택해도 노출되지 않음 (\"최근 주문 내역이 없습니다\")",
+    "status": "완료",
+    "summary": "[오탐 확인 - 결함 아님] jspark81 계정으로 Front에서 실제 완료한 주문이 Admin 주문리스트에는 정상 노출되나 Front 마이페이지 주문내역에는 노출되지 않는 것으로 최초 보고했으나, 재검증 결과 참조한 주문(O260820790055)이 jspark81이 아닌 봇 계정(mbrId=406, 봇_186324) 소유였음을 확인 — jspark81은 실제 주문 이력이 없어 Front의 Empty State 표시가 정상 동작임",
     "detectedAt": "2026-08-20",
     "source": "observation",
     "screenshot": "",
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-20", "status": "신규", "note": "Front-Admin 데이터 정합성 재검토(배치5) 중 발견 — 조회기간 필터를 \"전체\"로 명시 선택 후 재조회해도 동일 현상 재현 확인" }
+      { "at": "2026-08-20", "status": "신규", "note": "Front-Admin 데이터 정합성 재검토(배치5) 중 발견 — 조회기간 필터를 \"전체\"로 명시 선택 후 재조회해도 동일 현상 재현 확인" },
+      { "at": "2026-08-20", "status": "완료", "note": "사용자 요청으로 근본 원인 재조사 — Admin 주문 상세(GET /api/v1.0/order/O260820790055) 조회 결과 mbrId=\"406\", mbrName=\"봇_186324\"로 확인됨(jspark81의 mbrId는 382). 해당 일자 생성된 주문 4건 전부 봇 계정(378/379/406/407) 소유로 jspark81 명의 주문은 존재하지 않음. Front 표시가 정확했던 것으로 결론, 오탐으로 종결" }
     ],
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180 (Front) / http://192.168.10.116:30280 (Admin)",
     "testSteps": "1) jspark81 Front 로그인 후 /mypage/order 진입\n2) 조회기간 \"전체\" 선택 후 \"조회\" 클릭\n3) Admin devel 로그인 후 /order/list에서 동일 계정 주문 확인",
-    "actualResult": "Front: \"최근 주문 내역이 없습니다\" / Admin: 주문번호 O260820790055 1건 정상 조회됨",
-    "expectedResult": "Front 마이페이지 주문내역에도 동일한 주문 1건이 노출되어야 함"
+    "actualResult": "Front: \"최근 주문 내역이 없습니다\" / Admin: 주문번호 O260820790055 1건 정상 조회됨(단, 해당 주문은 jspark81이 아닌 봇 계정 소유로 확인됨)",
+    "expectedResult": "(오탐) 애초에 비교 대상 주문이 jspark81 소유가 아니었으므로 이 결함 자체가 성립하지 않음"
   },
   {
     "defectId": "DEF_데모사이트_009",
     "tcId": "TC_MB_046",
     "module": "회원",
     "severity": "P1",
-    "status": "신규",
-    "summary": "Front에 가입되어 로그인·주문·마이페이지 정상 이용 중인 jspark81 계정이 Admin 회원관리 목록에서 로그인아이디로 필터 조회해도 확인되지 않음 — Front와 Admin의 회원 데이터가 분리되어 있거나 동기화되지 않는 것으로 추정",
+    "status": "완료",
+    "summary": "[오탐 확인 - 결함 아님] Front에 가입된 jspark81 계정이 Admin 회원관리 목록에서 조회되지 않는다고 최초 보고했으나, 재검증 결과 검색 시 \"회원이름\" 필드에 로그인아이디를 입력하는 테스트 오류였음이 확인됨 — \"로그인아이디\" 필드로 정확히 검색 시 정상 조회됨",
     "detectedAt": "2026-08-20",
     "source": "observation",
     "screenshot": "",
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-20", "status": "신규", "note": "배치3에서 [확인필요]로 최초 발견(TC_MB_046). Front-Admin 데이터 정합성 재검토(배치5) 중 정식 결함으로 승격 — DEF_데모사이트_008(주문내역 미동기화)과 함께 Front/Admin 데이터베이스 분리 가능성을 시사하는 연관 결함으로 판단" }
+      { "at": "2026-08-20", "status": "신규", "note": "배치3에서 [확인필요]로 최초 발견(TC_MB_046). Front-Admin 데이터 정합성 재검토(배치5) 중 정식 결함으로 승격 — DEF_데모사이트_008(주문내역 미동기화)과 함께 Front/Admin 데이터베이스 분리 가능성을 시사하는 연관 결함으로 판단" },
+      { "at": "2026-08-20", "status": "완료", "note": "사용자 요청으로 근본 원인 재조사 — 실제 API 호출(GET /api/v1.0/member?mbrName=jspark81)을 확인한 결과 \"회원이름\"(mbrName) 필드에 로그인아이디 값이 입력되어 0건이 나온 것으로 확인(jspark81은 로그인아이디이지 실제 이름이 아님, 실제 이름은 \"박지숙\"). \"로그인아이디\" 필드(GET /api/v1.0/member?loginId=jspark81)로 재검색 시 mbrId=382 레코드가 정상 조회되며 Front 로그인 응답과 완전히 일치. 오탐으로 종결" }
     ],
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180 (Front) / http://192.168.10.116:30280 (Admin)",
     "testSteps": "1) jspark81 Front 로그인 확인(정상 동작)\n2) Admin devel 로그인 후 /member 진입\n3) 로그인아이디에 \"jspark81\" 입력 후 \"조회\" 클릭",
-    "actualResult": "회원 목록에 jspark81이 조회되지 않음(0건)",
-    "expectedResult": "jspark81 계정 정보가 Admin 회원관리 목록에 정상 조회되어야 함"
+    "actualResult": "(최초 오탐) 회원이름 필드에 잘못 입력하여 0건 / (재검증) 로그인아이디 필드로 정확히 검색 시 mbrId=382 정상 조회",
+    "expectedResult": "(오탐) 애초에 잘못된 필드로 검색했던 테스트 오류였으므로 이 결함 자체가 성립하지 않음"
   }
 ]

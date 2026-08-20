@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "MB",
     "moduleName": "회원",
-    "version": 7,
+    "version": 6,
     "changeHistory": [
       {
         "version": 1,
@@ -34,11 +34,6 @@
         "version": 6,
         "date": "2026-08-20",
         "summary": "Phase 4(배치5): Front-Admin 회원정보 정합성 검증 2건 + Admin 리뷰관리/라벨관리 신규 관찰 4건 추가(누락됐던 Admin \"회원\" 그룹 하위 메뉴 보완)"
-      },
-      {
-        "version": 7,
-        "date": "2026-08-20",
-        "summary": "DEF_데모사이트_009 재검증 결과 오탐(false positive)으로 확정 — Admin 회원관리 검색 시 \"회원이름\" 필드에 로그인아이디를 입력한 테스트 오류였음. 정확한 \"로그인아이디\" 필드로 검색 시 jspark81 정상 조회, Front-Admin 회원정보 필드값 완전 일치 확인. TC_MB_046/048 내용 정정, MB.spec.js 자동화 코드의 필드 선택자 버그 수정"
       }
     ]
   },
@@ -1084,22 +1079,22 @@
       "minorCategory": "데이터정합성",
       "platform": "Admin",
       "type": "데이터",
-      "item": "Front 회원(jspark81) Admin 회원관리 목록 노출 여부 검증",
+      "item": "[확인필요] Front 회원(jspark81) Admin 회원관리 목록 노출 여부 검증",
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "Admin 로그인 상태, jspark81 계정은 Front에 가입되어 있음",
       "steps": "1) /member 진입 2) 로그인아이디에 \"jspark81\" 입력 후 \"조회\" 클릭",
-      "expected": "1) 2) jspark81 계정(mbrId=382, 박지숙)이 목록에 정상 조회된다",
+      "expected": "1) 2) jspark81 계정이 목록에 노출되어야 하나, 필터 없이 전체 조회 시 목록에서 확인되지 않음\n* [확인필요] Front-Admin 회원 데이터 동기화 여부 또는 페이지네이션/필터 조건 재확인 필요",
       "testData": "로그인아이디=jspark81",
       "result": "",
       "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
+      "issueSummary": "Admin 회원관리 목록에서 jspark81 미확인 (Front-Admin 회원 데이터 미동기화)",
+      "issueLink": "DEF_데모사이트_009",
       "origin": "신규",
       "system": "BO",
       "displayNo": 46,
       "tcId": "TC_MB_046",
-      "remark": "2026-08-20 재검증: 최초 테스트 시 \"회원이름\" 필드에 로그인아이디를 입력하는 오류로 미노출 결함(DEF_009)으로 오판했음. \"로그인아이디\" 필드로 정확히 검색 시 정상 조회 확인 — 결함 아님(DEF_009 재검증완료-오탐)"
+      "remark": ""
     },
     {
       "majorCategory": "회원",
@@ -1130,20 +1125,20 @@
       "minorCategory": "Front-Admin정합성",
       "platform": "Web",
       "type": "데이터",
-      "item": "Admin 회원정보와 Front 마이페이지 표시값 일치 여부 검증",
+      "item": "[확인필요][결함] Admin 회원정보와 Front 마이페이지 표시값 일치 여부 검증",
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "jspark81 Front 로그인 상태",
       "steps": "1) [FO] Front /mypage/edit에서 회원정보(이름/전화번호/이메일 등) 확인\n2) [BO] Admin /member에서 동일 계정 조회 시도",
-      "expected": "1) 2) Front(이름=박지숙, 이메일=jspark81@3top.co.kr, 전화번호=01084131696, 생년월일=20260818)와 Admin 회원관리 조회 결과(동일 항목)가 모두 일치함을 확인",
+      "expected": "1) 2) 두 화면의 회원정보가 일치해야 하나, jspark81 계정 자체가 Admin에서 조회되지 않아(DEF_데모사이트_009) 값 비교가 불가능한 상태",
       "testData": "-",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
+      "issueSummary": "jspark81 Admin 미노출로 정보 대조 불가",
+      "issueLink": "DEF_데모사이트_009",
       "origin": "신규",
       "system": "FO",
-      "remark": "2026-08-20: DEF_009 오탐 재확인 과정에서 Admin 정상 조회 확인 및 Front-Admin 필드값 일치 확인 완료",
+      "remark": "",
       "displayNo": 48,
       "tcId": "TC_MB_048"
     },
@@ -1166,7 +1161,7 @@
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "remark": "DEF_009는 오탐으로 정정됨(TC_MB_046 참고) — 본 TC는 별개 항목으로 계속 [확인필요] 유지",
+      "remark": "",
       "displayNo": 49,
       "tcId": "TC_MB_049"
     },

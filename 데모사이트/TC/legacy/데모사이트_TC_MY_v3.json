@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "MY",
     "moduleName": "마이페이지",
-    "version": 4,
+    "version": 3,
     "changeHistory": [
       {
         "version": 1,
@@ -19,11 +19,6 @@
         "version": 3,
         "date": "2026-08-20",
         "summary": "Phase 4(배치5): Front-Admin 데이터 정합성 재검토 — 실제 완료 주문이 Front 마이페이지 주문내역에 미노출되는 결함 확인(DEF_데모사이트_008), 1건 추가"
-      },
-      {
-        "version": 4,
-        "date": "2026-08-20",
-        "summary": "DEF_데모사이트_008 재검증 결과 오탐으로 확정 — Admin에서 확인한 주문(O260820790055)이 jspark81이 아닌 봇 계정(mbrId 406) 소유였음이 원인. jspark81은 실제 주문 이력이 없어 Front가 Empty State를 보이는 것이 정상 동작. TC_MY_026 내용 정정, 자동화 코드(MY.spec.js)의 잘못된 어서션 제거"
       }
     ]
   },
@@ -609,20 +604,20 @@
       "minorCategory": "Front-Admin정합성",
       "platform": "Web",
       "type": "기능",
-      "item": "[확인필요] Front 마이페이지 주문내역 실제 데이터 반영 검증",
+      "item": "[결함] Front 마이페이지 주문내역에 실제 완료 주문 미노출 검증",
       "baseDoc": "-",
-      "priority": "P3",
-      "precondition": "jspark81 계정, 실제 완료된 주문 없음",
+      "priority": "P1",
+      "precondition": "jspark81 계정으로 Front에서 실제 주문 완료됨(주문번호 O260820790055), Admin 주문리스트에서 확인 가능한 상태",
       "steps": "1) jspark81 Front 로그인 후 /mypage/order 진입\n2) 조회기간 \"전체\" 선택 후 \"조회\" 클릭",
-      "expected": "1) 2) \"최근 주문 내역이 없습니다\"가 노출됨 — jspark81 명의의 실제 주문이 없으므로 정상 동작\n* [확인필요] 재검증 시 Admin 주문리스트의 주문(O260820790055)을 jspark81 소유로 오인했으나, 실제 조회 결과 해당 주문은 봇 계정(mbrId=406, 봇_186324) 소유로 확인됨(오늘 생성된 주문 4건 모두 봇 계정). jspark81로 실제 신규 주문을 생성해 Front-Admin 동기화를 재검증하려 했으나 TossPayments 결제위젯 연동 단계에서 Playwright 자동화가 어려워 완료하지 못함 — 결제위젯을 우회하지 않는 별도 테스트 데이터 준비 방안 필요",
-      "testData": "",
+      "expected": "1) 2) 해당 주문 1건이 목록에 노출되어야 하나, 실제로는 \"최근 주문 내역이 없습니다\"로 노출됨\n* Admin 주문리스트(/order/list)에서는 동일 주문이 정상 조회됨 — Front-Admin 데이터 미동기화 확정",
+      "testData": "주문번호=O260820790055",
       "result": "",
       "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
+      "issueSummary": "Front 주문내역-Admin 주문리스트 데이터 미동기화",
+      "issueLink": "DEF_데모사이트_008",
       "origin": "신규",
       "system": "FO",
-      "remark": "2026-08-20: DEF_008 오탐으로 정정(TC_OP_016에서 확인한 주문이 jspark81 소유가 아니었음이 원인) — 결함 아님",
+      "remark": "",
       "displayNo": 26,
       "tcId": "TC_MY_026"
     }

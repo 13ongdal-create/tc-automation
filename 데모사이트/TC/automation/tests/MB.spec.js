@@ -105,19 +105,20 @@ test('[TC_MB_044][Admin회원관리] Admin 회원관리 목록 컬럼 노출 검
 test('[TC_MB_045][Admin회원관리] 검색 필드(로그인아이디) 조회 동작 검증', async ({ page }) => {
   await adminLogin(page);
   await page.goto(ADMIN_BASE + '/member', { waitUntil: 'load' });
-  await page.locator('input[name="loginId"], input').filter({ hasText: '' }).first();
+  await page.locator('input[name="loginId"]').fill('jspark81');
   await page.getByRole('button', { name: '조회', exact: true }).click();
   await page.waitForTimeout(1000);
+  await expect(page.getByText('jspark81')).toBeVisible();
 });
 
-test('[TC_MB_046][Admin회원관리] [확인필요] Front 회원(jspark81) Admin 목록 노출 여부 검증', async ({ page }) => {
+test('[TC_MB_046][Admin회원관리] Front 회원(jspark81) Admin 목록 노출 여부 검증', async ({ page }) => {
   await adminLogin(page);
   await page.goto(ADMIN_BASE + '/member', { waitUntil: 'load' });
+  // 2026-08-20 재검증: "회원이름" 필드에 로그인아이디를 넣던 오류를 수정 — "로그인아이디" 필드(input[name="loginId"])로 정확히 검색
+  await page.locator('input[name="loginId"]').fill('jspark81');
   await page.getByRole('button', { name: '조회', exact: true }).click();
   await page.waitForTimeout(1000);
-  const found = await page.getByText('jspark81').count();
-  // [확인필요] 현재 미노출로 관측됨 — 회귀 감지를 위해 결과만 기록 (assertion 강제하지 않음)
-  console.log('jspark81 Admin 노출 여부:', found > 0);
+  await expect(page.getByText('박지숙')).toBeVisible();
 });
 
 test('[TC_MB_047][Admin회원관리] 조회 전 목록 초기 상태 검증', async ({ page }) => {
