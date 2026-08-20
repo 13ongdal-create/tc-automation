@@ -32,12 +32,16 @@ function describeToolUse(block) {
   return name;
 }
 
+// AGENTS.md에 정의된 마커: 에이전트가 Phase 진행 중 이슈/에러를 발견하면 최종 응답을 기다리지 않고
+// 이 형식으로 즉시 한 줄을 출력하도록 지시합니다. 스트리밍 도중 이 줄을 감지해 onIssue로 즉시 전달합니다.
+const ISSUE_ALERT_RE = /^ISSUE_ALERT:\s*(.+)$/;
+
 /**
  * claude CLI를 headless로, 실시간 스트리밍 출력(stream-json)으로 실행합니다.
  * 스트림에서 "지금 어떤 tool을 쓰고 있는지"를 그때그때 추출해두므로, 별도로 Claude를 다시 호출(=토큰 소모)
  * 하지 않고도 handle.status로 현재 진행 상황을 즉시 조회할 수 있습니다.
  * @param {string[]} args - 예: ['-p', prompt] 또는 ['--resume', sessionId, '-p', prompt]
- * @param {{ onProcess?: (handle: { pid: number, cancel: () => void, status: string|null, startedAt: number }) => void }} [opts]
+ * @param {{ onProcess?: (handle: { pid: number, cancel: () => void, status: string|null, startedAt: number }) => void, onIssue?: (message: string) => void }} [opts]
  */
 function runClaude(args, opts = {}) {
   return new Promise((resolve, reject) => {
@@ -56,6 +60,7 @@ function runClaude(args, opts = {}) {
     let finalResult = null;
     let buffer = '';
     let stderr = '';
+    const alertedIssues = new Set();
 
     const handle = {
       pid: child.pid,
@@ -70,8 +75,10 @@ function runClaude(args, opts = {}) {
     };
     if (opts.onProcess) opts.onProcess(handle);
 
+    let timedOut = false;
     const timer = setTimeout(() => {
       cancelled = true;
+      timedOut = true;
       killTree(child.pid);
     }, TIMEOUT_MS);
 
@@ -83,6 +90,16 @@ function runClaude(args, opts = {}) {
             lastStatus = describeToolUse(block);
           } else if (block.type === 'text' && block.text && block.text.trim()) {
             lastStatus = block.text.trim().slice(0, 200);
+            if (opts.onIssue) {
+              // 한 텍스트 블록에 ISSUE_ALERT 줄이 여러 개 있을 수 있으므로 전부 스캔합니다.
+              for (const line of block.text.split('\n')) {
+                const m = line.match(ISSUE_ALERT_RE);
+                if (m && !alertedIssues.has(m[1])) {
+                  alertedIssues.add(m[1]);
+                  opts.onIssue(m[1].trim());
+                }
+              }
+            }
           }
         }
       } else if (evt.type === 'result') {
@@ -114,8 +131,13 @@ function runClaude(args, opts = {}) {
     child.on('close', (code) => {
       clearTimeout(timer);
       if (cancelled) {
-        const err = new Error('claude CLI 실행이 중단되었습니다.');
+        const err = new Error(
+          timedOut
+            ? `claude CLI 실행이 시간 초과(${Math.round(TIMEOUT_MS / 60000)}분)로 자동 종료되었습니다.`
+            : 'claude CLI 실행이 중단되었습니다.'
+        );
         err.cancelled = true;
+        err.isTimeout = timedOut;
         reject(err);
         return;
       }

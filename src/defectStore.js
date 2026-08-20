@@ -18,7 +18,14 @@ function load(project) {
 }
 
 function save(project, defects) {
-  fs.writeFileSync(defectsPath(project), JSON.stringify(defects, null, 2), 'utf8');
+  // 원자적 쓰기: 임시 파일에 먼저 쓴 뒤 rename — 쓰기 도중 다른 프로세스(예: 같은 프로젝트를
+  // 실행 중인 Claude CLI 세션의 Edit 도구)가 이 파일을 읽어도 반쯤 쓰인 내용을 보지 않습니다.
+  // (단, 두 프로세스가 거의 동시에 각자 읽은 뒤 서로 다른 내용으로 저장하는 "마지막에 쓴 쪽이
+  // 이긴다" 유실까지는 막지 못합니다 — 완전한 해결은 프로젝트 단위 락이 필요합니다.)
+  const target = defectsPath(project);
+  const tmp = `${target}.${process.pid}.tmp`;
+  fs.writeFileSync(tmp, JSON.stringify(defects, null, 2), 'utf8');
+  fs.renameSync(tmp, target);
 }
 
 /** /tc-defects 최초 조회 - 상태별 건수 + 신규/재발생 목록을 표로 요약 (AGENTS.md 20항 형식) */

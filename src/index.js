@@ -94,7 +94,8 @@ function buildInitialPrompt(params) {
     `AGENTS.md 13항의 Phase 워크플로우(Phase 0~8)를 단계별로 따르세요 — 이 프로젝트의 project.json이 없으면 먼저 Phase 0(URL, 단위/통합 구분, 코드/정책기반 질의)부터 진행하고, 있으면 건너뜁니다.`,
     url ? `URL이 함께 제공되었습니다: ${url} — Phase 0 질의에 참고하고, AGENTS.md 19항(URL 기반 코드형 TC)에 따라 Playwright로 직접 접속해 관찰한 화면 구조를 근거로 사용하세요.` : null,
     `목표 건수는 미리 정하지 않습니다 — 근거에서 도출 가능한 시나리오를 최대한 뽑아내고, 실제 도출된 개수를 있는 그대로 보고해주세요 (AGENTS.md 13항).`,
-    `이번 응답에서는 (Phase 0 질의가 필요하면 그것만, 아니면) **Phase 1(분석) 한 단계만** 진행하고 승인을 기다려주세요. Phase 2~8은 각각 별도의 승인/요청을 받은 뒤에만 진행합니다 (한 번에 여러 Phase를 묶어 진행하지 않습니다).`,
+    `이번 응답에서는 (Phase 0 질의가 필요하면 그것부터 처리한 뒤) **Phase 1(분석)~Phase 3(테스트 케이스 산출)까지 승인을 기다리지 않고 연속으로 진행**합니다. Phase 3까지 끝나면 그 결과를 **한눈에 확인 가능한 마크다운 표 형식 요약**(예: 소분류/기능별 시나리오 건수, 우선순위 분포, 총 건수)으로 제시하고, **그 시점에만 승인을 기다립니다**. 승인을 받은 뒤에만 Phase 4(TC 산출물 생성)를 진행하세요. Phase 5(테스트 실행) 이후는 기존 규칙대로 별도 요청 시에만 진행합니다.`,
+    `Phase 1~4를 진행하는 동안 이슈나 에러(예: 페이지 접근 실패, 예상과 다른 화면 구조, 정책 불일치, 관찰 중 발견된 결함 등)를 발견하면 최종 요약까지 기다리지 말고 **발견 즉시** 별도 줄에 정확히 \`ISSUE_ALERT: {한 줄 설명}\` 형식으로 출력하세요 — 브릿지가 이 줄을 실시간으로 감지해 스레드에 즉시 알림으로 전달합니다.`,
     `결과는 Slack 메시지로 바로 붙여넣을 수 있도록 마크다운 표/목록 형태로 간결하게 정리해주세요.`,
   ].filter(Boolean).join('\n');
 }
@@ -108,15 +109,15 @@ function buildFollowupPrompt(text) {
       '사용자가 테스트 실행(Phase 5)을 명시적으로 요청했습니다.',
       'Phase 4(TC 작성)가 아직 승인되지 않았다면 먼저 그 사실을 알리고 멈추세요. 승인되어 있다면 AGENTS.md 19항 규칙대로 Playwright 자동화 테스트를 실행하고,',
       'Phase 6(오류 공유: 콘솔 에러/실패 스크린샷)과 Phase 7(결함 관리: defects.json 등록/갱신)을 거쳐 Phase 8(Pass/Fail 결과 요약)까지 보고해주세요.',
-      '이 단계에서는 아직 git 커밋을 하지 마세요 — 결과를 본 사용자가 최종 승인해야 커밋합니다.',
+      'Phase 8 보고 직후 AGENTS.md 18항 규칙대로 별도 승인 요청 없이 자동으로 git commit까지 진행하세요. 단, git push는 커밋 직후 "원격(origin)에 push할까요?"처럼 짧게 확인을 받은 뒤에만 실행하세요.',
     ].join('\n');
   }
   if (/^(승인|approve|yes|ok)$/i.test(trimmed)) {
     return [
-      '사용자가 방금 제시한 내용을 승인했습니다.',
-      'AGENTS.md 13항 Phase 워크플로우의 **바로 다음 Phase 하나만** 진행하고 다시 승인을 기다리세요 (여러 Phase를 한 번에 진행하지 마세요).',
-      '단, Phase 4(TC 작성)까지 승인됐다고 해서 Phase 5(테스트 실행)를 자동으로 시작하지 마세요 — 테스트 실행은 사용자가 "테스트 실행해줘" 등으로 별도 요청할 때만 시작합니다.',
-      `Phase 8(결과 도출) 이후의 승인이라면 AGENTS.md 18항 규칙에 따라 "${TC_AUTOMATION_ROOT}" 저장소에 git add(해당 프로젝트 경로만)/commit/push까지 수행하고, 커밋 메시지와 해시를 알려주세요.`,
+      '사용자가 방금 "승인"했습니다. 직전에 당신이 무엇을 확인 요청했는지에 따라 다르게 진행하세요:',
+      '- **Phase 진행 승인**이었다면: AGENTS.md 13항 Phase 워크플로우의 **바로 다음 Phase 하나만** 진행하고 다시 승인을 기다리세요 (여러 Phase를 한 번에 진행하지 마세요). Phase 4 승인이 Phase 5(테스트 실행) 자동 시작을 의미하지는 않습니다 — 테스트 실행은 별도 요청 시에만 시작합니다. Phase 4/8처럼 커밋이 자동으로 이뤄지는 시점이면 18항 규칙대로 커밋 후 push 여부를 확인하세요.',
+      `- **git push 확인 질문**에 대한 답이었다면(18항): 그 즉시 "${TC_AUTOMATION_ROOT}" 저장소에 git push를 실행하고 결과를 알려주세요. (커밋 자체는 이미 자동으로 끝나 있어야 하며, 이 "승인"이 커밋을 새로 트리거하지 않습니다.)`,
+      '- **결함 완료 처리 확인 질문**(20-3항, "TC_XXX 재검증 통과 — 관련 결함 DEF_XXX를 완료 처리할까요?")에 대한 답이었다면: 해당 결함 레코드의 상태만 `완료`로 변경하고 history에 기록하세요. Phase 진행이나 git push와는 무관한 별개의 확인입니다.',
     ].join('\n');
   }
   if (/^(반려|거절|no)\b/i.test(trimmed)) {
@@ -144,6 +145,9 @@ async function startNewThread(client, { channelId, ackText, prompt, meta }) {
         activeRuns.set(key, handle);
         if (lockKey) activeProjectModules.set(lockKey, key);
       },
+      onIssue: (message) => {
+        client.chat.postMessage({ channel: channelId, thread_ts: threadTs, text: `:rotating_light: 진행 중 이슈 발견: ${message}` });
+      },
     });
 
     sessionStore.set(channelId, threadTs, { sessionId: result.sessionId, ...meta });
@@ -161,7 +165,11 @@ async function startNewThread(client, { channelId, ackText, prompt, meta }) {
       alert.alertResultFlaggedError({ channel: channelId, threadTs, project: meta && meta.project, resultText: result.resultText });
     }
   } catch (err) {
-    if (!err.cancelled) {
+    if (err.isTimeout) {
+      // 타임아웃은 '중단' 명령과 달리 아무도 안내 메시지를 올리지 않으므로, 여기서 직접 알립니다.
+      await client.chat.postMessage({ channel: channelId, thread_ts: threadTs, text: `:alarm_clock: ${err.message}` });
+      alert.alertRequestError({ channel: channelId, threadTs, project: meta && meta.project, kind: meta && meta.kind, errorMessage: err.message });
+    } else if (!err.cancelled) {
       await client.chat.postMessage({
         channel: channelId,
         thread_ts: threadTs,
@@ -169,7 +177,7 @@ async function startNewThread(client, { channelId, ackText, prompt, meta }) {
       });
       alert.alertRequestError({ channel: channelId, threadTs, project: meta && meta.project, kind: meta && meta.kind, errorMessage: err.message });
     }
-    // err.cancelled === true인 경우: '중단' 처리 핸들러가 이미 안내 메시지를 올렸으므로 여기서는 조용히 넘어갑니다.
+    // err.cancelled === true(타임아웃 제외)인 경우: '중단' 처리 핸들러가 이미 안내 메시지를 올렸으므로 여기서는 조용히 넘어갑니다.
   } finally {
     activeRuns.delete(key);
     if (lockKey && activeProjectModules.get(lockKey) === key) activeProjectModules.delete(lockKey);
@@ -255,7 +263,7 @@ app.command('/tc-test', async ({ command, ack, client }) => {
       grepTarget ? `AGENTS.md 19-1항에 따라 \`--grep "${grepTarget}"\` 옵션을 추가해 해당 ${tcId ? 'TC ID' : '기능'}만 실행하세요 (테스트 제목에 [TC_ID][기능명]이 포함되어 있어야 매칭됩니다).` : null,
       `AGENTS.md 19항(실행), 13항 Phase 5~8(테스트 수행 → 오류 공유 → 결함 관리 → 결과 도출) 규칙을 그대로 따라주세요.`,
       `결과 보고 시 실제 실행 범위(${scopeLabel})를 명시해주세요.`,
-      `결과 도출 후 최종 승인을 받기 전까지 git 커밋은 하지 마세요.`,
+      `결과 도출(Phase 8) 직후 AGENTS.md 18항 규칙대로 별도 승인 요청 없이 자동으로 git commit하세요. git push는 커밋 직후 짧게 확인을 받은 뒤에만 실행하세요.`,
       `결과는 Slack 메시지로 바로 붙여넣을 수 있도록 마크다운 표/목록 형태로 간결하게 정리해주세요.`,
     ].filter(Boolean).join('\n'),
     meta: { kind: 'tc-test', project, module: module_ || null, feature: feature || null, tcId: tcId || null },
@@ -403,10 +411,18 @@ app.event('message', async ({ event, client }) => {
             `"${session.project}" 프로젝트의 결함 관리 요청입니다: "${trimmed}"`,
             `AGENTS.md 20항(결함 관리) 규칙에 따라 "${session.project}/TC/defects.json"을 조회/수정해주세요. 파일 수정은 즉시 반영하되, Git 커밋은 사용자가 "승인"하기 전까지 하지 마세요.`,
           ].join('\n'),
-          { onProcess: (handle) => { activeRuns.set(key, handle); if (lockKey) activeProjectModules.set(lockKey, key); } }
+          {
+            onProcess: (handle) => { activeRuns.set(key, handle); if (lockKey) activeProjectModules.set(lockKey, key); },
+            onIssue: (message) => {
+              client.chat.postMessage({ channel: event.channel, thread_ts: event.thread_ts, text: `:rotating_light: 진행 중 이슈 발견: ${message}` });
+            },
+          }
         )
       : await claudeRunner.resumeSession(session.sessionId, buildFollowupPrompt(event.text), {
           onProcess: (handle) => { activeRuns.set(key, handle); if (lockKey) activeProjectModules.set(lockKey, key); },
+          onIssue: (message) => {
+            client.chat.postMessage({ channel: event.channel, thread_ts: event.thread_ts, text: `:rotating_light: 진행 중 이슈 발견: ${message}` });
+          },
         });
 
     await resultReporter.postResult(client, {
@@ -422,7 +438,10 @@ app.event('message', async ({ event, client }) => {
       alert.alertResultFlaggedError({ channel: event.channel, threadTs: event.thread_ts, project: session.project, resultText: result.resultText });
     }
   } catch (err) {
-    if (!err.cancelled) {
+    if (err.isTimeout) {
+      await client.chat.postMessage({ channel: event.channel, thread_ts: event.thread_ts, text: `:alarm_clock: ${err.message}` });
+      alert.alertRequestError({ channel: event.channel, threadTs: event.thread_ts, project: session.project, kind: session.kind, errorMessage: err.message });
+    } else if (!err.cancelled) {
       await client.chat.postMessage({
         channel: event.channel,
         thread_ts: event.thread_ts,
