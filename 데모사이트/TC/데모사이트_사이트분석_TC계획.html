@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데모사이트 사이트 분석 & TC 계획</title>
+<style>
+  :root{
+    --bg:#f6f8fa; --panel:#ffffff; --text:#1f2328; --muted:#656d76;
+    --border:#d0d7de; --accent:#0969da; --accent2:#0550ae;
+    --fo:#0969da; --bo:#8250df; --new:#1a7f37; --existing:#9a6700; --wait:#8c959f;
+    --headbg:#f6f8fa;
+  }
+  html[data-theme="dark"]{
+    --bg:#0d1117; --panel:#161b22; --text:#e6edf3; --muted:#8b949e;
+    --border:#30363d; --accent:#58a6ff; --accent2:#79c0ff;
+    --fo:#58a6ff; --bo:#bc8cff; --new:#3fb950; --existing:#d29922; --wait:#8b949e;
+    --headbg:#161b22;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--bg);color:var(--text);}
+  header{position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:1px solid var(--border);padding:16px 24px;}
+  header h1{font-size:17px;margin:0 0 3px;}
+  header .sub{font-size:12.5px;color:var(--muted);}
+  .container{padding:20px 24px 60px;max-width:1200px;margin:0 auto;}
+  section{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:20px;}
+  section h2{font-size:15px;margin:0 0 6px;display:flex;align-items:center;gap:8px;}
+  section .desc{font-size:12.5px;color:var(--muted);margin-bottom:14px;line-height:1.6;}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top;}
+  th{background:var(--headbg);font-size:11.5px;color:var(--muted);}
+  .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
+  .cat-card{border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
+  .cat-card .name{font-weight:700;font-size:13px;margin-bottom:4px;}
+  .cat-card .code{color:var(--muted);font-weight:400;font-size:11.5px;}
+  .cat-card ul{margin:6px 0 0;padding-left:16px;font-size:12px;color:var(--muted);}
+  .pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;color:#fff;}
+  .pill.fo{background:var(--fo);} .pill.bo{background:var(--bo);}
+  .pill.new{background:var(--new);} .pill.existing{background:var(--existing);} .pill.wait{background:var(--wait);}
+  .link-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;}
+  .link-item{border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-size:12px;}
+  .link-item .path{color:var(--muted);font-size:11px;display:block;margin-top:2px;font-family:monospace;}
+  .link-item .note{color:var(--accent);font-size:11px;display:block;margin-top:2px;}
+  .admin-group{margin-bottom:10px;}
+  .admin-group .gname{font-weight:700;font-size:12.5px;margin-bottom:5px;}
+  .admin-group .items{display:flex;flex-wrap:wrap;gap:6px;}
+  .admin-chip{background:var(--headbg);border:1px solid var(--border);border-radius:14px;padding:3px 10px;font-size:11.5px;}
+  .code-cell{font-weight:700;font-family:monospace;font-size:13px;}
+  .footnote{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.6;}
+  pre.flow{background:var(--headbg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:12px;line-height:1.7;overflow-x:auto;white-space:pre-wrap;}
+  .warn-row{color:var(--existing);}
+  .q-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:700;flex-shrink:0;}
+</style>
+</head>
+<body>
+<header>
+  <h1>🔍 데모사이트 사이트 분석 & TC 계획</h1>
+  <div class="sub">Front(192.168.10.116:30180) + Admin/BO(192.168.10.116:30280) 전체화면 재관찰 결과 · Phase 1~2 산출물 · 2026-08-20</div>
+</header>
+
+<div class="container">
+
+  <section>
+    <h2>🖥️ Front 사이트 구조</h2>
+    <div class="desc">GNB 카테고리, 전시/배너, 마이페이지 서브메뉴, 고객센터/정책 페이지를 Playwright로 직접 접속해 확인한 실제 경로입니다.</div>
+
+    <h3 style="font-size:13px;">카테고리 (8개)</h3>
+    <div class="cat-grid">
+      <div class="cat-card"><div class="name">남성 <span class="code">(110)</span></div><ul><li>아우터(113)</li><li>점퍼(116)</li><li>상의(114)</li></ul></div><div class="cat-card"><div class="name">여성 <span class="code">(111)</span></div><ul><li>드레스(115)</li><li>상의(117)</li></ul></div><div class="cat-card"><div class="name">액세서리 <span class="code">(112)</span></div></div>
+    </div>
+
+    <h3 style="font-size:13px;margin-top:16px;">전시/배너</h3>
+    <div class="link-grid">
+      <div class="link-item">SALE<span class="path">/display/hot-deal</span></div><div class="link-item">MD's PICK<span class="path">/display/mds-pick</span></div><div class="link-item">ZARA 브랜드관<span class="path">/display/brand/zara</span></div><div class="link-item">H&amp;M 브랜드관<span class="path">/display/brand/hm</span></div>
+    </div>
+
+    <h3 style="font-size:13px;margin-top:16px;">마이페이지 서브 (9개, 로그인 후 확인)</h3>
+    <div class="link-grid">
+      <div class="link-item">주문내역<span class="path">/mypage/order</span></div><div class="link-item">SNS 연결설정<span class="path">/mypage/social</span></div><div class="link-item">위시리스트<span class="path">/mypage/wishlist</span><span class="note">최대 100개</span></div><div class="link-item">배송주소록 관리<span class="path">/mypage/address</span><span class="note">최대 5개, 기본배송지 자동입력</span></div><div class="link-item">쿠폰<span class="path">/mypage/coupon</span></div><div class="link-item">1:1 문의<span class="path">/mypage/inquiry</span></div><div class="link-item">리뷰 목록<span class="path">/mypage/review</span></div><div class="link-item">개인정보 수정<span class="path">/mypage/edit</span></div><div class="link-item">회원 탈퇴<span class="path">/mypage/withdraw</span></div>
+    </div>
+
+    <h3 style="font-size:13px;margin-top:16px;">고객센터/정책 (4개)</h3>
+    <div class="link-grid">
+      <div class="link-item">공지사항<span class="path">/customer/notice</span></div><div class="link-item">FAQ<span class="path">/customer/faq</span></div><div class="link-item">개인정보처리방침<span class="path">/policy</span></div><div class="link-item">이용약관<span class="path">/service</span></div>
+    </div>
+    <div class="footnote">※ <code>/search</code> 직접 진입 시 기능 없음 — 헤더 아이콘 기반 이미지검색 방식으로 추정, 재확인 필요.</div>
+  </section>
+
+  <section>
+    <h2>🔧 Admin/BO 사이트 구조 (8개 대분류, 41개 메뉴)</h2>
+    <div class="desc">devel 계정으로 로그인 성공 후 확인한 전체 관리자 메뉴입니다.</div>
+    <div class="admin-group"><div class="gname">회원 (4)</div><div class="items"><span class="admin-chip">회원관리</span><span class="admin-chip">배송지관리</span><span class="admin-chip">리뷰관리</span><span class="admin-chip">라벨관리</span></div></div><div class="admin-group"><div class="gname">상품 (5)</div><div class="items"><span class="admin-chip">표준카테고리</span><span class="admin-chip">브랜드</span><span class="admin-chip">상품고시정보</span><span class="admin-chip">옵션관리</span><span class="admin-chip">상품관리</span></div></div><div class="admin-group"><div class="gname">프로모션 (3)</div><div class="items"><span class="admin-chip">대행사관리</span><span class="admin-chip">가격할인관리</span><span class="admin-chip">쿠폰관리</span></div></div><div class="admin-group"><div class="gname">주문/클레임 (2)</div><div class="items"><span class="admin-chip">주문리스트</span><span class="admin-chip">클레임리스트</span></div></div><div class="admin-group"><div class="gname">전시 (4)</div><div class="items"><span class="admin-chip">전시카테고리관리</span><span class="admin-chip">전시코너관리</span><span class="admin-chip">전시템플릿관리</span><span class="admin-chip">전시페이지관리</span></div></div><div class="admin-group"><div class="gname">워크플로우 (2)</div><div class="items"><span class="admin-chip">워크플로우관리</span><span class="admin-chip">모니터링</span></div></div><div class="admin-group"><div class="gname">시스템 (18)</div><div class="items"><span class="admin-chip">공통코드관리</span><span class="admin-chip">다국어관리</span><span class="admin-chip">프로그램관리</span><span class="admin-chip">메뉴관리</span><span class="admin-chip">화면관리</span><span class="admin-chip">대시보드관리</span><span class="admin-chip">권한관리</span><span class="admin-chip">관리자관리</span><span class="admin-chip">권한별메뉴</span><span class="admin-chip">메뉴별권한</span><span class="admin-chip">배치관리</span><span class="admin-chip">로그인내역조회</span><span class="admin-chip">관리자로그관리</span><span class="admin-chip">검색엔진관리</span><span class="admin-chip">Agent 관리</span><span class="admin-chip">Tool 관리</span><span class="admin-chip">Sample</span><span class="admin-chip">PUSH관리</span></div></div><div class="admin-group"><div class="gname">고객센터 (3)</div><div class="items"><span class="admin-chip">FAQ</span><span class="admin-chip">공지사항관리</span><span class="admin-chip">1:1 문의 관리</span></div></div>
+  </section>
+
+  <section>
+    <h2>📋 계정 매트릭스</h2>
+    <table>
+      <thead><tr><th>계정</th><th>유형</th><th>대상</th><th>비고</th></tr></thead>
+      <tbody><tr><td><b>jspark81</b></td><td>로그인 회원(일반)</td><td><span class="pill fo">Front</span></td><td>사용자 제공 계정. 프로필: 박지숙, Newbie 등급</td></tr><tr><td><b>비로그인(Guest)</b></td><td>비회원 상태</td><td><span class="pill fo">Front</span></td><td>별도 계정 없음 — 로그인 안 한 상태 자체가 테스트 조건</td></tr><tr><td><b>신규가입(임시)</b></td><td>가입 플로우 검증용</td><td><span class="pill fo">Front</span></td><td>고정 계정 없음 — TC 실행 시 매번 새 아이디로 임시 생성 필요 `[확인필요]` 가입 후 프로모션 자동 적용 여부</td></tr><tr><td><b>devel</b></td><td>관리자</td><td><span class="pill bo">Admin</span></td><td>사용자 제공 계정 (2026-08-20 추가)</td></tr></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>🗺️ User Flow Map (핵심 플로우)</h2>
+    <div class="desc">실제 관측된 화면/배너/정책 기준으로 작성한 플로우입니다. 이미 TC로 완료된 구간은 표기했습니다.</div>
+    <table>
+      <thead><tr><th>플로우</th><th>우선순위</th><th>경로</th><th>관련 모듈</th></tr></thead>
+      <tbody><tr><td><b>Flow 1. 핵심 구매 플로우</b></td><td><span class="pill existing">P1</span></td><td>메인 → 카테고리(남성/여성/액세서리) → 상품상세(PDP) → 장바구니 → 주문하기 → 체크아웃</td><td>PD → OP</td></tr><tr><td><b>Flow 2. 로그인 상태별 체크아웃 분기</b></td><td><span class="pill existing">P1</span></td><td>로그인: 배송정보(이름/이메일/전화번호) 자동 채움 / 비로그인: 전 필드 공란</td><td>MB(완료: TC_MB_041/042)</td></tr><tr><td><b>Flow 3. 위시리스트 로그인/비로그인 분기</b></td><td><span class="pill existing">P1</span></td><td>PDP "위시리스트 추가" 클릭 → 로그인 시 담김 / 비로그인 시 로그인 유도</td><td>PD(완료: TC_PD_079/080/084/085)</td></tr><tr><td><b>Flow 4. 이벤트/쿠폰 응모 플로우</b></td><td><span class="pill existing">P1</span></td><td>홈 배너("99% 쿠폰 드로우" 등) → 상세보기 클릭 → 이벤트 페이지 → 쿠폰 응모</td><td>PR — ⚠️ "99% 쿠폰 드로우" 배너 CTA가 www.naver.com으로 연결되며 프로토콜 누락 404 발생 (기존 DSP legacy 결함 후보, 재검증 필요)</td></tr><tr><td><b>Flow 5. 마이페이지 서브 화면 탐색</b></td><td><span class="pill wait">P2</span></td><td>로그인 → 마이페이지 → 주문내역/SNS연결/위시리스트/배송주소록/쿠폰/1:1문의/리뷰목록/개인정보수정/회원탈퇴 각 화면 진입</td><td>MY — 노출 여부만 확인됨(TC_MB_039), 각 화면 실제 기능은 미관찰 `[확인필요]`</td></tr><tr><td><b>Flow 6. 회원가입 플로우</b></td><td><span class="pill existing">P1</span></td><td>/register 진입 → 필드 입력/유효성 검증 → 가입 성공 → 로그인 페이지 이동</td><td>MB(완료: TC_MB_001~026)</td></tr><tr><td><b>Flow 7. Admin 상품/주문 관리 플로우</b></td><td><span class="pill existing">P1</span></td><td>(1차 배치 예정) Admin 로그인 → 상품관리에서 상품 등록/수정 → Front 반영 확인 / 주문리스트에서 주문 상태 변경 → Front 마이페이지 반영 확인</td><td>PD(BO), OP(BO) — 혼합 플로우(system 태그 [FO]/[BO] 적용 대상)</td></tr></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>📊 모듈별 TC 배분 계획</h2>
+    <div class="desc">예상 TC 건수는 배치 진행 전 추정치이며, Phase 3 시나리오 도출 후 실제 건수로 확정됩니다 (목표 건수를 미리 고정하지 않음).</div>
+    <table>
+      <thead><tr><th>모듈</th><th>주요 검증 포인트</th><th>예상 TC 건수</th></tr></thead>
+      <tbody><tr><td class="code-cell">PD</td><td>카테고리 필터(색상/사이즈/브랜드 등), 113~117 신규 카테고리(완료), PDP 가격/옵션/배지, 전시 UI(구 DSP, 완료), Admin 상품등록·수정</td><td>102건 (완료 — 기존66/신규36)</td></tr><tr><td class="code-cell">MB</td><td>가입/로그인 유효성, GNB 상태, 마이페이지 접근제어, 체크아웃 연동</td><td>43건 (완료)</td></tr><tr><td class="code-cell">OP</td><td>장바구니 담기/삭제/수량/금액계산, Admin 주문리스트 상태 처리</td><td>15건 (legacy 이전 완료 — Admin 주문리스트는 배치3에서 보완)</td></tr><tr><td class="code-cell">CO</td><td>언어선택, 이미지검색, 헤더 공통요소, 접근성, 404 처리</td><td>20건 (legacy 이전 완료)</td></tr><tr><td class="code-cell">MY</td><td>마이페이지 서브 9개 화면 각각의 실제 기능(목록조회/등록/수정/삭제)</td><td>20~30건 (추정, 상세관찰 전)</td></tr><tr><td class="code-cell">CS</td><td>공지사항/FAQ 목록·상세, 정책/약관 전문 노출</td><td>8~12건 (추정)</td></tr><tr><td class="code-cell">PR</td><td>홈 배너 3종 CTA 정상 동작, 이벤트 페이지, 쿠폰 응모/발급</td><td>6~10건 (추정) — 배너 결함 후보 1건 포함</td></tr><tr><td class="code-cell">PD/OP/CS/PR(BO)</td><td>Admin 1차: 회원관리(MB)/상품관리(PD)/주문리스트(OP)/클레임리스트(CS)/쿠폰관리(PR)/전시관리(PD)</td><td>메뉴별 상세관찰 필요 — 추정 보류</td></tr></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>⚠️ Phase 1 관찰 중 발견한 [확인필요] 항목</h2>
+    <table>
+      <thead><tr><th>#</th><th>항목</th><th>발견 위치/비고</th></tr></thead>
+      <tbody><tr><td><span class="q-num">1</span></td><td>/search 직접 진입 시 콘텐츠 없음</td><td>헤더 검색 기능 방식(아이콘/모달 등) 재확인 필요</td></tr><tr><td><span class="q-num">2</span></td><td>"99% 쿠폰 드로우" 배너 CTA → www.naver.com 프로토콜 누락 404</td><td>홈 메인배너 (기존 DSP legacy TC_DSP_004 결함 후보)</td></tr><tr><td><span class="q-num">3</span></td><td>마이페이지 서브 9개 화면 실제 기능(등록/수정/삭제/작성) 미관찰</td><td>노출 여부만 확인(TC_MB_039), 상세 동작 미검증</td></tr><tr><td><span class="q-num">4</span></td><td>신규가입 시 프로모션/쿠폰 자동 발급 여부</td><td>홈 배너에 할인/쿠폰팩 문구는 있으나 가입 연동 정책 미확인</td></tr><tr><td><span class="q-num">5</span></td><td>Admin 41개 메뉴 중 2차(시스템/워크플로우 18개) 상세 미관찰</td><td>1차 6개 메뉴만 이번 배치 대상</td></tr><tr><td><span class="q-num">6</span></td><td>DEF_데모사이트_001/002/003 (로그인 리소스 404, 미존재상품 500)</td><td>기존 확인된 결함 — Admin 쪽 동일 패턴 여부 미확인</td></tr></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>🏷️ 모듈 코드 정의 (FO/BO 공통, 확정)</h2>
+    <div class="desc">같은 업무 도메인이면 FO/BO 관계없이 동일 모듈 코드를 사용하고, <code>system</code> 컬럼(FO/BO)으로만 구분합니다.</div>
+    <table>
+      <thead><tr><th>코드</th><th>모듈명</th><th>FO 범위</th><th>BO 범위</th><th>상태</th></tr></thead>
+      <tbody>
+        <tr><td class="code-cell">PD</td><td>상품전시(+전시)</td><td>카테고리 목록, 상품상세(PDP), 위시리스트 담기 버튼, 메인배너/카테고리하이라이트/인기·최신상품/브랜드관/HotDeal 등 전시 UI</td><td>표준카테고리, 브랜드, 상품고시정보, 옵션관리, 상품관리, 전시카테고리/코너/템플릿/페이지 관리</td><td>기존(확장)</td></tr><tr><td class="code-cell">PR</td><td>이벤트/기획전/쿠폰행사</td><td>이벤트/기획전 페이지, 쿠폰 다운로드·응모 등 캠페인 기능</td><td>쿠폰관리(발급/설정), 대행사관리, 가격할인관리</td><td>신규</td></tr><tr><td class="code-cell">MB</td><td>회원</td><td>회원가입, 로그인, GNB 상태표시, 마이페이지 진입/서브메뉴, 로그아웃, 체크아웃 배송정보 연동</td><td>회원 목록/상세, 배송지관리, 리뷰관리, 라벨관리</td><td>기존(MBR→MB 코드 변경)</td></tr><tr><td class="code-cell">OP</td><td>구매프로세스</td><td>장바구니 담기/삭제/수량/금액계산/세션유지</td><td>주문리스트(목록/상세/처리)</td><td>기존(CRT→OP, 캐노니컬 이전 완료·15건)</td></tr><tr><td class="code-cell">CO</td><td>시스템(공통)</td><td>언어선택, 검색(이미지검색), 헤더 공통요소, 반응형, 접근성, 네트워크 예외, 404 처리</td><td>-</td><td>기존(SYS→CO, 캐노니컬 이전 완료·20건)</td></tr><tr><td class="code-cell">MY</td><td>마이페이지</td><td>주문내역/SNS연결설정/위시리스트(목록화면)/배송주소록관리/쿠폰(보유쿠폰함)/1:1문의/리뷰목록/개인정보수정/회원탈퇴</td><td>-</td><td>신규</td></tr><tr><td class="code-cell">CS</td><td>고객센터/정책</td><td>공지사항, FAQ, 개인정보처리방침, 이용약관</td><td>-</td><td>신규</td></tr>
+      </tbody>
+    </table>
+    <h3 style="font-size:13px;margin-top:16px;">예약된 미래 모듈 코드</h3>
+    <table>
+      <thead><tr><th>코드</th><th>모듈명</th></tr></thead>
+      <tbody><tr><td class="code-cell">AA</td><td>정산</td></tr><tr><td class="code-cell">CM</td><td>클레임</td></tr><tr><td class="code-cell">HD</td><td>배송</td></tr></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>📋 배치 진행 계획</h2>
+    <table>
+      <thead><tr><th>배치</th><th>범위</th><th>상세</th><th>상태</th></tr></thead>
+      <tbody>
+        <tr><td><b>배치 1</b></td><td>PD 카테고리 갭 보완 + OP/CO 캐노니컬 이전</td><td>PD에 카테고리 113~117 신규 6건 보완(TC_PD_126~131), DSP legacy 40건→PD로 통합 이전(TC_PD_086~125), CRT legacy 15건→OP로 이전(TC_OP_001~015), SYS legacy 20건→CO로 이전(TC_CO_001~020). PD/MB 기존 항목 포함 전체 system:FO backfill. 자동화 코드도 함께 이전(OP.spec.js 신설, DSP분 PD.spec.js에 병합).</td><td><span class="pill wait">완료</span></td></tr><tr><td><b>배치 2</b></td><td>MY(마이페이지) + CS(고객센터/정책) 신규</td><td>마이페이지 서브 9개 화면 상세 관찰 및 TC 작성, 고객센터/정책 4개 페이지 TC 작성.</td><td><span class="pill new">다음 진행</span></td></tr><tr><td><b>배치 3~</b></td><td>Admin(BO) 1차 우선순위</td><td>회원관리(MB) · 상품관리(PD) · 주문리스트(OP) · 클레임리스트 · 쿠폰관리(PR) · 전시관리(PD) — 메뉴별 상세 관찰 후 순차 진행. 이후 시스템/워크플로우 등 2차 메뉴는 별도 요청 시 진행.</td><td><span class="pill wait">대기</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데모사이트 QA TC 뷰어 - 상품전시(PD)</title>
+<style>
+  :root{
+    --bg:#f6f8fa; --panel:#ffffff; --text:#1f2328; --muted:#656d76;
+    --border:#d0d7de; --accent:#0969da; --accent2:#0550ae;
+    --p1:#cf222e; --p2:#9a6700; --p3:#0969da;
+    --pass:#1a7f37; --fail:#cf222e; --blocked:#9a6700; --na:#8c959f; --none:#d0d7de;
+    --headbg:#f6f8fa;
+  }
+  html[data-theme="dark"]{
+    --bg:#0d1117; --panel:#161b22; --text:#e6edf3; --muted:#8b949e;
+    --border:#30363d; --accent:#58a6ff; --accent2:#79c0ff;
+    --p1:#f85149; --p2:#d29922; --p3:#58a6ff;
+    --headbg:#161b22;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--bg);color:var(--text);}
+  header{position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .header-title{display:flex;align-items:center;gap:12px;}
+  .header-badge{width:34px;height:34px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  header h1{font-size:16px;margin:0;line-height:1.3;}
+  header .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+  .header-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  button{cursor:pointer;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:20px;padding:7px 14px;font-size:12.5px;font-weight:600;white-space:nowrap;}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+  button.primary:hover{background:var(--accent2);}
+  button:hover{filter:brightness(0.97);}
+  .container{padding:16px 20px 60px;max-width:1600px;margin:0 auto;}
+
+  .kpis{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0;}
+  .kpi{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px 16px;}
+  .kpi .num{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .kpi .label{font-size:12px;color:var(--muted);}
+  .kpi.p1 .num{color:var(--p1);} .kpi.p2 .num{color:var(--p2);} .kpi.p3 .num{color:var(--p3);}
+  .kpi.def-new .num{color:var(--p1);} .kpi.def-progress .num{color:var(--accent);} .kpi.def-done .num{color:var(--pass);}
+
+  .stats-wrap{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:16px;overflow-x:auto;}
+  .stats-wrap h3{margin:0 0 10px;font-size:14px;}
+  table.stats{width:100%;border-collapse:collapse;font-size:12px;}
+  table.stats th,table.stats td{border:1px solid var(--border);padding:6px 8px;text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums;}
+  table.stats th{background:var(--headbg);}
+  table.stats td.modname{text-align:left;}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+  .tab-btn{border-radius:20px;font-size:12px;padding:6px 12px;}
+  .tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .tab-btn.tab-defect{border-color:var(--fail);color:var(--fail);}
+  .tab-btn.tab-defect.active{background:var(--fail);border-color:var(--fail);color:#fff;}
+
+  .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+  .toolbar .count{font-size:13px;color:var(--muted);}
+
+  .filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .filter-bar input[type="text"]{flex:1;min-width:200px;padding:8px 10px;font-size:13px;border-radius:8px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+  .filter-bar select{padding:8px 10px;font-size:13px;border-radius:8px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+
+  /* 표준 "고정 헤더 스프레드시트" 패턴: 테이블 영역 자체를 독립 스크롤 박스로 만들고,
+     그 박스 기준(top:0)으로 헤더를 고정 — 페이지 전체 스크롤/외부 헤더 높이에 의존하지 않음.
+     이전에 JS로 외부 헤더 높이를 계산해 top 오프셋을 맞추던 방식은 타이밍/브라우저 편차로
+     계속 깨졌기 때문에 이 방식으로 교체 (2026-08-18) */
+  .table-wrap{background:var(--panel);border:1px solid var(--border);border-radius:10px;max-height:70vh;overflow:auto;}
+  table.tc{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:12px;}
+  table.tc th,table.tc td{border-bottom:1px solid var(--border);border-right:1px solid var(--border);padding:6px 7px;vertical-align:top;word-break:break-word;overflow-wrap:break-word;white-space:pre-wrap;}
+  table.tc th:first-child,table.tc td:first-child{border-left:1px solid var(--border);}
+  table.tc thead th{border-top:1px solid var(--border);}
+  table.tc th{background:var(--headbg);position:sticky;top:0;z-index:10;font-size:11.5px;}
+  table.tc td.center{text-align:center;}
+  .badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:11px;color:#fff;}
+  .badge.P1{background:var(--p1);} .badge.P2{background:var(--p2);} .badge.P3{background:var(--p3);}
+  select.result-select{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+  select.result-select[data-val="Pass"]{color:var(--pass);font-weight:600;}
+  select.result-select[data-val="Fail"]{color:var(--fail);font-weight:600;}
+  select.result-select[data-val="Blocked"]{color:var(--blocked);font-weight:600;}
+  input.free-input{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+
+  .col-no{width:3%} .col-id{width:6%} .col-cat{width:3%} .col-mod{width:4%} .col-sub{width:4%}
+  .col-platform{width:3%} .col-type{width:3%} .col-title{width:11%} .col-origin{width:3%} .col-ref{width:4%}
+  .col-priority{width:3%} .col-precond{width:6%} .col-proc{width:9%} .col-expected{width:9%}
+  .col-testdata{width:6%} .col-result{width:5%} .col-assignee{width:4%} .col-issue{width:9%} .col-issuelink{width:9%}
+
+  .col-def-id{width:9%} .col-def-mod{width:6%} .col-def-sev{width:5%} .col-def-status{width:8%}
+  .col-def-summary{width:18%} .col-def-detail{width:24%} .col-def-thumb{width:8%} .col-def-date{width:7%} .col-def-tc{width:7%} .col-def-link{width:8%}
+  img.def-thumb{width:100%;max-height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer;display:block;}
+  a.defect-tc-link{color:var(--accent);text-decoration:underline;cursor:pointer;}
+  select.defect-status-select{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+  select.defect-status-select[data-val="신규"]{color:var(--p1);font-weight:600;}
+  select.defect-status-select[data-val="처리중"]{color:var(--accent);font-weight:600;}
+  select.defect-status-select[data-val="재검증대기"]{color:var(--p2);font-weight:600;}
+  select.defect-status-select[data-val="완료"]{color:var(--pass);font-weight:600;}
+  select.defect-status-select[data-val="보류"]{color:var(--muted);font-weight:600;}
+  select.defect-status-select[data-val="재발생"]{color:var(--fail);font-weight:700;}
+  #defectTable tbody tr{cursor:pointer;}
+  #defectTable tbody tr:hover{background:var(--headbg);}
+  #defectModalImg{max-width:100%;border-radius:8px;border:1px solid var(--border);display:block;margin-top:10px;}
+  #defectModalHistory{margin:8px 0 0;padding-left:18px;font-size:12px;color:var(--muted);line-height:1.7;}
+
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--panel);border-radius:12px;max-width:720px;width:92%;max-height:80vh;overflow-y:auto;padding:20px;}
+  .modal h2{margin-top:0;font-size:16px;}
+  .modal table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px;}
+  .modal table th,.modal table td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top;}
+  .modal table th{background:var(--headbg);}
+  .modal .modal-note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6;}
+  .modal-close{float:right;}
+  .status-confirmed{color:var(--pass);font-weight:600;}
+  .status-unconfirmed{color:var(--muted);}
+
+  .footnote{font-size:11.5px;color:var(--muted);margin-top:14px;line-height:1.6;}
+  .version-note{font-size:11px;color:var(--muted);}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-title">
+    <div class="header-badge">🧪</div>
+    <div>
+      <h1>데모사이트 QA TC 뷰어 <span style="color:var(--accent);">v4</span> — 상품전시(PD)</h1>
+      <div class="sub">Interactive TC Viewer · 총 56건 (기존 26 / 신규 30)</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button id="btnAccMatrix">👤 테스트 계정 매트릭스</button>
+    <button id="btnFlowMap">🧭 User Flow Map</button>
+    <a href="http://192.168.10.116:30180/" target="_blank" rel="noopener"><button type="button">🔗 테스트사이트 바로가기</button></a>
+    <a href="results/index.html"><button type="button">📜 실행결과 이력</button></a>
+    <button id="btnCsv" class="primary">📥 CSV 다운로드</button>
+    <button id="btnJsonSave" class="primary">💾 JSON 저장</button>
+    <button id="btnJsonLoad">📂 JSON 파일 연결/불러오기</button>
+    <input type="file" id="jsonFileInput" accept="application/json" style="display:none;">
+    <span id="tcFileStatus" style="font-size:11px;color:var(--muted);">미연결 (저장 시 다운로드)</span>
+    <button id="btnTheme">🌙 다크모드</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="stats-wrap" id="statsWrapBlock">
+    <h3>소분류별 실행현황 통계</h3>
+    <div style="overflow-x:auto;">
+    <table class="stats" id="statsTable">
+      <thead>
+        <tr><th>소분류</th><th>전체</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>Fail율</th></tr>
+      </thead>
+      <tbody id="statsBody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis">
+    <div class="kpi"><div class="num" id="kpiTotal">0</div><div class="label">전체 TC</div></div>
+    <div class="kpi p1"><div class="num" id="kpiP1">0</div><div class="label">P1</div></div>
+    <div class="kpi p2"><div class="num" id="kpiP2">0</div><div class="label">P2</div></div>
+    <div class="kpi p3"><div class="num" id="kpiP3">0</div><div class="label">P3</div></div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="filter-bar" id="filterBarBlock">
+    <input id="searchInput" type="text" placeholder="TC ID / 테스트 항목 키워드 검색">
+    <select id="filterPriority"><option value="">우선순위 전체</option></select>
+    <select id="filterType"><option value="">유형 전체</option></select>
+    <select id="filterOrigin"><option value="">구분 전체</option></select>
+    <button id="btnResetFilter">초기화</button>
+  </div>
+
+  <div class="toolbar" id="toolbarBlock">
+    <div class="count" id="filteredCount"></div>
+  </div>
+
+  <div class="table-wrap" id="tcTableWrap">
+    <table class="tc">
+      <thead>
+        <tr>
+          <th class="col-no">No.</th>
+          <th class="col-id">TC ID</th>
+          <th class="col-cat">대분류</th>
+          <th class="col-mod">중분류</th>
+          <th class="col-sub">소분류</th>
+          <th class="col-platform">플랫폼</th>
+          <th class="col-type">유형</th>
+          <th class="col-title">테스트 항목</th>
+          <th class="col-origin">구분</th>
+          <th class="col-ref">기준문서</th>
+          <th class="col-priority">우선순위</th>
+          <th class="col-precond">사전조건</th>
+          <th class="col-proc">테스트 수행 절차</th>
+          <th class="col-expected">기대 결과</th>
+          <th class="col-testdata">테스트 데이터</th>
+          <th class="col-result">실행결과</th>
+          <th class="col-assignee">담당자</th>
+          <th class="col-issue">이슈내용</th>
+          <th class="col-issuelink">이슈링크</th>
+        </tr>
+      </thead>
+      <tbody id="tcBody"></tbody>
+    </table>
+  </div>
+
+  <div id="defectPanel" style="display:none;">
+    <div class="kpis" id="defectKpis">
+      <div class="kpi"><div class="num" id="defKpiTotal">0</div><div class="label">전체 결함</div></div>
+      <div class="kpi def-new"><div class="num" id="defKpiNew">0</div><div class="label">신규</div></div>
+      <div class="kpi def-progress"><div class="num" id="defKpiProgress">0</div><div class="label">처리중</div></div>
+      <div class="kpi def-done"><div class="num" id="defKpiDone">0</div><div class="label">완료</div></div>
+    </div>
+
+    <div class="tabs" id="defectFilterPills"></div>
+
+    <div class="toolbar" style="gap:8px;">
+      <button id="btnDefectSave" class="primary">💾 결함 저장</button>
+      <button id="btnDefectFileConnect">📂 defects.json 파일 연결/불러오기</button>
+      <span id="defectFileStatus" style="font-size:11px;color:var(--muted);">미연결 (저장 시 다운로드)</span>
+    </div>
+
+    <div class="toolbar">
+      <div class="count" id="defectFilteredCount"></div>
+    </div>
+
+    <div class="table-wrap" id="defectTableWrapOuter">
+      <table class="tc" id="defectTable">
+        <thead>
+          <tr>
+            <th class="col-def-id">결함ID</th>
+            <th class="col-def-mod">모듈</th>
+            <th class="col-def-sev">심각도</th>
+            <th class="col-def-status">상태</th>
+            <th class="col-def-summary">요약</th>
+            <th class="col-def-detail">상세내용</th>
+            <th class="col-def-thumb">스크린샷</th>
+            <th class="col-def-date">발견일</th>
+            <th class="col-def-tc">관련 TC ID</th>
+            <th class="col-def-link">비고</th>
+          </tr>
+        </thead>
+        <tbody id="defectBody"></tbody>
+      </table>
+    </div>
+    <div class="footnote">※ 결함 행 클릭 시 스크린샷을 확인할 수 있습니다 (상태/담당자/이슈링크 드롭다운·입력란 클릭 시에는 열리지 않습니다). "관련 TC ID"를 클릭하면 해당 TC 목록 위치로 이동합니다.</div>
+  </div>
+
+  <div class="footnote">
+    ※ 실행결과/담당자/이슈내용/이슈링크/결함 상태는 기본적으로 브라우저 메모리에만 저장되어 새로고침 시 초기화됩니다. "JSON 파일 연결/불러오기"로 원본 파일을 한 번 연결하면, 이후 "저장" 클릭 시 다운로드 없이 그 파일에 바로 반영됩니다(Chrome/Edge 등 File System Access API 지원 브라우저 한정 — 미지원 브라우저는 다운로드로 대체).<br>
+    ※ [확인필요] 태그가 붙은 TC는 근거 문서/화면이 아직 확보되지 않은 항목입니다 (AGENTS.md 7항). 스펙 확정 시 재검증이 필요합니다.<br>
+    <span class="version-note">meta.changeHistory: v1(2026-08-18) 레거시 파일 데모사이트_TC_ALL_2026-08-14.json에서 이전 (카테고리목록/상품상세 범위, 26건) / v2(2026-08-18) Phase 4: 상품전시 신규 시나리오 25건 추가 (TC_PD_056~080) — 카테고리목록 갭 보완 15건, 상품유닛 신규 소분류 10건 / v3(2026-08-18) 기존/신규 구분(origin) 필드 추가, 기준문서는 정책서/화면설계서 있을 때만 기재하도록 변경(전부 "-"), 화면표시용 순번(displayNo) 추가, HTML 뷰어 sticky 헤더 겹침 버그 수정. tcId 자체는 프로젝트 전체 TC_PD 번호 충돌 방지를 위해 비연속(001~003/028~030/031~050/056~080) 유지. / v4(2026-08-19) 상품상세 모듈 신규 시나리오 5건 추가 (TC_PD_081~085) — /products/96 관측 기반: 상품설명/평점표시/NEW배지/위시리스트(로그인·비로그인)</span>
+  </div>
+</div>
+
+<div class="modal-overlay" id="defectModalOverlay">
+  <div class="modal">
+    <button class="modal-close" data-close="defect">닫기</button>
+    <h2 id="defectModalTitle"></h2>
+    <div id="defectModalSummary" style="font-size:13px;"></div>
+    <img id="defectModalImg" alt="결함 스크린샷" onerror="this.style.display='none'; document.getElementById('defectModalImgMissing').style.display='block';">
+    <div class="modal-note" id="defectModalImgMissing" style="display:none;">※ 스크린샷 파일을 찾을 수 없습니다.</div>
+    <div class="modal-note">이력</div>
+    <ul id="defectModalHistory"></ul>
+  </div>
+</div>
+
+<div class="modal-overlay" id="accModalOverlay">
+  <div class="modal">
+    <button class="modal-close" data-close="acc">닫기</button>
+    <h2>테스트 계정 매트릭스</h2>
+    <table>
+      <thead><tr><th>계정 ID</th><th>역할</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td>jspark81</td><td>일반회원</td><td>사용자 제공 (2026-08-18), 로그인 상태 검증용</td></tr>
+      </tbody>
+    </table>
+    <div class="modal-note">※ 비밀번호는 보안상 이 화면에 표기하지 않습니다 — <code>tc-automation데모사이트TC	estAccounts.json</code>에서 확인 (git 미추적).</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="flowModalOverlay">
+  <div class="modal">
+    <button class="modal-close" data-close="flow">닫기</button>
+    <h2>User Flow Map (상품전시 기준)</h2>
+    <table>
+      <thead><tr><th>단계</th><th>내용</th><th>확인 상태</th></tr></thead>
+      <tbody>
+        <tr><td>1. 카테고리 진입</td><td>/categories/111 진입 → 카테고리명("여성") 타이틀, 필터(색상/사이즈/브랜드/가격), 정렬 4종, 상품 목록 노출</td><td class="status-confirmed">Playwright 관측 확인</td></tr>
+        <tr><td>2. 목록 탐색</td><td>필터/정렬/페이지네이션 적용 → 조건에 맞는 상품유닛(카드) 재노출</td><td class="status-confirmed">Playwright 관측 확인</td></tr>
+        <tr><td>3. 상품상세 진입</td><td>상품 카드 클릭 → /products/{id} 이동, 상품명·가격·브랜드·브레드크럼 노출</td><td class="status-confirmed">Playwright 관측 확인 (TC_PD_072)</td></tr>
+        <tr><td>4. 위시리스트/장바구니</td><td>로그인/비로그인 상태별 위시리스트 버튼 클릭 처리</td><td class="status-unconfirmed">[확인필요] 미실행 — Phase 5 대기 (TC_PD_079/080)</td></tr>
+        <tr><td>5. 결제/주문완료</td><td>-</td><td class="status-unconfirmed">[확인필요] 미관찰 — 장바구니·결제 페이지 관찰 필요</td></tr>
+      </tbody>
+    </table>
+    <div class="modal-note">※ "확인 상태"가 [확인필요]인 단계는 아직 Playwright로 관찰/실행하지 않아 추측으로 채우지 않았습니다 (AGENTS.md 7항).</div>
+  </div>
+</div>
+
+<script>
+const TC_DATA = [{"tcId":"TC_PD_001","majorCategory":"상품","midCategory":"상품상세","minorCategory":"기본정보","platform":"Web","type":"UI","item":"상품상세 기본 정보(상품명/브랜드/가격/할인율) 노출 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /products/99 진입","expected":"1) 상품명 \"빈티지 체크 셔츠\", 브랜드 \"H&M\", 할인가 139,000원, 정가 159,000원(취소선), 할인율 13%가 노출된다","testData":"상품코드=PD0000039","result":"Pass","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":1},{"tcId":"TC_PD_002","majorCategory":"상품","midCategory":"상품상세","minorCategory":"상품코드","platform":"Web","type":"UI","item":"상품상세 상품코드 표기 형식 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /products/99 진입\n2) 상품코드 영역 확인","expected":"1) \"상품 코드: PD0000039\" 형식으로 노출된다","testData":"특이 테스트 데이터 없음","result":"Pass","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":2},{"tcId":"TC_PD_003","majorCategory":"상품","midCategory":"상품상세","minorCategory":"평점/리뷰수","platform":"Web","type":"UI","item":"상품상세 평점 및 리뷰수 노출 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /products/99 진입\n2) 별점/리뷰수 영역 확인","expected":"1) ★★★★★ 별점과 \"(311 리뷰)\" 건수가 노출된다","testData":"특이 테스트 데이터 없음","result":"Pass","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":3},{"tcId":"TC_PD_028","majorCategory":"예외·회귀","midCategory":"상품상세","minorCategory":"미존재상품","platform":"Web","type":"기능","item":"존재하지 않는 상품ID 접근 시 처리 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /products/999999 (존재하지 않는 상품ID) 접속","expected":"1) 404 또는 \"상품을 찾을 수 없습니다\" 안내 화면이 노출되고 500 서버 에러가 발생하지 않는다","testData":"상품ID=999999(미존재)","result":"Fail","assignee":"","issueSummary":"존재하지 않는 상품ID 접근 시 500 에러 발생 (기대: 404/안내 화면)","issueLink":"DEF_데모사이트_003","origin":"기존","displayNo":4},{"tcId":"TC_PD_029","majorCategory":"품질·비기능","midCategory":"상품상세","minorCategory":"콘솔에러","platform":"Web","type":"회귀","item":"상품상세 진입 시 콘솔/네트워크 에러 없음 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /products/99 진입 후 개발자도구 Console/Network 탭 확인","expected":"1) 콘솔 에러 및 4xx/5xx 응답이 없다","testData":"특이 테스트 데이터 없음","result":"Pass","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":5},{"tcId":"TC_PD_030","majorCategory":"상품","midCategory":"상품상세","minorCategory":"브레드크럼","platform":"Web","type":"기능","item":"브레드크럼 클릭 이동 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /products/99 진입\n2) 브레드크럼 \"남성\" 클릭","expected":"1) /categories/110 (남성 카테고리) 페이지로 이동한다","testData":"특이 테스트 데이터 없음","result":"Pass","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":6},{"tcId":"TC_PD_031","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"총건수","platform":"Web","type":"UI","item":"카테고리 목록 총 건수 표기 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /categories/110 진입","expected":"1) \"총 30개\" 형태로 실제 목록 건수가 표기된다","testData":"카테고리=남성(110), 총건수=30","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":7},{"tcId":"TC_PD_032","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"색상필터","platform":"Web","type":"기능","item":"색상 필터(파랑) 적용 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/110 진입\n2) 색상 \"파랑\" 체크박스 선택","expected":"1) 파랑 색상 상품만 목록에 필터링되어 노출된다","testData":"필터=색상:파랑","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":8},{"tcId":"TC_PD_033","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"브랜드필터경계","platform":"Web","type":"Boundary","item":"브랜드 필터 전체(7개) 동시 체크 시 처리 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /categories/110 진입\n2) 브랜드 필터 7개 전체 체크박스 선택","expected":"1) 필터 없이 노출되는 것과 동일하게 카테고리 전체 상품이 노출되고 에러가 발생하지 않는다","testData":"필터=브랜드:전체 7개","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":9},{"tcId":"TC_PD_034","majorCategory":"품질·비기능","midCategory":"카테고리목록","minorCategory":"보안","platform":"Web","type":"보안","item":"카테고리 목록 URL 쿼리 파라미터 비정상 값(가격 음수) 주입 시 안전 처리 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/110?minPrice=-99999 형태로 가격 파라미터에 음수 값을 직접 주입하여 접속","expected":"1) 서버 에러(500) 없이 무시되거나 최소값(0원) 기준으로 안전하게 처리된다","testData":"쿼리파라미터 minPrice=-99999","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":10},{"tcId":"TC_PD_035","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"사이즈필터","platform":"Web","type":"기능","item":"사이즈 필터 다중 선택(S+M) 조합 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/110 진입\n2) 사이즈 \"S\", \"M\" 체크박스 동시 선택","expected":"1) S 또는 M 사이즈를 보유한 상품이 목록에 노출된다","testData":"필터=사이즈:S+M","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":11},{"tcId":"TC_PD_036","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"스타일필터","platform":"Web","type":"기능","item":"스타일 필터(모던/올드) 적용 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /categories/110 진입\n2) 스타일 \"모던\" 체크박스 선택","expected":"1) 모던 스타일 상품만 목록에 필터링되어 노출된다","testData":"필터=스타일:모던","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":12},{"tcId":"TC_PD_037","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"브랜드필터","platform":"Web","type":"기능","item":"브랜드 필터 다중 선택(ZARA+H&M) 조합 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/110 진입\n2) 브랜드 \"ZARA\", \"H&M\" 체크박스 동시 선택","expected":"1) ZARA 또는 H&M 브랜드 상품만 목록에 필터링되어 노출된다","testData":"필터=브랜드:ZARA+H&M","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":13},{"tcId":"TC_PD_038","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"가격필터","platform":"Web","type":"Boundary","item":"가격 슬라이더 최소값(0원) 경계값 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/110 진입\n2) 가격 슬라이더 최소값을 0원으로 설정","expected":"1) 0원 이상 전체 상품이 목록에 노출된다","testData":"가격범위=0원~430,000원(전체)","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":14},{"tcId":"TC_PD_039","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"가격필터","platform":"Web","type":"Boundary","item":"가격 슬라이더 최대값(430,000원) 경계값 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/110 진입\n2) 가격 슬라이더 최대값을 430,000원으로 설정","expected":"1) 최대값 이하 전체 상품이 목록에 노출되고 상한을 초과하는 상품은 제외된다","testData":"가격상한=430,000원","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":15},{"tcId":"TC_PD_040","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"복합필터","platform":"Web","type":"기능","item":"색상+사이즈+브랜드 3중 조합 필터 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/110 진입\n2) 색상 \"검정\", 사이즈 \"M\", 브랜드 \"ZARA\" 동시 선택","expected":"1) 3개 조건을 모두 만족하는 상품만 목록에 노출된다","testData":"필터=색상:검정+사이즈:M+브랜드:ZARA","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":16},{"tcId":"TC_PD_041","majorCategory":"예외·회귀","midCategory":"카테고리목록","minorCategory":"결과없음","platform":"Web","type":"UI","item":"필터 결과 없음 Empty State 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/110 진입\n2) 조합 시 결과가 없는 필터(예: 가격 0~1,000원 + 브랜드 Dior) 적용","expected":"1) \"조건에 맞는 상품이 없습니다\" 등 Empty State 안내가 노출되고 에러가 발생하지 않는다","testData":"필터=가격:0~1,000원+브랜드:Dior","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":17},{"tcId":"TC_PD_042","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"정렬","platform":"Web","type":"기능","item":"정렬 \"최신순\" 적용 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/110 진입\n2) 정렬 셀렉트에서 \"최신순\" 선택","expected":"1) 등록일 최신순으로 목록이 재정렬된다","testData":"특이 테스트 데이터 없음","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":18},{"tcId":"TC_PD_043","majorCategory":"예외·회귀","midCategory":"카테고리목록","minorCategory":"정렬+필터조합","platform":"Web","type":"회귀","item":"[확인필요] 필터 적용 후 정렬 변경 시 필터 조건 유지 여부 검증","baseDoc":"-","priority":"P2","precondition":"색상 필터가 이미 적용된 상태","steps":"1) /categories/110 진입\n2) 색상 \"파랑\" 필터 적용\n3) 정렬을 \"이름순\"으로 변경","expected":"1) 필터링된 상품만 재정렬되어야 하나, 정렬 변경 시 필터가 초기화될 가능성이 있음\n* [확인필요] 필터·정렬 조합 처리 방식 확정 필요","testData":"특이 테스트 데이터 없음","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":19},{"tcId":"TC_PD_044","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"정렬","platform":"Web","type":"기능","item":"정렬 \"낮은가격순\" 적용 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/110 진입\n2) 정렬 셀렉트에서 \"낮은가격순\" 선택","expected":"1) 판매가 오름차순으로 목록이 재정렬된다","testData":"특이 테스트 데이터 없음","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":20},{"tcId":"TC_PD_045","majorCategory":"품질·비기능","midCategory":"카테고리목록","minorCategory":"보안","platform":"Web","type":"보안","item":"정렬 쿼리 파라미터 비정상 값 주입 시 안전 처리 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/110?sort=\u003cscript>alert(1)\u003c/script> 형태로 정렬 파라미터에 스크립트 값을 직접 주입하여 접속","expected":"1) 스크립트가 실행되지 않고(alert 미노출) 기본 정렬값으로 안전하게 대체 처리된다","testData":"쿼리파라미터 sort=\u003cscript>alert(1)\u003c/script>","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":21},{"tcId":"TC_PD_046","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"페이지네이션","platform":"Web","type":"기능","item":"페이지네이션 1→2페이지 이동 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /categories/110 진입\n2) 페이지네이션 \"2\" 클릭","expected":"1) 2페이지 상품 목록으로 갱신된다","testData":"특이 테스트 데이터 없음","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":22},{"tcId":"TC_PD_047","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"페이지네이션","platform":"Web","type":"Boundary","item":"페이지네이션 마지막 페이지 경계값 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /categories/110 진입\n2) 페이지네이션 마지막 페이지(4) 클릭","expected":"1) 4페이지 목록이 노출되고 \"다음\" 버튼이 비활성화(또는 클릭 무반응)된다","testData":"전체페이지=4","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":23},{"tcId":"TC_PD_048","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"위시리스트","platform":"Web","type":"기능","item":"[확인필요] 카테고리 목록 상품 카드 위시리스트 추가 검증","baseDoc":"-","priority":"P3","precondition":"Acc_NonMember (비로그인)","steps":"1) /categories/110 진입\n2) 상품 카드 \"위시리스트 추가\" 버튼 클릭","expected":"1) 결과 확인 필요\n* [확인필요] 로그인 유도 여부 미확정","testData":"특이 테스트 데이터 없음","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":24},{"tcId":"TC_PD_049","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"상태값전개","platform":"Web","type":"회귀","item":"여성 카테고리 목록 진입 및 필터 노출 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /categories/111 (여성) 진입","expected":"1) 여성 카테고리 전용 필터/상품 목록이 정상 노출된다(남성 카테고리 필터값과 혼입되지 않음)","testData":"특이 테스트 데이터 없음","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":25},{"tcId":"TC_PD_050","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"상태값전개","platform":"Web","type":"회귀","item":"액세서리 카테고리 목록 진입 및 필터 노출 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /categories/112 (액세서리) 진입","expected":"1) 액세서리 카테고리 전용 필터/상품 목록이 정상 노출된다","testData":"특이 테스트 데이터 없음","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":26},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_056","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"정렬","type":"기능","item":"정렬 \"최신순\" 적용 시 실제 정렬 결과 데이터 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입\n2) 정렬 기준을 \"최신순\"으로 변경","expected":"1) 노출된 상품 목록이 등록일 기준 최신순으로 정렬되어 있다","testData":"특이 테스트 데이터 없음","origin":"신규","displayNo":27},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_057","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"정렬","type":"기능","item":"정렬 \"이름순\" 적용 시 실제 정렬 결과 데이터 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입\n2) 정렬 기준을 \"이름순\"으로 변경","expected":"1) 노출된 상품명이 가나다/알파벳 순으로 정렬되어 있다","testData":"특이 테스트 데이터 없음","origin":"신규","displayNo":28},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_058","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"정렬","type":"기능","item":"정렬 \"낮은가격순\" 적용 시 실제 정렬 결과 데이터 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입\n2) 정렬 기준을 \"낮은가격순\"으로 변경","expected":"1) 노출된 상품의 판매가가 오름차순으로 정렬되어 있다","testData":"특이 테스트 데이터 없음","origin":"신규","displayNo":29},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_059","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"정렬","type":"기능","item":"정렬 \"높은가격순\" 적용 시 실제 정렬 결과 데이터 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입\n2) 정렬 기준을 \"높은가격순\"으로 변경","expected":"1) 노출된 상품의 판매가가 내림차순으로 정렬되어 있다","testData":"특이 테스트 데이터 없음","origin":"신규","displayNo":30},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_060","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"색상필터","type":"기능","item":"색상 필터(파랑) 적용 시 노출 상품 데이터 정합성 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입\n2) 색상 필터 \"파랑\" 체크","expected":"1) 노출된 상품이 모두 색상 옵션에 \"파랑\"을 포함한다","testData":"색상=파랑","origin":"신규","displayNo":31},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_061","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"사이즈필터","type":"기능","item":"사이즈 필터(S+M) 다중 선택 적용 시 노출 상품 데이터 정합성 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입\n2) 사이즈 필터 \"S\", \"M\" 동시 체크","expected":"1) 노출된 상품이 모두 사이즈 옵션에 S 또는 M을 포함한다","testData":"사이즈=S,M","origin":"신규","displayNo":32},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_062","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"브랜드필터","type":"기능","item":"브랜드 필터(ZARA) 적용 시 노출 상품 데이터 정합성 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입\n2) 브랜드 필터 \"ZARA\" 체크","expected":"1) 노출된 상품이 모두 브랜드 \"ZARA\"이다","testData":"브랜드=ZARA","origin":"신규","displayNo":33},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_063","majorCategory":"예외·회귀","midCategory":"카테고리목록","minorCategory":"평점필터","type":"UI","item":"[확인필요] 평점 필터 영역 실제 옵션 노출 여부 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입\n2) 필터 영역의 \"평점\" 섹션 확인","expected":"1) \"평점\" 필터 하위에 선택 가능한 옵션(별점 단계 등)이 노출된다 — 스펙 확정 시 재검증 필요 (현재는 제목만 노출되고 옵션 컨테이너가 비어있음이 관측됨: \u003cdiv class=\"space-y-3\">\u003c/div>)","testData":"특이 테스트 데이터 없음","origin":"신규","displayNo":34},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_064","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"가격슬라이더","type":"Boundary","item":"가격 슬라이더 최소값(0원) 경계값 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입\n2) 가격 슬라이더를 최소값(0원)으로 설정","expected":"1) 0원 이상 상품이 정상적으로 노출된다","testData":"가격=0원(최소)","origin":"신규","displayNo":35},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_065","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"가격슬라이더","type":"Boundary","item":"가격 슬라이더 최대값(460,000원) 경계값 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입\n2) 가격 슬라이더를 최대값(460,000원)으로 설정","expected":"1) 460,000원 이하 상품이 정상적으로 노출된다","testData":"가격=460,000원(최대)","origin":"신규","displayNo":36},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_066","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"가격슬라이더","type":"Boundary","item":"가격 슬라이더 임의 중간값(230,000원) 구간 적용 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입\n2) 가격 슬라이더를 0원~230,000원 구간으로 설정","expected":"1) 설정한 가격 범위(0원~230,000원) 조건에 부합하는 상품만 노출된다","testData":"가격=0~230,000원(임의 중간값)","origin":"신규","displayNo":37},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_067","majorCategory":"예외·회귀","midCategory":"카테고리목록","minorCategory":"필터유지","type":"회귀","item":"필터 적용 후 페이지 이동 시 필터 조건 유지 검증","baseDoc":"-","priority":"P2","precondition":"카테고리 목록에서 브랜드 필터가 적용된 상태","steps":"1) 브랜드 필터 \"ZARA\" 체크\n2) 페이지네이션 \"2\" 클릭","expected":"1) 2페이지 이동 후에도 브랜드 필터 \"ZARA\" 선택 상태가 유지된다\n2) 2페이지에 노출된 상품도 모두 브랜드 \"ZARA\"이다","testData":"브랜드=ZARA","origin":"신규","displayNo":38},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_068","majorCategory":"예외·회귀","midCategory":"카테고리목록","minorCategory":"페이지네이션","type":"회귀","item":"페이지네이션 이동 시 목록 중복·누락 없음 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입 후 1페이지 상품 목록 기록\n2) 페이지네이션 \"2\" 클릭 후 상품 목록 기록","expected":"1) 1페이지와 2페이지에 노출된 상품이 서로 중복되지 않는다","testData":"특이 테스트 데이터 없음","origin":"신규","displayNo":39},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_069","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"다중필터","type":"기능","item":"다중 필터(브랜드+가격) 조합 적용 시 목록 노출 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입\n2) 브랜드 필터 \"ZARA\" 체크\n3) 가격 슬라이더를 0원~200,000원으로 설정","expected":"1) 노출된 상품이 브랜드=ZARA 이고 가격 0~200,000원 조건을 모두 만족한다","testData":"브랜드=ZARA, 가격=0~200,000원","origin":"신규","displayNo":40},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_070","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"총건수","type":"기능","item":"필터 적용 시 총 건수 표시가 실제 개수와 일치 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입 시 \"총 20개\" 표기 확인\n2) 브랜드 필터 \"ZARA\" 체크","expected":"1) 필터 적용 후 표시되는 총 건수가 실제 노출된 상품 카드 개수와 일치한다","testData":"브랜드=ZARA","origin":"신규","displayNo":41},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_071","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"카테고리타이틀","type":"UI","item":"카테고리 목록 진입 시 카테고리명(\"여성\") 타이틀 노출 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입","expected":"1) 화면 상단에 현재 카테고리명 \"여성\"이 타이틀(h2)로 노출된다","testData":"특이 테스트 데이터 없음","origin":"신규","displayNo":42},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_072","majorCategory":"상품","midCategory":"카테고리목록","minorCategory":"상세진입","type":"기능","item":"목록 내 상품 클릭 시 상품상세 정상 진입 및 정보 일치 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입\n2) 상품 카드 \"어반 실루엣 여성 블루종 자켓\" 클릭","expected":"1) 상품상세 페이지(/products/111)로 정상 이동한다\n2) 상세 페이지의 상품명/가격/브랜드가 목록 카드에 표기된 값과 일치한다","testData":"상품=어반 실루엣 여성 블루종 자켓(상품코드 PD0000052)","origin":"신규","displayNo":43},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_073","majorCategory":"상품","midCategory":"상품유닛","minorCategory":"NEW배지","type":"UI","item":"상품유닛 NEW 배지 노출 검증","baseDoc":"-","priority":"P3","precondition":"NEW 배지가 부여된 상품이 목록에 존재하는 상태","steps":"1) /categories/111 진입\n2) 상품 카드의 배지 영역 확인","expected":"1) 신규 등록 상품 카드에 \"NEW\" 배지가 노출된다","testData":"특이 테스트 데이터 없음","origin":"신규","displayNo":44},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_074","majorCategory":"상품","midCategory":"상품유닛","minorCategory":"BEST배지","type":"UI","item":"상품유닛 BEST 배지 노출 검증","baseDoc":"-","priority":"P3","precondition":"BEST 배지가 부여된 상품이 목록에 존재하는 상태","steps":"1) /categories/111 진입\n2) 상품 카드의 배지 영역 확인","expected":"1) 인기 상품 카드에 \"BEST\" 배지가 노출된다","testData":"특이 테스트 데이터 없음","origin":"신규","displayNo":45},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_075","majorCategory":"상품","midCategory":"상품유닛","minorCategory":"가격표기","type":"UI","item":"상품유닛 정가+할인가+할인율 동시 표기 검증","baseDoc":"-","priority":"P2","precondition":"할인이 적용된 상품이 목록에 존재하는 상태","steps":"1) /categories/111 진입\n2) 상품 카드 \"어반 실루엣 여성 블루종 자켓\" 가격 영역 확인","expected":"1) 정가(₩279,000), 할인가(₩264,000), 할인율(5%)이 함께 표기된다","testData":"상품=어반 실루엣 여성 블루종 자켓","origin":"신규","displayNo":46},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_076","majorCategory":"상품","midCategory":"상품유닛","minorCategory":"가격표기","type":"UI","item":"상품유닛 할인 없는 상품 단독 정가 표기 검증","baseDoc":"-","priority":"P3","precondition":"할인이 적용되지 않은 상품이 목록에 존재하는 상태","steps":"1) /categories/111 진입\n2) 상품 카드 \"소프트 웜 그레이 경량 패딩\" 가격 영역 확인","expected":"1) 정가(₩459,000)만 단독으로 표기되고 할인가/할인율은 노출되지 않는다","testData":"상품=소프트 웜 그레이 경량 패딩(lululemon)","origin":"신규","displayNo":47},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_077","majorCategory":"상품","midCategory":"상품유닛","minorCategory":"브랜드표기","type":"UI","item":"상품유닛 브랜드명 표기 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /categories/111 진입\n2) 상품 카드의 브랜드명 영역 확인","expected":"1) 각 상품 카드에 브랜드명(예: ZARA, lululemon, Dior 등)이 노출된다","testData":"특이 테스트 데이터 없음","origin":"신규","displayNo":48},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_078","majorCategory":"예외·회귀","midCategory":"상품유닛","minorCategory":"품절","type":"회귀","item":"[확인필요] 품절 상품 카드 표기 및 구매 차단 처리 검증","baseDoc":"-","priority":"P3","precondition":"품절 상태인 상품이 존재하는 경우","steps":"1) 품절 상품이 포함된 카테고리 목록 진입\n2) 품절 상품 카드 확인","expected":"1) 품절 상품 카드에 품절 표기(배지 등)가 노출된다\n2) 상세 진입 시 구매 버튼이 비활성화되거나 안내 문구가 노출된다 — 스펙 확정 시 재검증 필요 (오늘 관측 범위에는 품절 상품 없음)","testData":"특이 테스트 데이터 없음","origin":"신규","displayNo":49},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_079","majorCategory":"예외·회귀","midCategory":"상품유닛","minorCategory":"위시리스트","type":"기능","item":"비로그인 상태에서 위시리스트 버튼 클릭 시 처리 검증","baseDoc":"-","priority":"P2","precondition":"비로그인(Guest) 상태","steps":"1) /categories/111 진입\n2) 임의 상품 카드의 \"위시리스트 추가\" 버튼 클릭","expected":"1) 로그인 페이지로 이동하거나 로그인 유도 안내가 노출된다","testData":"특이 테스트 데이터 없음","origin":"신규","displayNo":50},{"platform":"Web","result":"","assignee":"","issueSummary":"","issueLink":"","tcId":"TC_PD_080","majorCategory":"상품","midCategory":"상품유닛","minorCategory":"위시리스트","type":"기능","item":"로그인 상태에서 위시리스트 버튼 클릭 시 처리 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태 (testAccounts.json의 jspark81 계정)","steps":"1) jspark81 계정으로 로그인\n2) /categories/111 진입\n3) 임의 상품 카드의 \"위시리스트 추가\" 버튼 클릭","expected":"1) 위시리스트에 정상 추가되고, 버튼 상태(아이콘/문구)가 \"추가됨\"으로 전환된다","testData":"계정=jspark81","origin":"신규","displayNo":51},{"platform":"Web","result":"Pass","assignee":"","issueSummary":"","issueLink":"","origin":"신규","tcId":"TC_PD_081","majorCategory":"상품","midCategory":"상품상세","minorCategory":"상품설명","type":"UI","item":"상품 설명 텍스트 노출 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /products/96 진입\n2) 상품 설명 영역 확인","expected":"1) 상품 설명 텍스트(\"차분한 브라운 컬러가 주는 따뜻한 무드가...\")가 노출된다","testData":"특이 테스트 데이터 없음","displayNo":52},{"platform":"Web","result":"Pass","assignee":"","issueSummary":"","issueLink":"","origin":"신규","tcId":"TC_PD_082","majorCategory":"예외·회귀","midCategory":"상품상세","minorCategory":"평점/리뷰수","type":"UI","item":"[확인필요] 리뷰 0건일 때 별점 표시 방식 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) /products/96 진입\n2) 리뷰 수 \"(0 리뷰)\" 확인\n3) 별점 영역 확인","expected":"1) 리뷰 0건임에도 별점이 만점(★★★★★)으로 표시된다 — 리뷰 없는 상품의 기본 별점 표기 기준(별점 미노출/0점 표시 등)이 의도된 것인지 정책 확인 필요","testData":"특이 테스트 데이터 없음","displayNo":53},{"platform":"Web","result":"Pass","assignee":"","issueSummary":"","issueLink":"","origin":"신규","tcId":"TC_PD_083","majorCategory":"상품","midCategory":"상품상세","minorCategory":"NEW배지","type":"UI","item":"상품상세 페이지 NEW 배지 노출 검증","baseDoc":"-","priority":"P3","precondition":"NEW 배지가 부여된 상품인 경우","steps":"1) /products/96 진입\n2) 상품명 근처 배지 영역 확인","expected":"1) \"NEW\" 배지가 노출된다","testData":"특이 테스트 데이터 없음","displayNo":54},{"platform":"Web","result":"Fail","assignee":"","issueSummary":"비로그인 상태에서 위시리스트 버튼 클릭 시, /login 페이지 리소스 404 실패","issueLink":"DEF_데모사이트_001","origin":"신규","tcId":"TC_PD_084","majorCategory":"예외·회귀","midCategory":"상품상세","minorCategory":"위시리스트","type":"기능","item":"비로그인 상태 위시리스트 버튼 클릭 처리 검증 (상품상세)","baseDoc":"-","priority":"P2","precondition":"비로그인(Guest) 상태","steps":"1) /products/96 진입\n2) \"위시리스트 추가\" 버튼 클릭","expected":"1) 로그인 페이지로 이동하거나 로그인 유도 안내가 노출된다","testData":"특이 테스트 데이터 없음","displayNo":55},{"platform":"Web","result":"Fail","assignee":"","issueSummary":"로그인 페이지(/login) 진입 시 리소스 404 실패","issueLink":"DEF_데모사이트_002","origin":"신규","tcId":"TC_PD_085","majorCategory":"상품","midCategory":"상품상세","minorCategory":"위시리스트","type":"기능","item":"로그인 상태 위시리스트 버튼 클릭 처리 검증 (상품상세)","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태 (testAccounts.json의 jspark81 계정)","steps":"1) jspark81 계정으로 로그인\n2) /products/96 진입\n3) \"위시리스트 추가\" 버튼 클릭","expected":"1) 위시리스트에 정상 추가되고, 버튼 상태(아이콘/문구)가 \"추가됨\"으로 전환된다","testData":"계정=jspark81","displayNo":56}];
+const DEFECT_DATA = [{"defectId":"DEF_데모사이트_001","tcId":"TC_PD_084","module":"상품상세","severity":"P2","status":"신규","summary":"비로그인 상태에서 위시리스트 버튼 클릭 시 /login으로 이동되는데, 그 /login 페이지 자체에서 리소스 3건이 404로 실패함 (/forgot-password, /policy, /service 프리페치 요청)","detectedAt":"2026-08-19","source":"automation","screenshot":"TC/defects/DEF_데모사이트_001.png","assignee":"","issueLink":"","history":[{"at":"2026-08-19","status":"신규","note":"Playwright 자동 실행 중 최초 발견 (TC_PD_084)"}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) 비로그인 상태로 /products/96 진입\n2) \"위시리스트 추가\" 버튼 클릭 → /login으로 이동","actualResult":"이동된 /login 페이지에서 /forgot-password, /policy, /service 리소스 3건이 404로 실패 (콘솔/네트워크 에러 자동감지로 실패 처리됨)","expectedResult":"로그인 페이지로 정상 이동하고, 콘솔 에러/4xx·5xx 응답 없이 로그인 유도 화면이 노출되어야 함"},{"defectId":"DEF_데모사이트_002","tcId":"TC_PD_085","module":"상품상세","severity":"P2","status":"신규","summary":"로그인 페이지(/login) 진입 시 리소스 3건이 404로 실패함 (/forgot-password, /policy, /service 프리페치 요청) — DEF_데모사이트_001과 동일 근본 원인, 로그인 플로우를 거치는 모든 테스트에 영향","detectedAt":"2026-08-19","source":"automation","screenshot":"TC/defects/DEF_데모사이트_002.png","assignee":"","issueLink":"","history":[{"at":"2026-08-19","status":"신규","note":"Playwright 자동 실행 중 최초 발견 (TC_PD_085). 8/18 상품전시 테스트 관찰 시에도 동일 현상 발견된 바 있음 (그때는 결함 등록 보류)."}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) jspark81 계정으로 로그인 (로그인 페이지 진입 포함)\n2) /products/96 진입\n3) \"위시리스트 추가\" 버튼 클릭","actualResult":"로그인 과정에서 진입한 /login 페이지에서 /forgot-password, /policy, /service 리소스 3건이 404로 실패 (콘솔/네트워크 에러 자동감지로 실패 처리됨)","expectedResult":"콘솔 에러 및 4xx/5xx 응답 없이 로그인 및 위시리스트 추가가 정상 완료되어야 함"},{"defectId":"DEF_데모사이트_003","tcId":"TC_PD_028","module":"상품상세","severity":"P2","status":"신규","summary":"존재하지 않는 상품ID(/products/999999)로 접근 시 404 또는 안내 화면 대신 HTTP 500 에러가 발생함 (Next.js Server Components render 단계에서 예외 발생)","detectedAt":"2026-08-19","source":"automation","screenshot":"TC/defects/DEF_데모사이트_003.png","assignee":"","issueLink":"","history":[{"at":"2026-08-19","status":"신규","note":"Playwright 자동 실행 중 최초 발견 (TC_PD_028). /login 500 결함(DEF_데모사이트_001/002 근본 원인과 별개, 존재하지 않는 리소스 접근 시 서버 컴포넌트 렌더링 예외)과 동일한 크래시 유형."}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) /products/999999 (존재하지 않는 상품ID) 접속","actualResult":"HTTP 500 에러 발생 (Next.js Server Components render 단계에서 예외 발생)","expectedResult":"404 또는 \"상품을 찾을 수 없습니다\" 안내 화면이 노출되고 500 서버 에러가 발생하지 않아야 함"}];
+const DEFECT_TAB = '🐞 결함현황';
+let currentTab = '전체';
+let filterState = { keyword: '', priority: '', type: '', origin: '' };
+let defectFilterStatus = '전체';
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function setupFilterBar() {
+  const prioritySel = document.getElementById('filterPriority');
+  const typeSel = document.getElementById('filterType');
+  const originSel = document.getElementById('filterOrigin');
+  [...new Set(TC_DATA.map(t => t.priority))].sort().forEach(v => {
+    prioritySel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`);
+  });
+  [...new Set(TC_DATA.map(t => t.type))].sort().forEach(v => {
+    typeSel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`);
+  });
+  [...new Set(TC_DATA.map(t => t.origin))].forEach(v => {
+    originSel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`);
+  });
+
+  document.getElementById('searchInput').addEventListener('input', (e) => { filterState.keyword = e.target.value.trim().toLowerCase(); render(); });
+  prioritySel.addEventListener('change', (e) => { filterState.priority = e.target.value; render(); });
+  typeSel.addEventListener('change', (e) => { filterState.type = e.target.value; render(); });
+  originSel.addEventListener('change', (e) => { filterState.origin = e.target.value; render(); });
+  document.getElementById('btnResetFilter').addEventListener('click', () => {
+    filterState = { keyword: '', priority: '', type: '', origin: '' };
+    document.getElementById('searchInput').value = '';
+    prioritySel.value = ''; typeSel.value = ''; originSel.value = '';
+    render();
+  });
+}
+
+function render() {
+  const tabsEl = document.getElementById('tabs');
+  const subs = ['전체', ...new Set(TC_DATA.map(t => t.midCategory)), DEFECT_TAB];
+  tabsEl.innerHTML = subs.map(s => `<button class="tab-btn ${s===currentTab?'active':''} ${s===DEFECT_TAB?'tab-defect':''}" data-tab="${esc(s)}">${esc(s)}</button>`).join('');
+  tabsEl.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => { currentTab = b.dataset.tab; render(); });
+
+  const defectMode = currentTab === DEFECT_TAB;
+  ['statsWrapBlock', 'kpis', 'filterBarBlock', 'toolbarBlock', 'tcTableWrap'].forEach(id => {
+    document.getElementById(id).style.display = defectMode ? 'none' : '';
+  });
+  document.getElementById('defectPanel').style.display = defectMode ? '' : 'none';
+  if (defectMode) { renderDefects(); return; }
+
+  let filtered = currentTab === '전체' ? TC_DATA : TC_DATA.filter(t => t.midCategory === currentTab);
+  if (filterState.keyword) {
+    filtered = filtered.filter(t => (t.tcId + ' ' + t.item).toLowerCase().includes(filterState.keyword));
+  }
+  if (filterState.priority) filtered = filtered.filter(t => t.priority === filterState.priority);
+  if (filterState.type) filtered = filtered.filter(t => t.type === filterState.type);
+  if (filterState.origin) filtered = filtered.filter(t => t.origin === filterState.origin);
+  document.getElementById('filteredCount').textContent = `${filtered.length}건 표시 중 (전체 ${TC_DATA.length}건)`;
+
+  document.getElementById('kpiTotal').textContent = TC_DATA.length;
+  document.getElementById('kpiP1').textContent = TC_DATA.filter(t => t.priority === 'P1').length;
+  document.getElementById('kpiP2').textContent = TC_DATA.filter(t => t.priority === 'P2').length;
+  document.getElementById('kpiP3').textContent = TC_DATA.filter(t => t.priority === 'P3').length;
+
+  const statsBody = document.getElementById('statsBody');
+  const mods = [...new Set(TC_DATA.map(t => t.midCategory))];
+  statsBody.innerHTML = mods.map(m => {
+    const items = TC_DATA.filter(t => t.midCategory === m);
+    const total = items.length;
+    const pass = items.filter(t => t.result === 'Pass').length;
+    const fail = items.filter(t => t.result === 'Fail').length;
+    const blocked = items.filter(t => t.result === 'Blocked').length;
+    const na = items.filter(t => t.result === 'N/A').length;
+    const none = items.filter(t => !t.result).length;
+    const executed = total - none;
+    const rate = total ? ((executed/total)*100).toFixed(0) : 0;
+    const passRate = executed ? ((pass/executed)*100).toFixed(0) : 0;
+    const failRate = executed ? ((fail/executed)*100).toFixed(0) : 0;
+    return `<tr><td class="modname">${m}</td><td>${total}</td><td>${pass}</td><td>${fail}</td><td>${blocked}</td><td>${na}</td><td>${none}</td><td>${rate}%</td><td>${passRate}%</td><td>${failRate}%</td></tr>`;
+  }).join('');
+
+  const tbody = document.getElementById('tcBody');
+  tbody.innerHTML = filtered.map(t => `
+    <tr data-id="${esc(t.tcId)}">
+      <td class="center">${esc(t.displayNo)}</td>
+      <td>${esc(t.tcId)}</td>
+      <td>${esc(t.majorCategory)}</td>
+      <td>${esc(t.midCategory)}</td>
+      <td>${esc(t.minorCategory||'')}</td>
+      <td class="center">${esc(t.platform)}</td>
+      <td class="center">${esc(t.type)}</td>
+      <td>${esc(t.item)}</td>
+      <td class="center"><span class="badge ${t.origin==='신규'?'P3':'P2'}">${esc(t.origin||'')}</span></td>
+      <td>${esc(t.baseDoc||'-')}</td>
+      <td class="center"><span class="badge ${esc(t.priority)}">${esc(t.priority)}</span></td>
+      <td>${esc(t.precondition === '특이 사전조건 없음' ? '' : t.precondition)}</td>
+      <td>${esc(t.steps)}</td>
+      <td>${esc(t.expected)}</td>
+      <td>${esc(t.testData)}</td>
+      <td>${resultSelect(t)}</td>
+      <td><input class="free-input assignee" value="${esc(t.assignee||'')}"></td>
+      <td>${esc(t.issueSummary||'')}</td>
+      <td><input class="free-input issuelink" value="${esc(t.issueLink||'')}"></td>
+    </tr>
+  `).join('');
+
+  tbody.querySelectorAll('select.result-select').forEach(sel => {
+    sel.onchange = () => {
+      const tcId = sel.closest('tr').dataset.id;
+      const item = TC_DATA.find(t => t.tcId === tcId);
+      item.result = sel.value;
+      sel.dataset.val = sel.value;
+      render();
+    };
+  });
+  tbody.querySelectorAll('input.assignee').forEach(inp => inp.onchange = () => { TC_DATA.find(t=>t.tcId===inp.closest('tr').dataset.id).assignee = inp.value; });
+  tbody.querySelectorAll('input.issuelink').forEach(inp => inp.onchange = () => { TC_DATA.find(t=>t.tcId===inp.closest('tr').dataset.id).issueLink = inp.value; });
+}
+
+function resultSelect(t) {
+  const opts = ['', 'Pass', 'Fail', 'Blocked', 'N/A'];
+  return `<select class="result-select" data-val="${t.result||''}">${opts.map(o => `<option value="${o}" ${t.result===o?'selected':''}>${o||'미실행'}</option>`).join('')}</select>`;
+}
+
+function handleThumbError(img) {
+  img.outerHTML = '<span style="color:var(--muted);font-size:11px;">스크린샷 없음</span>';
+}
+
+function defectDetailCell(def) {
+  const lines = [];
+  if (def.testEnv) lines.push('환경: ' + def.testEnv);
+  if (def.testSteps) lines.push('절차: ' + def.testSteps);
+  if (def.actualResult) lines.push('실제결과: ' + def.actualResult);
+  if (def.expectedResult) lines.push('기대결과: ' + def.expectedResult);
+  return esc(lines.join('\n'));
+}
+
+function defectStatusSelect(def) {
+  const opts = ['신규', '처리중', '재검증대기', '완료', '보류', '재발생'];
+  return `<select class="defect-status-select" data-val="${esc(def.status)}">${opts.map(o => `<option value="${o}" ${def.status===o?'selected':''}>${o}</option>`).join('')}</select>`;
+}
+
+function renderDefects() {
+  const total = DEFECT_DATA.length;
+  const byStatus = s => DEFECT_DATA.filter(d => d.status === s).length;
+  document.getElementById('defKpiTotal').textContent = total;
+  document.getElementById('defKpiNew').textContent = byStatus('신규');
+  document.getElementById('defKpiProgress').textContent = byStatus('처리중');
+  document.getElementById('defKpiDone').textContent = byStatus('완료');
+
+  const pillsEl = document.getElementById('defectFilterPills');
+  const statuses = ['전체', '신규', '처리중', '재검증대기', '완료', '보류', '재발생'];
+  pillsEl.innerHTML = statuses.map(s => `<button class="tab-btn ${s===defectFilterStatus?'active':''}" data-status="${esc(s)}">${esc(s)} (${s==='전체'?total:byStatus(s)})</button>`).join('');
+  pillsEl.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => { defectFilterStatus = b.dataset.status; renderDefects(); });
+
+  const filtered = defectFilterStatus === '전체' ? DEFECT_DATA : DEFECT_DATA.filter(d => d.status === defectFilterStatus);
+  document.getElementById('defectFilteredCount').textContent = `${filtered.length}건 표시 중 (전체 ${total}건)`;
+
+  const tbody = document.getElementById('defectBody');
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px;">등록된 결함이 없습니다.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.map(def => `
+    <tr data-defid="${esc(def.defectId)}">
+      <td>${esc(def.defectId)}</td>
+      <td class="center">${esc(def.module)}</td>
+      <td class="center"><span class="badge ${esc(def.severity)}">${esc(def.severity)}</span></td>
+      <td>${defectStatusSelect(def)}</td>
+      <td>${esc(def.summary)}</td>
+      <td>${defectDetailCell(def)}</td>
+      <td>${def.screenshot ? `<img class="def-thumb" src="defects/${esc(def.defectId)}.png" alt="${esc(def.defectId)} 스크린샷" onerror="handleThumbError(this)">` : '<span style="color:var(--muted);font-size:11px;">-</span>'}</td>
+      <td class="center">${esc(def.detectedAt||'')}</td>
+      <td><a href="#" class="defect-tc-link" data-tcid="${esc(def.tcId)}">${esc(def.tcId)}</a></td>
+      <td><input class="free-input def-issuelink" value="${esc(def.issueLink||'')}"></td>
+    </tr>
+  `).join('');
+
+  tbody.querySelectorAll('select.defect-status-select').forEach(sel => {
+    sel.onclick = (e) => e.stopPropagation();
+    sel.onchange = (e) => {
+      e.stopPropagation();
+      const id = sel.closest('tr').dataset.defid;
+      DEFECT_DATA.find(dd => dd.defectId === id).status = sel.value;
+      renderDefects();
+    };
+  });
+  tbody.querySelectorAll('input.def-issuelink').forEach(inp => {
+    inp.onclick = (e) => e.stopPropagation();
+    inp.onchange = (e) => { e.stopPropagation(); DEFECT_DATA.find(dd => dd.defectId === inp.closest('tr').dataset.defid).issueLink = inp.value; };
+  });
+  tbody.querySelectorAll('a.defect-tc-link').forEach(a => {
+    a.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const tcId = a.dataset.tcid;
+      const tc = TC_DATA.find(t => t.tcId === tcId);
+      if (!tc) { alert(tcId + ' 항목을 TC 목록에서 찾을 수 없습니다.'); return; }
+      currentTab = tc.midCategory;
+      filterState.keyword = tcId.toLowerCase();
+      render();
+      document.getElementById('searchInput').value = tcId;
+      setTimeout(() => {
+        const row = document.querySelector('#tcBody tr[data-id="' + tcId + '"]');
+        if (row) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    };
+  });
+  tbody.querySelectorAll('tr[data-defid]').forEach(tr => {
+    tr.onclick = () => {
+      const def = DEFECT_DATA.find(dd => dd.defectId === tr.dataset.defid);
+      openDefectModal(def);
+    };
+  });
+}
+
+function openDefectModal(def) {
+  document.getElementById('defectModalTitle').textContent = `${def.defectId} — ${def.tcId}`;
+  document.getElementById('defectModalSummary').textContent = def.summary;
+  const img = document.getElementById('defectModalImg');
+  img.style.display = '';
+  document.getElementById('defectModalImgMissing').style.display = 'none';
+  img.src = 'defects/' + def.defectId + '.png';
+  document.getElementById('defectModalHistory').innerHTML = (def.history || []).map(h => `<li>[${esc(h.at)}] ${esc(h.status)} — ${esc(h.note)}</li>`).join('');
+  document.getElementById('defectModalOverlay').classList.add('open');
+}
+
+document.getElementById('btnTheme').onclick = () => {
+  const html = document.documentElement;
+  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+};
+
+document.getElementById('btnAccMatrix').onclick = () => document.getElementById('accModalOverlay').classList.add('open');
+document.getElementById('btnFlowMap').onclick = () => document.getElementById('flowModalOverlay').classList.add('open');
+document.querySelectorAll('.modal-close').forEach(btn => btn.onclick = (e) => e.target.closest('.modal-overlay').classList.remove('open'));
+document.querySelectorAll('.modal-overlay').forEach(ov => ov.onclick = (e) => { if (e.target === ov) ov.classList.remove('open'); });
+
+document.getElementById('btnCsv').onclick = () => {
+  const headers = ['No.','TC ID','대분류','중분류','소분류','플랫폼','유형','테스트 항목','구분','기준문서','우선순위','사전조건','절차','기대결과','테스트데이터','실행결과','담당자','이슈내용','이슈링크'];
+  const rows = TC_DATA.map(t => [t.displayNo,t.tcId,t.majorCategory,t.midCategory,t.minorCategory,t.platform,t.type,t.item,t.origin,t.baseDoc,t.priority,t.precondition,t.steps,t.expected,t.testData,t.result,t.assignee,t.issueSummary,t.issueLink]
+    .map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv = '\uFEFF' + [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '데모사이트_TC_PD.csv';
+  a.click();
+};
+
+const FS_ACCESS_SUPPORTED = 'showOpenFilePicker' in window;
+let tcFileHandle = null;
+let defectFileHandle = null;
+const JSON_PICKER_OPTS = { types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }] };
+
+async function writeToHandle(handle, content) {
+  const writable = await handle.createWritable();
+  await writable.write(content);
+  await writable.close();
+}
+
+function downloadJson(content, filename) {
+  const blob = new Blob([content], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+
+function applyLoadedTcItems(items) {
+  let n = 0;
+  items.forEach(li => {
+    const t = TC_DATA.find(x => x.tcId === li.tcId);
+    if (t) { t.result = li.result; t.assignee = li.assignee; t.issueSummary = li.issueSummary; t.issueLink = li.issueLink; n++; }
+  });
+  render();
+  return n;
+}
+
+document.getElementById('btnJsonSave').onclick = async () => {
+  const out = { meta: { project: '데모사이트', module: 'PD', moduleName: '상품전시', version: 4 }, items: TC_DATA };
+  const content = JSON.stringify(out, null, 2);
+  if (tcFileHandle) {
+    try { await writeToHandle(tcFileHandle, content); alert('저장 완료: ' + tcFileHandle.name); return; }
+    catch (err) { alert('직접 저장 실패, 다운로드로 대체합니다: ' + err.message); }
+  }
+  downloadJson(content, '데모사이트_TC_PD.json');
+};
+
+document.getElementById('btnJsonLoad').onclick = async () => {
+  if (!FS_ACCESS_SUPPORTED) { document.getElementById('jsonFileInput').click(); return; }
+  try {
+    const [handle] = await window.showOpenFilePicker(JSON_PICKER_OPTS);
+    const perm = await handle.requestPermission({ mode: 'readwrite' });
+    const file = await handle.getFile();
+    const loaded = JSON.parse(await file.text());
+    const n = applyLoadedTcItems(loaded.items || loaded);
+    if (perm === 'granted') {
+      tcFileHandle = handle;
+      document.getElementById('tcFileStatus').textContent = '🔗 연결됨: ' + handle.name;
+      alert('연결 완료 (' + handle.name + ') · ' + n + '건 불러옴 — 이제 "JSON 저장" 클릭 시 이 파일에 바로 저장됩니다.');
+    } else {
+      alert('읽기 전용으로 ' + n + '건 불러왔습니다 (쓰기 권한 거부 — 저장은 다운로드로 대체됩니다).');
+    }
+  } catch (err) {
+    if (err.name !== 'AbortError') alert('파일 연결/불러오기 실패: ' + err.message);
+  }
+};
+document.getElementById('jsonFileInput').onchange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const loaded = JSON.parse(reader.result);
+      const n = applyLoadedTcItems(loaded.items || loaded);
+      alert(n + '건 불러옴 (이 브라우저는 직접 저장을 지원하지 않아 저장은 다운로드로 진행됩니다)');
+    } catch (err) { alert('JSON 파싱 실패: ' + err.message); }
+  };
+  reader.readAsText(file);
+};
+
+document.getElementById('btnDefectSave').onclick = async () => {
+  const content = JSON.stringify(DEFECT_DATA, null, 2);
+  if (defectFileHandle) {
+    try { await writeToHandle(defectFileHandle, content); alert('저장 완료: ' + defectFileHandle.name); return; }
+    catch (err) { alert('직접 저장 실패, 다운로드로 대체합니다: ' + err.message); }
+  }
+  downloadJson(content, 'defects.json');
+};
+
+document.getElementById('btnDefectFileConnect').onclick = async () => {
+  if (!FS_ACCESS_SUPPORTED) { alert('이 브라우저는 파일 직접 연결을 지원하지 않습니다 (Chrome/Edge 최신 버전 권장). 저장은 다운로드로 진행됩니다.'); return; }
+  try {
+    const [handle] = await window.showOpenFilePicker(JSON_PICKER_OPTS);
+    const perm = await handle.requestPermission({ mode: 'readwrite' });
+    const file = await handle.getFile();
+    const loaded = JSON.parse(await file.text());
+    DEFECT_DATA.length = 0;
+    DEFECT_DATA.push(...loaded);
+    renderDefects();
+    if (perm === 'granted') {
+      defectFileHandle = handle;
+      document.getElementById('defectFileStatus').textContent = '🔗 연결됨: ' + handle.name;
+      alert('연결 완료 (' + handle.name + ') · ' + loaded.length + '건 불러옴 — 이제 "결함 저장" 클릭 시 이 파일에 바로 저장됩니다.');
+    } else {
+      alert('읽기 전용으로 ' + loaded.length + '건 불러왔습니다 (쓰기 권한 거부 — 저장은 다운로드로 대체됩니다).');
+    }
+  } catch (err) {
+    if (err.name !== 'AbortError') alert('파일 연결/불러오기 실패: ' + err.message);
+  }
+};
+
+function updateStickyOffset() {
+  const header = document.querySelector('header');
+  document.documentElement.style.setProperty('--sticky-top', header.offsetHeight + 'px');
+}
+window.addEventListener('resize', updateStickyOffset);
+updateStickyOffset();
+setupFilterBar();
+render();
+</script>
+</body>
+</html>

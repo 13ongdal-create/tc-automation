@@ -1,7 +1,7 @@
 {
   "meta": {
     "project": "데모사이트",
-    "module": "MBR",
+    "module": "MB",
     "moduleName": "회원",
     "version": 2,
     "changeHistory": [
@@ -13,13 +13,13 @@
       {
         "version": 2,
         "date": "2026-08-21",
-        "summary": "Phase 4: 로그인/비로그인 사전조건별 신규 시나리오 8건 추가 (TC_MBR_036~043) — GNB 상태표시/마이페이지 접근제어·정보노출/체크아웃 배송정보 연동/로그아웃, /products/99 및 /mypage /checkout 관측 기반"
+        "summary": "Phase 4: 로그인/비로그인 사전조건별 신규 시나리오 8건 추가 (TC_MB_036~043) — GNB 상태표시/마이페이지 접근제어·정보노출/체크아웃 배송정보 연동/로그아웃, /products/99 및 /mypage /checkout 관측 기반"
       }
     ]
   },
   "items": [
     {
-      "tcId": "TC_MBR_001",
+      "tcId": "TC_MB_001",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "필수값검증",
@@ -40,7 +40,7 @@
       "displayNo": 1
     },
     {
-      "tcId": "TC_MBR_002",
+      "tcId": "TC_MB_002",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "이름",
@@ -61,7 +61,7 @@
       "displayNo": 2
     },
     {
-      "tcId": "TC_MBR_003",
+      "tcId": "TC_MB_003",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "아이디",
@@ -82,7 +82,7 @@
       "displayNo": 3
     },
     {
-      "tcId": "TC_MBR_004",
+      "tcId": "TC_MB_004",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "아이디중복",
@@ -103,7 +103,7 @@
       "displayNo": 4
     },
     {
-      "tcId": "TC_MBR_005",
+      "tcId": "TC_MB_005",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "비밀번호정책",
@@ -124,7 +124,7 @@
       "displayNo": 5
     },
     {
-      "tcId": "TC_MBR_006",
+      "tcId": "TC_MB_006",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "비밀번호길이",
@@ -145,7 +145,7 @@
       "displayNo": 6
     },
     {
-      "tcId": "TC_MBR_007",
+      "tcId": "TC_MB_007",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "비밀번호확인",
@@ -166,7 +166,7 @@
       "displayNo": 7
     },
     {
-      "tcId": "TC_MBR_008",
+      "tcId": "TC_MB_008",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "휴대폰번호",
@@ -187,7 +187,7 @@
       "displayNo": 8
     },
     {
-      "tcId": "TC_MBR_009",
+      "tcId": "TC_MB_009",
       "majorCategory": "품질·비기능",
       "midCategory": "회원가입",
       "minorCategory": "보안",
@@ -208,7 +208,7 @@
       "displayNo": 9
     },
     {
-      "tcId": "TC_MBR_010",
+      "tcId": "TC_MB_010",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "생년월일",
@@ -229,7 +229,7 @@
       "displayNo": 10
     },
     {
-      "tcId": "TC_MBR_011",
+      "tcId": "TC_MB_011",
       "majorCategory": "예외·회귀",
       "midCategory": "회원가입",
       "minorCategory": "생년월일",
@@ -250,7 +250,7 @@
       "displayNo": 11
     },
     {
-      "tcId": "TC_MBR_012",
+      "tcId": "TC_MB_012",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "주소찾기",
@@ -271,7 +271,7 @@
       "displayNo": 12
     },
     {
-      "tcId": "TC_MBR_013",
+      "tcId": "TC_MB_013",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "주소연동",
@@ -292,7 +292,7 @@
       "displayNo": 13
     },
     {
-      "tcId": "TC_MBR_014",
+      "tcId": "TC_MB_014",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "상세주소",
@@ -313,7 +313,7 @@
       "displayNo": 14
     },
     {
-      "tcId": "TC_MBR_015",
+      "tcId": "TC_MB_015",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "성별",
@@ -334,7 +334,7 @@
       "displayNo": 15
     },
     {
-      "tcId": "TC_MBR_016",
+      "tcId": "TC_MB_016",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "성별",
@@ -355,7 +355,7 @@
       "displayNo": 16
     },
     {
-      "tcId": "TC_MBR_017",
+      "tcId": "TC_MB_017",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "성별",
@@ -376,7 +376,7 @@
       "displayNo": 17
     },
     {
-      "tcId": "TC_MBR_018",
+      "tcId": "TC_MB_018",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "이메일",
@@ -397,7 +397,7 @@
       "displayNo": 18
     },
     {
-      "tcId": "TC_MBR_019",
+      "tcId": "TC_MB_019",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "이메일",
@@ -418,7 +418,7 @@
       "displayNo": 19
     },
     {
-      "tcId": "TC_MBR_020",
+      "tcId": "TC_MB_020",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "약관동의",
@@ -439,7 +439,7 @@
       "displayNo": 20
     },
     {
-      "tcId": "TC_MBR_021",
+      "tcId": "TC_MB_021",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "가입성공",
@@ -460,7 +460,7 @@
       "displayNo": 21
     },
     {
-      "tcId": "TC_MBR_022",
+      "tcId": "TC_MB_022",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "가입후이동",
@@ -481,7 +481,7 @@
       "displayNo": 22
     },
     {
-      "tcId": "TC_MBR_023",
+      "tcId": "TC_MB_023",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "로그인이동",
@@ -492,7 +492,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) /register 진입\n2) \"로그인\" 링크 클릭",
-      "expected": "1) /login 경로로 이동은 되나, 로그인 페이지 자체가 500 에러(TC_MBR_029)로 화면이 정상 노출되지 않는다",
+      "expected": "1) /login 경로로 이동은 되나, 로그인 페이지 자체가 500 에러(TC_MB_029)로 화면이 정상 노출되지 않는다",
       "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
@@ -502,7 +502,7 @@
       "displayNo": 23
     },
     {
-      "tcId": "TC_MBR_024",
+      "tcId": "TC_MB_024",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "입력길이제한",
@@ -523,7 +523,7 @@
       "displayNo": 24
     },
     {
-      "tcId": "TC_MBR_025",
+      "tcId": "TC_MB_025",
       "majorCategory": "품질·비기능",
       "midCategory": "회원가입",
       "minorCategory": "보안",
@@ -544,7 +544,7 @@
       "displayNo": 25
     },
     {
-      "tcId": "TC_MBR_026",
+      "tcId": "TC_MB_026",
       "majorCategory": "품질·비기능",
       "midCategory": "회원가입",
       "minorCategory": "보안",
@@ -565,7 +565,7 @@
       "displayNo": 26
     },
     {
-      "tcId": "TC_MBR_027",
+      "tcId": "TC_MB_027",
       "majorCategory": "회원",
       "midCategory": "헤더진입",
       "minorCategory": "회원가입",
@@ -586,7 +586,7 @@
       "displayNo": 27
     },
     {
-      "tcId": "TC_MBR_028",
+      "tcId": "TC_MB_028",
       "majorCategory": "회원",
       "midCategory": "헤더진입",
       "minorCategory": "로그인",
@@ -597,7 +597,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 헤더 \"로그인\" 링크 클릭",
-      "expected": "1) /login?callbackUrl=%2F 경로로 이동은 되나, 500 에러(TC_MBR_029)로 로그인 화면이 노출되지 않는다",
+      "expected": "1) /login?callbackUrl=%2F 경로로 이동은 되나, 500 에러(TC_MB_029)로 로그인 화면이 노출되지 않는다",
       "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
@@ -607,7 +607,7 @@
       "displayNo": 28
     },
     {
-      "tcId": "TC_MBR_029",
+      "tcId": "TC_MB_029",
       "majorCategory": "회원",
       "midCategory": "로그인",
       "minorCategory": "서버에러",
@@ -628,7 +628,7 @@
       "displayNo": 29
     },
     {
-      "tcId": "TC_MBR_030",
+      "tcId": "TC_MB_030",
       "majorCategory": "예외·회귀",
       "midCategory": "로그인",
       "minorCategory": "에러화면",
@@ -649,7 +649,7 @@
       "displayNo": 30
     },
     {
-      "tcId": "TC_MBR_031",
+      "tcId": "TC_MB_031",
       "majorCategory": "회원",
       "midCategory": "로그인",
       "minorCategory": "에러화면",
@@ -670,7 +670,7 @@
       "displayNo": 31
     },
     {
-      "tcId": "TC_MBR_032",
+      "tcId": "TC_MB_032",
       "majorCategory": "예외·회귀",
       "midCategory": "로그인영향도",
       "minorCategory": "파급효과",
@@ -691,7 +691,7 @@
       "displayNo": 32
     },
     {
-      "tcId": "TC_MBR_033",
+      "tcId": "TC_MB_033",
       "majorCategory": "회원",
       "midCategory": "회원가입",
       "minorCategory": "새로고침",
@@ -712,7 +712,7 @@
       "displayNo": 33
     },
     {
-      "tcId": "TC_MBR_034",
+      "tcId": "TC_MB_034",
       "majorCategory": "회원",
       "midCategory": "반응형",
       "minorCategory": "모바일뷰",
@@ -733,7 +733,7 @@
       "displayNo": 34
     },
     {
-      "tcId": "TC_MBR_035",
+      "tcId": "TC_MB_035",
       "majorCategory": "품질·비기능",
       "midCategory": "회원가입",
       "minorCategory": "콘솔에러",
@@ -744,7 +744,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) /register 진입 후 개발자도구 Console/Network 탭 확인",
-      "expected": "1) 콘솔 에러 및 4xx/5xx 응답이 없다 (대조: /login은 TC_MBR_029에서 500 에러로 실패 확인됨)",
+      "expected": "1) 콘솔 에러 및 4xx/5xx 응답이 없다 (대조: /login은 TC_MB_029에서 500 에러로 실패 확인됨)",
       "testData": "특이 테스트 데이터 없음",
       "result": "",
       "assignee": "",
@@ -754,7 +754,7 @@
       "displayNo": 35
     },
     {
-      "tcId": "TC_MBR_036",
+      "tcId": "TC_MB_036",
       "majorCategory": "회원",
       "midCategory": "회원",
       "minorCategory": "GNB 상태표시",
@@ -775,7 +775,7 @@
       "displayNo": 36
     },
     {
-      "tcId": "TC_MBR_037",
+      "tcId": "TC_MB_037",
       "majorCategory": "회원",
       "midCategory": "회원",
       "minorCategory": "GNB 상태표시",
@@ -796,7 +796,7 @@
       "displayNo": 37
     },
     {
-      "tcId": "TC_MBR_038",
+      "tcId": "TC_MB_038",
       "majorCategory": "회원",
       "midCategory": "회원",
       "minorCategory": "마이페이지 접근제어",
@@ -817,7 +817,7 @@
       "displayNo": 38
     },
     {
-      "tcId": "TC_MBR_039",
+      "tcId": "TC_MB_039",
       "majorCategory": "회원",
       "midCategory": "회원",
       "minorCategory": "마이페이지 서브메뉴",
@@ -838,7 +838,7 @@
       "displayNo": 39
     },
     {
-      "tcId": "TC_MBR_040",
+      "tcId": "TC_MB_040",
       "majorCategory": "회원",
       "midCategory": "회원",
       "minorCategory": "마이페이지 기본정보",
@@ -859,7 +859,7 @@
       "displayNo": 40
     },
     {
-      "tcId": "TC_MBR_041",
+      "tcId": "TC_MB_041",
       "majorCategory": "구매프로세스",
       "midCategory": "회원",
       "minorCategory": "체크아웃 연동",
@@ -880,7 +880,7 @@
       "displayNo": 41
     },
     {
-      "tcId": "TC_MBR_042",
+      "tcId": "TC_MB_042",
       "majorCategory": "구매프로세스",
       "midCategory": "회원",
       "minorCategory": "체크아웃 연동",
@@ -901,7 +901,7 @@
       "displayNo": 42
     },
     {
-      "tcId": "TC_MBR_043",
+      "tcId": "TC_MB_043",
       "majorCategory": "회원",
       "midCategory": "회원",
       "minorCategory": "로그아웃",

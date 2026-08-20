@@ -408,3 +408,130 @@ test('[TC_PD_085][위시리스트] 로그인 상태 위시리스트 버튼 클�
   await page.waitForTimeout(500);
   // TODO(Phase 5): 위시리스트 추가 상태로 아이콘/문구 전환 여부 어서션
 });
+
+test('[TC_PD_126][카테고리진입] 아우터(113) 카테고리 진입 시 브레드크럼/상품목록 노출 검증', async ({ page }) => {
+  await page.goto(BASE + '/categories/113', { waitUntil: 'load' });
+  await expect(page.getByText('남성', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText('총 9개')).toBeVisible();
+});
+
+test('[TC_PD_127][카테고리진입] 상의-남성(114) 카테고리 진입 시 브레드크럼/상품목록 노출 검증', async ({ page }) => {
+  await page.goto(BASE + '/categories/114', { waitUntil: 'load' });
+  await expect(page.getByText('남성', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText('총 22개')).toBeVisible();
+});
+
+test('[TC_PD_128][카테고리진입] 드레스(115) 카테고리 진입 시 브레드크럼/상품목록 노출 검증', async ({ page }) => {
+  await page.goto(BASE + '/categories/115', { waitUntil: 'load' });
+  await expect(page.getByText('여성', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText('총 3개')).toBeVisible();
+});
+
+test('[TC_PD_129][카테고리진입] 점퍼(116) 3단계 브레드크럼(남성>아우터>점퍼) 및 상품목록 노출 검증', async ({ page }) => {
+  await page.goto(BASE + '/categories/116', { waitUntil: 'load' });
+  await expect(page.getByText('아우터', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText('총 8개')).toBeVisible();
+});
+
+test('[TC_PD_130][카테고리진입] 상의-여성(117) 카테고리 진입 시 브레드크럼/상품목록 노출 검증', async ({ page }) => {
+  await page.goto(BASE + '/categories/117', { waitUntil: 'load' });
+  await expect(page.getByText('여성', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText('총 17개')).toBeVisible();
+});
+
+test('[TC_PD_131][필터구성] 카테고리별 노출 필터 항목 구성 차이 검증', async ({ page }) => {
+  await page.goto(BASE + '/categories/113', { waitUntil: 'load' });
+  await expect(page.getByText('스타일', { exact: true })).toBeVisible();
+  await expect(page.getByText('색상', { exact: true })).not.toBeVisible();
+
+  await page.goto(BASE + '/categories/115', { waitUntil: 'load' });
+  await expect(page.getByText('색상', { exact: true })).toBeVisible();
+  await expect(page.getByText('스타일', { exact: true })).not.toBeVisible();
+
+  await page.goto(BASE + '/categories/116', { waitUntil: 'load' });
+  await expect(page.getByText('색상', { exact: true })).not.toBeVisible();
+  await expect(page.getByText('스타일', { exact: true })).not.toBeVisible();
+});
+
+test('TC_PD_089 [확인필요] "99% 쿠폰 드로우" 배너 상세보기 CTA href 프로토콜 누락 결함 검증', async ({ page }) => {
+  await page.goto(BASE + '/', { waitUntil: 'load' });
+  const link = page.locator('a[href="www.naver.com!"]').first();
+  await expect(link).toBeVisible();
+  const href = await link.getAttribute('href');
+  expect(/^https?:\/\//.test(href)).toBe(false);
+});
+
+test('TC_PD_090 [확인필요] "지금 사야 입어요" 배너 상세보기 CTA href 프로토콜 누락 결함 검증', async ({ page }) => {
+  await page.goto(BASE + '/', { waitUntil: 'load' });
+  const link = page.locator('a[href="www.3top.co.kr"]').first();
+  await expect(link).toBeVisible();
+  const href = await link.getAttribute('href');
+  expect(/^https?:\/\//.test(href)).toBe(false);
+});
+
+test('TC_PD_091 [확인필요] "라이프 블프" 배너 상세보기 CTA href 프로토콜 누락 결함 검증', async ({ page }) => {
+  await page.goto(BASE + '/', { waitUntil: 'load' });
+  const link = page.locator('a[href="www.google.com"]').first();
+  await expect(link).toBeVisible();
+  const href = await link.getAttribute('href');
+  expect(/^https?:\/\//.test(href)).toBe(false);
+});
+
+test('TC_PD_092 카테고리 하이라이트 "남자" 배너 이동 검증', async ({ page }) => {
+  await page.goto(BASE + '/', { waitUntil: 'load' });
+  await page.locator('a[href="/categories/110"]').first().click();
+  await page.waitForURL('**/categories/110');
+  expect(page.url()).toContain('/categories/110');
+});
+
+test('TC_PD_093 카테고리 하이라이트 "여자" 배너 이동 검증', async ({ page }) => {
+  await page.goto(BASE + '/', { waitUntil: 'load' });
+  await page.locator('a[href="/categories/111"]').first().click();
+  await page.waitForURL('**/categories/111');
+  expect(page.url()).toContain('/categories/111');
+});
+
+test('TC_PD_094 카테고리 하이라이트 "악세사리" 배너 이동 검증', async ({ page }) => {
+  await page.goto(BASE + '/', { waitUntil: 'load' });
+  await page.locator('a[href="/categories/112"]').first().click();
+  await page.waitForURL('**/categories/112');
+  expect(page.url()).toContain('/categories/112');
+});
+
+test('TC_PD_102 입점 브랜드 - 내부 링크 브랜드(ZARA) 이동 검증', async ({ page }) => {
+  await page.goto(BASE + '/', { waitUntil: 'load' });
+  await page.locator('a[href="/display/brand/zara"]').first().click();
+  await page.waitForURL('**/display/brand/zara');
+  expect(page.url()).toContain('/display/brand/zara');
+});
+
+test('TC_PD_104 브랜드관 히어로 SALE CTA 이동 검증', async ({ page }) => {
+  await page.goto(BASE + '/', { waitUntil: 'load' });
+  await page.locator('a[href="/display/hot-deal"]').first().click();
+  await page.waitForURL('**/display/hot-deal');
+  expect(page.url()).toContain('/display/hot-deal');
+});
+
+test('TC_PD_105 브랜드관 히어로 MD\'s PICK CTA 이동 검증', async ({ page }) => {
+  await page.goto(BASE + '/', { waitUntil: 'load' });
+  await page.locator('a[href="/display/mds-pick"]').first().click();
+  await page.waitForURL('**/display/mds-pick');
+  expect(page.url()).toContain('/display/mds-pick');
+});
+
+test('TC_PD_106 SALE(hot-deal) 페이지 Empty State 노출 검증', async ({ page }) => {
+  await page.goto(BASE + '/display/hot-deal', { waitUntil: 'load' });
+  await expect(page.getByText('등록된 컨텐츠가 없습니다')).toBeVisible();
+});
+
+test('TC_PD_114 헤더 로고 클릭 시 메인 이동 검증', async ({ page }) => {
+  await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
+  await page.locator('a[href="/"]').first().click();
+  await page.waitForURL(BASE + '/');
+  expect(page.url()).toBe(BASE + '/');
+});
+
+test('TC_PD_120 푸터 카피라이트 플레이스홀더 문구 노출 검증', async ({ page }) => {
+  await page.goto(BASE + '/', { waitUntil: 'load' });
+  await expect(page.getByText('© 2026 YOUR COMPANY. ALL RIGHTS RESERVED.')).toBeVisible();
+});
