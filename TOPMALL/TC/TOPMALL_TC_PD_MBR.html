@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOPMALL QA TC Viewer — 배치2 (PD+MBR)</title>
+<style>
+:root{--bg:#f6f8fa;--panel:#fff;--text:#1f2328;--muted:#656d76;--border:#d0d7de;--accent:#1a7f37;--accent2:#116329;--p1:#cf222e;--p2:#9a6700;--p3:#0969da;--headbg:#f6f8fa;--row-hover:#f0f6ff;--tag-bg:#eaf5ea}
+[data-theme="dark"]{--bg:#0d1117;--panel:#161b22;--text:#e6edf3;--muted:#848d97;--border:#30363d;--accent:#3fb950;--accent2:#2ea043;--p1:#f85149;--p2:#d29922;--p3:#58a6ff;--headbg:#21262d;--row-hover:#1c2128;--tag-bg:#1a2f1a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard','Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}
+.top-bar{background:var(--headbg);border-bottom:1px solid var(--border);padding:12px 20px;position:sticky;top:0;z-index:100}
+.top-bar-inner{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.project-title{font-size:18px;font-weight:700;color:var(--accent)}
+.project-sub{font-size:12px;color:var(--muted)}
+.btn{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);cursor:pointer;font-size:12px;font-weight:500;transition:.15s}
+.btn:hover{background:var(--headbg)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent2)}
+.spacer{flex:1}
+.kpi-bar{display:flex;gap:10px;padding:14px 20px;flex-wrap:wrap}
+.kpi{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:10px 18px;min-width:100px;text-align:center}
+.kpi-num{font-size:22px;font-weight:700}
+.kpi-label{font-size:11px;color:var(--muted);margin-top:2px}
+.kpi-p1 .kpi-num{color:var(--p1)}.kpi-p2 .kpi-num{color:var(--p2)}.kpi-p3 .kpi-num{color:var(--p3)}
+.stats-wrap{padding:0 20px 10px}
+.stats-table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px}
+.stats-table th{background:var(--headbg);padding:7px 12px;text-align:center;border-bottom:1px solid var(--border);font-weight:600}
+.stats-table td{padding:6px 12px;text-align:center;border-bottom:1px solid var(--border)}
+.stats-table tr:last-child td{border-bottom:none}
+.stats-table td:first-child{text-align:left;font-weight:500}
+.tab-bar{padding:0 20px 10px;display:flex;gap:6px;flex-wrap:wrap}
+.tab{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--panel);cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);transition:.15s}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tc-wrap{padding:0 20px 30px;overflow-x:auto}
+table.tc{width:100%;border-collapse:collapse;table-layout:fixed;background:var(--panel);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+table.tc th{background:var(--headbg);padding:8px;text-align:left;border-bottom:1px solid var(--border);font-weight:600;font-size:11px;white-space:nowrap}
+table.tc td{padding:7px 8px;border-bottom:1px solid var(--border);vertical-align:top;font-size:12px;word-break:break-word}
+table.tc tr:last-child td{border-bottom:none}
+table.tc tr:hover td{background:var(--row-hover)}
+.col-id{width:90px}.col-cat{width:70px}.col-plat{width:48px}.col-type{width:58px}.col-title{width:200px}.col-pri{width:42px}.col-pre{width:140px}.col-steps{width:170px}.col-expect{width:170px}.col-data{width:110px}.col-result{width:80px}.col-assignee{width:64px}.col-issue{width:100px}
+.badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;color:#fff}
+.badge.P1{background:var(--p1)}.badge.P2{background:var(--p2)}.badge.P3{background:var(--p3)}
+.tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;background:var(--tag-bg);color:var(--accent2);border:1px solid var(--border)}
+select.result-sel{width:100%;padding:3px 4px;border:1px solid var(--border);border-radius:4px;background:var(--panel);color:var(--text);font-size:11px}
+input.inline-input{width:100%;padding:3px 5px;border:1px solid var(--border);border-radius:4px;background:var(--panel);color:var(--text);font-size:11px}
+pre.tc-pre{white-space:pre-wrap;font-family:inherit;font-size:12px}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div>
+      <div class="project-title">🏷️ TOPMALL TC Viewer</div>
+      <div class="project-sub">배치2 — PD(상품) + MBR(회원) · v1.0 · 2026-08-20</div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn btn-primary" id="btnCSV">CSV 다운로드</button>
+    <button class="btn btn-primary" id="btnSaveJSON">JSON 저장</button>
+    <button class="btn" id="btnLoadJSON">JSON 불러오기</button>
+    <input type="file" id="fileInput" accept=".json" style="display:none">
+    <button class="btn" id="btnTheme">🌙 다크모드</button>
+  </div>
+</div>
+
+<div class="kpi-bar">
+  <div class="kpi"><div class="kpi-num" id="kpiTotal">0</div><div class="kpi-label">전체 TC</div></div>
+  <div class="kpi kpi-p1"><div class="kpi-num" id="kpiP1">0</div><div class="kpi-label">P1 Critical</div></div>
+  <div class="kpi kpi-p2"><div class="kpi-num" id="kpiP2">0</div><div class="kpi-label">P2 Major</div></div>
+  <div class="kpi kpi-p3"><div class="kpi-num" id="kpiP3">0</div><div class="kpi-label">P3 Minor</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiPass" style="color:var(--accent)">0</div><div class="kpi-label">Pass</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiFail" style="color:var(--p1)">0</div><div class="kpi-label">Fail</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiBlocked" style="color:var(--p2)">0</div><div class="kpi-label">Blocked</div></div>
+</div>
+
+<div class="stats-wrap">
+  <table class="stats-table">
+    <thead><tr><th>모듈</th><th>전체</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>Fail율</th></tr></thead>
+    <tbody id="statsTbody"></tbody>
+  </table>
+</div>
+
+<div class="tab-bar">
+  <div class="tab active" data-tab="ALL">전체</div>
+  <div class="tab" data-tab="PD">🏷️ 상품(PD)</div>
+  <div class="tab" data-tab="MBR">👤 회원(MBR)</div>
+</div>
+
+<div class="tc-wrap">
+<table class="tc">
+  <thead>
+    <tr>
+      <th class="col-id">TC ID</th>
+      <th class="col-cat">유형</th>
+      <th class="col-plat">플랫폼</th>
+      <th class="col-pri">우선순위</th>
+      <th class="col-title">테스트 항목</th>
+      <th class="col-pre">사전조건</th>
+      <th class="col-steps">수행절차</th>
+      <th class="col-expect">기대결과</th>
+      <th class="col-data">테스트 데이터</th>
+      <th class="col-result">실행결과</th>
+      <th class="col-assignee">담당자</th>
+      <th class="col-issue">이슈 요약</th>
+    </tr>
+  </thead>
+  <tbody id="tcTbody"></tbody>
+</table>
+</div>
+
+<script>
+const PD_ITEMS=[
+  {tcId:"TC_PD_001",_module:"PD",category3:"카테고리필터",platform:"Web",type:"기능",title:"WOMEN 카테고리 선택 시 여성 상품만 노출",priority:"P1",precondition:"메인 페이지 접속 상태",steps:"1) GNB 'WOMEN' 클릭\n2) 상품 목록 페이지 확인\n3) 노출 상품 카테고리 확인",expectedResult:"2) WOMEN 카테고리 상품목록 이동\n3) 여성 상품만 노출",testData:"카테고리=WOMEN",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_002",_module:"PD",category3:"카테고리필터",platform:"Web",type:"기능",title:"WOMEN > 상의 > 티셔츠 2depth 카테고리 필터링",priority:"P2",precondition:"WOMEN 상품목록 접속",steps:"1) GNB WOMEN 호버\n2) '상의>티셔츠' 클릭\n3) 목록 확인",expectedResult:"3) 티셔츠 카테고리 상품만 노출\n   브레드크럼 정합성",testData:"카테고리=WOMEN>상의>티셔츠",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_003",_module:"PD",category3:"카테고리필터",platform:"Web",type:"기능",title:"WOMEN > 하의 > 청바지 2depth 카테고리 필터링",priority:"P2",precondition:"WOMEN 상품목록 접속",steps:"1) GNB WOMEN 호버\n2) '하의>청바지' 클릭\n3) 목록 확인",expectedResult:"3) 청바지 카테고리 상품만 노출",testData:"카테고리=WOMEN>하의>청바지",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_004",_module:"PD",category3:"브랜드필터",platform:"Web",type:"기능",title:"브랜드 pill 단일 선택 — 해당 브랜드만 노출",priority:"P2",precondition:"상품목록 페이지 접속",steps:"1) 'Puma' pill 클릭\n2) 목록 확인",expectedResult:"2) Puma 상품만 노출\n   pill 선택 상태 표시",testData:"브랜드=Puma",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_005",_module:"PD",category3:"브랜드필터",platform:"Web",type:"기능",title:"브랜드 pill 복수 선택 — 선택 브랜드 모두 노출",priority:"P2",precondition:"상품목록 페이지 접속",steps:"1) 'Puma' pill 클릭\n2) '어반라인' pill 추가 클릭\n3) 목록 확인",expectedResult:"3) Puma+어반라인 상품 모두 노출",testData:"브랜드=Puma, 어반라인",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_006",_module:"PD",category3:"브랜드필터",platform:"Web",type:"기능",title:"카테고리 + 브랜드 동시 필터 — 교집합 노출",priority:"P2",precondition:"상품목록 페이지 접속",steps:"1) '티셔츠' 카테고리 선택\n2) 'Puma' pill 선택\n3) 목록 확인",expectedResult:"3) Puma 티셔츠만 노출",testData:"카테고리=티셔츠, 브랜드=Puma",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_007",_module:"PD",category3:"브랜드필터",platform:"Web",type:"기능",title:"필터 초기화 → 전체 상품 목록 복귀",priority:"P2",precondition:"브랜드 필터 선택 상태",steps:"1) 선택 pill 재클릭 or '전체'\n2) 목록 확인",expectedResult:"2) 전체 상품 복귀\n   pill 비선택 초기화",testData:"초기필터=Puma",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_008",_module:"PD",category3:"UI",platform:"Web",type:"UI",title:"할인 상품 카드 할인율 배지 정합성",priority:"P2",precondition:"상품목록 페이지 접속",steps:"1) 할인 배지 상품 확인\n2) 배지 % 기록\n3) PDP 진입 후 직접 계산\n4) 비교",expectedResult:"4) 배지% ≈ 계산값 (±1% 이내)",testData:"정가=33,900, 할인가=23,100, 계산=31.9%, 배지=-32%",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_009",_module:"PD",category3:"UI",platform:"Web",type:"UI",title:"미할인 상품 카드 할인율 배지 미노출",priority:"P2",precondition:"상품목록 페이지 접속",steps:"1) 정가=할인가 상품 확인\n2) 배지 영역 확인",expectedResult:"2) 할인율 배지(-X%) 미노출",testData:"미할인 상품",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_010",_module:"PD",category3:"검색",platform:"Web",type:"기능",title:"검색창 키워드 입력 시 관련 상품 노출",priority:"P1",precondition:"임의 페이지 접속",steps:"1) GNB 검색창 클릭\n2) '티셔츠' 입력 후 엔터\n3) 결과 확인",expectedResult:"3) 티셔츠 관련 상품 목록 노출\n   결과 수 표시",testData:"검색어=티셔츠",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_011",_module:"PD",category3:"검색",platform:"Web",type:"UI",title:"검색 결과 없음 시 Empty State 화면",priority:"P2",precondition:"검색 기능 접근 가능",steps:"1) '존재하지않는상품xyz123' 검색\n2) 결과 화면 확인",expectedResult:"2) Empty State 문구 노출\n   추천상품 or 홈 링크",testData:"검색어=존재하지않는상품xyz123",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_012",_module:"PD",category3:"가격표시",platform:"Web",type:"데이터",title:"PDP 정가/할인가 동시 표시 정합성",priority:"P1",precondition:"할인 상품 PDP 접속",steps:"1) PDP 가격 영역 확인\n2) 정가(취소선), 할인가 기록",expectedResult:"2) 정가=₩33,900(취소선)\n   할인가=₩23,100(강조)\n   동시 표시",testData:"정가=33,900원, 할인가=23,100원",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_013",_module:"PD",category3:"가격표시",platform:"Web",type:"데이터",title:"PDP 할인율 계산 정합성",priority:"P1",precondition:"할인 상품 PDP 접속",steps:"1) 표시 할인율 기록\n2) 직접 계산\n3) 비교",expectedResult:"3) 표시% = 계산값 (±1% 이내)",testData:"정가=33,900, 할인가=23,100, 계산=31.9%",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_014",_module:"PD",category3:"옵션선택",platform:"Web",type:"기능",title:"색상 옵션 선택 시 대표 이미지 변경",priority:"P2",precondition:"색상 옵션 2종 이상 PDP",steps:"1) 현재 이미지 확인\n2) 다른 색상 클릭\n3) 이미지 변경 확인",expectedResult:"3) 선택 색상 이미지로 변경\n   선택 옵션 강조 표시",testData:"색상=블랙, 화이트",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_015",_module:"PD",category3:"옵션선택",platform:"Web",type:"기능",title:"사이즈 옵션 선택 시 선택값 반영",priority:"P2",precondition:"사이즈 옵션 있는 PDP",steps:"1) 사이즈 'M' 클릭\n2) 선택값 확인",expectedResult:"2) 'M' 선택 상태 표시\n   이전 선택 해제",testData:"사이즈=M",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_016",_module:"PD",category3:"옵션선택",platform:"Web",type:"기능",title:"옵션 미선택 시 '장바구니' 클릭 → 옵션 선택 유도",priority:"P1",precondition:"옵션 미선택 PDP",steps:"1) 옵션 선택 없이\n2) '장바구니' 클릭",expectedResult:"2) 장바구니 미추가\n   '옵션을 선택해주세요' 안내",testData:"옵션선택=없음",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_017",_module:"PD",category3:"옵션선택",platform:"Web",type:"기능",title:"옵션 미선택 시 '바로구매' 클릭 → 옵션 선택 유도",priority:"P1",precondition:"옵션 미선택 PDP",steps:"1) 옵션 선택 없이\n2) '바로구매' 클릭",expectedResult:"2) 주문/결제 미이동\n   '옵션을 선택해주세요' 안내",testData:"옵션선택=없음",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_018",_module:"PD",category3:"장바구니담기",platform:"Web",type:"기능",title:"옵션 선택 후 '장바구니' 클릭 시 GNB 수량 갱신",priority:"P1",precondition:"Acc_Normal 로그인, 빈 장바구니",steps:"1) 옵션(블랙/S) 선택\n2) '장바구니' 클릭\n3) GNB 수량 확인",expectedResult:"3) GNB 아이콘 0→1\n   토스트 '장바구니에 추가됨'",testData:"옵션=블랙/S",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_019",_module:"PD",category3:"바로구매",platform:"Web",type:"기능",title:"옵션 선택 후 '바로구매' → 주문결제 직행",priority:"P1",precondition:"Acc_Normal 로그인",steps:"1) 옵션 선택\n2) '바로구매' 클릭",expectedResult:"2) 주문/결제 직행\n   해당 상품 1건만 반영",testData:"옵션=블랙/S",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_020",_module:"PD",category3:"품절",platform:"Web",type:"기능",title:"품절 상품 장바구니/바로구매 버튼 비활성화",priority:"P1",precondition:"품절 상품 PDP 접속",steps:"1) PDP 버튼 상태 확인\n2) 클릭 시도",expectedResult:"1) '품절' 표시, 버튼 비활성\n2) 반응 없음 or 안내 메시지",testData:"품절상품(재고=0)",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_021",_module:"PD",category3:"UI",platform:"Web",type:"UI",title:"PDP 이미지 슬라이드/확대 기능 동작",priority:"P3",precondition:"이미지 다수 상품 PDP",steps:"1) 이미지 클릭 or 슬라이드 버튼\n2) 동작 확인",expectedResult:"1~2) 슬라이드 or 확대 동작\n   좌우 전환 가능",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_022",_module:"PD",category3:"네비게이션",platform:"Web",type:"기능",title:"PDP 브레드크럼 각 링크 정상 이동",priority:"P2",precondition:"상품 PDP 접속",steps:"1) 브레드크럼 확인\n2) '홈' 클릭\n3) 'WOMEN' 클릭\n4) '티셔츠' 클릭",expectedResult:"2) 메인 이동\n3) WOMEN 목록\n4) 티셔츠 목록",testData:"브레드크럼=홈>WOMEN>티셔츠>상품명",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_023",_module:"PD",category3:"카테고리필터",platform:"Web",type:"기능",title:"MEN 카테고리 상품 목록 정상 노출",priority:"P2",precondition:"메인 페이지",steps:"1) GNB 'MEN' 클릭\n2) 목록 확인",expectedResult:"2) MEN 상품만 노출",testData:"카테고리=MEN",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PD_024",_module:"PD",category3:"카테고리필터",platform:"Web",type:"기능",title:"UNISEX / ACCESSORY 카테고리 상품 목록 노출",priority:"P2",precondition:"메인 페이지",steps:"1) 'UNISEX' 클릭 → 목록 확인\n2) 'ACCESSORY' 클릭 → 목록 확인",expectedResult:"1) UNISEX 상품 노출\n2) ACCESSORY 상품 노출",testData:"카테고리=UNISEX, ACCESSORY",result:"",assignee:"",issueSummary:""}
+];
+
+const MBR_ITEMS=[
+  {tcId:"TC_MBR_001",_module:"MBR",category3:"입력값검증",platform:"Web",type:"기능",title:"회원가입 — 이메일 형식 검증",priority:"P1",precondition:"비로그인, 회원가입 페이지",steps:"1) 'testuser' 입력 후 제출\n2) 'test@' 입력 후 제출\n3) 'test@.com' 입력 후 제출",expectedResult:"1~3) 오류: '올바른 이메일 형식 입력해주세요'",testData:"오류=testuser, test@, test@.com",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_002",_module:"MBR",category3:"입력값검증",platform:"Web",type:"기능",title:"회원가입 — 비밀번호 정책 검증 (8자리+특수문자)",priority:"P1",precondition:"비로그인, 회원가입 페이지",steps:"1) '1234567' 입력 후 제출\n2) 'password' 입력 후 제출\n3) 'pass1234!' 입력",expectedResult:"1) 오류: 8자리 이상\n2) 오류: 특수문자 포함\n3) 통과",testData:"오류=1234567, password\n정상=pass1234!",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_003",_module:"MBR",category3:"입력값검증",platform:"Web",type:"기능",title:"회원가입 — 비밀번호 확인 불일치 시 오류",priority:"P1",precondition:"비로그인, 회원가입 페이지",steps:"1) 비밀번호: pass1234!\n2) 확인: pass1234@ (불일치)\n3) 가입 클릭",expectedResult:"3) 오류: '비밀번호가 일치하지 않습니다'",testData:"비밀번호=pass1234!, 확인=pass1234@",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_004",_module:"MBR",category3:"입력값검증",platform:"Web",type:"기능",title:"회원가입 — 이미 등록된 이메일 중복 가입 불가",priority:"P1",precondition:"jspark81 이메일 기가입 상태",steps:"1) jspark81@3top.co.kr 입력\n2) 나머지 정보 입력\n3) 가입 클릭",expectedResult:"3) 오류: '이미 사용 중인 이메일'",testData:"중복=jspark81@3top.co.kr",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_005",_module:"MBR",category3:"약관동의",platform:"Web",type:"기능",title:"회원가입 — 필수 약관 미동의 시 제출 차단",priority:"P1",precondition:"비로그인, 회원가입 페이지",steps:"1) 모든 정보 입력\n2) 필수 약관 미체크\n3) 가입 클릭",expectedResult:"3) 차단\n   '필수 약관에 동의해주세요'\n   미체크 항목 강조",testData:"필수약관=서비스이용약관, 개인정보처리방침",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_006",_module:"MBR",category3:"가입완료",platform:"Web",type:"기능",title:"회원가입 성공 → 로그인 상태 or 로그인 화면 이동",priority:"P1",precondition:"비로그인, 회원가입 페이지",steps:"1) 이메일: newtest01@test.com\n2) 비밀번호: Testpass1!\n3) 이름 등 입력\n4) 필수 약관 동의\n5) 가입 클릭",expectedResult:"5) [A] 자동로그인 → 메인\n   [B] '가입완료' → 로그인 안내",testData:"이메일=newtest01@test.com, PW=Testpass1!",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_007",_module:"MBR",category3:"쿠폰발급",platform:"Web",type:"기능",title:"회원가입 성공 → 쿠폰함에 첫구매 15% 쿠폰 자동 발급",priority:"P1",precondition:"MBR_006 완료 후 신규 계정 로그인",steps:"1) 신규 계정 로그인\n2) 마이페이지 > 쿠폰함\n3) 쿠폰 목록 확인",expectedResult:"3) '첫구매 15% 할인쿠폰' 발급 확인",testData:"신규계정=newtest01@test.com",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_008",_module:"MBR",category3:"정상로그인",platform:"Web",type:"기능",title:"로그인 — 정상 계정 로그인 성공",priority:"P1",precondition:"비로그인, 로그인 페이지",steps:"1) 이메일: jspark81@3top.co.kr\n2) 비밀번호: q1w2e3r4!\n3) '로그인' 클릭",expectedResult:"3) 로그인 성공 → 메인 이동\n   GNB 로그인 상태 표시",testData:"이메일=jspark81@3top.co.kr, PW=q1w2e3r4!",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_009",_module:"MBR",category3:"오류처리",platform:"Web",type:"기능",title:"로그인 — 잘못된 비밀번호 → 오류 메시지",priority:"P1",precondition:"비로그인, 로그인 페이지",steps:"1) 이메일: jspark81@3top.co.kr\n2) 비밀번호: wrongpassword123!\n3) '로그인' 클릭",expectedResult:"3) 실패\n   '이메일 또는 비밀번호 오류' 메시지\n   비밀번호 필드 초기화",testData:"PW=wrongpassword123! (오류)",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_010",_module:"MBR",category3:"오류처리",platform:"Web",type:"기능",title:"로그인 — 미가입 이메일 → 오류 메시지",priority:"P1",precondition:"비로그인, 로그인 페이지",steps:"1) 이메일: notexist@test.com\n2) 비밀번호: anypassword1!\n3) '로그인' 클릭",expectedResult:"3) 실패\n   일반 오류 메시지 (이메일 미가입 여부 직접 노출 안함)",testData:"이메일=notexist@test.com (미가입)",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_011",_module:"MBR",category3:"보안",platform:"Web",type:"보안",title:"로그인 5회 연속 실패 → 계정 잠금 or 재시도 제한",priority:"P1",precondition:"비로그인, 로그인 페이지",steps:"1) 틀린 비밀번호 로그인 5회 반복\n2) 6번째 시도",expectedResult:"2) [A] 계정 잠금 메시지\n   [B] reCAPTCHA or 추가 인증\n   무제한 시도 불가",testData:"실패횟수=5, 계정=jspark81@3top.co.kr",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_012",_module:"MBR",category3:"리다이렉트",platform:"Web",type:"기능",title:"로그인 상태에서 로그인 페이지 접근 → 메인 리다이렉트",priority:"P2",precondition:"jspark81 로그인 상태",steps:"1) 주소창에 /login 직접 입력\n2) 결과 확인",expectedResult:"2) 로그인 페이지 미표시\n   메인 or 마이페이지 리다이렉트",testData:"URL=/login",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_013",_module:"MBR",category3:"기능",platform:"Web",type:"기능",title:"로그아웃 → 비로그인 전환 + 마이페이지 접근 시 로그인 유도",priority:"P1",precondition:"jspark81 로그인 상태",steps:"1) '로그아웃' 클릭\n2) GNB 상태 확인\n3) 마이페이지 URL 직접 접근",expectedResult:"1) 비로그인 전환\n2) GNB 비로그인 아이콘\n3) 로그인 페이지 리다이렉트",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_014",_module:"MBR",category3:"비밀번호찾기",platform:"Web",type:"기능",title:"아이디/비밀번호 찾기 링크 노출 및 기능 동작",priority:"P2",precondition:"비로그인, 로그인 페이지",steps:"1) '비밀번호 찾기' 링크 확인\n2) 링크 클릭\n3) 이메일 입력 후 발송",expectedResult:"1) 링크 노출\n2) 찾기 페이지 이동\n3) '이메일로 발송됨' 안내",testData:"이메일=jspark81@3top.co.kr",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_015",_module:"MBR",category3:"자동로그인",platform:"Web",type:"기능",title:"로그인 유지 — 브라우저 재시작 후 로그인 상태 유지",priority:"P2",precondition:"비로그인, 로그인 페이지",steps:"1) '로그인 상태 유지' 체크\n2) jspark81 로그인\n3) 브라우저 완전 종료 후 재시작\n4) 사이트 접속",expectedResult:"4) 로그인 상태 유지\n   재로그인 불필요",testData:"자동로그인=체크",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MBR_016",_module:"MBR",category3:"세션만료",platform:"Web",type:"기능",title:"세션 만료 후 보호 페이지 접근 → 로그인 리다이렉트",priority:"P2",precondition:"세션 만료 상태",steps:"1) 마이페이지 URL 직접 접근\n   or 주문하기 클릭",expectedResult:"1) 로그인 페이지 리다이렉트\n   로그인 후 원래 페이지 복귀\n   세션 만료 안내",testData:"세션=만료",result:"",assignee:"",issueSummary:""}
+];
+
+let allItems=[...PD_ITEMS,...MBR_ITEMS];
+let currentTab='ALL';
+
+function filteredItems(){return currentTab==='ALL'?allItems:allItems.filter(i=>i._module===currentTab);}
+function getItem(id){return allItems.find(i=>i.tcId===id);}
+
+function renderTable(){
+  const items=filteredItems();
+  document.getElementById('tcTbody').innerHTML=items.map(item=>`
+    <tr>
+      <td><b>${item.tcId}</b><br><small style="color:var(--muted)">${item.category3}</small></td>
+      <td><span class="tag">${item.type}</span></td>
+      <td>${item.platform}</td>
+      <td><span class="badge ${item.priority}">${item.priority}</span></td>
+      <td><pre class="tc-pre">${item.title}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.precondition}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.steps}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.expectedResult}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.testData}</pre></td>
+      <td><select class="result-sel" data-id="${item.tcId}"><option value="">미실행</option><option value="Pass" ${item.result==='Pass'?'selected':''}>Pass</option><option value="Fail" ${item.result==='Fail'?'selected':''}>Fail</option><option value="Blocked" ${item.result==='Blocked'?'selected':''}>Blocked</option><option value="N/A" ${item.result==='N/A'?'selected':''}>N/A</option></select></td>
+      <td><input class="inline-input" type="text" placeholder="담당자" data-id="${item.tcId}" data-field="assignee" value="${item.assignee}"></td>
+      <td><input class="inline-input" type="text" placeholder="이슈요약" data-id="${item.tcId}" data-field="issueSummary" value="${item.issueSummary}"></td>
+    </tr>
+  `).join('');
+  renderKPI();renderStats();
+}
+
+function renderKPI(){
+  const items=filteredItems();
+  document.getElementById('kpiTotal').textContent=items.length;
+  document.getElementById('kpiP1').textContent=items.filter(i=>i.priority==='P1').length;
+  document.getElementById('kpiP2').textContent=items.filter(i=>i.priority==='P2').length;
+  document.getElementById('kpiP3').textContent=items.filter(i=>i.priority==='P3').length;
+  document.getElementById('kpiPass').textContent=items.filter(i=>i.result==='Pass').length;
+  document.getElementById('kpiFail').textContent=items.filter(i=>i.result==='Fail').length;
+  document.getElementById('kpiBlocked').textContent=items.filter(i=>i.result==='Blocked').length;
+}
+
+function renderStats(){
+  const mods=[{key:'PD',label:'상품(PD)'},{key:'MBR',label:'회원(MBR)'}];
+  document.getElementById('statsTbody').innerHTML=mods.map(m=>{
+    const items=allItems.filter(i=>i._module===m.key);
+    const total=items.length,pass=items.filter(i=>i.result==='Pass').length,fail=items.filter(i=>i.result==='Fail').length,blocked=items.filter(i=>i.result==='Blocked').length,na=items.filter(i=>i.result==='N/A').length,notRun=total-pass-fail-blocked-na,executed=pass+fail+blocked+na;
+    return `<tr><td>${m.label}</td><td>${total}</td><td style="color:var(--accent)">${pass}</td><td style="color:var(--p1)">${fail}</td><td style="color:var(--p2)">${blocked}</td><td>${na}</td><td style="color:var(--muted)">${notRun}</td><td>${total?Math.round(executed/total*100):0}%</td><td>${executed?Math.round(pass/executed*100):0}%</td><td>${executed?Math.round(fail/executed*100):0}%</td></tr>`;
+  }).join('');
+}
+
+document.getElementById('tabBar').addEventListener('click',e=>{
+  const tab=e.target.closest('[data-tab]');if(!tab)return;
+  currentTab=tab.dataset.tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');renderTable();
+});
+document.getElementById('tcTbody').addEventListener('change',e=>{
+  const sel=e.target.closest('select.result-sel');if(!sel)return;
+  const item=getItem(sel.dataset.id);if(item){item.result=sel.value;renderKPI();renderStats();}
+});
+document.getElementById('tcTbody').addEventListener('input',e=>{
+  const inp=e.target.closest('input.inline-input');if(!inp)return;
+  const item=getItem(inp.dataset.id);if(item)item[inp.dataset.field]=inp.value;
+});
+document.getElementById('btnTheme').addEventListener('click',()=>{
+  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',isDark?'':'dark');
+  document.getElementById('btnTheme').textContent=isDark?'🌙 다크모드':'☀️ 라이트모드';
+});
+document.getElementById('btnCSV').addEventListener('click',()=>{
+  const cols=['TC ID','소분류','플랫폼','유형','테스트 항목','우선순위','사전조건','수행절차','기대결과','테스트 데이터','실행결과','담당자','이슈 요약'];
+  const rows=allItems.map(i=>[i.tcId,i.category3,i.platform,i.type,i.title,i.priority,i.precondition,i.steps,i.expectedResult,i.testData,i.result,i.assignee,i.issueSummary].map(v=>'"'+(v||'').replace(/"/g,'""').replace(/\n/g,' ')+'"').join(','));
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(cols.join(',')+'\n'+rows.join('\n'));a.download='TOPMALL_TC_PD_MBR.csv';a.click();
+});
+document.getElementById('btnSaveJSON').addEventListener('click',()=>{
+  const json=JSON.stringify({meta:{project:'TOPMALL',modules:['PD','MBR'],savedAt:new Date().toISOString()},items:allItems},null,2);
+  const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(json);a.download='TOPMALL_TC_PD_MBR.json';a.click();
+});
+document.getElementById('btnLoadJSON').addEventListener('click',()=>document.getElementById('fileInput').click());
+document.getElementById('fileInput').addEventListener('change',e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);
+      (data.items||[]).forEach(loaded=>{
+        const existing=allItems.find(i=>i.tcId===loaded.tcId);
+        if(existing){existing.result=loaded.result||'';existing.assignee=loaded.assignee||'';existing.issueSummary=loaded.issueSummary||'';}
+      });
+      renderTable();alert('불러오기 완료');
+    }catch(err){alert('파일 오류: '+err.message);}
+    e.target.value='';
+  };
+  reader.readAsText(file,'utf-8');
+});
+renderTable();
+</script>
+</body>
+</html>

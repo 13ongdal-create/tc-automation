@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOPMALL QA TC Viewer — 정책서 보완 (POLICY)</title>
+<style>
+:root{--bg:#f0f4ff;--panel:#fff;--text:#1f2328;--muted:#656d76;--border:#d0d7de;--accent:#6e40c9;--accent2:#5a32a3;--p1:#cf222e;--p2:#9a6700;--p3:#0969da;--headbg:#f6f0ff;--row-hover:#f0eaff;--tag-bg:#f0e8ff;--warn:#ff6b35}
+[data-theme="dark"]{--bg:#0d1117;--panel:#161b22;--text:#e6edf3;--muted:#848d97;--border:#30363d;--accent:#a371f7;--accent2:#8957e5;--p1:#f85149;--p2:#d29922;--p3:#58a6ff;--headbg:#1c1533;--row-hover:#1c1533;--tag-bg:#1c1533;--warn:#ff9500}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard','Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}
+.top-bar{background:var(--headbg);border-bottom:2px solid var(--accent);padding:12px 20px;position:sticky;top:0;z-index:100}
+.top-bar-inner{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.project-title{font-size:18px;font-weight:700;color:var(--accent)}
+.project-sub{font-size:12px;color:var(--muted)}
+.policy-badge{background:var(--accent);color:#fff;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:700}
+.btn{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);cursor:pointer;font-size:12px;font-weight:500;transition:.15s}
+.btn:hover{background:var(--headbg)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent2)}
+.spacer{flex:1}
+.policy-notice{background:linear-gradient(135deg,#6e40c9,#4a2080);color:#fff;padding:12px 20px;border-radius:0;font-size:12px;line-height:1.8}
+.policy-notice b{font-size:13px}
+.policy-notice .warn{color:#ffcc44;font-weight:700}
+.kpi-bar{display:flex;gap:10px;padding:14px 20px;flex-wrap:wrap}
+.kpi{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:10px 18px;min-width:100px;text-align:center}
+.kpi-num{font-size:22px;font-weight:700}
+.kpi-label{font-size:11px;color:var(--muted);margin-top:2px}
+.kpi-p1 .kpi-num{color:var(--p1)}.kpi-p2 .kpi-num{color:var(--p2)}.kpi-p3 .kpi-num{color:var(--p3)}.kpi-pol .kpi-num{color:var(--accent)}
+.stats-wrap{padding:0 20px 10px}
+.stats-table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px}
+.stats-table th{background:var(--headbg);padding:7px 12px;text-align:center;border-bottom:1px solid var(--border);font-weight:600}
+.stats-table td{padding:6px 12px;text-align:center;border-bottom:1px solid var(--border)}
+.stats-table tr:last-child td{border-bottom:none}
+.stats-table td:first-child{text-align:left;font-weight:500}
+.tab-bar{padding:0 20px 10px;display:flex;gap:6px;flex-wrap:wrap}
+.tab{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--panel);cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);transition:.15s}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tc-wrap{padding:0 20px 30px;overflow-x:auto}
+table.tc{width:100%;border-collapse:collapse;table-layout:fixed;background:var(--panel);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+table.tc th{background:var(--headbg);padding:8px;text-align:left;border-bottom:1px solid var(--border);font-weight:600;font-size:11px;white-space:nowrap}
+table.tc td{padding:7px 8px;border-bottom:1px solid var(--border);vertical-align:top;font-size:12px;word-break:break-word}
+table.tc tr:last-child td{border-bottom:none}
+table.tc tr:hover td{background:var(--row-hover)}
+.col-id{width:90px}.col-pol{width:75px}.col-cat{width:62px}.col-plat{width:46px}.col-pri{width:42px}.col-title{width:195px}.col-pre{width:135px}.col-steps{width:165px}.col-expect{width:165px}.col-data{width:105px}.col-result{width:78px}.col-assignee{width:60px}.col-issue{width:100px}
+.badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;color:#fff}
+.badge.P1{background:var(--p1)}.badge.P2{background:var(--p2)}.badge.P3{background:var(--p3)}
+.tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;background:var(--tag-bg);color:var(--accent2);border:1px solid var(--border)}
+.tag-warn{background:#fff3e0;color:#e65100;border-color:#ffcc80}
+.pol-ref{font-size:10px;color:var(--accent);font-weight:600}
+select.result-sel{width:100%;padding:3px 4px;border:1px solid var(--border);border-radius:4px;background:var(--panel);color:var(--text);font-size:11px}
+input.inline-input{width:100%;padding:3px 5px;border:1px solid var(--border);border-radius:4px;background:var(--panel);color:var(--text);font-size:11px}
+pre.tc-pre{white-space:pre-wrap;font-family:inherit;font-size:12px}
+.issue-warn{color:var(--warn);font-size:11px}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div>
+      <div class="project-title">📋 TOPMALL TC Viewer <span class="policy-badge">정책서 기반</span></div>
+      <div class="project-sub">TopMall_서비스_업무정책서.xlsx 분석 보완 · v1.0 · 2026-08-20</div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn btn-primary" id="btnCSV">CSV 다운로드</button>
+    <button class="btn btn-primary" id="btnSave">JSON 저장</button>
+    <button class="btn" id="btnLoad">JSON 불러오기</button>
+    <input type="file" id="fileInput" accept=".json" style="display:none">
+    <button class="btn" id="btnTheme">🌙 다크모드</button>
+  </div>
+</div>
+
+<div class="policy-notice">
+  <b>📌 정책서 보완 TC 안내</b><br>
+  본 뷰어는 <b>TopMall_서비스_업무정책서.xlsx</b>를 분석하여 기존 배치 1~4에서 미커버된 정책 항목을 보완한 TC입니다.<br>
+  <span class="warn">⚠️ 미결 정책 주의:</span>
+  <b>[미결#1]</b> 다중기기 로그인 (TC_POL_001) — 1기기 전용 의도 여부 확정 필요 |
+  <b>[미결#2]</b> 반품 09→10 전환 기능 미구현 (TC_POL_017) — BO 반품 처리 화면 필요
+</div>
+
+<div class="kpi-bar">
+  <div class="kpi kpi-pol"><div class="kpi-num" id="kpiTotal">0</div><div class="kpi-label">전체 TC</div></div>
+  <div class="kpi kpi-p1"><div class="kpi-num" id="kpiP1">0</div><div class="kpi-label">P1 Critical</div></div>
+  <div class="kpi kpi-p2"><div class="kpi-num" id="kpiP2">0</div><div class="kpi-label">P2 Major</div></div>
+  <div class="kpi kpi-p3"><div class="kpi-num" id="kpiP3">0</div><div class="kpi-label">P3 Minor</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiPass" style="color:var(--accent)">0</div><div class="kpi-label">Pass</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiFail" style="color:var(--p1)">0</div><div class="kpi-label">Fail</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiBlocked" style="color:var(--p2)">0</div><div class="kpi-label">Blocked</div></div>
+</div>
+
+<div class="stats-wrap">
+  <table class="stats-table">
+    <thead><tr><th>정책 영역</th><th>전체</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>Fail율</th></tr></thead>
+    <tbody id="statsTbody"></tbody>
+  </table>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <div class="tab active" data-tab="ALL">전체</div>
+  <div class="tab" data-tab="회원·인증">👤 회원·인증</div>
+  <div class="tab" data-tab="주문·결제">💳 주문·결제</div>
+  <div class="tab" data-tab="취소·환불·반품">📦 취소·반품</div>
+  <div class="tab" data-tab="포인트·쿠폰">🎁 포인트·쿠폰</div>
+  <div class="tab" data-tab="장바구니·배송지">🛒 장바구니·배송지</div>
+  <div class="tab" data-tab="상품·전시">🏷️ 상품·전시</div>
+  <div class="tab" data-tab="리뷰">⭐ 리뷰</div>
+</div>
+
+<div class="tc-wrap">
+<table class="tc">
+  <thead>
+    <tr>
+      <th class="col-id">TC ID</th>
+      <th class="col-pol">정책 시트</th>
+      <th class="col-cat">유형</th>
+      <th class="col-plat">플랫폼</th>
+      <th class="col-pri">우선순위</th>
+      <th class="col-title">테스트 항목</th>
+      <th class="col-pre">사전조건</th>
+      <th class="col-steps">수행절차</th>
+      <th class="col-expect">기대결과</th>
+      <th class="col-data">테스트 데이터</th>
+      <th class="col-result">실행결과</th>
+      <th class="col-assignee">담당자</th>
+      <th class="col-issue">이슈 / 비고</th>
+    </tr>
+  </thead>
+  <tbody id="tcTbody"></tbody>
+</table>
+</div>
+
+<script>
+const DATA=[
+  {tcId:"TC_POL_001",policySheet:"회원·인증",policyNo:"R3",type:"기능",platform:"Web",priority:"P2",title:"신규 기기 로그인 시 이전 기기 세션 만료",precondition:"jspark81 브라우저A 로그인",steps:"1) 브라우저B에서 동일 계정 로그인\n2) 브라우저A 임의 API 호출\n3) 브라우저A 상태 확인",expectedResult:"3) 브라우저A: 세션 만료 → 로그인 리다이렉트\n   '다른 기기에서 로그인됨' 안내\n   (1기기 전용 정책: Refresh Token 재발급)",testData:"계정=jspark81, A/B 동시 사용",result:"",assignee:"",issueSummary:"⚠️ 미결#1: 1기기 전용 정책 여부 확정 필요"},
+  {tcId:"TC_POL_002",policySheet:"회원·인증",policyNo:"R5",type:"기능",platform:"Web",priority:"P2",title:"카카오 소셜 로그인 연동 동작",precondition:"비로그인, 로그인 페이지",steps:"1) '카카오 로그인' 버튼 확인\n2) 버튼 클릭\n3) 인증 후 결과",expectedResult:"2) 카카오 OAuth 인증 페이지 이동\n3) 인증 후 메인 이동, GNB 로그인 표시",testData:"MEMBER_LOGIN_METHOD=02",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_003",policySheet:"회원·인증",policyNo:"R5",type:"기능",platform:"Web",priority:"P2",title:"네이버 소셜 로그인 연동 동작",precondition:"비로그인, 로그인 페이지",steps:"1) '네이버 로그인' 버튼 확인\n2) 버튼 클릭\n3) 인증 후 결과",expectedResult:"2) 네이버 OAuth 인증 페이지 이동\n3) 인증 후 메인 이동",testData:"MEMBER_LOGIN_METHOD=03",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_004",policySheet:"회원·인증",policyNo:"약관",type:"기능",platform:"Web",priority:"P1",title:"회원가입 약관 3종 표시 및 필수/선택 구분",precondition:"비로그인, 회원가입 페이지",steps:"1) 약관 영역 확인\n2) 약관 종류·필수여부 기록\n3) 각 약관 링크 클릭",expectedResult:"2) 이용약관(필수), 개인정보(필수), 마케팅(선택) 3종\n3) 본문 정상 노출",testData:"TERMS_TYPE=01,02,03",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_005",policySheet:"회원·인증",policyNo:"약관",type:"기능",platform:"Web",priority:"P2",title:"선택 약관(마케팅) 미동의 시에도 회원가입 가능",precondition:"비로그인, 회원가입 페이지",steps:"1) 필수 약관만 체크\n2) 마케팅 미체크\n3) 가입 클릭",expectedResult:"3) 가입 성공\n   마케팅 미동의도 허용",testData:"필수동의, 마케팅=미동의",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_006",policySheet:"회원·인증",policyNo:"전체동의",type:"기능",platform:"Web",priority:"P2",title:"'전체 동의' 체크 시 하위 약관 모두 자동 체크",precondition:"비로그인, 회원가입 페이지",steps:"1) '전체 동의' 클릭\n2) 하위 상태 확인\n3) '전체 동의' 재클릭\n4) 하위 상태 확인",expectedResult:"2) 3종 모두 자동 체크\n4) 3종 모두 자동 해제",testData:"전체동의 토글",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_007",policySheet:"주문·결제",policyNo:"결제수단",type:"기능",platform:"Web",priority:"P1",title:"결제 수단 목록 정상 노출 (무통장입금 포함)",precondition:"Acc_Normal 로그인, 주문/결제 페이지",steps:"1) 결제 수단 영역 확인\n2) 제공 수단 기록",expectedResult:"2) 카드, 무통장입금 등 노출\n   무통장 입금 기한 안내",testData:"PAYMENT_STATUS 코드 참조",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_008",policySheet:"주문·결제",policyNo:"무통장입금",type:"기능",platform:"Web",priority:"P2",title:"무통장입금 주문 상태 '입금대기(05)' 전환",precondition:"Acc_Normal 로그인, 주문/결제 페이지",steps:"1) 무통장입금 선택\n2) '주문하기' 클릭\n3) 주문내역 상태 확인",expectedResult:"3) 주문 상태: 입금대기(05)\n   계좌번호/기한 표시",testData:"결제=무통장, 기대=입금대기(05)",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_009",policySheet:"주문·결제",policyNo:"무통장기한",type:"기능",platform:"Web",priority:"P2",title:"무통장입금 기한 만료 시 '기한만료' 처리",precondition:"무통장 주문, 입금 기한 초과",steps:"1) 주문내역 상태 확인\n2) 기한 경과 후 재확인",expectedResult:"2) PAYMENT_STATUS=06(기한만료)\n   주문 자동 취소 처리",testData:"PAYMENT_STATUS=06",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_010",policySheet:"주문·결제",policyNo:"결제실패",type:"기능",platform:"Web",priority:"P1",title:"결제 실패 시 '결제실패(03)' + 장바구니 유지",precondition:"주문/결제 페이지",steps:"1) 결제 실패 시도\n2) 주문 상태 확인\n3) 장바구니 상태 확인",expectedResult:"2) ORDER_STATUS=03(결제실패)\n3) 장바구니 상품 그대로 유지",testData:"ORDER_STATUS=03",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_011",policySheet:"주문·결제",policyNo:"배송메모",type:"기능",platform:"Web",priority:"P2",title:"배송 요청사항 선택 옵션 4종 노출",precondition:"주문/결제 페이지",steps:"1) 배송 요청사항 드롭다운\n2) 옵션 목록 확인\n3) '문 앞에 놓아주세요' 선택\n4) 주문 후 확인",expectedResult:"2) 01문앞/02경비실/03택배함/99직접입력 4종\n4) 선택값 저장",testData:"DELIVERY_MEMO=01,02,03,99",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_012",policySheet:"주문·결제",policyNo:"배송메모직접입력",type:"기능",platform:"Web",priority:"P2",title:"배송 요청사항 '직접 입력(99)' 시 텍스트 입력창 노출",precondition:"주문/결제 페이지",steps:"1) '직접 입력' 선택\n2) 텍스트 입력창 확인\n3) 내용 입력 후 주문",expectedResult:"2) 직접 입력창 노출\n3) 주문상세에 입력값 저장",testData:"DELIVERY_MEMO=99",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_013",policySheet:"주문·결제",policyNo:"주문상태",type:"데이터",platform:"Web",priority:"P2",title:"주문 상태 코드 화면 표시명 정합성 검증",precondition:"다양한 상태 주문 이력",steps:"1) 주문내역 각 상태 확인\n2) 정책서 코드값 대조",expectedResult:"2) 02=결제완료, 04=취소완료, 09=반품접수\n   10=반품완료, 11=배송준비중, 12=배송중\n   13=배송완료, 14=구매확정 정합성",testData:"ORDER_STATUS 전체",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_014",policySheet:"취소·환불·반품",policyNo:"R5",type:"기능",platform:"Web",priority:"P1",title:"결제대기/결제완료 상태만 취소 가능",precondition:"다양한 상태 주문 존재",steps:"1) 결제대기(01) 취소 버튼 확인\n2) 결제완료(02) 취소 버튼 확인\n3) 배송준비중(11) 취소 버튼 확인",expectedResult:"1~2) 취소 버튼 활성\n3) 취소 버튼 비활성/미노출",testData:"취소가능=01,02, 불가=11,12,13",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_015",policySheet:"취소·환불·반품",policyNo:"R7",type:"기능",platform:"Web",priority:"P2",title:"부분취소 후 주문 상태 '부분취소(07)' 전환",precondition:"다중 상품 결제완료 주문",steps:"1) 일부 상품만 취소\n2) 주문 상태 확인",expectedResult:"2) ORDER_STATUS=07(부분취소)\n   취소품목=ITEM_STATUS 02, 나머지=01",testData:"ORDER_STATUS=07",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_016",policySheet:"취소·환불·반품",policyNo:"R9",type:"데이터",platform:"Web",priority:"P2",title:"취소 가능 수량 = 주문수량 - 취소된 수량",precondition:"부분취소 있는 주문 상세",steps:"1) 취소 가능 수량 확인\n2) 직접 계산\n3) 비교",expectedResult:"3) 화면값 = 주문수량 - 취소수량",testData:"주문=3, 취소=1, 가능=2",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_017",policySheet:"취소·환불·반품",policyNo:"R10",type:"기능",platform:"Web",priority:"P1",title:"반품 신청 후 상태 '반품접수(09)' 전환 및 정지 여부 확인",precondition:"배송완료(13) 주문",steps:"1) 반품신청 완료\n2) 주문 상태 확인\n3) 자동 전환 여부 모니터링",expectedResult:"2) ORDER_STATUS=09(반품접수)\n3) ⚠️ 09→10 자동전환 미구현\n   관리자 수동 처리 필요",testData:"ORDER_STATUS=09, 미결정책#2",result:"",assignee:"",issueSummary:"⚠️ 미결#2: 반품 09→10 전환 미구현, 재고 미복구"},
+  {tcId:"TC_POL_018",policySheet:"취소·환불·반품",policyNo:"R11",type:"기능",platform:"Web",priority:"P1",title:"취소 환불 수단 = 원결제 수단 동일",precondition:"카드 결제 주문 취소완료",steps:"1) 취소 완료 후 주문상세\n2) 환불 수단 확인",expectedResult:"2) 카드결제→카드환불\n   무통장→계좌환불\n   PAYMENT_STATUS=04",testData:"PAYMENT_STATUS=04(결제취소)",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_019",policySheet:"취소·환불·반품",policyNo:"클레임상태",type:"기능",platform:"Web",priority:"P2",title:"클레임 상태 '요청→처리중→완료' 흐름 반영",precondition:"취소/반품 신청 완료",steps:"1) 신청 직후 상태\n2) 처리중 상태\n3) 완료 상태",expectedResult:"1) CLAIM_STATUS=01(요청)\n2) CLAIM_STATUS=02(처리중)\n3) CLAIM_STATUS=03(완료)",testData:"CLAIM_STATUS=01,02,03,04",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_020",policySheet:"취소·환불·반품",policyNo:"구매확정",type:"기능",platform:"Web",priority:"P2",title:"배송완료(13) 후 '구매확정(14)' 버튼 노출 및 상태 전환",precondition:"배송완료(13) 주문",steps:"1) 주문내역 배송완료 주문\n2) '구매확정' 버튼 확인\n3) 클릭 후 상태",expectedResult:"2) '구매확정' 버튼 노출\n3) ORDER_STATUS=14(구매확정)",testData:"ORDER_STATUS=13→14",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_021",policySheet:"포인트·쿠폰",policyNo:"적립기준",type:"기능",platform:"Web",priority:"P2",title:"주문 완료(구매확정) 후 포인트 적립",precondition:"Acc_Normal, 주문 완료",steps:"1) 구매확정(14) 전환\n2) 포인트 내역 확인",expectedResult:"2) 구매확정 후 포인트 적립 내역\n   적립율/금액 표시",testData:"ORDER_STATUS=14",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_022",policySheet:"포인트·쿠폰",policyNo:"취소차감",type:"기능",platform:"Web",priority:"P2",title:"포인트 사용 주문 취소 시 포인트 복구",precondition:"포인트 사용 주문 취소완료",steps:"1) 취소 후 포인트 내역 확인",expectedResult:"1) 사용 포인트 복구\n   잔액 원상복구",testData:"사용포인트=1,000P",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_023",policySheet:"포인트·쿠폰",policyNo:"최소사용",type:"기능",platform:"Web",priority:"P2",title:"포인트 최소 사용 단위 미만 입력 시 오류",precondition:"포인트 보유 계정, 주문/결제 페이지",steps:"1) 최소 단위 미만 입력\n2) 적용 시도",expectedResult:"2) '최소 사용 단위' 오류 메시지",testData:"입력=10P(최소단위 미만 추정)",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_024",policySheet:"포인트·쿠폰",policyNo:"포인트+쿠폰",type:"기능",platform:"Web",priority:"P2",title:"포인트 + 쿠폰 동시 사용 가능 여부",precondition:"포인트+쿠폰 보유 계정, 주문/결제",steps:"1) 쿠폰 적용\n2) 포인트 추가 입력\n3) 결제금액 확인",expectedResult:"3) [A] 중복 적용 가능: 금액=상품-쿠폰-포인트\n   [B] 중복 불가 안내\n   (정책 확인 필요)",testData:"쿠폰=15%, 포인트=1,000P",result:"",assignee:"",issueSummary:"정책 확정 필요"},
+  {tcId:"TC_POL_025",policySheet:"포인트·쿠폰",policyNo:"포인트한도",type:"기능",platform:"Web",priority:"P2",title:"보유 포인트 초과 입력 시 차단",precondition:"1,000P 보유, 주문/결제",steps:"1) 포인트 입력란 5,000 입력\n2) 적용 시도",expectedResult:"2) 초과 오류\n   최대=보유량 이내로 제한",testData:"보유=1,000P, 입력=5,000P",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_026",policySheet:"포인트·쿠폰",policyNo:"유효기간",type:"기능",platform:"Web",priority:"P2",title:"만료된 포인트 잔액 미포함",precondition:"만료 포인트 이력 계정",steps:"1) 포인트 내역 만료 확인\n2) 잔액 계산 확인",expectedResult:"2) 만료분 차감 내역 표시\n   사용 가능 잔액에 만료분 미포함",testData:"만료포인트 이력",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_027",policySheet:"장바구니·배송지",policyNo:"R2",type:"기능",platform:"Web",priority:"P1",title:"동일 SKU 재담기 시 수량 합산",precondition:"장바구니에 블랙/S 1개 담긴 상태",steps:"1) 동일 상품(블랙/S) 2개 추가\n2) 장바구니 수량 확인",expectedResult:"2) 별도 행 아닌 수량 합산=3\n   (기존1 + 추가2)",testData:"동일SKU, 기존=1, 추가=2, 합산=3",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_028",policySheet:"장바구니·배송지",policyNo:"R3",type:"Boundary",platform:"Web",priority:"P1",title:"장바구니 수량 변경 시 재고 초과 차단",precondition:"재고 3개 상품, 장바구니 1개",steps:"1) 수량 + 버튼으로 4개 시도\n2) 결과 확인",expectedResult:"2) 수량 4 불가\n   '재고 부족, 최대 3개' 안내",testData:"재고=3, 시도=4",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_029",policySheet:"장바구니·배송지",policyNo:"R6",type:"기능",platform:"Web",priority:"P1",title:"결제 승인 후 주문 상품만 장바구니 삭제",precondition:"장바구니 A,B 담긴 상태",steps:"1) A만 주문 → 결제 완료\n2) 장바구니 확인",expectedResult:"2) A: 삭제(결제 승인 시점)\n   B: 유지",testData:"주문=A, 잔류=B",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_030",policySheet:"장바구니·배송지",policyNo:"R9",type:"기능",platform:"Web",priority:"P2",title:"기본 배송지 직접 삭제 불가",precondition:"기본 배송지 설정 상태",steps:"1) 기본 배송지 '삭제' 버튼 확인\n2) 삭제 시도",expectedResult:"1) 삭제 버튼 비활성/미노출\n2) '기본 배송지는 삭제 불가' 안내",testData:"기본배송지 삭제 시도",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_031",policySheet:"장바구니·배송지",policyNo:"R10",type:"기능",platform:"Web",priority:"P2",title:"주소 입력 — 다음 우편번호 위젯 전용 (직접 입력 불가)",precondition:"배송지 추가/수정 폼",steps:"1) 주소 필드 직접 타이핑 시도\n2) '주소 검색' 버튼 클릭",expectedResult:"1) 직접 타이핑 불가 (readonly)\n2) 다음 우편번호 팝업 열림",testData:"주소직접입력=불가",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_032",policySheet:"장바구니·배송지",policyNo:"R11",type:"기능",platform:"Web",priority:"P2",title:"주문 후 주소록 변경해도 기존 주문 배송지 유지(스냅샷)",precondition:"주문 완료 상태",steps:"1) 주문 완료 후 주소록 배송지 수정\n2) 기존 주문 주문상세 배송지 확인",expectedResult:"2) 기존 주문 배송지 = 주문 시점 값 유지\n   주소록 변경 소급 미적용",testData:"주문배송지=강남구, 변경=서초구",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_033",policySheet:"상품·전시",policyNo:"R3",type:"기능",platform:"Web",priority:"P2",title:"액세서리 상품 — 사이즈 옵션 미노출 (NULL)",precondition:"액세서리 PDP 접속",steps:"1) 액세서리 PDP 진입\n2) 사이즈 옵션 영역 확인",expectedResult:"2) 사이즈 옵션 미노출\n   색상만 존재\n   사이즈 없이 장바구니 가능",testData:"카테고리=액세서리, sz_cd=NULL",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_034",policySheet:"상품·전시",policyNo:"R5",type:"기능",platform:"Web",priority:"P1",title:"숨김(03) 상품 목록/검색 미노출 및 URL 차단",precondition:"숨김 상태 상품 존재",steps:"1) 숨김 상품 검색\n2) URL 직접 접속",expectedResult:"1) 검색 결과 미노출\n2) 404 or '존재하지 않는 상품'",testData:"PRODUCT_STATUS=03(숨김)",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_035",policySheet:"상품·전시",policyNo:"R8",type:"기능",platform:"Web",priority:"P3",title:"룩북 — 스타일 이미지 상품 링크 PDP 이동",precondition:"룩북 페이지 접속",steps:"1) 룩북 이미지 연결 상품 클릭\n2) 이동 페이지 확인",expectedResult:"2) 해당 상품 PDP 이동\n   상품 정보 정합성",testData:"룩북→PDP 연결",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_036",policySheet:"상품·전시",policyNo:"R9",type:"기능",platform:"Web",priority:"P3",title:"검색 엔진 장애 시 DB 검색 폴백 동작",precondition:"검색 엔진 장애 환경",steps:"1) '티셔츠' 검색",expectedResult:"1) 검색 엔진 장애에도 결과 노출\n   DB 조회 폴백",testData:"검색어=티셔츠, 환경=엔진장애",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_037",policySheet:"리뷰",policyNo:"R1",type:"기능",platform:"Web",priority:"P1",title:"취소·반품 품목 리뷰 작성 불가",precondition:"취소 상품 포함 주문, 로그인",steps:"1) 주문상세 '리뷰 작성' 버튼 확인\n2) 취소 상품 버튼 상태\n3) 정상 상품 버튼 클릭",expectedResult:"2) 취소 상품: 버튼 비활성/미노출\n3) 정상 상품: 작성 화면 이동",testData:"취소상품=리뷰불가",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_038",policySheet:"리뷰",policyNo:"R2,R3,R4,R5",type:"기능",platform:"Web",priority:"P2",title:"리뷰 작성 — 별점(1~5), 본문(2000자), 태그(20개) 제한",precondition:"리뷰 작성 화면",steps:"1) 별점 선택\n2) 본문 2001자 입력\n3) 태그 21개 선택 시도",expectedResult:"1) 1~5 정상 선택\n2) 2000자 초과 차단 (글자수 카운터)\n3) 21번째 태그 차단",testData:"별점=1~5, 본문=2000자, 태그=20개",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_039",policySheet:"리뷰",policyNo:"R6",type:"기능",platform:"Web",priority:"P2",title:"리뷰 수정 기능 미제공 (삭제 후 재작성만 가능)",precondition:"작성 완료된 리뷰 존재",steps:"1) 내 리뷰 조회\n2) 수정 버튼 확인",expectedResult:"2) 수정 버튼 미노출\n   삭제 버튼만 제공",testData:"PUT/PATCH API 없음",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_POL_040",policySheet:"리뷰",policyNo:"R8",type:"UI",platform:"Web",priority:"P2",title:"리뷰 작성자명 마스킹 (김철수 → 김**)",precondition:"상품 PDP 리뷰 목록",steps:"1) 리뷰 목록 작성자명 확인\n2) 마스킹 패턴 기록",expectedResult:"2) 첫 글자 + ** 마스킹\n   김철수→김**\n   2자이름=김*",testData:"마스킹=첫글자+**",result:"",assignee:"",issueSummary:""}
+];
+
+let currentTab='ALL';
+const SHEETS=[...new Set(DATA.map(d=>d.policySheet))];
+
+function filteredItems(){
+  return currentTab==='ALL'?DATA:DATA.filter(i=>i.policySheet===currentTab);
+}
+function getItem(id){return DATA.find(i=>i.tcId===id);}
+
+function renderTable(){
+  const items=filteredItems();
+  document.getElementById('tcTbody').innerHTML=items.map(item=>`
+    <tr>
+      <td><b>${item.tcId}</b><br><small class="pol-ref">${item.policyNo}</small></td>
+      <td><span class="tag" style="font-size:10px">${item.policySheet}</span></td>
+      <td><span class="tag">${item.type}</span></td>
+      <td>${item.platform}</td>
+      <td><span class="badge ${item.priority}">${item.priority}</span></td>
+      <td><pre class="tc-pre">${item.title}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.precondition}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.steps}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.expectedResult}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.testData}</pre></td>
+      <td><select class="result-sel" data-id="${item.tcId}"><option value="">미실행</option><option value="Pass" ${item.result==='Pass'?'selected':''}>Pass</option><option value="Fail" ${item.result==='Fail'?'selected':''}>Fail</option><option value="Blocked" ${item.result==='Blocked'?'selected':''}>Blocked</option><option value="N/A" ${item.result==='N/A'?'selected':''}>N/A</option></select></td>
+      <td><input class="inline-input" type="text" placeholder="담당자" data-id="${item.tcId}" data-field="assignee" value="${item.assignee}"></td>
+      <td>${item.issueSummary?`<span class="${item.issueSummary.startsWith('⚠️')?'issue-warn':''}">${item.issueSummary}</span>`:''}<input class="inline-input" type="text" placeholder="이슈추가" data-id="${item.tcId}" data-field="issueSummary" style="margin-top:3px"></td>
+    </tr>
+  `).join('');
+  renderKPI();renderStats();
+}
+
+function renderKPI(){
+  const items=filteredItems();
+  document.getElementById('kpiTotal').textContent=items.length;
+  ['P1','P2','P3'].forEach(p=>document.getElementById('kpi'+p).textContent=items.filter(i=>i.priority===p).length);
+  document.getElementById('kpiPass').textContent=items.filter(i=>i.result==='Pass').length;
+  document.getElementById('kpiFail').textContent=items.filter(i=>i.result==='Fail').length;
+  document.getElementById('kpiBlocked').textContent=items.filter(i=>i.result==='Blocked').length;
+}
+
+function renderStats(){
+  document.getElementById('statsTbody').innerHTML=SHEETS.map(s=>{
+    const items=DATA.filter(i=>i.policySheet===s);
+    const total=items.length,pass=items.filter(i=>i.result==='Pass').length,fail=items.filter(i=>i.result==='Fail').length,blocked=items.filter(i=>i.result==='Blocked').length,na=items.filter(i=>i.result==='N/A').length,notRun=total-pass-fail-blocked-na,ex=pass+fail+blocked+na;
+    return `<tr><td>${s}</td><td>${total}</td><td style="color:var(--accent)">${pass}</td><td style="color:var(--p1)">${fail}</td><td style="color:var(--p2)">${blocked}</td><td>${na}</td><td style="color:var(--muted)">${notRun}</td><td>${total?Math.round(ex/total*100):0}%</td><td>${ex?Math.round(pass/ex*100):0}%</td><td>${ex?Math.round(fail/ex*100):0}%</td></tr>`;
+  }).join('');
+}
+
+document.getElementById('tabBar').addEventListener('click',e=>{
+  const tab=e.target.closest('[data-tab]');if(!tab)return;
+  currentTab=tab.dataset.tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');renderTable();
+});
+document.getElementById('tcTbody').addEventListener('change',e=>{
+  const sel=e.target.closest('select.result-sel');if(!sel)return;
+  const item=getItem(sel.dataset.id);if(item){item.result=sel.value;renderKPI();renderStats();}
+});
+document.getElementById('tcTbody').addEventListener('input',e=>{
+  const inp=e.target.closest('input.inline-input');if(!inp)return;
+  const item=getItem(inp.dataset.id);if(item)item[inp.dataset.field]=inp.value;
+});
+document.getElementById('btnTheme').addEventListener('click',()=>{
+  const d=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',d?'':'dark');
+  document.getElementById('btnTheme').textContent=d?'🌙 다크모드':'☀️ 라이트모드';
+});
+document.getElementById('btnCSV').addEventListener('click',()=>{
+  const cols=['TC ID','정책시트','정책No','유형','플랫폼','우선순위','테스트항목','사전조건','수행절차','기대결과','테스트데이터','실행결과','담당자','이슈비고'];
+  const rows=DATA.map(i=>[i.tcId,i.policySheet,i.policyNo,i.type,i.platform,i.priority,i.title,i.precondition,i.steps,i.expectedResult,i.testData,i.result,i.assignee,i.issueSummary].map(v=>'"'+(v||'').replace(/"/g,'""').replace(/\n/g,' ')+'"').join(','));
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(cols.join(',')+'\n'+rows.join('\n'));a.download='TOPMALL_TC_POLICY.csv';a.click();
+});
+document.getElementById('btnSave').addEventListener('click',()=>{
+  const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify({meta:{savedAt:new Date().toISOString()},items:DATA},null,2));a.download='TOPMALL_TC_POLICY.json';a.click();
+});
+document.getElementById('btnLoad').addEventListener('click',()=>document.getElementById('fileInput').click());
+document.getElementById('fileInput').addEventListener('change',e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const d=JSON.parse(ev.target.result);
+      (d.items||[]).forEach(loaded=>{
+        const ex=DATA.find(i=>i.tcId===loaded.tcId);
+        if(ex){ex.result=loaded.result||'';ex.assignee=loaded.assignee||'';ex.issueSummary=loaded.issueSummary||'';}
+      });
+      renderTable();alert('불러오기 완료');
+    }catch(err){alert('파일 오류: '+err.message);}
+    e.target.value='';
+  };
+  reader.readAsText(file,'utf-8');
+});
+renderTable();
+</script>
+</body>
+</html>

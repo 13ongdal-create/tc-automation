@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOPMALL QA TC Viewer — 배치3 (MY+CLM+PR)</title>
+<style>
+:root{--bg:#f6f8fa;--panel:#fff;--text:#1f2328;--muted:#656d76;--border:#d0d7de;--accent:#1a7f37;--accent2:#116329;--p1:#cf222e;--p2:#9a6700;--p3:#0969da;--headbg:#f6f8fa;--row-hover:#f0f6ff;--tag-bg:#eaf5ea}
+[data-theme="dark"]{--bg:#0d1117;--panel:#161b22;--text:#e6edf3;--muted:#848d97;--border:#30363d;--accent:#3fb950;--accent2:#2ea043;--p1:#f85149;--p2:#d29922;--p3:#58a6ff;--headbg:#21262d;--row-hover:#1c2128;--tag-bg:#1a2f1a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard','Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}
+.top-bar{background:var(--headbg);border-bottom:1px solid var(--border);padding:12px 20px;position:sticky;top:0;z-index:100}
+.top-bar-inner{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.project-title{font-size:18px;font-weight:700;color:var(--accent)}
+.project-sub{font-size:12px;color:var(--muted)}
+.btn{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);cursor:pointer;font-size:12px;font-weight:500;transition:.15s}
+.btn:hover{background:var(--headbg)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent2)}
+.spacer{flex:1}
+.kpi-bar{display:flex;gap:10px;padding:14px 20px;flex-wrap:wrap}
+.kpi{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:10px 18px;min-width:100px;text-align:center}
+.kpi-num{font-size:22px;font-weight:700}
+.kpi-label{font-size:11px;color:var(--muted);margin-top:2px}
+.kpi-p1 .kpi-num{color:var(--p1)}.kpi-p2 .kpi-num{color:var(--p2)}.kpi-p3 .kpi-num{color:var(--p3)}
+.stats-wrap{padding:0 20px 10px}
+.stats-table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px}
+.stats-table th{background:var(--headbg);padding:7px 12px;text-align:center;border-bottom:1px solid var(--border);font-weight:600}
+.stats-table td{padding:6px 12px;text-align:center;border-bottom:1px solid var(--border)}
+.stats-table tr:last-child td{border-bottom:none}
+.stats-table td:first-child{text-align:left;font-weight:500}
+.tab-bar{padding:0 20px 10px;display:flex;gap:6px;flex-wrap:wrap}
+.tab{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--panel);cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);transition:.15s}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tc-wrap{padding:0 20px 30px;overflow-x:auto}
+table.tc{width:100%;border-collapse:collapse;table-layout:fixed;background:var(--panel);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+table.tc th{background:var(--headbg);padding:8px;text-align:left;border-bottom:1px solid var(--border);font-weight:600;font-size:11px;white-space:nowrap}
+table.tc td{padding:7px 8px;border-bottom:1px solid var(--border);vertical-align:top;font-size:12px;word-break:break-word}
+table.tc tr:last-child td{border-bottom:none}
+table.tc tr:hover td{background:var(--row-hover)}
+.col-id{width:90px}.col-cat{width:70px}.col-plat{width:48px}.col-pri{width:42px}.col-title{width:200px}.col-pre{width:140px}.col-steps{width:170px}.col-expect{width:170px}.col-data{width:110px}.col-result{width:80px}.col-assignee{width:64px}.col-issue{width:100px}
+.badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;color:#fff}
+.badge.P1{background:var(--p1)}.badge.P2{background:var(--p2)}.badge.P3{background:var(--p3)}
+.tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;background:var(--tag-bg);color:var(--accent2);border:1px solid var(--border)}
+select.result-sel{width:100%;padding:3px 4px;border:1px solid var(--border);border-radius:4px;background:var(--panel);color:var(--text);font-size:11px}
+input.inline-input{width:100%;padding:3px 5px;border:1px solid var(--border);border-radius:4px;background:var(--panel);color:var(--text);font-size:11px}
+pre.tc-pre{white-space:pre-wrap;font-family:inherit;font-size:12px}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div>
+      <div class="project-title">📦 TOPMALL TC Viewer</div>
+      <div class="project-sub">배치3 — MY(마이페이지) + CLM(취소/반품) + PR(프로모션) · v1.0 · 2026-08-20</div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn btn-primary" id="btnCSV">CSV 다운로드</button>
+    <button class="btn btn-primary" id="btnSave">JSON 저장</button>
+    <button class="btn" id="btnLoad">JSON 불러오기</button>
+    <input type="file" id="fileInput" accept=".json" style="display:none">
+    <button class="btn" id="btnTheme">🌙 다크모드</button>
+  </div>
+</div>
+
+<div class="kpi-bar">
+  <div class="kpi"><div class="kpi-num" id="kpiTotal">0</div><div class="kpi-label">전체 TC</div></div>
+  <div class="kpi kpi-p1"><div class="kpi-num" id="kpiP1">0</div><div class="kpi-label">P1 Critical</div></div>
+  <div class="kpi kpi-p2"><div class="kpi-num" id="kpiP2">0</div><div class="kpi-label">P2 Major</div></div>
+  <div class="kpi kpi-p3"><div class="kpi-num" id="kpiP3">0</div><div class="kpi-label">P3 Minor</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiPass" style="color:var(--accent)">0</div><div class="kpi-label">Pass</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiFail" style="color:var(--p1)">0</div><div class="kpi-label">Fail</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiBlocked" style="color:var(--p2)">0</div><div class="kpi-label">Blocked</div></div>
+</div>
+
+<div class="stats-wrap">
+  <table class="stats-table">
+    <thead><tr><th>모듈</th><th>전체</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>Fail율</th></tr></thead>
+    <tbody id="statsTbody"></tbody>
+  </table>
+</div>
+
+<div class="tab-bar">
+  <div class="tab active" data-tab="ALL">전체</div>
+  <div class="tab" data-tab="MY">🏠 마이페이지(MY)</div>
+  <div class="tab" data-tab="CLM">📦 취소/반품(CLM)</div>
+  <div class="tab" data-tab="PR">🎁 프로모션(PR)</div>
+</div>
+
+<div class="tc-wrap">
+<table class="tc">
+  <thead>
+    <tr>
+      <th class="col-id">TC ID</th>
+      <th class="col-cat">유형</th>
+      <th class="col-plat">플랫폼</th>
+      <th class="col-pri">우선순위</th>
+      <th class="col-title">테스트 항목</th>
+      <th class="col-pre">사전조건</th>
+      <th class="col-steps">수행절차</th>
+      <th class="col-expect">기대결과</th>
+      <th class="col-data">테스트 데이터</th>
+      <th class="col-result">실행결과</th>
+      <th class="col-assignee">담당자</th>
+      <th class="col-issue">이슈 요약</th>
+    </tr>
+  </thead>
+  <tbody id="tcTbody"></tbody>
+</table>
+</div>
+
+<script>
+const MY_ITEMS=[
+  {tcId:"TC_MY_001",_module:"MY",category3:"보안",platform:"Web",type:"보안",title:"비로그인 마이페이지 접근 → 로그인 리다이렉트",priority:"P1",precondition:"비로그인 상태",steps:"1) /mypage URL 직접 입력\n2) 접속 시도",expectedResult:"2) 마이페이지 미표시\n   로그인 페이지 리다이렉트\n   로그인 후 마이페이지 복귀",testData:"비로그인, URL=/mypage",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MY_002",_module:"MY",category3:"목록조회",platform:"Web",type:"기능",title:"주문내역 목록 조회 (주문번호/상품명/금액/상태)",priority:"P1",precondition:"Acc_Normal 로그인, 주문이력 존재",steps:"1) 마이페이지 > 주문내역\n2) 목록 확인",expectedResult:"2) 주문번호/상품명/금액/상태 표시\n   최신순 정렬\n   상세 링크 제공",testData:"계정=jspark81",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MY_003",_module:"MY",category3:"상세조회",platform:"Web",type:"기능",title:"주문상세 조회 (상품/결제/배송지 정보 정합성)",priority:"P1",precondition:"주문내역 목록 접속",steps:"1) 특정 주문 클릭\n2) 주문상세 확인",expectedResult:"2) 상품/결제/배송지 정보\n   주문 시 입력값과 일치",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MY_004",_module:"MY",category3:"목록조회",platform:"Web",type:"기능",title:"배송지 목록 조회",priority:"P2",precondition:"배송지 1건 이상 등록",steps:"1) 마이페이지 > 배송지 관리\n2) 목록 확인",expectedResult:"2) 배송지 목록 표시\n   기본 배송지 별도 표시\n   수정/삭제 버튼",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MY_005",_module:"MY",category3:"기본배송지",platform:"Web",type:"기능",title:"기본 배송지 설정 변경",priority:"P2",precondition:"배송지 2건 이상",steps:"1) 배송지 관리\n2) 다른 배송지 '기본으로 설정' 클릭\n3) 목록 재확인",expectedResult:"3) 선택 배송지 '기본' 표시\n   이전 기본 해제\n   주문서에 변경 반영",testData:"배송지 2건 이상",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MY_006",_module:"MY",category3:"추가",platform:"Web",type:"기능",title:"신규 배송지 추가",priority:"P2",precondition:"배송지 관리 페이지",steps:"1) '배송지 추가' 클릭\n2) 수령인/연락처/주소 입력\n3) '저장' 클릭\n4) 목록 확인",expectedResult:"4) 신규 배송지 추가됨\n   입력값 정합성 확인",testData:"수령인=테스트수령인, 연락처=01011112222",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MY_007",_module:"MY",category3:"수정",platform:"Web",type:"기능",title:"배송지 정보 수정",priority:"P2",precondition:"배송지 1건 이상",steps:"1) 특정 배송지 '수정' 클릭\n2) 상세주소 101호→202호 변경\n3) '저장' 클릭\n4) 확인",expectedResult:"4) 202호로 변경 반영",testData:"수정전=101호, 수정후=202호",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MY_008",_module:"MY",category3:"삭제",platform:"Web",type:"기능",title:"배송지 삭제",priority:"P2",precondition:"비기본 배송지 1건 이상",steps:"1) 비기본 배송지 '삭제' 클릭\n2) 확인 팝업 '확인'\n3) 목록 확인",expectedResult:"3) 해당 배송지 제거\n   나머지 유지",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MY_009",_module:"MY",category3:"목록조회",platform:"Web",type:"기능",title:"쿠폰함 — 보유 쿠폰 목록 조회",priority:"P2",precondition:"쿠폰 1건 이상 보유",steps:"1) 마이페이지 > 쿠폰함\n2) 쿠폰 목록 확인",expectedResult:"2) 쿠폰명/할인율/유효기간/조건 표시\n   사용가능/만료 구분",testData:"쿠폰=첫구매 15%",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MY_010",_module:"MY",category3:"수정",platform:"Web",type:"기능",title:"회원정보 수정 (이름/전화번호)",priority:"P2",precondition:"Acc_Normal 로그인",steps:"1) 이름 '박지속'→'박지수'\n2) 전화 변경\n3) '저장'\n4) 확인",expectedResult:"4) 변경값 반영\n   GNB에 변경 이름 표시",testData:"이름=박지속→박지수",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MY_011",_module:"MY",category3:"비밀번호변경",platform:"Web",type:"기능",title:"비밀번호 변경 — 현재PW 확인 후 신규PW 설정",priority:"P2",precondition:"Acc_Normal 로그인",steps:"1) 현재PW: q1w2e3r4!\n2) 신규PW: NewPass1!\n3) 확인: NewPass1!\n4) '변경'\n5) 신규PW로 로그인",expectedResult:"4) 변경 성공 메시지\n5) 신규PW 로그인 성공",testData:"현재=q1w2e3r4!, 신규=NewPass1!",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MY_012",_module:"MY",category3:"비밀번호변경",platform:"Web",type:"기능",title:"비밀번호 변경 — 현재PW 오입력 시 오류",priority:"P2",precondition:"Acc_Normal 로그인",steps:"1) 현재PW: wrongPW123! (오류)\n2) 신규PW 입력\n3) '변경'",expectedResult:"3) 오류: '현재 비밀번호 불일치'\n   변경 차단",testData:"현재PW=wrongPW123! (오류)",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MY_013",_module:"MY",category3:"내역조회",platform:"Web",type:"기능",title:"포인트 적립/사용 내역 조회",priority:"P2",precondition:"Acc_Normal 로그인, 포인트 이력 존재",steps:"1) 마이페이지 > 포인트 내역\n2) 내역 확인",expectedResult:"2) 적립/사용/잔여 포인트 표시",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_MY_014",_module:"MY",category3:"탈퇴",platform:"Web",type:"기능",title:"회원탈퇴 — 탈퇴 확인 후 로그아웃 처리",priority:"P3",precondition:"별도 탈퇴용 계정 로그인",steps:"1) 탈퇴 사유 선택\n2) '탈퇴하기' 클릭\n3) 확인 팝업 '확인'",expectedResult:"3) 탈퇴완료 → 자동 로그아웃\n   탈퇴 이메일 재가입 제한\n   완료 안내 페이지",testData:"탈퇴계정=별도 계정",result:"",assignee:"",issueSummary:""}
+];
+
+const CLM_ITEMS=[
+  {tcId:"TC_CLM_001",_module:"CLM",category3:"취소신청",platform:"Web",type:"기능",title:"결제완료 상태 주문 취소 신청",priority:"P1",precondition:"Acc_Normal 로그인, '결제완료' 주문 존재",steps:"1) 마이페이지 > 주문내역\n2) '결제완료' 주문 선택\n3) '주문취소' 클릭\n4) 취소사유 선택 → '취소신청'",expectedResult:"4) 취소 신청 완료\n   상태 '취소완료' or '취소처리중'",testData:"주문상태=결제완료",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_CLM_002",_module:"CLM",category3:"상태변경",platform:"Web",type:"기능",title:"취소 신청 후 주문 상태 '취소완료' 전환",priority:"P1",precondition:"CLM_001 완료",steps:"1) 마이페이지 > 주문내역\n2) 취소 주문 확인",expectedResult:"2) 상태='취소완료'\n   취소일시 기록",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_CLM_003",_module:"CLM",category3:"환불금액",platform:"Web",type:"데이터",title:"취소 후 환불금액 = 결제금액 정합성",priority:"P1",precondition:"취소완료 주문 존재",steps:"1) 취소완료 주문 상세\n2) 환불금액 확인\n3) 원결제금액과 비교",expectedResult:"3) 환불 = 실결제금액\n   환불수단 = 원결제수단",testData:"결제=26,100원, 환불=26,100원",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_CLM_004",_module:"CLM",category3:"취소불가",platform:"Web",type:"기능",title:"배송중 상태 주문 취소 불가 안내",priority:"P1",precondition:"'배송중' 상태 주문 존재",steps:"1) '배송중' 주문 취소버튼 확인\n2) 취소 시도",expectedResult:"1) 취소버튼 비활성/미노출\n2) '배송중 취소불가, 반품신청 이용' 안내",testData:"주문상태=배송중",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_CLM_005",_module:"CLM",category3:"반품신청",platform:"Web",type:"기능",title:"배송완료 후 30일 이내 반품 신청 가능",priority:"P1",precondition:"'배송완료' 주문 (30일 이내)",steps:"1) '배송완료' 주문 '반품신청' 클릭\n2) 반품사유 선택\n3) '신청' 클릭",expectedResult:"3) 반품 신청 완료\n   상태 '반품신청'",testData:"배송완료후=30일 이내",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_CLM_006",_module:"CLM",category3:"반품사유",platform:"Web",type:"기능",title:"반품 사유 선택 후 반품 신청 완료",priority:"P1",precondition:"반품신청 화면",steps:"1) 사유: '단순 변심' 선택\n2) 추가내용 입력\n3) '신청' 클릭",expectedResult:"3) 신청완료 메시지\n   접수번호 발급",testData:"반품사유=단순 변심",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_CLM_007",_module:"CLM",category3:"상태변경",platform:"Web",type:"기능",title:"반품 신청 후 주문 상태 '반품신청' 전환",priority:"P1",precondition:"CLM_005 or CLM_006 완료",steps:"1) 마이페이지 > 주문내역\n2) 반품 주문 상태 확인",expectedResult:"2) '반품신청' 표시\n   신청일시/접수번호",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_CLM_008",_module:"CLM",category3:"기간초과",platform:"Web",type:"Boundary",title:"배송완료 31일 초과 시 반품 신청 불가",priority:"P2",precondition:"배송완료 31일 이상 주문",steps:"1) 해당 주문 반품버튼 확인\n2) 반품 시도",expectedResult:"1) 반품버튼 비활성/미노출\n2) '반품 가능기간(30일) 초과' 안내",testData:"배송완료후=31일",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_CLM_009",_module:"CLM",category3:"교환신청",platform:"Web",type:"기능",title:"교환 신청 — 사유 선택 후 신청 완료",priority:"P2",precondition:"'배송완료' 주문 존재",steps:"1) '교환신청' 클릭\n2) 사유: '사이즈 변경'\n3) '신청' 클릭",expectedResult:"3) 신청완료\n   상태 '교환신청'",testData:"교환사유=사이즈 변경",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_CLM_010",_module:"CLM",category3:"부분취소",platform:"Web",type:"기능",title:"다중 상품 주문에서 일부 상품만 부분취소",priority:"P2",precondition:"다중 상품 '결제완료' 주문 (2종 이상)",steps:"1) 주문상세\n2) 특정 상품만 체크 → '선택취소'\n3) 사유 → '신청'\n4) 상세 재확인",expectedResult:"4) 선택 상품만 '취소완료'\n   나머지 '결제완료' 유지\n   환불=취소 상품금액만",testData:"주문=2종, 취소=1종",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_CLM_011",_module:"CLM",category3:"환불처리",platform:"Web",type:"기능",title:"반품완료 후 환불 처리 상태 반영",priority:"P2",precondition:"반품완료 처리된 주문",steps:"1) 마이페이지 > 주문내역\n2) 반품완료 주문 상태\n3) 주문상세 환불 정보",expectedResult:"2) '반품완료' 표시\n3) 환불금액/일시/수단 표시",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_CLM_012",_module:"CLM",category3:"쿠폰복구",platform:"Web",type:"기능",title:"쿠폰 사용 주문 취소 시 쿠폰 복구",priority:"P2",precondition:"쿠폰 사용 주문 취소완료",steps:"1) 취소 후 쿠폰함 확인",expectedResult:"1) 사용 쿠폰 쿠폰함에 복구\n   유효기간 이내 경우",testData:"사용쿠폰=첫구매 15%",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_CLM_013",_module:"CLM",category3:"내역반영",platform:"Web",type:"기능",title:"취소/반품 내역 주문내역에 반영",priority:"P2",precondition:"취소 or 반품 신청 완료",steps:"1) 마이페이지 > 주문내역\n2) 해당 주문 상태 확인",expectedResult:"2) 최신 상태 반영\n   (취소완료/반품신청/반품완료)",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_CLM_014",_module:"CLM",category3:"환불금액",platform:"Web",type:"데이터",title:"반품 배송비 차감 후 환불금액 정합성",priority:"P2",precondition:"단순변심 반품완료 주문",steps:"1) 반품완료 주문상세 환불금액\n2) 계산: 결제금액-반품배송비\n3) 비교",expectedResult:"3) 환불=결제-반품배송비(왕복)\n   상품불량=전액환불",testData:"결제=26,100, 반품배송=5,000, 환불=21,100",result:"",assignee:"",issueSummary:""}
+];
+
+const PR_ITEMS=[
+  {tcId:"TC_PR_001",_module:"PR",category3:"자동발급",platform:"Web",type:"기능",title:"신규 회원가입 → 쿠폰함 15% 쿠폰 자동 발급",priority:"P1",precondition:"신규 계정 가입 완료 직후",steps:"1) 신규 계정 로그인\n2) 마이페이지 > 쿠폰함\n3) 쿠폰 목록 확인",expectedResult:"3) '첫구매 15% 쿠폰' 발급 확인\n   할인율/유효기간/조건 표시",testData:"신규계정=회원가입 직후",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PR_002",_module:"PR",category3:"적용조건",platform:"Web",type:"기능",title:"쿠폰 — 최소 주문금액 충족 시 적용 가능",priority:"P1",precondition:"쿠폰 보유 계정, 합계 충족",steps:"1) 주문/결제 쿠폰 영역\n2) 보유 쿠폰 선택",expectedResult:"2) 쿠폰 정상 적용\n   할인금액 반영",testData:"최소주문=10,000원, 합계=23,100원(충족)",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PR_003",_module:"PR",category3:"적용조건",platform:"Web",type:"기능",title:"쿠폰 — 최소 주문금액 미충족 시 적용 불가",priority:"P1",precondition:"쿠폰 보유 계정, 합계 미충족",steps:"1) 주문/결제 쿠폰 선택 시도",expectedResult:"1) 적용불가 or 오류\n   '최소 OO원 이상 사용가능' 안내",testData:"최소주문=10,000원, 합계=5,000원(미충족)",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PR_004",_module:"PR",category3:"유효기간",platform:"Web",type:"기능",title:"쿠폰 유효기간 내 사용 가능",priority:"P1",precondition:"유효기간 내 쿠폰 보유",steps:"1) 쿠폰함에서 유효기간 확인\n2) 주문/결제에서 쿠폰 선택",expectedResult:"2) 정상 적용\n   할인금액 반영",testData:"유효기간=현재일 이후",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PR_005",_module:"PR",category3:"유효기간",platform:"Web",type:"기능",title:"쿠폰 유효기간 만료 후 사용 불가",priority:"P2",precondition:"만료 쿠폰 보유",steps:"1) 쿠폰함 만료 쿠폰 확인\n2) 주문/결제에서 선택 시도",expectedResult:"1) '만료됨' 표시\n2) 적용불가 or 선택 차단",testData:"유효기간=현재일 이전",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PR_006",_module:"PR",category3:"중복사용",platform:"Web",type:"기능",title:"동일 쿠폰 중복 사용 불가",priority:"P1",precondition:"이미 사용된 쿠폰 존재",steps:"1) 쿠폰함 사용완료 쿠폰 확인\n2) 주문/결제에서 재선택 시도",expectedResult:"1) '사용완료' or 비표시\n2) 재선택 불가",testData:"사용완료=첫구매 15%",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PR_007",_module:"PR",category3:"가격정합성",platform:"Web",type:"데이터",title:"SALE 상품 할인가 정합성 (정가×(1-할인율)=할인가)",priority:"P1",precondition:"SALE 카테고리 접속",steps:"1) SALE 상품 2종 선택\n2) 정가/할인율/할인가 기록\n3) 직접 계산\n4) 화면 할인가 비교",expectedResult:"4) 화면값=계산값 (±1원 이내)",testData:"상품A: 정가=33,900, 할인율=32%",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PR_008",_module:"PR",category3:"배지정합성",platform:"Web",type:"데이터",title:"상품 카드 할인율 배지 % 정합성",priority:"P2",precondition:"상품목록 페이지",steps:"1) 배지 상품 3종 선택\n2) 배지% 기록\n3) PDP 진입 후 직접 계산\n4) 비교",expectedResult:"4) 배지값=계산값 (±1% 이내)",testData:"샘플 -32%, -19%, -25%",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PR_009",_module:"PR",category3:"중복할인",platform:"Web",type:"기능",title:"SALE 상품 + 쿠폰 중복할인 적용 불가 처리",priority:"P2",precondition:"쿠폰 보유, SALE 상품만 장바구니",steps:"1) SALE 상품 장바구니 담기\n2) 주문/결제 쿠폰 적용 시도",expectedResult:"2) [A] 적용불가 + 중복할인 불가 안내\n   [B] 정책에 따라 가능할 수도 있음 (확인 필요)",testData:"SALE상품+쿠폰 조합",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PR_010",_module:"PR",category3:"사용처리",platform:"Web",type:"기능",title:"쿠폰 사용 주문 완료 후 쿠폰 소진 처리",priority:"P2",precondition:"쿠폰 적용 주문 완료",steps:"1) 주문 완료 후 쿠폰함 확인",expectedResult:"1) 사용 쿠폰 '사용완료' or 목록에서 제거",testData:"사용쿠폰=첫구매 15%",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PR_011",_module:"PR",category3:"쿠폰복구",platform:"Web",type:"기능",title:"주문 취소 시 사용 쿠폰 쿠폰함 복구",priority:"P2",precondition:"쿠폰 사용 주문 취소완료",steps:"1) 취소 후 쿠폰함 확인",expectedResult:"1) 쿠폰 복구 — 재표시\n   유효기간 내 사용 가능",testData:"취소쿠폰=첫구매 15%",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_PR_012",_module:"PR",category3:"무료배송",platform:"Web",type:"기능",title:"장바구니 무료배송 기준 달성 시 실시간 반영",priority:"P2",precondition:"합계 26,900원 미만 상태",steps:"1) 장바구니 배송비 3,000원 확인\n2) 수량+ 증가로 26,900원 이상 도달\n3) 배송비 변경 확인",expectedResult:"3) 배송비 즉시 0원으로 변경\n   결제예정금액 재계산",testData:"초기=23,100원(유료), 증가후=46,200원(무료)",result:"",assignee:"",issueSummary:""}
+];
+
+let allItems=[...MY_ITEMS,...CLM_ITEMS,...PR_ITEMS];
+let currentTab='ALL';
+
+function filteredItems(){return currentTab==='ALL'?allItems:allItems.filter(i=>i._module===currentTab);}
+function getItem(id){return allItems.find(i=>i.tcId===id);}
+
+function renderTable(){
+  const items=filteredItems();
+  document.getElementById('tcTbody').innerHTML=items.map(item=>`
+    <tr>
+      <td><b>${item.tcId}</b><br><small style="color:var(--muted)">${item.category3}</small></td>
+      <td><span class="tag">${item.type}</span></td>
+      <td>${item.platform}</td>
+      <td><span class="badge ${item.priority}">${item.priority}</span></td>
+      <td><pre class="tc-pre">${item.title}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.precondition}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.steps}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.expectedResult}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.testData}</pre></td>
+      <td><select class="result-sel" data-id="${item.tcId}"><option value="">미실행</option><option value="Pass" ${item.result==='Pass'?'selected':''}>Pass</option><option value="Fail" ${item.result==='Fail'?'selected':''}>Fail</option><option value="Blocked" ${item.result==='Blocked'?'selected':''}>Blocked</option><option value="N/A" ${item.result==='N/A'?'selected':''}>N/A</option></select></td>
+      <td><input class="inline-input" type="text" placeholder="담당자" data-id="${item.tcId}" data-field="assignee" value="${item.assignee}"></td>
+      <td><input class="inline-input" type="text" placeholder="이슈요약" data-id="${item.tcId}" data-field="issueSummary" value="${item.issueSummary}"></td>
+    </tr>
+  `).join('');
+  renderKPI();renderStats();
+}
+
+function renderKPI(){
+  const items=filteredItems();
+  document.getElementById('kpiTotal').textContent=items.length;
+  ['P1','P2','P3'].forEach(p=>document.getElementById('kpi'+p).textContent=items.filter(i=>i.priority===p).length);
+  document.getElementById('kpiPass').textContent=items.filter(i=>i.result==='Pass').length;
+  document.getElementById('kpiFail').textContent=items.filter(i=>i.result==='Fail').length;
+  document.getElementById('kpiBlocked').textContent=items.filter(i=>i.result==='Blocked').length;
+}
+
+function renderStats(){
+  const mods=[{key:'MY',label:'마이페이지(MY)'},{key:'CLM',label:'취소/반품(CLM)'},{key:'PR',label:'프로모션(PR)'}];
+  document.getElementById('statsTbody').innerHTML=mods.map(m=>{
+    const items=allItems.filter(i=>i._module===m.key);
+    const total=items.length,pass=items.filter(i=>i.result==='Pass').length,fail=items.filter(i=>i.result==='Fail').length,blocked=items.filter(i=>i.result==='Blocked').length,na=items.filter(i=>i.result==='N/A').length,notRun=total-pass-fail-blocked-na,executed=pass+fail+blocked+na;
+    return `<tr><td>${m.label}</td><td>${total}</td><td style="color:var(--accent)">${pass}</td><td style="color:var(--p1)">${fail}</td><td style="color:var(--p2)">${blocked}</td><td>${na}</td><td style="color:var(--muted)">${notRun}</td><td>${total?Math.round(executed/total*100):0}%</td><td>${executed?Math.round(pass/executed*100):0}%</td><td>${executed?Math.round(fail/executed*100):0}%</td></tr>`;
+  }).join('');
+}
+
+document.getElementById('tabBar').addEventListener('click',e=>{
+  const tab=e.target.closest('[data-tab]');if(!tab)return;
+  currentTab=tab.dataset.tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');renderTable();
+});
+document.getElementById('tcTbody').addEventListener('change',e=>{
+  const sel=e.target.closest('select.result-sel');if(!sel)return;
+  const item=getItem(sel.dataset.id);if(item){item.result=sel.value;renderKPI();renderStats();}
+});
+document.getElementById('tcTbody').addEventListener('input',e=>{
+  const inp=e.target.closest('input.inline-input');if(!inp)return;
+  const item=getItem(inp.dataset.id);if(item)item[inp.dataset.field]=inp.value;
+});
+document.getElementById('btnTheme').addEventListener('click',()=>{
+  const d=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',d?'':'dark');
+  document.getElementById('btnTheme').textContent=d?'🌙 다크모드':'☀️ 라이트모드';
+});
+document.getElementById('btnCSV').addEventListener('click',()=>{
+  const cols=['TC ID','소분류','플랫폼','유형','테스트 항목','우선순위','사전조건','수행절차','기대결과','테스트 데이터','실행결과','담당자','이슈 요약'];
+  const rows=allItems.map(i=>[i.tcId,i.category3,i.platform,i.type,i.title,i.priority,i.precondition,i.steps,i.expectedResult,i.testData,i.result,i.assignee,i.issueSummary].map(v=>'"'+(v||'').replace(/"/g,'""').replace(/\n/g,' ')+'"').join(','));
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(cols.join(',')+'\n'+rows.join('\n'));a.download='TOPMALL_TC_MY_CLM_PR.csv';a.click();
+});
+document.getElementById('btnSave').addEventListener('click',()=>{
+  const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify({meta:{project:'TOPMALL',modules:['MY','CLM','PR'],savedAt:new Date().toISOString()},items:allItems},null,2));a.download='TOPMALL_TC_MY_CLM_PR.json';a.click();
+});
+document.getElementById('btnLoad').addEventListener('click',()=>document.getElementById('fileInput').click());
+document.getElementById('fileInput').addEventListener('change',e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);
+      (data.items||[]).forEach(loaded=>{
+        const existing=allItems.find(i=>i.tcId===loaded.tcId);
+        if(existing){existing.result=loaded.result||'';existing.assignee=loaded.assignee||'';existing.issueSummary=loaded.issueSummary||'';}
+      });
+      renderTable();alert('불러오기 완료');
+    }catch(err){alert('파일 오류: '+err.message);}
+    e.target.value='';
+  };
+  reader.readAsText(file,'utf-8');
+});
+renderTable();
+</script>
+</body>
+</html>

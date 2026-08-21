@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOPMALL QA TC Viewer — 배치4 (DSP+SYS)</title>
+<style>
+:root{--bg:#f6f8fa;--panel:#fff;--text:#1f2328;--muted:#656d76;--border:#d0d7de;--accent:#1a7f37;--accent2:#116329;--p1:#cf222e;--p2:#9a6700;--p3:#0969da;--headbg:#f6f8fa;--row-hover:#f0f6ff;--tag-bg:#eaf5ea}
+[data-theme="dark"]{--bg:#0d1117;--panel:#161b22;--text:#e6edf3;--muted:#848d97;--border:#30363d;--accent:#3fb950;--accent2:#2ea043;--p1:#f85149;--p2:#d29922;--p3:#58a6ff;--headbg:#21262d;--row-hover:#1c2128;--tag-bg:#1a2f1a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard','Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}
+.top-bar{background:var(--headbg);border-bottom:1px solid var(--border);padding:12px 20px;position:sticky;top:0;z-index:100}
+.top-bar-inner{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.project-title{font-size:18px;font-weight:700;color:var(--accent)}
+.project-sub{font-size:12px;color:var(--muted)}
+.btn{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);cursor:pointer;font-size:12px;font-weight:500;transition:.15s}
+.btn:hover{background:var(--headbg)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent2)}
+.spacer{flex:1}
+.kpi-bar{display:flex;gap:10px;padding:14px 20px;flex-wrap:wrap}
+.kpi{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:10px 18px;min-width:100px;text-align:center}
+.kpi-num{font-size:22px;font-weight:700}
+.kpi-label{font-size:11px;color:var(--muted);margin-top:2px}
+.kpi-p1 .kpi-num{color:var(--p1)}.kpi-p2 .kpi-num{color:var(--p2)}.kpi-p3 .kpi-num{color:var(--p3)}
+.stats-wrap{padding:0 20px 10px}
+.stats-table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px}
+.stats-table th{background:var(--headbg);padding:7px 12px;text-align:center;border-bottom:1px solid var(--border);font-weight:600}
+.stats-table td{padding:6px 12px;text-align:center;border-bottom:1px solid var(--border)}
+.stats-table tr:last-child td{border-bottom:none}
+.stats-table td:first-child{text-align:left;font-weight:500}
+.tab-bar{padding:0 20px 10px;display:flex;gap:6px;flex-wrap:wrap}
+.tab{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--panel);cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);transition:.15s}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tc-wrap{padding:0 20px 30px;overflow-x:auto}
+table.tc{width:100%;border-collapse:collapse;table-layout:fixed;background:var(--panel);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+table.tc th{background:var(--headbg);padding:8px;text-align:left;border-bottom:1px solid var(--border);font-weight:600;font-size:11px;white-space:nowrap}
+table.tc td{padding:7px 8px;border-bottom:1px solid var(--border);vertical-align:top;font-size:12px;word-break:break-word}
+table.tc tr:last-child td{border-bottom:none}
+table.tc tr:hover td{background:var(--row-hover)}
+.col-id{width:90px}.col-cat{width:70px}.col-plat{width:48px}.col-pri{width:42px}.col-title{width:200px}.col-pre{width:140px}.col-steps{width:170px}.col-expect{width:170px}.col-data{width:110px}.col-result{width:80px}.col-assignee{width:64px}.col-issue{width:100px}
+.badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;color:#fff}
+.badge.P1{background:var(--p1)}.badge.P2{background:var(--p2)}.badge.P3{background:var(--p3)}
+.tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;background:var(--tag-bg);color:var(--accent2);border:1px solid var(--border)}
+select.result-sel{width:100%;padding:3px 4px;border:1px solid var(--border);border-radius:4px;background:var(--panel);color:var(--text);font-size:11px}
+input.inline-input{width:100%;padding:3px 5px;border:1px solid var(--border);border-radius:4px;background:var(--panel);color:var(--text);font-size:11px}
+pre.tc-pre{white-space:pre-wrap;font-family:inherit;font-size:12px}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div>
+      <div class="project-title">🖥️ TOPMALL TC Viewer</div>
+      <div class="project-sub">배치4 — DSP(전시/메인) + SYS(공통/비기능) · v1.0 · 2026-08-20</div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn btn-primary" id="btnCSV">CSV 다운로드</button>
+    <button class="btn btn-primary" id="btnSave">JSON 저장</button>
+    <button class="btn" id="btnLoad">JSON 불러오기</button>
+    <input type="file" id="fileInput" accept=".json" style="display:none">
+    <button class="btn" id="btnTheme">🌙 다크모드</button>
+  </div>
+</div>
+
+<div class="kpi-bar">
+  <div class="kpi"><div class="kpi-num" id="kpiTotal">0</div><div class="kpi-label">전체 TC</div></div>
+  <div class="kpi kpi-p1"><div class="kpi-num" id="kpiP1">0</div><div class="kpi-label">P1 Critical</div></div>
+  <div class="kpi kpi-p2"><div class="kpi-num" id="kpiP2">0</div><div class="kpi-label">P2 Major</div></div>
+  <div class="kpi kpi-p3"><div class="kpi-num" id="kpiP3">0</div><div class="kpi-label">P3 Minor</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiPass" style="color:var(--accent)">0</div><div class="kpi-label">Pass</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiFail" style="color:var(--p1)">0</div><div class="kpi-label">Fail</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiBlocked" style="color:var(--p2)">0</div><div class="kpi-label">Blocked</div></div>
+</div>
+
+<div class="stats-wrap">
+  <table class="stats-table">
+    <thead><tr><th>모듈</th><th>전체</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>Fail율</th></tr></thead>
+    <tbody id="statsTbody"></tbody>
+  </table>
+</div>
+
+<div class="tab-bar">
+  <div class="tab active" data-tab="ALL">전체</div>
+  <div class="tab" data-tab="DSP">🖥️ 메인/전시(DSP)</div>
+  <div class="tab" data-tab="SYS">⚙️ 공통/비기능(SYS)</div>
+</div>
+
+<div class="tc-wrap">
+<table class="tc">
+  <thead>
+    <tr>
+      <th class="col-id">TC ID</th>
+      <th class="col-cat">유형</th>
+      <th class="col-plat">플랫폼</th>
+      <th class="col-pri">우선순위</th>
+      <th class="col-title">테스트 항목</th>
+      <th class="col-pre">사전조건</th>
+      <th class="col-steps">수행절차</th>
+      <th class="col-expect">기대결과</th>
+      <th class="col-data">테스트 데이터</th>
+      <th class="col-result">실행결과</th>
+      <th class="col-assignee">담당자</th>
+      <th class="col-issue">이슈 요약</th>
+    </tr>
+  </thead>
+  <tbody id="tcTbody"></tbody>
+</table>
+</div>
+
+<script>
+const DSP_ITEMS=[
+  {tcId:"TC_DSP_001",_module:"DSP",category3:"배너",platform:"Web",type:"UI",title:"메인 히어로 배너 이미지 정상 노출",priority:"P2",precondition:"메인 페이지 접속",steps:"1) http://192.168.10.198:3003/ 접속\n2) 히어로 배너 영역 확인",expectedResult:"2) 히어로 배너 이미지 정상 노출\n   'Summer Vacation 2026' 문구 표시\n   이미지 깨짐 없음",testData:"URL=http://192.168.10.198:3003/",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_DSP_002",_module:"DSP",category3:"배너",platform:"Web",type:"기능",title:"'컬렉션 보기' 버튼 클릭 → 컬렉션 상품 목록 이동",priority:"P2",precondition:"메인 페이지 접속",steps:"1) 히어로 배너 '컬렉션 보기' 버튼 클릭\n2) 이동 페이지 확인",expectedResult:"2) 컬렉션 상품 목록 페이지 이동\n   URL 변경 확인",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_DSP_003",_module:"DSP",category3:"배너",platform:"Web",type:"기능",title:"'룩북 보기' 버튼 클릭 → 룩북 페이지 이동",priority:"P3",precondition:"메인 페이지 접속",steps:"1) 히어로 배너 '룩북 보기' 버튼 클릭\n2) 이동 페이지 확인",expectedResult:"2) 룩북 페이지 이동\n   룩북 이미지/컨텐츠 정상 노출",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_DSP_004",_module:"DSP",category3:"배너",platform:"Web",type:"데이터",title:"상단 배너 문구 정합성 (FREE SHIPPING·첫구매15%·30일무료반품)",priority:"P1",precondition:"메인 페이지 접속",steps:"1) 페이지 최상단 배너 문구 확인\n2) 문구 내용 기록",expectedResult:"2) 'FREE SHIPPING' 문구 표시\n   '첫 구매 15% 쿠폰' 문구 표시\n   '30일 무료 반품' 문구 표시\n   오탈자/누락 없음",testData:"예상문구=FREE SHIPPING, 첫 구매 15%, 30일 무료 반품",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_DSP_005",_module:"DSP",category3:"GNB",platform:"Web",type:"UI",title:"GNB 카테고리 Hover 시 2depth 메뉴 노출",priority:"P2",precondition:"메인 페이지 접속",steps:"1) GNB 'WOMEN' 메뉴에 마우스 호버\n2) 2depth 메뉴 노출 확인\n3) MEN, UNISEX, ACCESSORY 각각 호버",expectedResult:"1~3) 각 카테고리 호버 시 2depth 메뉴 정상 노출\n   메뉴 이탈 시 2depth 메뉴 자동 닫힘",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_DSP_006",_module:"DSP",category3:"GNB",platform:"Web",type:"기능",title:"GNB 카테고리 클릭 → 해당 카테고리 상품목록 이동",priority:"P2",precondition:"메인 페이지 접속",steps:"1) GNB 'WOMEN' 클릭 → 이동 확인\n2) 뒤로가기 후 'MEN' 클릭 → 확인\n3) 'UNISEX' 클릭 → 확인",expectedResult:"1) WOMEN 카테고리 상품목록\n2) MEN 카테고리 상품목록\n3) UNISEX 카테고리 상품목록",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_DSP_007",_module:"DSP",category3:"메인상품",platform:"Web",type:"기능",title:"메인 상품 카드 클릭 → PDP 이동",priority:"P2",precondition:"메인 페이지 접속",steps:"1) 메인 페이지 상품 카드 클릭\n2) 이동 페이지 확인",expectedResult:"2) 해당 상품의 PDP 이동\n   상품명, 가격 정보 정합성 확인",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_DSP_008",_module:"DSP",category3:"GNB",platform:"Web",type:"기능",title:"TOPMALL 로고 클릭 → 메인 페이지 이동",priority:"P2",precondition:"PDP 또는 상품목록 페이지 접속",steps:"1) GNB 좌측 TOPMALL 로고 클릭",expectedResult:"1) 메인 페이지로 이동\n   URL: http://192.168.10.198:3003/",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_DSP_009",_module:"DSP",category3:"GNB",platform:"Web",type:"기능",title:"SALE GNB 클릭 → SALE 상품 목록 이동",priority:"P2",precondition:"메인 페이지 접속",steps:"1) GNB 'SALE' 클릭\n2) 이동 페이지 확인",expectedResult:"2) SALE 카테고리 상품 목록\n   할인 상품 표시",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_DSP_010",_module:"DSP",category3:"GNB",platform:"Web",type:"기능",title:"NEW GNB 클릭 → 신상품 목록 이동",priority:"P2",precondition:"메인 페이지 접속",steps:"1) GNB 'NEW' 클릭\n2) 이동 페이지 확인",expectedResult:"2) 신상품 카테고리 상품 목록\n   최신 등록 상품 노출",testData:"-",result:"",assignee:"",issueSummary:""}
+];
+
+const SYS_ITEMS=[
+  {tcId:"TC_SYS_001",_module:"SYS",category3:"콘솔에러",platform:"Web",type:"기능",title:"메인 페이지 로드 시 콘솔 에러 미발생",priority:"P1",precondition:"비로그인 or 로그인 상태",steps:"1) 브라우저 F12 → Console 탭 열기\n2) 메인 페이지 로드 (새로고침 포함)\n3) 콘솔 에러 메시지 확인",expectedResult:"3) 에러(빨간 Error 레벨) 로그 미발생\n   경고(Warning)는 허용하나 에러는 0건",testData:"URL=/, 브라우저=Chrome",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_SYS_002",_module:"SYS",category3:"콘솔에러",platform:"Web",type:"기능",title:"PDP 로드 시 콘솔 에러 미발생",priority:"P1",precondition:"비로그인 상태",steps:"1) F12 → Console 탭 열기\n2) PDP 페이지 접속\n3) 콘솔 에러 확인",expectedResult:"3) Error 레벨 로그 0건",testData:"URL=/product/[id]",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_SYS_003",_module:"SYS",category3:"콘솔에러",platform:"Web",type:"기능",title:"장바구니 페이지 로드 시 콘솔 에러 미발생",priority:"P1",precondition:"Acc_Normal 로그인, 상품 담긴 상태",steps:"1) F12 → Console 탭 열기\n2) 장바구니 페이지 접속\n3) 콘솔 에러 확인",expectedResult:"3) Error 레벨 로그 0건",testData:"URL=/cart",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_SYS_004",_module:"SYS",category3:"404처리",platform:"Web",type:"기능",title:"존재하지 않는 URL 접근 → 404 에러 페이지",priority:"P2",precondition:"임의 상태",steps:"1) 주소창에 존재하지 않는 경로 입력\n   예: /this-page-does-not-exist-xyz\n2) 접속 결과 확인",expectedResult:"2) 404 에러 페이지 표시\n   '페이지를 찾을 수 없습니다' 안내\n   홈으로 이동 링크 제공",testData:"URL=/this-page-does-not-exist-xyz",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_SYS_005",_module:"SYS",category3:"접근제어",platform:"Web",type:"보안",title:"미인증 사용자 보호 페이지 직접 URL 접근 → 로그인 리다이렉트",priority:"P1",precondition:"비로그인 상태",steps:"1) 마이페이지 URL 직접 입력 (/mypage)\n2) 장바구니 결제 URL 직접 입력 (/checkout)\n3) 각 결과 확인",expectedResult:"1~2) 로그인 페이지로 리다이렉트\n   로그인 완료 후 원 요청 URL 복귀",testData:"보호URL=/mypage, /checkout",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_SYS_006",_module:"SYS",category3:"보안",platform:"Web",type:"보안",title:"검색창 XSS 입력값 필터링",priority:"P1",precondition:"임의 상태",steps:"1) 검색창에 <script>alert('XSS')</script> 입력 후 엔터\n2) 결과 확인",expectedResult:"2) alert 팝업 미발생\n   입력값 이스케이프 처리 후 텍스트로 표시\n   또는 특수문자 제거 후 처리",testData:"입력값=<script>alert('XSS')</script>",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_SYS_007",_module:"SYS",category3:"보안",platform:"Web",type:"보안",title:"주소 입력창 특수문자 입력 시 필터링",priority:"P2",precondition:"주문/결제 페이지 배송지 직접 입력 상태",steps:"1) 상세주소에 '<script>alert(1)</script>' 입력\n2) '주문하기' 클릭",expectedResult:"2) 스크립트 실행 없음\n   입력값 이스케이프 처리\n   또는 특수문자 입력 자체 차단",testData:"입력값=<script>alert(1)</script>",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_SYS_008",_module:"SYS",category3:"성능",platform:"Web",type:"성능",title:"네트워크 지연(Slow 3G) 시 로딩 인디케이터 표시",priority:"P3",precondition:"임의 상태",steps:"1) F12 → Network 탭 → Throttling: Slow 3G 설정\n2) 메인 페이지 새로고침\n3) 페이지 로딩 중 화면 확인",expectedResult:"3) 로딩 스피너 or 스켈레톤 UI 표시\n   무한 빈 화면(레이아웃 shift 없음)\n   로딩 완료 후 정상 노출",testData:"Throttling=Slow 3G",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_SYS_009",_module:"SYS",category3:"뒤로가기",platform:"Web",type:"기능",title:"브라우저 뒤로가기 후 장바구니 상태 유지",priority:"P2",precondition:"Acc_Normal 로그인, 장바구니 상품 담긴 상태",steps:"1) 장바구니 페이지 진입 → 상품 확인\n2) 브라우저 뒤로가기 (PDP 등)\n3) 브라우저 앞으로가기 또는 장바구니 재접속",expectedResult:"3) 장바구니 상품 목록 그대로 유지\n   수량/선택 상태 유지",testData:"-",result:"",assignee:"",issueSummary:""},
+  {tcId:"TC_SYS_010",_module:"SYS",category3:"중복방지",platform:"Web",type:"기능",title:"주문하기 버튼 연속 이중 클릭 → 중복 주문 방지",priority:"P1",precondition:"Acc_Normal 로그인, 주문/결제 페이지 모든 정보 입력 완료",steps:"1) '주문하기' 버튼 빠르게 연속 2회 클릭\n2) 마이페이지 > 주문내역 확인",expectedResult:"2) 주문 1건만 생성\n   버튼 첫 클릭 즉시 비활성화 or 로딩 상태\n   중복 주문번호 미생성",testData:"-",result:"",assignee:"",issueSummary:""}
+];
+
+let allItems=[...DSP_ITEMS,...SYS_ITEMS];
+let currentTab='ALL';
+
+function filteredItems(){return currentTab==='ALL'?allItems:allItems.filter(i=>i._module===currentTab);}
+function getItem(id){return allItems.find(i=>i.tcId===id);}
+
+function renderTable(){
+  const items=filteredItems();
+  document.getElementById('tcTbody').innerHTML=items.map(item=>`
+    <tr>
+      <td><b>${item.tcId}</b><br><small style="color:var(--muted)">${item.category3}</small></td>
+      <td><span class="tag">${item.type}</span></td>
+      <td>${item.platform}</td>
+      <td><span class="badge ${item.priority}">${item.priority}</span></td>
+      <td><pre class="tc-pre">${item.title}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.precondition}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.steps}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.expectedResult}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.testData}</pre></td>
+      <td><select class="result-sel" data-id="${item.tcId}"><option value="">미실행</option><option value="Pass" ${item.result==='Pass'?'selected':''}>Pass</option><option value="Fail" ${item.result==='Fail'?'selected':''}>Fail</option><option value="Blocked" ${item.result==='Blocked'?'selected':''}>Blocked</option><option value="N/A" ${item.result==='N/A'?'selected':''}>N/A</option></select></td>
+      <td><input class="inline-input" type="text" placeholder="담당자" data-id="${item.tcId}" data-field="assignee" value="${item.assignee}"></td>
+      <td><input class="inline-input" type="text" placeholder="이슈요약" data-id="${item.tcId}" data-field="issueSummary" value="${item.issueSummary}"></td>
+    </tr>
+  `).join('');
+  renderKPI();renderStats();
+}
+
+function renderKPI(){
+  const items=filteredItems();
+  document.getElementById('kpiTotal').textContent=items.length;
+  ['P1','P2','P3'].forEach(p=>document.getElementById('kpi'+p).textContent=items.filter(i=>i.priority===p).length);
+  document.getElementById('kpiPass').textContent=items.filter(i=>i.result==='Pass').length;
+  document.getElementById('kpiFail').textContent=items.filter(i=>i.result==='Fail').length;
+  document.getElementById('kpiBlocked').textContent=items.filter(i=>i.result==='Blocked').length;
+}
+
+function renderStats(){
+  const mods=[{key:'DSP',label:'메인/전시(DSP)'},{key:'SYS',label:'공통/비기능(SYS)'}];
+  document.getElementById('statsTbody').innerHTML=mods.map(m=>{
+    const items=allItems.filter(i=>i._module===m.key);
+    const total=items.length,pass=items.filter(i=>i.result==='Pass').length,fail=items.filter(i=>i.result==='Fail').length,blocked=items.filter(i=>i.result==='Blocked').length,na=items.filter(i=>i.result==='N/A').length,notRun=total-pass-fail-blocked-na,executed=pass+fail+blocked+na;
+    return `<tr><td>${m.label}</td><td>${total}</td><td style="color:var(--accent)">${pass}</td><td style="color:var(--p1)">${fail}</td><td style="color:var(--p2)">${blocked}</td><td>${na}</td><td style="color:var(--muted)">${notRun}</td><td>${total?Math.round(executed/total*100):0}%</td><td>${executed?Math.round(pass/executed*100):0}%</td><td>${executed?Math.round(fail/executed*100):0}%</td></tr>`;
+  }).join('');
+}
+
+document.getElementById('tabBar').addEventListener('click',e=>{
+  const tab=e.target.closest('[data-tab]');if(!tab)return;
+  currentTab=tab.dataset.tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');renderTable();
+});
+document.getElementById('tcTbody').addEventListener('change',e=>{
+  const sel=e.target.closest('select.result-sel');if(!sel)return;
+  const item=getItem(sel.dataset.id);if(item){item.result=sel.value;renderKPI();renderStats();}
+});
+document.getElementById('tcTbody').addEventListener('input',e=>{
+  const inp=e.target.closest('input.inline-input');if(!inp)return;
+  const item=getItem(inp.dataset.id);if(item)item[inp.dataset.field]=inp.value;
+});
+document.getElementById('btnTheme').addEventListener('click',()=>{
+  const d=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',d?'':'dark');
+  document.getElementById('btnTheme').textContent=d?'🌙 다크모드':'☀️ 라이트모드';
+});
+document.getElementById('btnCSV').addEventListener('click',()=>{
+  const cols=['TC ID','소분류','플랫폼','유형','테스트 항목','우선순위','사전조건','수행절차','기대결과','테스트 데이터','실행결과','담당자','이슈 요약'];
+  const rows=allItems.map(i=>[i.tcId,i.category3,i.platform,i.type,i.title,i.priority,i.precondition,i.steps,i.expectedResult,i.testData,i.result,i.assignee,i.issueSummary].map(v=>'"'+(v||'').replace(/"/g,'""').replace(/\n/g,' ')+'"').join(','));
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(cols.join(',')+'\n'+rows.join('\n'));a.download='TOPMALL_TC_DSP_SYS.csv';a.click();
+});
+document.getElementById('btnSave').addEventListener('click',()=>{
+  const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify({meta:{project:'TOPMALL',modules:['DSP','SYS'],savedAt:new Date().toISOString()},items:allItems},null,2));a.download='TOPMALL_TC_DSP_SYS.json';a.click();
+});
+document.getElementById('btnLoad').addEventListener('click',()=>document.getElementById('fileInput').click());
+document.getElementById('fileInput').addEventListener('change',e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);
+      (data.items||[]).forEach(loaded=>{
+        const existing=allItems.find(i=>i.tcId===loaded.tcId);
+        if(existing){existing.result=loaded.result||'';existing.assignee=loaded.assignee||'';existing.issueSummary=loaded.issueSummary||'';}
+      });
+      renderTable();alert('불러오기 완료');
+    }catch(err){alert('파일 오류: '+err.message);}
+    e.target.value='';
+  };
+  reader.readAsText(file,'utf-8');
+});
+renderTable();
+</script>
+</body>
+</html>

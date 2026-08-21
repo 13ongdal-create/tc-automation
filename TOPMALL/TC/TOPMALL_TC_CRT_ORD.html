@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOPMALL QA TC Viewer — 배치1 (CRT+ORD)</title>
+<style>
+:root {
+  --bg:#f6f8fa;--panel:#fff;--text:#1f2328;--muted:#656d76;
+  --border:#d0d7de;--accent:#1a7f37;--accent2:#116329;
+  --p1:#cf222e;--p2:#9a6700;--p3:#0969da;--headbg:#f6f8fa;
+  --row-hover:#f0f6ff;--tag-bg:#eaf5ea;
+}
+[data-theme="dark"] {
+  --bg:#0d1117;--panel:#161b22;--text:#e6edf3;--muted:#848d97;
+  --border:#30363d;--accent:#3fb950;--accent2:#2ea043;
+  --p1:#f85149;--p2:#d29922;--p3:#58a6ff;--headbg:#21262d;
+  --row-hover:#1c2128;--tag-bg:#1a2f1a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard','Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}
+/* Header */
+.top-bar{background:var(--headbg);border-bottom:1px solid var(--border);padding:12px 20px;position:sticky;top:0;z-index:100}
+.top-bar-inner{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.project-title{font-size:18px;font-weight:700;color:var(--accent)}
+.project-sub{font-size:12px;color:var(--muted)}
+.btn{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);cursor:pointer;font-size:12px;font-weight:500;transition:.15s}
+.btn:hover{background:var(--headbg)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent2)}
+.spacer{flex:1}
+/* KPI */
+.kpi-bar{display:flex;gap:10px;padding:14px 20px;flex-wrap:wrap}
+.kpi{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:10px 18px;min-width:100px;text-align:center}
+.kpi-num{font-size:22px;font-weight:700}
+.kpi-label{font-size:11px;color:var(--muted);margin-top:2px}
+.kpi-p1 .kpi-num{color:var(--p1)}
+.kpi-p2 .kpi-num{color:var(--p2)}
+.kpi-p3 .kpi-num{color:var(--p3)}
+/* Stats Table */
+.stats-wrap{padding:0 20px 10px}
+.stats-table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px}
+.stats-table th{background:var(--headbg);padding:7px 12px;text-align:center;border-bottom:1px solid var(--border);font-weight:600}
+.stats-table td{padding:6px 12px;text-align:center;border-bottom:1px solid var(--border)}
+.stats-table tr:last-child td{border-bottom:none}
+.stats-table td:first-child{text-align:left;font-weight:500}
+/* Tabs */
+.tab-bar{padding:0 20px 10px;display:flex;gap:6px;flex-wrap:wrap}
+.tab{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--panel);cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);transition:.15s}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* TC Table */
+.tc-wrap{padding:0 20px 30px;overflow-x:auto}
+table.tc{width:100%;border-collapse:collapse;table-layout:fixed;background:var(--panel);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+table.tc th{background:var(--headbg);padding:8px 8px;text-align:left;border-bottom:1px solid var(--border);font-weight:600;font-size:11px;white-space:nowrap;overflow:hidden}
+table.tc td{padding:7px 8px;border-bottom:1px solid var(--border);vertical-align:top;font-size:12px;word-break:break-word}
+table.tc tr:last-child td{border-bottom:none}
+table.tc tr:hover td{background:var(--row-hover)}
+/* Column widths */
+.col-id{width:90px}
+.col-cat{width:70px}
+.col-plat{width:48px}
+.col-type{width:58px}
+.col-title{width:200px}
+.col-pri{width:42px}
+.col-pre{width:140px}
+.col-steps{width:170px}
+.col-expect{width:170px}
+.col-data{width:110px}
+.col-result{width:80px}
+.col-assignee{width:64px}
+.col-issue{width:100px}
+/* Badges */
+.badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;color:#fff}
+.badge.P1{background:var(--p1)}
+.badge.P2{background:var(--p2)}
+.badge.P3{background:var(--p3)}
+.tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;background:var(--tag-bg);color:var(--accent2);border:1px solid var(--border)}
+/* Dropdowns & Inputs */
+select.result-sel{width:100%;padding:3px 4px;border:1px solid var(--border);border-radius:4px;background:var(--panel);color:var(--text);font-size:11px}
+select.result-sel option[value="Pass"]{color:#1a7f37}
+select.result-sel option[value="Fail"]{color:#cf222e}
+select.result-sel option[value="Blocked"]{color:#9a6700}
+input.inline-input{width:100%;padding:3px 5px;border:1px solid var(--border);border-radius:4px;background:var(--panel);color:var(--text);font-size:11px}
+pre.tc-pre{white-space:pre-wrap;font-family:inherit;font-size:12px}
+/* Modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:24px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto}
+.modal h3{margin-bottom:14px;font-size:16px}
+.modal-close{float:right;cursor:pointer;font-size:18px;color:var(--muted)}
+/* Responsive */
+@media(max-width:900px){table.tc{font-size:11px}}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div>
+      <div class="project-title">🛒 TOPMALL TC Viewer</div>
+      <div class="project-sub">배치1 — CRT(장바구니) + ORD(주문/결제) · v1.0 · 2026-08-20</div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn" id="btnAccMatrix" data-modal="modal-acc">👤 테스트 계정 매트릭스</button>
+    <button class="btn" id="btnFlowMap" data-modal="modal-flow">🗺️ User Flow Map</button>
+    <button class="btn btn-primary" id="btnCSV">CSV 다운로드</button>
+    <button class="btn btn-primary" id="btnSaveJSON">JSON 저장</button>
+    <button class="btn" id="btnLoadJSON">JSON 불러오기</button>
+    <input type="file" id="fileInput" accept=".json" style="display:none">
+    <button class="btn" id="btnTheme">🌙 다크모드</button>
+  </div>
+</div>
+
+<!-- KPI -->
+<div class="kpi-bar" id="kpiBar">
+  <div class="kpi"><div class="kpi-num" id="kpiTotal">0</div><div class="kpi-label">전체 TC</div></div>
+  <div class="kpi kpi-p1"><div class="kpi-num" id="kpiP1">0</div><div class="kpi-label">P1 Critical</div></div>
+  <div class="kpi kpi-p2"><div class="kpi-num" id="kpiP2">0</div><div class="kpi-label">P2 Major</div></div>
+  <div class="kpi kpi-p3"><div class="kpi-num" id="kpiP3">0</div><div class="kpi-label">P3 Minor</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiPass" style="color:var(--accent)">0</div><div class="kpi-label">Pass</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiFail" style="color:var(--p1)">0</div><div class="kpi-label">Fail</div></div>
+  <div class="kpi"><div class="kpi-num" id="kpiBlocked" style="color:var(--p2)">0</div><div class="kpi-label">Blocked</div></div>
+</div>
+
+<!-- Stats -->
+<div class="stats-wrap">
+  <table class="stats-table" id="statsTable">
+    <thead><tr><th>모듈</th><th>전체</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>Fail율</th></tr></thead>
+    <tbody id="statsTbody"></tbody>
+  </table>
+</div>
+
+<!-- Tabs -->
+<div class="tab-bar" id="tabBar">
+  <div class="tab active" data-tab="ALL">전체</div>
+  <div class="tab" data-tab="CRT">🛒 장바구니(CRT)</div>
+  <div class="tab" data-tab="ORD">💳 주문/결제(ORD)</div>
+</div>
+
+<!-- TC Table -->
+<div class="tc-wrap">
+<table class="tc" id="tcTable">
+  <thead>
+    <tr>
+      <th class="col-id">TC ID</th>
+      <th class="col-cat">유형</th>
+      <th class="col-plat">플랫폼</th>
+      <th class="col-pri">우선순위</th>
+      <th class="col-title">테스트 항목</th>
+      <th class="col-pre">사전조건</th>
+      <th class="col-steps">수행절차</th>
+      <th class="col-expect">기대결과</th>
+      <th class="col-data">테스트 데이터</th>
+      <th class="col-result">실행결과</th>
+      <th class="col-assignee">담당자</th>
+      <th class="col-issue">이슈 요약</th>
+    </tr>
+  </thead>
+  <tbody id="tcTbody"></tbody>
+</table>
+</div>
+
+<!-- Modal: 계정 매트릭스 -->
+<div class="modal-bg" id="modal-acc">
+  <div class="modal">
+    <span class="modal-close" data-close="modal-acc">✕</span>
+    <h3>👤 테스트 계정 매트릭스</h3>
+    <table class="stats-table">
+      <thead><tr><th>계정명</th><th>유형</th><th>ID</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td>Acc_Normal</td><td>로그인 회원</td><td>jspark81</td><td>기본 배송지/결제수단 등록 전제</td></tr>
+        <tr><td>Acc_NonMember</td><td>비로그인(게스트)</td><td>-</td><td>비로그인 구매 가능 여부 검증용</td></tr>
+        <tr><td>Acc_NewMember</td><td>신규 가입 계정</td><td>테스트 시 생성</td><td>첫 구매 15% 쿠폰 발급 검증용</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: User Flow Map -->
+<div class="modal-bg" id="modal-flow">
+  <div class="modal">
+    <span class="modal-close" data-close="modal-flow">✕</span>
+    <h3>🗺️ User Flow Map</h3>
+    <table class="stats-table">
+      <thead><tr><th>플로우</th><th>경로</th><th>우선순위</th></tr></thead>
+      <tbody>
+        <tr><td>핵심 구매</td><td>메인 → 카테고리 → PDP → 장바구니 → 주문결제 → 완료</td><td>P1</td></tr>
+        <tr><td>바로구매</td><td>PDP → [바로구매] → 주문결제 → 완료</td><td>P1</td></tr>
+        <tr><td>쿠폰 적용 구매</td><td>장바구니 → 주문결제 → 쿠폰 적용 → 결제</td><td>P1</td></tr>
+        <tr><td>무료배송 경계</td><td>26,899원(유료) / 26,900원(무료) / 26,901원(무료)</td><td>P1</td></tr>
+        <tr><td>장바구니 관리</td><td>담기 → 수량변경 → 선택삭제 → 주문</td><td>P2</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+// ────────────────────────────── DATA ──────────────────────────────
+const CRT_META = {"project":"TOPMALL","module":"CRT","moduleName":"장바구니","version":"v1.0","generatedAt":"2026-08-20","totalCount":22,"changeHistory":[{"version":"v1.0","date":"2026-08-20","author":"AGY","summary":"최초 생성 — URL 관찰 기반, 22건"}]};
+const ORD_META = {"project":"TOPMALL","module":"ORD","moduleName":"주문/결제","version":"v1.0","generatedAt":"2026-08-20","totalCount":24,"changeHistory":[{"version":"v1.0","date":"2026-08-20","author":"AGY","summary":"최초 생성 — URL 관찰 기반, 24건"}]};
+
+const CRT_ITEMS = [
+  {tcId:"TC_CRT_001",category1:"구매프로세스",category2:"장바구니",category3:"상품담기",platform:"Web",type:"기능",title:"로그인 회원 상품 장바구니 담기 성공",reference:"-",priority:"P1",precondition:"1) Acc_Normal(jspark81) 로그인 상태\n2) 장바구니 비어있음\n3) PDP 접근 가능한 상품 선택 완료",steps:"1) 브라우저에서 Front URL 접속\n2) WOMEN > 상의 > 티셔츠 진입\n3) 스트라이프 티셔츠 블랙 클릭\n4) 색상 '블랙' 선택\n5) 사이즈 'S' 선택\n6) '장바구니' 버튼 클릭",expectedResult:"1~3) PDP 정상 노출\n4~5) 옵션값 반영\n6) 장바구니 추가됨, GNB 아이콘 '1' 갱신",testData:"상품=스트라이프 티셔츠 블랙, 옵션=블랙/S, 단가=23,100원, 계정=jspark81",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_002",category1:"구매프로세스",category2:"장바구니",category3:"상품담기",platform:"Web",type:"기능",title:"비로그인 상태 장바구니 담기 — 로그인 유도 or 임시저장",reference:"-",priority:"P1",precondition:"1) 비로그인 상태",steps:"1) 비로그인 상태로 PDP 진입\n2) 옵션 선택\n3) '장바구니' 버튼 클릭",expectedResult:"3) [A] 로그인 팝업/페이지 이동\n   [B] 임시저장 후 로그인 시 유지",testData:"비로그인 상태",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_003",category1:"구매프로세스",category2:"장바구니",category3:"상품담기",platform:"Web",type:"기능",title:"동일 상품 중복 담기 시 수량 합산",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 동일 상품 1개 담긴 상태",steps:"1) 동일 상품 PDP 재진입\n2) 동일 옵션 선택\n3) '장바구니' 클릭\n4) 장바구니 수량 확인",expectedResult:"4) 새 행 없이 수량 2로 합산\n   금액=23,100×2=46,200원",testData:"동일상품 중복, 합산금액=46,200원",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_004",category1:"구매프로세스",category2:"장바구니",category3:"수량변경",platform:"Web",type:"기능",title:"수량 + 버튼 — 1 증가 및 금액 재계산",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 장바구니 수량 1개",steps:"1) 장바구니 진입\n2) '+' 버튼 클릭",expectedResult:"2) 수량 1→2\n   금액 23,100→46,200원",testData:"단가=23,100원, 초기=1, 변경후=2",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_005",category1:"구매프로세스",category2:"장바구니",category3:"수량변경",platform:"Web",type:"기능",title:"수량 - 버튼 — 1 감소 및 금액 재계산",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 장바구니 수량 2개",steps:"1) 장바구니 진입\n2) '-' 버튼 클릭",expectedResult:"2) 수량 2→1\n   금액 46,200→23,100원",testData:"단가=23,100원, 초기=2, 변경후=1",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_006",category1:"구매프로세스",category2:"장바구니",category3:"수량변경",platform:"Web",type:"Boundary",title:"수량 1에서 - 클릭 — 최솟값 제한 or 삭제 확인",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 수량 1개",steps:"1) 장바구니 진입\n2) 수량 1 상태에서 '-' 클릭",expectedResult:"2) [A] 1 유지 + 버튼 비활성\n   [B] 삭제 확인 팝업 노출\n   수량 0/음수 절대 미노출",testData:"경계값=0",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_007",category1:"구매프로세스",category2:"장바구니",category3:"수량변경",platform:"Web",type:"Boundary",title:"수량 최대값(99) 초과 입력 제한",reference:"-",priority:"P2",precondition:"1) Acc_Normal 로그인\n2) 장바구니 상품 있음",steps:"1) 장바구니 진입\n2) '+' 연속 클릭하여 99 도달\n3) 99에서 '+' 추가 클릭\n4) 입력필드에 100 직접 입력",expectedResult:"3) 99 이상 미증가 or 안내\n4) 99로 자동조정 or 오류",testData:"최대=99, 초과=100",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_008",category1:"구매프로세스",category2:"장바구니",category3:"상품삭제",platform:"Web",type:"기능",title:"개별 상품 X 버튼 — 해당 상품만 삭제",reference:"-",priority:"P2",precondition:"1) Acc_Normal 로그인\n2) 장바구니 2종 이상",steps:"1) 장바구니 진입\n2) 첫 번째 상품 'X' 클릭\n3) 목록/금액 확인",expectedResult:"3) 해당 상품만 제거\n   나머지 상품/금액 유지\n   GNB 수량 감소",testData:"-",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_009",category1:"구매프로세스",category2:"장바구니",category3:"상품삭제",platform:"Web",type:"기능",title:"체크박스 개별 선택 후 선택삭제",reference:"-",priority:"P2",precondition:"1) Acc_Normal 로그인\n2) 장바구니 3종",steps:"1) 장바구니 진입\n2) 1번 상품만 체크\n3) '선택삭제' 클릭\n4) 목록 확인",expectedResult:"4) 1번만 삭제, 나머지 2개 유지\n   금액 재계산",testData:"-",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_010",category1:"구매프로세스",category2:"장바구니",category3:"상품삭제",platform:"Web",type:"기능",title:"전체선택 체크박스 선택/해제 토글",reference:"-",priority:"P2",precondition:"1) Acc_Normal 로그인\n2) 장바구니 2종 이상",steps:"1) 장바구니 진입\n2) '전체선택' 클릭\n3) 다시 '전체선택' 클릭",expectedResult:"2) 전체 체크\n3) 전체 해제",testData:"-",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_011",category1:"구매프로세스",category2:"장바구니",category3:"상품삭제",platform:"Web",type:"기능",title:"전체선택 → 선택삭제 → Empty State 화면 노출",reference:"-",priority:"P2",precondition:"1) Acc_Normal 로그인\n2) 장바구니 상품 있음",steps:"1) 장바구니 진입\n2) 전체선택\n3) 선택삭제 클릭",expectedResult:"3) 전체 삭제\n   Empty State 안내 + 쇼핑 계속하기 링크",testData:"-",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_012",category1:"구매프로세스",category2:"장바구니",category3:"금액계산",platform:"Web",type:"데이터",title:"상품금액 합계 정합성 (단가×수량=소계)",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 장바구니 2종 이상, 다른 수량",steps:"1) 장바구니 진입\n2) 각 상품 단가×수량 직접 계산\n3) 화면 합계와 대조",expectedResult:"3) 화면합계 = Σ(단가×수량)\n   원 단위 정합성",testData:"A=23,100×2=46,200, B=19,900×1=19,900, 합=66,100",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_013",category1:"구매프로세스",category2:"장바구니",category3:"배송비",platform:"Web",type:"데이터",title:"합계 26,900원 미만 → 배송비 3,000원",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 상품합계 26,900원 미만",steps:"1) 장바구니 진입\n2) 배송비 항목 확인",expectedResult:"2) 배송비=+3,000원\n   결제예정=상품+3,000",testData:"합계=23,100원, 배송비=3,000원, 결제예정=26,100원",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_014",category1:"구매프로세스",category2:"장바구니",category3:"배송비",platform:"Web",type:"Boundary",title:"무료배송 경계 — 26,899원: 유료(3,000원)",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 합계 26,899원 구성",steps:"1) 장바구니 진입\n2) 배송비/결제예정금액 확인",expectedResult:"2) 배송비=3,000원\n   결제=26,899+3,000=29,899원\n   무료배송 부족금액 안내",testData:"합계=26,899, 기준=26,900, 배송비=3,000",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_015",category1:"구매프로세스",category2:"장바구니",category3:"배송비",platform:"Web",type:"Boundary",title:"무료배송 경계 — 26,900원: 무료(0원)",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 합계 정확히 26,900원",steps:"1) 장바구니 진입\n2) 배송비 확인",expectedResult:"2) 배송비=0원(무료)\n   결제=26,900원",testData:"합계=26,900, 배송비=0",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_016",category1:"구매프로세스",category2:"장바구니",category3:"배송비",platform:"Web",type:"Boundary",title:"무료배송 경계 — 26,901원: 무료(0원)",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 합계 26,901원",steps:"1) 장바구니 진입\n2) 배송비 확인",expectedResult:"2) 배송비=0원\n   결제=26,901원",testData:"합계=26,901, 배송비=0",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_017",category1:"구매프로세스",category2:"장바구니",category3:"금액계산",platform:"Web",type:"데이터",title:"결제예정금액 = 상품금액 - 할인금액 + 배송비 정합성",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 장바구니 상품 있음",steps:"1) 장바구니 진입\n2) 각 항목 기록\n3) 계산값과 결제예정금액 비교",expectedResult:"3) 결제예정 = 상품-할인+배송\n   원 단위 오차 없음",testData:"상품=23,100, 할인=0, 배송=3,000, 결제예정=26,100",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_018",category1:"구매프로세스",category2:"장바구니",category3:"금액계산",platform:"Web",type:"데이터",title:"무료배송까지 부족금액 안내 문구 정합성",reference:"-",priority:"P2",precondition:"1) Acc_Normal 로그인\n2) 합계 26,900원 미만",steps:"1) 장바구니 진입\n2) 부족금액 안내 문구 확인\n3) 실제 계산: 26,900-합계",expectedResult:"3) 문구의 금액 = 26,900-현재합계\n   예) 합계23,100 → '3,800원 더 담으면 무료'",testData:"합계=23,100, 기준=26,900, 부족=3,800",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_019",category1:"구매프로세스",category2:"장바구니",category3:"주문이동",platform:"Web",type:"기능",title:"'선택상품 주문하기' → 주문/결제 페이지 이동",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 장바구니 상품 체크된 상태",steps:"1) 장바구니 진입\n2) 상품 체크\n3) '선택상품 주문하기' 클릭",expectedResult:"3) 주문/결제 이동\n   체크 상품만 주문서 반영",testData:"체크=티셔츠 블랙/S 1개",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_020",category1:"구매프로세스",category2:"장바구니",category3:"네비게이션",platform:"Web",type:"기능",title:"장바구니 상품 이미지/상품명 클릭 → PDP 이동",reference:"-",priority:"P2",precondition:"1) Acc_Normal 로그인\n2) 장바구니 상품 있음",steps:"1) 장바구니 진입\n2) 상품 이미지 클릭\n3) 뒤로가기 후 상품명 클릭",expectedResult:"2) PDP 이동\n3) PDP 이동",testData:"-",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_021",category1:"구매프로세스",category2:"장바구니",category3:"네비게이션",platform:"Web",type:"기능",title:"GNB 장바구니 아이콘 클릭 → 장바구니 페이지 이동",reference:"-",priority:"P2",precondition:"1) 임의 페이지 접속 상태",steps:"1) GNB 우측 장바구니 아이콘 클릭",expectedResult:"1) 장바구니 페이지(/cart) 이동\n   담긴 상품 목록 정상 노출",testData:"-",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_CRT_022",category1:"구매프로세스",category2:"장바구니",category3:"Empty State",platform:"Web",type:"UI",title:"빈 장바구니 Empty State + 쇼핑 계속하기 링크",reference:"-",priority:"P2",precondition:"1) Acc_Normal 로그인\n2) 장바구니 비어있음",steps:"1) /cart 직접 접근\n2) 화면 확인\n3) 링크 클릭",expectedResult:"1~2) 비어있음 안내\n3) 메인/상품목록 이동",testData:"-",result:"",assignee:"",issueSummary:"",issueLink:""}
+];
+
+const ORD_ITEMS = [
+  {tcId:"TC_ORD_001",category1:"구매프로세스",category2:"주문/결제",category3:"입력값검증",platform:"Web",type:"기능",title:"주문자명 필수 — 공백 제출 시 오류",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 주문/결제 페이지 진입",steps:"1) 주문자명 필드 공백\n2) '주문하기' 클릭",expectedResult:"2) 제출 차단\n   오류 메시지 노출\n   해당 필드 포커스",testData:"주문자명='' (공백)",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_002",category1:"구매프로세스",category2:"주문/결제",category3:"입력값검증",platform:"Web",type:"기능",title:"휴대폰번호 형식 검증 — 숫자 11자리 외 오류",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 주문/결제 페이지 진입",steps:"1) 휴대폰에 '010-1234-567' 입력 → 주문\n2) 휴대폰에 'abcd12345678' 입력 → 주문",expectedResult:"1) 오류 메시지\n2) 오류 메시지\n   숫자 11자리만 허용",testData:"오류값=010-1234-567, abcd12345678\n정상=01012345678",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_003",category1:"구매프로세스",category2:"주문/결제",category3:"입력값검증",platform:"Web",type:"기능",title:"이메일 형식 검증 — @ 누락 시 오류",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 주문/결제 페이지 진입",steps:"1) 이메일에 'testuser' → 주문\n2) 이메일에 'test@' → 주문",expectedResult:"1~2) 오류 메시지\n   유효형식: test@example.com",testData:"오류=testuser, test@\n정상=jspark81@3top.co.kr",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_004",category1:"구매프로세스",category2:"주문/결제",category3:"배송지",platform:"Web",type:"기능",title:"배송지 — 기본 배송지 자동 입력",reference:"-",priority:"P1",precondition:"1) Acc_Normal(기본 배송지 등록) 로그인\n2) 주문/결제 진입",steps:"1) '기본 배송지' 라디오 선택\n2) 배송지 필드 확인",expectedResult:"2) 등록된 기본 배송지 자동 입력\n   수정 가능",testData:"기본배송지=박지속, 010-8413-1696",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_005",category1:"구매프로세스",category2:"주문/결제",category3:"배송지",platform:"Web",type:"기능",title:"배송지 — 최근 배송지 선택 시 자동 입력",reference:"-",priority:"P2",precondition:"1) 이전 주문 이력 있는 계정\n2) 주문/결제 진입",steps:"1) '최근 배송지' 라디오 선택\n2) 배송지 필드 확인",expectedResult:"2) 최근 주문 배송지 자동 입력",testData:"-",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_006",category1:"구매프로세스",category2:"주문/결제",category3:"배송지",platform:"Web",type:"기능",title:"배송지 — 직접 입력 선택 시 빈 필드 전환",reference:"-",priority:"P2",precondition:"1) 기본/최근 배송지 입력된 상태",steps:"1) '직접 입력' 라디오 선택\n2) 필드 상태 확인",expectedResult:"2) 모든 배송지 필드 초기화\n   직접 입력 가능",testData:"-",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_007",category1:"구매프로세스",category2:"주문/결제",category3:"배송지",platform:"Web",type:"기능",title:"'주문자와 동일' 버튼 → 수령인/전화번호 자동 완성",reference:"-",priority:"P2",precondition:"1) 주문자 정보 입력 완료\n2) 직접 입력 선택 상태",steps:"1) 주문자명 '박지속', 전화 입력\n2) '주문자와 동일' 클릭\n3) 배송지 수령인/연락처 확인",expectedResult:"3) 수령인=박지속\n   연락처=입력값 자동 채움",testData:"주문자=박지속, 전화=01084131696",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_008",category1:"구매프로세스",category2:"주문/결제",category3:"배송지",platform:"Web",type:"기능",title:"배송지 우편번호 검색 정상 동작",reference:"-",priority:"P2",precondition:"1) 직접 입력 선택 상태",steps:"1) '우편번호 검색' 클릭\n2) '강남구' 검색\n3) 결과 선택",expectedResult:"1) 팝업 노출\n2) 주소 목록\n3) 우편번호+기본주소 자동입력\n   상세주소 입력 대기",testData:"검색어=강남구",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_009",category1:"구매프로세스",category2:"주문/결제",category3:"배송지",platform:"Web",type:"기능",title:"배송 요청사항 입력 및 주문상세 반영",reference:"-",priority:"P3",precondition:"1) 배송지 정보 완성 상태",steps:"1) 배송 요청사항에 '문 앞에 놓아주세요' 입력\n2) 주문 완료 후 주문상세 확인",expectedResult:"2) 주문상세에 요청사항 표시",testData:"요청사항=문 앞에 놓아주세요",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_010",category1:"구매프로세스",category2:"주문/결제",category3:"결제수단",platform:"Web",type:"기능",title:"결제수단 — 신용카드 선택 후 결제 완료",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 모든 필수 정보 입력 완료",steps:"1) '신용카드' 선택\n2) 카드 정보 입력\n3) '주문하기' 클릭\n4) 완료 화면 확인",expectedResult:"4) 주문완료 페이지\n   주문번호/결제금액/배송지 표시",testData:"결제수단=신용카드",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_011",category1:"구매프로세스",category2:"주문/결제",category3:"결제수단",platform:"Web",type:"기능",title:"결제수단 — 무통장입금 선택 후 입금 안내",reference:"-",priority:"P2",precondition:"1) Acc_Normal 로그인\n2) 필수 정보 입력 완료",steps:"1) '무통장입금' 선택\n2) 입금자명 입력\n3) '주문하기' 클릭\n4) 완료 화면 확인",expectedResult:"4) 주문완료\n   입금계좌/기한 안내",testData:"입금자명=박지속",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_012",category1:"구매프로세스",category2:"주문/결제",category3:"쿠폰",platform:"Web",type:"기능",title:"첫구매 15% 쿠폰 적용 → 할인금액 반영",reference:"-",priority:"P1",precondition:"1) Acc_NewMember 로그인\n2) 첫구매 15% 쿠폰 보유\n3) 주문/결제 진입",steps:"1) 쿠폰 영역에서 '첫구매 15%' 선택\n2) 할인/결제금액 확인",expectedResult:"2) 할인=상품×15%\n   결제=상품×85%+배송비",testData:"상품=23,100, 쿠폰=15%, 할인=3,465, 결제=19,635+배송",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_013",category1:"구매프로세스",category2:"주문/결제",category3:"쿠폰",platform:"Web",type:"데이터",title:"쿠폰 적용 후 결제예정금액 재계산 정합성",reference:"-",priority:"P1",precondition:"1) 쿠폰 보유 계정\n2) 쿠폰 적용 완료",steps:"1) 각 금액 항목 기록\n2) 직접 계산\n3) 화면과 비교",expectedResult:"3) 화면금액=상품-쿠폰+배송\n   원 단위 오차 없음",testData:"상품=23,100, 쿠폰=3,465, 배송=3,000, 결제=22,635",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_014",category1:"구매프로세스",category2:"주문/결제",category3:"쿠폰",platform:"Web",type:"UI",title:"쿠폰 미보유 시 비활성 or 안내 처리",reference:"-",priority:"P2",precondition:"1) 쿠폰 없는 Acc_Normal 로그인",steps:"1) 주문/결제 쿠폰 영역 확인",expectedResult:"1) '보유 쿠폰 없음' 안내\n   또는 드롭다운 비활성",testData:"보유쿠폰=0",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_015",category1:"구매프로세스",category2:"주문/결제",category3:"포인트",platform:"Web",type:"기능",title:"포인트 사용 시 결제금액 차감 및 재계산",reference:"-",priority:"P2",precondition:"1) 포인트 보유 계정 로그인",steps:"1) 포인트 1,000P 입력\n2) 결제예정금액 확인",expectedResult:"2) 결제=상품-쿠폰-1,000+배송\n   1P=1원",testData:"보유=5,000P, 사용=1,000P",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_016",category1:"구매프로세스",category2:"주문/결제",category3:"금액계산",platform:"Web",type:"데이터",title:"최종 결제금액 = 상품-쿠폰-포인트+배송 정합성",reference:"-",priority:"P1",precondition:"1) 쿠폰+포인트 모두 적용 상태",steps:"1) 모든 항목 기록\n2) 직접 계산\n3) 화면과 비교",expectedResult:"3) 일치, 오차 없음",testData:"상품=23,100, 쿠폰=3,465, 포인트=1,000, 배송=3,000, 결제=21,635",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_017",category1:"구매프로세스",category2:"주문/결제",category3:"배송비",platform:"Web",type:"데이터",title:"무료배송 조건 충족 시 주문서 배송비 0원",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 합계 26,900원 이상",steps:"1) 주문/결제 배송비 확인",expectedResult:"1) 배송비=0원\n   결제에 배송비 미포함",testData:"합계=46,200원, 배송비=0",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_018",category1:"구매프로세스",category2:"주문/결제",category3:"중복주문방지",platform:"Web",type:"기능",title:"주문하기 버튼 이중 클릭 → 중복 주문 방지",reference:"-",priority:"P1",precondition:"1) 모든 정보 입력 완료",steps:"1) '주문하기' 빠르게 2회 클릭",expectedResult:"1) 주문 1건만 생성\n   버튼 즉시 비활성/로딩 전환",testData:"-",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_019",category1:"구매프로세스",category2:"주문/결제",category3:"주문완료",platform:"Web",type:"UI",title:"주문완료 화면 — 주문번호/결제금액/배송지 노출",reference:"-",priority:"P1",precondition:"1) 결제 완료 직후",steps:"1) 주문완료 페이지 확인\n2) 노출 항목 목록",expectedResult:"2) 주문번호, 결제금액, 배송지\n   '계속쇼핑' or '주문내역' 버튼",testData:"-",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_020",category1:"구매프로세스",category2:"주문/결제",category3:"주문완료",platform:"Web",type:"기능",title:"주문완료 후 마이페이지 주문내역 반영",reference:"-",priority:"P1",precondition:"1) 주문 완료 직후",steps:"1) 마이페이지 > 주문내역 이동\n2) 최신 주문 확인",expectedResult:"2) 새 주문 최상단 노출\n   상품명/금액/상태='결제완료'",testData:"-",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_021",category1:"구매프로세스",category2:"주문/결제",category3:"주문완료",platform:"Web",type:"기능",title:"주문완료 후 결제 확인 이메일 발송",reference:"-",priority:"P2",precondition:"1) 이메일 확인 가능 상태\n2) 주문 완료 직후",steps:"1) 이메일 수신함 확인\n2) 이메일 내용 확인",expectedResult:"2) 주문확인 이메일 수신\n   주문번호/상품/금액/배송지 포함",testData:"이메일=jspark81@3top.co.kr",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_022",category1:"구매프로세스",category2:"주문/결제",category3:"입력값검증",platform:"Web",type:"기능",title:"필수 입력값 누락 → 제출 차단 및 오류 표시",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인\n2) 필수 필드 미입력 상태",steps:"1) 주문자명/전화/주소 비워둠\n2) '주문하기' 클릭",expectedResult:"2) 제출 차단\n   첫 오류 필드 포커스 + 메시지",testData:"모든 필수필드='' (공백)",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_023",category1:"구매프로세스",category2:"주문/결제",category3:"바로구매",platform:"Web",type:"기능",title:"PDP 바로구매 경로 주문서 정상 처리",reference:"-",priority:"P1",precondition:"1) Acc_Normal 로그인",steps:"1) PDP 진입\n2) 옵션 선택\n3) '바로구매' 클릭\n4) 주문서 상품 확인\n5) 주문 완료",expectedResult:"3) 장바구니 경유 없이 주문/결제 직행\n4) 선택 상품 1건만 반영\n5) 주문완료",testData:"상품=티셔츠 블랙, 옵션=블랙/S",result:"",assignee:"",issueSummary:"",issueLink:""},
+  {tcId:"TC_ORD_024",category1:"구매프로세스",category2:"주문/결제",category3:"진행바",platform:"Web",type:"UI",title:"주문 단계 진행바 현재 단계 표시 정합성",reference:"-",priority:"P2",precondition:"1) Acc_Normal 로그인",steps:"1) 장바구니 → 진행바 확인\n2) 주문/결제 → 진행바 확인\n3) 주문완료 → 진행바 확인",expectedResult:"1) '01 장바구니' 활성\n2) '02 주문서' 활성\n3) '03 주문완료' 활성",testData:"-",result:"",assignee:"",issueSummary:"",issueLink:""}
+];
+
+// ────────────────────────────── STATE ──────────────────────────────
+let allItems = [
+  ...CRT_ITEMS.map(i=>({...i,_module:'CRT'})),
+  ...ORD_ITEMS.map(i=>({...i,_module:'ORD'}))
+];
+let currentTab = 'ALL';
+
+// ────────────────────────────── RENDER ──────────────────────────────
+function filteredItems(){
+  return currentTab==='ALL' ? allItems : allItems.filter(i=>i._module===currentTab);
+}
+
+function getItem(tcId){ return allItems.find(i=>i.tcId===tcId); }
+
+function renderTable(){
+  const items = filteredItems();
+  const tbody = document.getElementById('tcTbody');
+  tbody.innerHTML = items.map(item=>`
+    <tr>
+      <td><b>${item.tcId}</b><br><small style="color:var(--muted)">${item.category3}</small></td>
+      <td><span class="tag">${item.type}</span></td>
+      <td>${item.platform}</td>
+      <td><span class="badge ${item.priority}">${item.priority}</span></td>
+      <td><pre class="tc-pre">${item.title}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.precondition}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.steps}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.expectedResult}</pre></td>
+      <td><pre class="tc-pre" style="font-size:11px">${item.testData}</pre></td>
+      <td>
+        <select class="result-sel" data-id="${item.tcId}">
+          <option value="">미실행</option>
+          <option value="Pass" ${item.result==='Pass'?'selected':''}>Pass</option>
+          <option value="Fail" ${item.result==='Fail'?'selected':''}>Fail</option>
+          <option value="Blocked" ${item.result==='Blocked'?'selected':''}>Blocked</option>
+          <option value="N/A" ${item.result==='N/A'?'selected':''}>N/A</option>
+        </select>
+      </td>
+      <td><input class="inline-input" type="text" placeholder="담당자" data-id="${item.tcId}" data-field="assignee" value="${item.assignee}"></td>
+      <td><input class="inline-input" type="text" placeholder="이슈 요약" data-id="${item.tcId}" data-field="issueSummary" value="${item.issueSummary}"></td>
+    </tr>
+  `).join('');
+  renderKPI();
+  renderStats();
+}
+
+function renderKPI(){
+  const items = filteredItems();
+  document.getElementById('kpiTotal').textContent = items.length;
+  document.getElementById('kpiP1').textContent = items.filter(i=>i.priority==='P1').length;
+  document.getElementById('kpiP2').textContent = items.filter(i=>i.priority==='P2').length;
+  document.getElementById('kpiP3').textContent = items.filter(i=>i.priority==='P3').length;
+  document.getElementById('kpiPass').textContent = items.filter(i=>i.result==='Pass').length;
+  document.getElementById('kpiFail').textContent = items.filter(i=>i.result==='Fail').length;
+  document.getElementById('kpiBlocked').textContent = items.filter(i=>i.result==='Blocked').length;
+}
+
+function renderStats(){
+  const modules = [{key:'CRT',label:'장바구니(CRT)'},{key:'ORD',label:'주문/결제(ORD)'}];
+  const tbody = document.getElementById('statsTbody');
+  tbody.innerHTML = modules.map(m=>{
+    const items = allItems.filter(i=>i._module===m.key);
+    const total=items.length;
+    const pass=items.filter(i=>i.result==='Pass').length;
+    const fail=items.filter(i=>i.result==='Fail').length;
+    const blocked=items.filter(i=>i.result==='Blocked').length;
+    const na=items.filter(i=>i.result==='N/A').length;
+    const notRun=total-pass-fail-blocked-na;
+    const executed=pass+fail+blocked+na;
+    const execRate=total?Math.round(executed/total*100):0;
+    const passRate=executed?Math.round(pass/executed*100):0;
+    const failRate=executed?Math.round(fail/executed*100):0;
+    return `<tr>
+      <td>${m.label}</td>
+      <td>${total}</td>
+      <td style="color:var(--accent)">${pass}</td>
+      <td style="color:var(--p1)">${fail}</td>
+      <td style="color:var(--p2)">${blocked}</td>
+      <td>${na}</td>
+      <td style="color:var(--muted)">${notRun}</td>
+      <td>${execRate}%</td>
+      <td>${passRate}%</td>
+      <td>${failRate}%</td>
+    </tr>`;
+  }).join('');
+}
+
+// ────────────────────────────── EVENTS ──────────────────────────────
+document.getElementById('tabBar').addEventListener('click', e=>{
+  const tab = e.target.closest('[data-tab]');
+  if(!tab) return;
+  currentTab = tab.dataset.tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+  renderTable();
+});
+
+document.getElementById('tcTbody').addEventListener('change', e=>{
+  const sel = e.target.closest('select.result-sel');
+  if(!sel) return;
+  const item = getItem(sel.dataset.id);
+  if(item){ item.result = sel.value; renderKPI(); renderStats(); }
+});
+
+document.getElementById('tcTbody').addEventListener('input', e=>{
+  const inp = e.target.closest('input.inline-input');
+  if(!inp) return;
+  const item = getItem(inp.dataset.id);
+  if(item) item[inp.dataset.field] = inp.value;
+});
+
+// Theme
+document.getElementById('btnTheme').addEventListener('click', ()=>{
+  const isDark = document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme', isDark?'':'dark');
+  document.getElementById('btnTheme').textContent = isDark?'🌙 다크모드':'☀️ 라이트모드';
+});
+
+// CSV
+document.getElementById('btnCSV').addEventListener('click', ()=>{
+  const cols=['TC ID','대분류','중분류','소분류','플랫폼','유형','테스트 항목','기준문서','우선순위','사전조건','수행절차','기대결과','테스트 데이터','실행결과','담당자','이슈 요약','이슈링크'];
+  const rows = allItems.map(i=>[
+    i.tcId,i.category1,i.category2,i.category3,i.platform,i.type,i.title,
+    i.reference,i.priority,i.precondition,i.steps,i.expectedResult,
+    i.testData,i.result,i.assignee,i.issueSummary,i.issueLink
+  ].map(v=>'"'+(v||'').replace(/"/g,'""').replace(/\n/g,' ')+'"').join(','));
+  const bom='\uFEFF';
+  const csv=bom+cols.join(',')+'\n'+rows.join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='TOPMALL_TC_CRT_ORD.csv';
+  a.click();
+});
+
+// JSON Save
+document.getElementById('btnSaveJSON').addEventListener('click', ()=>{
+  const data = {
+    meta:{project:'TOPMALL',modules:['CRT','ORD'],version:'v1.0',savedAt:new Date().toISOString(),totalCount:allItems.length},
+    items:allItems
+  };
+  const json=JSON.stringify(data,null,2);
+  if(window.showSaveFilePicker){
+    window.showSaveFilePicker({suggestedName:'TOPMALL_TC_CRT_ORD.json',types:[{description:'JSON',accept:{'application/json':['.json']}}]})
+      .then(h=>h.createWritable()).then(w=>{w.write(json);return w;}).then(w=>w.close()).catch(()=>{});
+  } else {
+    const a=document.createElement('a');
+    a.href='data:application/json;charset=utf-8,'+encodeURIComponent(json);
+    a.download='TOPMALL_TC_CRT_ORD.json';
+    a.click();
+  }
+});
+
+// JSON Load
+document.getElementById('btnLoadJSON').addEventListener('click',()=>document.getElementById('fileInput').click());
+document.getElementById('fileInput').addEventListener('change', e=>{
+  const file=e.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);
+      const loaded=data.items||[];
+      if(!loaded.length) throw new Error('items 없음');
+      loaded.forEach(loaded=>{
+        const existing=allItems.find(i=>i.tcId===loaded.tcId);
+        if(existing){
+          existing.result=loaded.result||'';
+          existing.assignee=loaded.assignee||'';
+          existing.issueSummary=loaded.issueSummary||'';
+          existing.issueLink=loaded.issueLink||'';
+        }
+      });
+      renderTable();
+      alert(`${loaded.length}건 불러옴 — 실행결과/담당자 복원 완료`);
+    }catch(err){
+      alert('파일 형식 오류: '+err.message+'\n기존 데이터는 유지됩니다.');
+    }
+    e.target.value='';
+  };
+  reader.readAsText(file,'utf-8');
+});
+
+// Modal
+document.querySelectorAll('[data-modal]').forEach(btn=>{
+  btn.addEventListener('click',()=>document.getElementById(btn.dataset.modal).classList.add('open'));
+});
+document.querySelectorAll('[data-close]').forEach(btn=>{
+  btn.addEventListener('click',()=>document.getElementById(btn.dataset.close).classList.remove('open'));
+});
+document.querySelectorAll('.modal-bg').forEach(bg=>{
+  bg.addEventListener('click',e=>{ if(e.target===bg) bg.classList.remove('open'); });
+});
+
+// Init
+renderTable();
+</script>
+</body>
+</html>
