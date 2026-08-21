@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PR",
     "moduleName": "이벤트/기획전/쿠폰행사",
-    "version": 5,
+    "version": 4,
     "changeHistory": [
       {
         "version": 1,
@@ -24,11 +24,6 @@
         "version": 4,
         "date": "2026-08-20",
         "summary": "Phase 4(배치5): Admin 대행사관리 신규 관찰(누락됐던 프로모션 그룹 메뉴) + Front-Admin 가격할인 정합성 검증 1건 추가"
-      },
-      {
-        "version": 5,
-        "date": "2026-08-21",
-        "summary": "TC 표기 개선(배치6): 테스트 수행 절차의 URL을 화면명으로 표기(7건), 기대결과 단일 항목 넘버링 제거(3건), [확인필요]/스펙확정 주석을 별도 verifyNote 필드로 분리하여 뷰어에서 RED 강조 표시하도록 개선(2건)"
       }
     ]
   },
@@ -43,7 +38,7 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "Admin 로그인 상태, 쿠폰 행사 4건 등록됨",
-      "steps": "1) Admin 쿠폰관리(/promotion쿠폰(/coupon)) 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /promotion/coupon 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 소행사번호/소행사명/행사시작일시/행사종료일시/쿠폰명/쿠폰유형/정액·정률/할인액(률)/최소주문금액 컬럼과 함께 쿠폰 4건이 노출된다(예: \"20% 할인 쿠폰(아우터)\" 정률 20%, 최소주문금액 10,000원)",
       "testData": "",
       "result": "",
@@ -54,8 +49,7 @@
       "system": "BO",
       "displayNo": 1,
       "tcId": "TC_PR_001",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -67,7 +61,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 쿠폰관리(/promotion쿠폰(/coupon)) 진입 2) \"조회\" 버튼 클릭 3) 쿠폰유형 컬럼 확인",
+      "steps": "1) /promotion/coupon 진입 2) \"조회\" 버튼 클릭 3) 쿠폰유형 컬럼 확인",
       "expected": "1) 2) 3) 등록된 쿠폰이 상품쿠폰/즉시할인/장바구니쿠폰 유형으로 구분되어 노출된다",
       "testData": "",
       "result": "",
@@ -78,8 +72,7 @@
       "system": "BO",
       "displayNo": 2,
       "tcId": "TC_PR_002",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -91,7 +84,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 쿠폰관리(/promotion쿠폰(/coupon)) 진입 2) 쿠폰유형 필터에 \"즉시할인\" 선택 후 \"조회\" 클릭",
+      "steps": "1) /promotion/coupon 진입 2) 쿠폰유형 필터에 \"즉시할인\" 선택 후 \"조회\" 클릭",
       "expected": "1) 2) 즉시할인 유형의 쿠폰만 목록에 노출된다",
       "testData": "쿠폰유형=즉시할인",
       "result": "",
@@ -102,8 +95,7 @@
       "system": "BO",
       "displayNo": 3,
       "tcId": "TC_PR_003",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -115,7 +107,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 쿠폰관리(/promotion쿠폰(/coupon)) 진입 2) \"등록\" 버튼 클릭",
+      "steps": "1) /promotion/coupon 진입 2) \"등록\" 버튼 클릭",
       "expected": "1) 2) 신규 쿠폰 행사 등록 화면(폼)으로 이동한다",
       "testData": "",
       "result": "",
@@ -126,8 +118,7 @@
       "system": "BO",
       "displayNo": 4,
       "tcId": "TC_PR_004",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "예외·회귀",
@@ -139,8 +130,8 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "Admin에 유효기간 내 쿠폰 행사 등록됨, jspark81 계정으로 로그인",
-      "steps": "1) Admin에서 쿠폰 행사 발급 대상/조건 확인 2) jspark81로 Front 로그인 후 마이페이지 쿠폰(/mypage쿠폰(/coupon)) 진입",
-      "expected": "1) 2) 발급 조건에 해당하면 Front 마이페이지 쿠폰함에 쿠폰이 노출되어야 하나, 현재 jspark81의 쿠폰함은 비어있음(TC_MY_012)",
+      "steps": "1) Admin에서 쿠폰 행사 발급 대상/조건 확인 2) jspark81로 Front 로그인 후 /mypage/coupon 진입",
+      "expected": "1) 2) 발급 조건에 해당하면 Front 마이페이지 쿠폰함에 쿠폰이 노출되어야 하나, 현재 jspark81의 쿠폰함은 비어있음(TC_MY_012)\n* [확인필요] 쿠폰 발급이 자동인지 수동 다운로드/응모(PR 모듈) 방식인지, 발급 조건 미충족인지 확인 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -150,8 +141,7 @@
       "system": "BO",
       "displayNo": 5,
       "tcId": "TC_PR_005",
-      "remark": "",
-      "verifyNote": "쿠폰 발급이 자동인지 수동 다운로드/응모(PR 모듈) 방식인지, 발급 조건 미충족인지 확인 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_PR_006",
@@ -165,7 +155,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 1번째 배너의 \"상세보기\" 버튼 클릭",
-      "expected": "쿠폰 이벤트 상세 페이지로 이동한다\n* \"99% 쿠폰 드로우\" 배너 CTA가 프로토콜 없는 외부 도메인 문자열(href)로 설정되어 있어 클릭 시 사이트 내부 경로로 오인식되어 404 발생. 대체 목적지 페이지(/event, /promotion, /campaign, /coupon 등) 존재 여부도 확인했으나 전부 404 — 이벤트/기획전 페이지 자체가 미구현 상태로 확인됨(DEF_데모사이트_007)",
+      "expected": "1) 쿠폰 이벤트 상세 페이지로 이동한다\n* \"99% 쿠폰 드로우\" 배너 CTA가 프로토콜 없는 외부 도메인 문자열(href)로 설정되어 있어 클릭 시 사이트 내부 경로로 오인식되어 404 발생. 대체 목적지 페이지(/event, /promotion, /campaign, /coupon 등) 존재 여부도 확인했으나 전부 404 — 이벤트/기획전 페이지 자체가 미구현 상태로 확인됨(DEF_데모사이트_007)",
       "testData": "대상 링크: href=\"www.naver.com!\"",
       "result": "",
       "assignee": "",
@@ -174,8 +164,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 6,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PR_007",
@@ -189,7 +178,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 2번째 배너의 \"상세보기\" 버튼 클릭",
-      "expected": "아우터 할인전 상세 페이지로 이동한다\n* \"지금 사야 입어요\" 배너 CTA가 프로토콜 없는 외부 도메인 문자열(href)로 설정되어 있어 클릭 시 사이트 내부 경로로 오인식되어 404 발생. 대체 목적지 페이지(/event, /promotion, /campaign, /coupon 등) 존재 여부도 확인했으나 전부 404 — 이벤트/기획전 페이지 자체가 미구현 상태로 확인됨(DEF_데모사이트_007)",
+      "expected": "1) 아우터 할인전 상세 페이지로 이동한다\n* \"지금 사야 입어요\" 배너 CTA가 프로토콜 없는 외부 도메인 문자열(href)로 설정되어 있어 클릭 시 사이트 내부 경로로 오인식되어 404 발생. 대체 목적지 페이지(/event, /promotion, /campaign, /coupon 등) 존재 여부도 확인했으나 전부 404 — 이벤트/기획전 페이지 자체가 미구현 상태로 확인됨(DEF_데모사이트_007)",
       "testData": "대상 링크: href=\"www.3top.co.kr\"",
       "result": "",
       "assignee": "",
@@ -198,8 +187,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 7,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PR_008",
@@ -213,7 +201,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 3번째 배너의 \"상세보기\" 버튼 클릭",
-      "expected": "블랙프라이데이 기획전 페이지로 이동한다\n* \"라이프 블프\" 배너 CTA가 프로토콜 없는 외부 도메인 문자열(href)로 설정되어 있어 클릭 시 사이트 내부 경로로 오인식되어 404 발생. 대체 목적지 페이지(/event, /promotion, /campaign, /coupon 등) 존재 여부도 확인했으나 전부 404 — 이벤트/기획전 페이지 자체가 미구현 상태로 확인됨(DEF_데모사이트_007)",
+      "expected": "1) 블랙프라이데이 기획전 페이지로 이동한다\n* \"라이프 블프\" 배너 CTA가 프로토콜 없는 외부 도메인 문자열(href)로 설정되어 있어 클릭 시 사이트 내부 경로로 오인식되어 404 발생. 대체 목적지 페이지(/event, /promotion, /campaign, /coupon 등) 존재 여부도 확인했으나 전부 404 — 이벤트/기획전 페이지 자체가 미구현 상태로 확인됨(DEF_데모사이트_007)",
       "testData": "대상 링크: href=\"www.google.com\"",
       "result": "",
       "assignee": "",
@@ -222,8 +210,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 8,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "이벤트",
@@ -235,7 +222,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 대행사관리 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /promotion/master 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 프로모션 대행사 아이디/명/시작일시/종료일시/사용여부/작성자/등록일시 컬럼과 \"등록\" 버튼이 노출된다(현재 0건)",
       "testData": "",
       "result": "",
@@ -246,8 +233,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 9,
-      "tcId": "TC_PR_009",
-      "verifyNote": ""
+      "tcId": "TC_PR_009"
     },
     {
       "majorCategory": "이벤트",
@@ -259,8 +245,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태, 등록 가능한 상품 존재",
-      "steps": "1) [BO] Admin 가격할인관리에서 임의 상품에 가격할인 행사 등록\n2) [FO] Front 해당 상품 PDP·카테고리 목록에서 할인가/할인율 배지 확인",
-      "expected": "1) 2) Admin에 등록한 할인율이 Front 상품가·배지(예: \"-32%\")에 정확히 반영되어야 함",
+      "steps": "1) [BO] Admin /promotion/sale에서 임의 상품에 가격할인 행사 등록\n2) [FO] Front 해당 상품 PDP·카테고리 목록에서 할인가/할인율 배지 확인",
+      "expected": "1) 2) Admin에 등록한 할인율이 Front 상품가·배지(예: \"-32%\")에 정확히 반영되어야 함\n* [확인필요] 실제 등록 테스트 미실행 — 현재 Front에 노출 중인 할인 상품들이 이 Admin 화면을 통해 설정된 것인지 배경 확인 필요",
       "testData": "-",
       "result": "",
       "assignee": "",
@@ -270,8 +256,7 @@
       "system": "FO",
       "remark": "",
       "displayNo": 10,
-      "tcId": "TC_PR_010",
-      "verifyNote": "실제 등록 테스트 미실행 — 현재 Front에 노출 중인 할인 상품들이 이 Admin 화면을 통해 설정된 것인지 배경 확인 필요"
+      "tcId": "TC_PR_010"
     }
   ]
 }

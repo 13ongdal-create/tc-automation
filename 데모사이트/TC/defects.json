@@ -5,7 +5,7 @@
     "module": "상품상세",
     "severity": "P2",
     "status": "신규",
-    "summary": "비로그인 상태에서 위시리스트 버튼 클릭 시 /login으로 이동되는데, 그 /login 페이지 자체에서 리소스 3건이 404로 실패함 (/forgot-password, /policy, /service 프리페치 요청)",
+    "summary": "상품상세 > 비로그인 상태에서 위시리스트 버튼 클릭 시 로그인 페이지 자체에서 리소스 3건 404로 실패",
     "detectedAt": "2026-08-19",
     "source": "automation",
     "screenshot": "TC/defects/DEF_데모사이트_001.png",
@@ -29,7 +29,7 @@
     "module": "상품상세",
     "severity": "P2",
     "status": "신규",
-    "summary": "로그인 페이지(/login) 진입 시 리소스 3건이 404로 실패함 (/forgot-password, /policy, /service 프리페치 요청) — DEF_데모사이트_001과 동일 근본 원인, 로그인 플로우를 거치는 모든 테스트에 영향",
+    "summary": "상품상세 > 로그인 진행 중 로그인 페이지에서 리소스 3건 404로 실패",
     "detectedAt": "2026-08-19",
     "source": "automation",
     "screenshot": "TC/defects/DEF_데모사이트_002.png",
@@ -53,7 +53,7 @@
     "module": "상품상세",
     "severity": "P2",
     "status": "신규",
-    "summary": "존재하지 않는 상품ID(/products/999999)로 접근 시 404 또는 안내 화면 대신 HTTP 500 에러가 발생함 (Next.js Server Components render 단계에서 예외 발생)",
+    "summary": "상품상세 > 존재하지 않는 상품ID 접근 시 404 대신 500 에러 발생",
     "detectedAt": "2026-08-19",
     "source": "automation",
     "screenshot": "TC/defects/DEF_데모사이트_003.png",
@@ -77,18 +77,27 @@
     "module": "마이페이지",
     "severity": "P1",
     "status": "신규",
-    "summary": "마이페이지 > SNS 연결설정(/mypage/social) 화면 진입 시 HTTP 500 서버 에러 발생 (Next.js Server Components render 단계에서 예외 발생)",
+    "summary": "마이페이지 > SNS연결설정 진입 시 카카오/네이버 OAuth 요청 CORS 실패",
     "detectedAt": "2026-08-20",
     "source": "observation",
-    "screenshot": "",
+    "screenshot": "TC/defects/DEF_데모사이트_004.png",
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-20", "status": "신규", "note": "Phase 1 재관찰(배치2, 마이페이지 서브 화면 전수 확인) 중 최초 발견" }
+      {
+        "at": "2026-08-20",
+        "status": "신규",
+        "note": "Phase 1 재관찰(배치2, 마이페이지 서브 화면 전수 확인) 중 최초 발견"
+      },
+      {
+        "at": "2026-08-21",
+        "status": "신규",
+        "note": "스크린샷 캡처 메커니즘 점검(사용자 요청) 중 실제 자동화 테스트 재실행 결과 증상이 500 에러에서 카카오/네이버 OAuth CORS 실패로 변경된 것을 확인. 데모 환경이 지속 변경되는 것으로 추정. TC_MY_005/MY.spec.js 내용을 현재 증상 기준으로 갱신"
+      }
     ],
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
     "testSteps": "1) jspark81 계정으로 로그인\n2) /mypage/social 진입",
-    "actualResult": "\"시스템 오류가 발생했습니다\" 500 Internal Server Error 화면 노출 (Error Digest: 2806040409)",
+    "actualResult": "2026-08-20 최초 발견 시 500 Internal Server Error(Error Digest: 2806040409)였으나, 2026-08-21 재검증 결과 페이지 자체는 200으로 정상 렌더링됨. 다만 진입 시 카카오(kauth.kakao.com)/네이버(nid.naver.com) OAuth 인증 요청이 자동 발생하며 CORS 정책 위반으로 실패(net::ERR_FAILED, \"Failed to fetch RSC payload\")가 콘솔에 기록됨 — 콘솔 에러 자동감지 규칙에 의해 결함으로 유지",
     "expectedResult": "SNS 연동 상태(연동/미연동) 화면이 정상 노출되어야 함"
   },
   {
@@ -97,14 +106,18 @@
     "module": "고객센터",
     "severity": "P1",
     "status": "신규",
-    "summary": "푸터 \"개인정보처리방침\" 링크가 가리키는 /policy 경로가 실제로는 존재하지 않아 404 에러 발생",
+    "summary": "고객센터 > 개인정보처리방침(/policy) 접근 시 404 에러 발생",
     "detectedAt": "2026-08-20",
     "source": "observation",
-    "screenshot": "",
+    "screenshot": "TC/defects/DEF_데모사이트_005.png",
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-20", "status": "신규", "note": "Phase 1 재관찰(배치2, 고객센터/정책 화면 전수 확인) 중 최초 발견. 기존 DEF_데모사이트_001/002에서도 /login 페이지 프리페치 리소스로 /policy 404가 부수적으로 관측된 바 있음 — 동일 원인으로 추정" }
+      {
+        "at": "2026-08-20",
+        "status": "신규",
+        "note": "Phase 1 재관찰(배치2, 고객센터/정책 화면 전수 확인) 중 최초 발견. 기존 DEF_데모사이트_001/002에서도 /login 페이지 프리페치 리소스로 /policy 404가 부수적으로 관측된 바 있음 — 동일 원인으로 추정"
+      }
     ],
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
     "testSteps": "1) 푸터 \"개인정보처리방침\" 링크 클릭 또는 /policy 직접 접속",
@@ -117,14 +130,18 @@
     "module": "고객센터",
     "severity": "P1",
     "status": "신규",
-    "summary": "푸터 \"이용약관\" 링크가 가리키는 /service 경로가 실제로는 존재하지 않아 404 에러 발생",
+    "summary": "고객센터 > 이용약관(/service) 접근 시 404 에러 발생",
     "detectedAt": "2026-08-20",
     "source": "observation",
-    "screenshot": "",
+    "screenshot": "TC/defects/DEF_데모사이트_006.png",
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-20", "status": "신규", "note": "Phase 1 재관찰(배치2, 고객센터/정책 화면 전수 확인) 중 최초 발견. DEF_데모사이트_005와 동일 패턴(푸터 링크 목적지 미구현)" }
+      {
+        "at": "2026-08-20",
+        "status": "신규",
+        "note": "Phase 1 재관찰(배치2, 고객센터/정책 화면 전수 확인) 중 최초 발견. DEF_데모사이트_005와 동일 패턴(푸터 링크 목적지 미구현)"
+      }
     ],
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
     "testSteps": "1) 푸터 \"이용약관\" 링크 클릭 또는 /service 직접 접속",
@@ -137,19 +154,27 @@
     "module": "이벤트",
     "severity": "P2",
     "status": "신규",
-    "summary": "홈 메인배너 3종(\"99% 쿠폰 드로우\"/\"지금 사야 입어요\"/\"라이프 블프\") 모두 \"상세보기\" CTA의 href가 프로토콜 없는 외부 도메인 문자열(www.naver.com!, www.3top.co.kr, www.google.com)로 설정되어 있어, 클릭 시 사이트 내부 상대경로로 오인식되어 전부 404 발생. 대체 목적지 경로(/event, /events, /promotion, /campaign, /coupon, /coupon-event)도 전수 확인했으나 모두 404 — 이벤트/기획전 페이지 자체가 아예 구현되지 않은 것으로 결론",
+    "summary": "이벤트 > 메인배너 3종 CTA 클릭 시 전부 404, 대체 경로도 전부 404",
     "detectedAt": "2026-08-20",
     "source": "observation",
-    "screenshot": "",
+    "screenshot": "TC/defects/DEF_데모사이트_007.png",
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-19", "status": "신규", "note": "legacy DSP 관측 시 최초 발견(당시 [확인필요] 상태로 TC_PD_089~091에 기록)" },
-      { "at": "2026-08-20", "status": "신규", "note": "PR 모듈 재분류(TC_PR_006~008) 및 대체 경로 전수 확인 후 정식 결함으로 등록. 이벤트 페이지 자체 부재로 결론" }
+      {
+        "at": "2026-08-19",
+        "status": "신규",
+        "note": "legacy DSP 관측 시 최초 발견(당시 [확인필요] 상태로 TC_PD_089~091에 기록)"
+      },
+      {
+        "at": "2026-08-20",
+        "status": "신규",
+        "note": "PR 모듈 재분류(TC_PR_006~008) 및 대체 경로 전수 확인 후 정식 결함으로 등록. 이벤트 페이지 자체 부재로 결론"
+      }
     ],
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
     "testSteps": "1) 메인(/) 진입\n2) 배너 1~3번 각각의 \"상세보기\" 버튼 클릭\n3) /event, /events, /promotion, /campaign, /coupon, /coupon-event 직접 접속 시도",
-    "actualResult": "배너 클릭 시 3건 모두 404, 대체 경로 6개도 전부 404",
+    "actualResult": "배너 3종(\"99% 쿠폰 드로우\"/\"지금 사야 입어요\"/\"라이프 블프\")의 \"상세보기\" CTA href가 각각 www.naver.com!, www.3top.co.kr, www.google.com(프로토콜 없음)으로 설정되어 사이트 내부 상대경로로 오인식되어 3건 모두 404 발생. 대체 목적지 경로(/event, /events, /promotion, /campaign, /coupon, /coupon-event) 6종도 전수 확인했으나 모두 404",
     "expectedResult": "각 배너에 대응하는 이벤트/기획전 상세 페이지로 정상 이동해야 함"
   },
   {
@@ -158,15 +183,23 @@
     "module": "마이페이지",
     "severity": "P1",
     "status": "완료",
-    "summary": "[오탐 확인 - 결함 아님] jspark81 계정으로 Front에서 실제 완료한 주문이 Admin 주문리스트에는 정상 노출되나 Front 마이페이지 주문내역에는 노출되지 않는 것으로 최초 보고했으나, 재검증 결과 참조한 주문(O260820790055)이 jspark81이 아닌 봇 계정(mbrId=406, 봇_186324) 소유였음을 확인 — jspark81은 실제 주문 이력이 없어 Front의 Empty State 표시가 정상 동작임",
+    "summary": "마이페이지 > [오탐 종결] 참조했던 주문이 봇 계정 소유로 확인되어 결함 아님",
     "detectedAt": "2026-08-20",
     "source": "observation",
     "screenshot": "",
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-20", "status": "신규", "note": "Front-Admin 데이터 정합성 재검토(배치5) 중 발견 — 조회기간 필터를 \"전체\"로 명시 선택 후 재조회해도 동일 현상 재현 확인" },
-      { "at": "2026-08-20", "status": "완료", "note": "사용자 요청으로 근본 원인 재조사 — Admin 주문 상세(GET /api/v1.0/order/O260820790055) 조회 결과 mbrId=\"406\", mbrName=\"봇_186324\"로 확인됨(jspark81의 mbrId는 382). 해당 일자 생성된 주문 4건 전부 봇 계정(378/379/406/407) 소유로 jspark81 명의 주문은 존재하지 않음. Front 표시가 정확했던 것으로 결론, 오탐으로 종결" }
+      {
+        "at": "2026-08-20",
+        "status": "신규",
+        "note": "Front-Admin 데이터 정합성 재검토(배치5) 중 발견 — 조회기간 필터를 \"전체\"로 명시 선택 후 재조회해도 동일 현상 재현 확인"
+      },
+      {
+        "at": "2026-08-20",
+        "status": "완료",
+        "note": "사용자 요청으로 근본 원인 재조사 — Admin 주문 상세(GET /api/v1.0/order/O260820790055) 조회 결과 mbrId=\"406\", mbrName=\"봇_186324\"로 확인됨(jspark81의 mbrId는 382). 해당 일자 생성된 주문 4건 전부 봇 계정(378/379/406/407) 소유로 jspark81 명의 주문은 존재하지 않음. Front 표시가 정확했던 것으로 결론, 오탐으로 종결"
+      }
     ],
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180 (Front) / http://192.168.10.116:30280 (Admin)",
     "testSteps": "1) jspark81 Front 로그인 후 /mypage/order 진입\n2) 조회기간 \"전체\" 선택 후 \"조회\" 클릭\n3) Admin devel 로그인 후 /order/list에서 동일 계정 주문 확인",
@@ -179,15 +212,23 @@
     "module": "회원",
     "severity": "P1",
     "status": "완료",
-    "summary": "[오탐 확인 - 결함 아님] Front에 가입된 jspark81 계정이 Admin 회원관리 목록에서 조회되지 않는다고 최초 보고했으나, 재검증 결과 검색 시 \"회원이름\" 필드에 로그인아이디를 입력하는 테스트 오류였음이 확인됨 — \"로그인아이디\" 필드로 정확히 검색 시 정상 조회됨",
+    "summary": "회원 > [오탐 종결] 검색 필드 오류로 인한 오판, 로그인아이디 필드로는 정상 조회됨",
     "detectedAt": "2026-08-20",
     "source": "observation",
     "screenshot": "",
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-20", "status": "신규", "note": "배치3에서 [확인필요]로 최초 발견(TC_MB_046). Front-Admin 데이터 정합성 재검토(배치5) 중 정식 결함으로 승격 — DEF_데모사이트_008(주문내역 미동기화)과 함께 Front/Admin 데이터베이스 분리 가능성을 시사하는 연관 결함으로 판단" },
-      { "at": "2026-08-20", "status": "완료", "note": "사용자 요청으로 근본 원인 재조사 — 실제 API 호출(GET /api/v1.0/member?mbrName=jspark81)을 확인한 결과 \"회원이름\"(mbrName) 필드에 로그인아이디 값이 입력되어 0건이 나온 것으로 확인(jspark81은 로그인아이디이지 실제 이름이 아님, 실제 이름은 \"박지숙\"). \"로그인아이디\" 필드(GET /api/v1.0/member?loginId=jspark81)로 재검색 시 mbrId=382 레코드가 정상 조회되며 Front 로그인 응답과 완전히 일치. 오탐으로 종결" }
+      {
+        "at": "2026-08-20",
+        "status": "신규",
+        "note": "배치3에서 [확인필요]로 최초 발견(TC_MB_046). Front-Admin 데이터 정합성 재검토(배치5) 중 정식 결함으로 승격 — DEF_데모사이트_008(주문내역 미동기화)과 함께 Front/Admin 데이터베이스 분리 가능성을 시사하는 연관 결함으로 판단"
+      },
+      {
+        "at": "2026-08-20",
+        "status": "완료",
+        "note": "사용자 요청으로 근본 원인 재조사 — 실제 API 호출(GET /api/v1.0/member?mbrName=jspark81)을 확인한 결과 \"회원이름\"(mbrName) 필드에 로그인아이디 값이 입력되어 0건이 나온 것으로 확인(jspark81은 로그인아이디이지 실제 이름이 아님, 실제 이름은 \"박지숙\"). \"로그인아이디\" 필드(GET /api/v1.0/member?loginId=jspark81)로 재검색 시 mbrId=382 레코드가 정상 조회되며 Front 로그인 응답과 완전히 일치. 오탐으로 종결"
+      }
     ],
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180 (Front) / http://192.168.10.116:30280 (Admin)",
     "testSteps": "1) jspark81 Front 로그인 확인(정상 동작)\n2) Admin devel 로그인 후 /member 진입\n3) 로그인아이디에 \"jspark81\" 입력 후 \"조회\" 클릭",

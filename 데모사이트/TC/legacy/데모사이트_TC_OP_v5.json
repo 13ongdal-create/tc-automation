@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "OP",
     "moduleName": "구매프로세스",
-    "version": 6,
+    "version": 5,
     "changeHistory": [
       {
         "version": 1,
@@ -29,11 +29,6 @@
         "version": 5,
         "date": "2026-08-20",
         "summary": "DEF_데모사이트_008/009 오탐 확정에 따라 TC_OP_021/022의 차단 사유 문구 정정(내용 자체는 여전히 [확인필요]로 유지, 근거만 수정)"
-      },
-      {
-        "version": 6,
-        "date": "2026-08-21",
-        "summary": "TC 표기 개선(배치6): 테스트 수행 절차의 URL을 화면명으로 표기(19건), 기대결과 단일 항목 넘버링 제거(14건), [확인필요]/스펙확정 주석을 별도 verifyNote 필드로 분리하여 뷰어에서 RED 강조 표시하도록 개선(11건)"
       }
     ]
   },
@@ -49,8 +44,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Acc_NonMember (장바구니 비어있음)",
-      "steps": "1) 장바구니 진입",
-      "expected": "\"장바구니에 담긴 상품이 없습니다\" 안내 문구가 노출된다",
+      "steps": "1) /cart 진입",
+      "expected": "1) \"장바구니에 담긴 상품이 없습니다\" 안내 문구가 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -59,8 +54,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 1,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_OP_002",
@@ -73,8 +67,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Acc_NonMember (장바구니 비어있음)",
-      "steps": "1) 장바구니 진입\n2) \"계속 쇼핑하기\" 버튼 클릭",
-      "expected": "상품 목록/메인 페이지로 이동한다",
+      "steps": "1) /cart 진입\n2) \"계속 쇼핑하기\" 버튼 클릭",
+      "expected": "1) 상품 목록/메인 페이지로 이동한다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -83,8 +77,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 2,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_OP_003",
@@ -97,7 +90,7 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 상품상세(/products/99)에서 사이즈 M, 수량 1로 \"장바구니 담기\" 클릭\n2) 장바구니(/cart) 진입",
+      "steps": "1) /products/99에서 사이즈 M, 수량 1로 \"장바구니 담기\" 클릭\n2) /cart 진입",
       "expected": "1) 장바구니 담기 성공 안내가 노출된다\n2) 장바구니 목록에 \"빈티지 체크 셔츠(M/1개)\"가 노출된다",
       "testData": "상품코드=PD0000039, 사이즈=M, 수량=1",
       "result": "",
@@ -107,8 +100,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 3,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_OP_004",
@@ -121,8 +113,8 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "장바구니에 상품 1건 담겨 있음",
-      "steps": "1) 장바구니 진입\n2) 담긴 상품 수량을 1에서 2로 변경",
-      "expected": "상품 소계 및 전체 합계 금액이 단가×수량 기준으로 즉시 재계산되어 노출된다",
+      "steps": "1) /cart 진입\n2) 담긴 상품 수량을 1에서 2로 변경",
+      "expected": "1) 상품 소계 및 전체 합계 금액이 단가×수량 기준으로 즉시 재계산되어 노출된다\n* [확인필요] 배송비 등 부가 항목 포함 여부 확정 필요",
       "testData": "단가=139,000원, 수량 1→2",
       "result": "",
       "assignee": "",
@@ -131,8 +123,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 4,
-      "remark": "",
-      "verifyNote": "배송비 등 부가 항목 포함 여부 확정 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_OP_005",
@@ -145,8 +136,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "장바구니에 상품 2건 이상 담겨 있음",
-      "steps": "1) 장바구니 진입\n2) 1건 상품의 삭제 버튼 클릭",
-      "expected": "해당 상품이 목록에서 제거되고 합계 금액이 재계산된다",
+      "steps": "1) /cart 진입\n2) 1건 상품의 삭제 버튼 클릭",
+      "expected": "1) 해당 상품이 목록에서 제거되고 합계 금액이 재계산된다\n* [확인필요] 삭제 확인 팝업 유무 확인 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -155,8 +146,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 5,
-      "remark": "",
-      "verifyNote": "삭제 확인 팝업 유무 확인 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_OP_006",
@@ -169,8 +159,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "장바구니에 상품 1건 담겨 있음",
-      "steps": "1) 장바구니 진입\n2) 유일한 상품 삭제",
-      "expected": "삭제 후 \"장바구니에 담긴 상품이 없습니다\" Empty State로 전환된다",
+      "steps": "1) /cart 진입\n2) 유일한 상품 삭제",
+      "expected": "1) 삭제 후 \"장바구니에 담긴 상품이 없습니다\" Empty State로 전환된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -179,8 +169,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 6,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_OP_007",
@@ -193,8 +182,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "장바구니에 동일 상품(M 사이즈) 1개 담겨 있음",
-      "steps": "1) 상품상세(/products/99)에서 동일 사이즈(M)로 재차 \"장바구니 담기\" 클릭\n2) 장바구니(/cart) 확인",
-      "expected": "신규 라인이 추가되지 않고 기존 라인의 수량이 합산된다(1+1=2)",
+      "steps": "1) /products/99에서 동일 사이즈(M)로 재차 \"장바구니 담기\" 클릭\n2) /cart 확인",
+      "expected": "1) 신규 라인이 추가되지 않고 기존 라인의 수량이 합산된다(1+1=2)\n* [확인필요] 신규 라인 분리 처리 가능성도 있어 실제 동작 확정 필요",
       "testData": "상품코드=PD0000039, 사이즈=M",
       "result": "",
       "assignee": "",
@@ -203,8 +192,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 7,
-      "remark": "",
-      "verifyNote": "신규 라인 분리 처리 가능성도 있어 실제 동작 확정 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_OP_008",
@@ -218,7 +206,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 상품 1개를 장바구니에 담기\n2) 헤더 장바구니 아이콘 확인",
-      "expected": "헤더 카트 아이콘에 담긴 상품 수량 뱃지가 즉시 갱신되어 노출된다",
+      "expected": "1) 헤더 카트 아이콘에 담긴 상품 수량 뱃지가 즉시 갱신되어 노출된다\n* [확인필요] 뱃지 노출 여부 실측 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -227,8 +215,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 8,
-      "remark": "",
-      "verifyNote": "[확인필요] 뱃지 노출 여부 실측 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_OP_009",
@@ -241,8 +228,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "장바구니에 상품 1건 담겨 있음",
-      "steps": "1) 장바구니 진입\n2) 담긴 상품의 사이즈 옵션 변경 시도",
-      "expected": "옵션 변경 가능 여부와 변경 시 처리 방식 확인",
+      "steps": "1) /cart 진입\n2) 담긴 상품의 사이즈 옵션 변경 시도",
+      "expected": "1) 옵션 변경 가능 여부와 변경 시 처리 방식 확인\n* [확인필요] 옵션 변경 UI 제공 여부 미확인",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -251,8 +238,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 9,
-      "remark": "",
-      "verifyNote": "옵션 변경 UI 제공 여부 미확인"
+      "remark": ""
     },
     {
       "tcId": "TC_OP_010",
@@ -265,8 +251,8 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "장바구니에 상품 1건 담겨 있음, Acc_NonMember",
-      "steps": "1) 장바구니 진입\n2) \"주문하기\"(결제 진입) 버튼 클릭",
-      "expected": "주문/결제 페이지로 이동하거나 비회원인 경우 로그인 유도가 노출된다",
+      "steps": "1) /cart 진입\n2) \"주문하기\"(결제 진입) 버튼 클릭",
+      "expected": "1) 주문/결제 페이지로 이동하거나 비회원인 경우 로그인 유도가 노출된다\n* [확인필요] 로그인 결함(500 에러)으로 로그인 유도 시 후속 진행 불가, 결함 해결 후 재검증 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -275,8 +261,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 10,
-      "remark": "",
-      "verifyNote": "로그인 결함(500 에러)으로 로그인 유도 시 후속 진행 불가, 결함 해결 후 재검증 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_OP_011",
@@ -290,7 +275,7 @@
       "priority": "P2",
       "precondition": "Acc_NonMember, 장바구니에 상품 1건 담겨 있음",
       "steps": "1) 장바구니에 상품 담기\n2) 브라우저 새로고침",
-      "expected": "새로고침 후에도 담긴 상품이 유지된다",
+      "expected": "1) 새로고침 후에도 담긴 상품이 유지된다\n* [확인필요] 세션 저장 방식(localStorage/쿠키/서버) 확인 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -299,8 +284,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 11,
-      "remark": "",
-      "verifyNote": "세션 저장 방식(localStorage/쿠키/서버) 확인 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_OP_012",
@@ -313,8 +297,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 장바구니 진입 후 개발자도구 Console/Network 탭 확인",
-      "expected": "콘솔 에러 및 4xx/5xx 응답이 없다",
+      "steps": "1) /cart 진입 후 개발자도구 Console/Network 탭 확인",
+      "expected": "1) 콘솔 에러 및 4xx/5xx 응답이 없다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -323,8 +307,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 12,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_OP_013",
@@ -337,8 +320,8 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "장바구니에 품절된 상품이 담겨 있음(사이즈 S 등)",
-      "steps": "1) 장바구니 진입",
-      "expected": "품절 상태가 라벨로 표시되고 해당 상품은 주문 진행이 차단된다",
+      "steps": "1) /cart 진입",
+      "expected": "1) 품절 상태가 라벨로 표시되고 해당 상품은 주문 진행이 차단된다\n* [확인필요] 품절 발생 시점 처리 정책 확인 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -347,8 +330,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 13,
-      "remark": "",
-      "verifyNote": "품절 발생 시점 처리 정책 확인 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_OP_014",
@@ -362,7 +344,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 상품상세에서 수량을 정책상 최대치보다 크게 설정 시도",
-      "expected": "최대 허용 수량을 초과하지 못하도록 차단된다",
+      "expected": "1) 최대 허용 수량을 초과하지 못하도록 차단된다\n* [확인필요] 최대 수량 정책값 미확인",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -371,8 +353,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 14,
-      "remark": "",
-      "verifyNote": "최대 수량 정책값 미확인"
+      "remark": ""
     },
     {
       "tcId": "TC_OP_015",
@@ -385,8 +366,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "장바구니에 상품 1건 담겨 있음",
-      "steps": "1) 장바구니 진입하여 상품 확인\n2) 브라우저 새로고침(F5) 후 재확인",
-      "expected": "새로고침 후에도 동일한 담긴 상품 목록이 유지된다",
+      "steps": "1) /cart 진입하여 상품 확인\n2) 브라우저 새로고침(F5) 후 재확인",
+      "expected": "1) 새로고침 후에도 동일한 담긴 상품 목록이 유지된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -395,8 +376,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 15,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -408,7 +388,7 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "Admin 로그인 상태, Front에서 생성된 주문 1건 이상 존재",
-      "steps": "1) Admin 주문리스트 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /order/list 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 주문매체/주문일시/주문번호/전시카테고리/브랜드명/회원등급/주문상태/첫구매여부/배송상태/주문금액 컬럼과 함께 주문 목록이 노출된다(현재 1건: PC/lululemon/Newbie/결제완료/상품준비중/109,000원)",
       "testData": "",
       "result": "",
@@ -419,8 +399,7 @@
       "system": "BO",
       "displayNo": 16,
       "tcId": "TC_OP_016",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -432,7 +411,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 주문리스트 진입 2) 주문상태 드롭다운 클릭",
+      "steps": "1) /order/list 진입 2) 주문상태 드롭다운 클릭",
       "expected": "1) 2) \"전체/주문완료/결제완료/출하지시/출고완료/배송완료/구매확정/주문취소/주문실패\" 옵션이 노출되며, Front 마이페이지 주문내역 화면(TC_MY_003)의 주문상태 옵션과 동일하다",
       "testData": "",
       "result": "",
@@ -443,8 +422,7 @@
       "system": "BO",
       "displayNo": 17,
       "tcId": "TC_OP_017",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -456,7 +434,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 주문리스트 진입 2) 결제수단 드롭다운 클릭",
+      "steps": "1) /order/list 진입 2) 결제수단 드롭다운 클릭",
       "expected": "1) 2) \"전체/카드/간편결제/계좌이체/가상계좌/휴대폰/포인트\" 옵션이 노출된다",
       "testData": "",
       "result": "",
@@ -467,8 +445,7 @@
       "system": "BO",
       "displayNo": 18,
       "tcId": "TC_OP_018",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -480,7 +457,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태, 검색 필터에 값이 입력된 상태",
-      "steps": "1) Admin 주문리스트 진입 2) 주문매체 \"PC\" 선택 3) \"초기화\" 버튼 클릭",
+      "steps": "1) /order/list 진입 2) 주문매체 \"PC\" 선택 3) \"초기화\" 버튼 클릭",
       "expected": "1) 2) 3) 선택했던 필터 값이 모두 기본값(전체)으로 초기화된다",
       "testData": "",
       "result": "",
@@ -491,8 +468,7 @@
       "system": "BO",
       "displayNo": 19,
       "tcId": "TC_OP_019",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -504,7 +480,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 배송지관리 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /member/address 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 회원번호/회원명/배송지명/수령인명/휴대폰번호/우편번호/주소/상세주소/기본배송지여부 컬럼과 함께 목록이 노출된다(현재 0건)",
       "testData": "",
       "result": "",
@@ -515,8 +491,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 20,
-      "tcId": "TC_OP_020",
-      "verifyNote": ""
+      "tcId": "TC_OP_020"
     },
     {
       "majorCategory": "구매프로세스",
@@ -528,8 +503,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Front jspark81 계정, 배송지 미등록 상태",
-      "steps": "1) [FO] Front 마이페이지 배송주소록관리(/mypage/address)에서 배송지 신규 등록\n2) [BO] Admin 배송지관리(Admin 배송지관리(/member/address))에서 해당 회원의 배송지 조회",
-      "expected": "1) 2) Front에서 등록한 배송지가 Admin 배송지관리 목록에도 동일하게 노출되어야 함",
+      "steps": "1) [FO] Front /mypage/address에서 배송지 신규 등록\n2) [BO] Admin /member/address에서 해당 회원의 배송지 조회",
+      "expected": "1) 2) Front에서 등록한 배송지가 Admin 배송지관리 목록에도 동일하게 노출되어야 함\n* [확인필요] 실제 등록 테스트 미실행 — 별도 시나리오로 재검증 필요(선행 우려였던 DEF_009는 오탐으로 정정됨, TC_MB_046 참고)",
       "testData": "-",
       "result": "",
       "assignee": "",
@@ -539,8 +514,7 @@
       "system": "BO",
       "remark": "2026-08-20: 선행 근거로 언급했던 DEF_009가 오탐으로 정정되어 문구 수정",
       "displayNo": 21,
-      "tcId": "TC_OP_021",
-      "verifyNote": "실제 등록 테스트 미실행 — 별도 시나리오로 재검증 필요(선행 우려였던 DEF_009는 오탐으로 정정됨, TC_MB_046 참고)"
+      "tcId": "TC_OP_021"
     },
     {
       "majorCategory": "구매프로세스",
@@ -552,8 +526,8 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "Admin에 처리 가능한 주문 존재 필요",
-      "steps": "1) [BO] Admin 주문리스트(Admin 주문리스트(/order/list))에서 해당 주문 상태를 \"배송완료\"로 변경\n2) [FO] Front jspark81 마이페이지 주문내역(/mypage/order)에서 상태 확인",
-      "expected": "1) 2) Front 주문내역에 \"배송완료\" 상태로 갱신되어 노출되어야 함",
+      "steps": "1) [BO] Admin /order/list에서 해당 주문 상태를 \"배송완료\"로 변경\n2) [FO] Front jspark81 /mypage/order에서 상태 확인",
+      "expected": "1) 2) Front 주문내역에 \"배송완료\" 상태로 갱신되어 노출되어야 함\n* [확인필요] jspark81 명의의 실제 주문이 없어(TC_MY_026 참고) 검증용 주문 데이터 준비가 선행되어야 함. 기존에 참조했던 O260820790055는 봇 계정 소유로 확인되어 jspark81 시나리오에 사용 불가(DEF_008 오탐 확인 과정에서 발견)",
       "testData": "주문번호=O260820790055",
       "result": "",
       "assignee": "",
@@ -563,8 +537,7 @@
       "system": "FO",
       "remark": "2026-08-20: 선행 근거였던 DEF_008이 오탐으로 정정되어 문구 및 이유 수정",
       "displayNo": 22,
-      "tcId": "TC_OP_022",
-      "verifyNote": "[확인필요] jspark81 명의의 실제 주문이 없어(TC_MY_026 참고) 검증용 주문 데이터 준비가 선행되어야 함. 기존에 참조했던 O260820790055는 봇 계정 소유로 확인되어 jspark81 시나리오에 사용 불가(DEF_008 오탐 확인 과정에서 발견)"
+      "tcId": "TC_OP_022"
     }
   ]
 }

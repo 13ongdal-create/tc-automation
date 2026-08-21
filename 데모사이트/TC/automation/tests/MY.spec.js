@@ -44,10 +44,11 @@ test('[TC_MY_004][주문내역] "쇼핑하러 가기" 버튼 클릭 시 메인 �
   expect(page.url()).toBe(BASE + '/');
 });
 
-test('[TC_MY_005][SNS연결설정] [확인필요][결함] SNS 연결설정 화면 500 에러 재현 검증', async ({ page }) => {
+test('[TC_MY_005][SNS연결설정][결함] SNS 연결설정 화면 OAuth CORS 실패 검증', async ({ page }) => {
   await login(page);
   const res = await page.goto(BASE + '/mypage/social', { waitUntil: 'load' });
-  expect(res.status()).toBe(500);
+  expect(res.status()).toBe(200);
+  // 콘솔/네트워크 에러 자동 감지 fixture에 의해 카카오/네이버 OAuth CORS 실패 시 이 테스트는 실패 처리됨(의도된 결함 확인 동작)
 });
 
 test('[TC_MY_006][위시리스트] 위시리스트 보유 상품 목록 노출 검증', async ({ page }) => {

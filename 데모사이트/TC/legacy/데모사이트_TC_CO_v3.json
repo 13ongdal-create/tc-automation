@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "CO",
     "moduleName": "시스템(공통)",
-    "version": 4,
+    "version": 3,
     "changeHistory": [
       {
         "version": 1,
@@ -19,11 +19,6 @@
         "version": 3,
         "date": "2026-08-20",
         "summary": "Phase 4(배치4): Admin 2차 우선순위 20개 메뉴(워크플로우 2개+시스템 18개) 신규 30건 추가(system:BO) — 화면관리(테마 커스터마이저), 대시보드관리(위젯 25개), 권한관리/관리자관리/권한별메뉴/메뉴별권한 등 보안 민감 화면 포함. Sample 화면은 실사용 기능이 아닌 UI 예시로 확인되어 QA 대상 제외 검토 의견 기록"
-      },
-      {
-        "version": 4,
-        "date": "2026-08-21",
-        "summary": "TC 표기 개선(배치6): 테스트 수행 절차의 URL을 화면명으로 표기(32건), 기대결과 단일 항목 넘버링 제거(21건), [확인필요]/스펙확정 주석을 별도 verifyNote 필드로 분리하여 뷰어에서 RED 강조 표시하도록 개선(16건)"
       }
     ]
   },
@@ -40,7 +35,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 헤더 \"🇰🇷 한국어\" 버튼 클릭",
-      "expected": "지원 언어 목록이 드롭다운으로 노출된다",
+      "expected": "1) 지원 언어 목록이 드롭다운으로 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -49,8 +44,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 1,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_CO_002",
@@ -64,7 +58,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 언어선택 드롭다운에서 한국어 외 다른 언어 선택",
-      "expected": "화면 텍스트가 선택한 언어로 전환된다",
+      "expected": "1) 화면 텍스트가 선택한 언어로 전환된다\n* [확인필요] 실제 지원 언어 목록 및 전환 범위 확인 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -73,8 +67,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 2,
-      "remark": "",
-      "verifyNote": "실제 지원 언어 목록 및 전환 범위 확인 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_CO_003",
@@ -88,7 +81,7 @@
       "priority": "P3",
       "precondition": "언어를 한국어 외 다른 언어로 전환한 상태",
       "steps": "1) 언어 전환 후 브라우저 새로고침(F5)",
-      "expected": "새로고침 후에도 전환된 언어가 유지된다",
+      "expected": "1) 새로고침 후에도 전환된 언어가 유지된다\n* [확인필요] 저장 방식(쿠키/localStorage) 확인 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -97,8 +90,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 3,
-      "remark": "",
-      "verifyNote": "저장 방식(쿠키/localStorage) 확인 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_CO_004",
@@ -112,7 +104,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 헤더 검색 아이콘 클릭",
-      "expected": "검색 입력창이 노출되고 포커스가 이동한다",
+      "expected": "1) 검색 입력창이 노출되고 포커스가 이동한다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -121,8 +113,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 4,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_CO_005",
@@ -136,7 +127,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 헤더 이미지검색(카메라) 아이콘 클릭",
-      "expected": "파일 선택 다이얼로그가 트리거된다",
+      "expected": "1) 파일 선택 다이얼로그가 트리거된다\n* [확인필요] 실제 동작 방식 미확인",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -145,8 +136,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 5,
-      "remark": "",
-      "verifyNote": "실제 동작 방식 미확인"
+      "remark": ""
     },
     {
       "tcId": "TC_CO_006",
@@ -160,7 +150,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 이미지검색 업로드에 .txt 등 비이미지 파일 선택",
-      "expected": "\"이미지 파일만 업로드 가능합니다\" 등 에러 안내가 노출된다",
+      "expected": "1) \"이미지 파일만 업로드 가능합니다\" 등 에러 안내가 노출된다\n* [확인필요] 실제 안내 문구 및 허용 확장자 확인 필요",
       "testData": "업로드 파일=sample.txt",
       "result": "",
       "assignee": "",
@@ -169,8 +159,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 6,
-      "remark": "",
-      "verifyNote": "실제 안내 문구 및 허용 확장자 확인 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_CO_007",
@@ -184,7 +173,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 이미지검색 업로드에 상품 이미지(.jpg) 선택",
-      "expected": "유사 상품 검색 결과가 노출된다",
+      "expected": "1) 유사 상품 검색 결과가 노출된다\n* [확인필요] 실제 이미지 인식/매칭 로직 미확인",
       "testData": "업로드 파일=product.jpg",
       "result": "",
       "assignee": "",
@@ -193,8 +182,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 7,
-      "remark": "",
-      "verifyNote": "실제 이미지 인식/매칭 로직 미확인"
+      "remark": ""
     },
     {
       "tcId": "TC_CO_008",
@@ -208,7 +196,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 헤더 장바구니 아이콘 클릭",
-      "expected": "/cart 페이지로 이동한다",
+      "expected": "1) /cart 페이지로 이동한다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -217,8 +205,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 8,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_CO_009",
@@ -232,7 +219,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 헤더 메뉴 순서 확인",
-      "expected": "\"전체카테고리 - SALE - MD's PICK - BRAND\" 순서로 노출된다",
+      "expected": "1) \"전체카테고리 - SALE - MD's PICK - BRAND\" 순서로 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -241,8 +228,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 9,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_CO_010",
@@ -256,7 +242,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 뷰포트를 375x812(모바일)로 축소\n2) 헤더 영역 확인",
-      "expected": "헤더 메뉴가 햄버거 아이콘으로 축소되어 노출된다",
+      "expected": "1) 헤더 메뉴가 햄버거 아이콘으로 축소되어 노출된다\n* [확인필요] 모바일 헤더 UI 존재 여부 실측 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -265,8 +251,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 10,
-      "remark": "",
-      "verifyNote": "[확인필요] 모바일 헤더 UI 존재 여부 실측 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_CO_011",
@@ -280,7 +265,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) Chromium 브라우저로 메인(/) 진입\n2) 헤더/푸터 레이아웃 확인",
-      "expected": "요소 겹침이나 깨짐 없이 정상 렌더링된다",
+      "expected": "1) 요소 겹침이나 깨짐 없이 정상 렌더링된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -289,8 +274,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 11,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_CO_012",
@@ -304,7 +288,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 개발자도구 Network에서 Offline 체크\n2) 페이지 새로고침 시도",
-      "expected": "오프라인 안내 화면 또는 재시도 UI가 노출된다",
+      "expected": "1) 오프라인 안내 화면 또는 재시도 UI가 노출된다\n* [확인필요] 실제 오프라인 처리 UX 미확인",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -313,8 +297,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 12,
-      "remark": "",
-      "verifyNote": "실제 오프라인 처리 UX 미확인"
+      "remark": ""
     },
     {
       "tcId": "TC_CO_013",
@@ -328,7 +311,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 개발자도구 Network에서 Throttling: Slow 3G 설정\n2) 메인(/) 새로고침",
-      "expected": "이미지 로딩 완료 전 Skeleton/blur placeholder가 노출된다",
+      "expected": "1) 이미지 로딩 완료 전 Skeleton/blur placeholder가 노출된다\n* [확인필요] 실제 적용 여부 미확인",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -337,8 +320,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 13,
-      "remark": "",
-      "verifyNote": "실제 적용 여부 미확인"
+      "remark": ""
     },
     {
       "tcId": "TC_CO_014",
@@ -351,8 +333,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 존재하지 않는 경로(존재하지 않는 페이지) 접속",
-      "expected": "404 Not Found 안내 페이지가 노출되고 500 서버 에러가 발생하지 않는다",
+      "steps": "1) 존재하지 않는 경로(/no-such-page) 접속",
+      "expected": "1) 404 Not Found 안내 페이지가 노출되고 500 서버 에러가 발생하지 않는다",
       "testData": "접속 경로=/no-such-page",
       "result": "",
       "assignee": "",
@@ -361,8 +343,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 14,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_CO_015",
@@ -376,7 +357,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) Tab 키로 검색/장바구니/언어선택 버튼 순차 이동",
-      "expected": "각 요소에 포커스 시 시각적 포커스 표시(outline 등)가 노출된다",
+      "expected": "1) 각 요소에 포커스 시 시각적 포커스 표시(outline 등)가 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -385,8 +366,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 15,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_CO_016",
@@ -400,7 +380,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 개발자도구로 상품 이미지 alt 속성 전수 확인",
-      "expected": "모든 상품 이미지에 상품명을 설명하는 alt 텍스트가 존재한다",
+      "expected": "1) 모든 상품 이미지에 상품명을 설명하는 alt 텍스트가 존재한다\n* [확인필요] 일부 이미지 alt가 상품명이 아닌 파일명으로 노출됨(TC_SYS_017 참조)",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -409,8 +389,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 16,
-      "remark": "",
-      "verifyNote": "[확인필요] 일부 이미지 alt가 상품명이 아닌 파일명으로 노출됨(TC_SYS_017 참조)"
+      "remark": ""
     },
     {
       "tcId": "TC_CO_017",
@@ -424,7 +403,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 배너 이미지의 alt 속성 확인",
-      "expected": "배너 내용을 설명하는 alt 텍스트가 노출되어야 하나, 실제로는 \"df23cd0d-c7f9-4611-abaf-21353e05b873.png\" 형태의 원본 파일명이 그대로 노출됨 — 스크린리더 사용성 저하",
+      "expected": "1) 배너 내용을 설명하는 alt 텍스트가 노출되어야 하나, 실제로는 \"df23cd0d-c7f9-4611-abaf-21353e05b873.png\" 형태의 원본 파일명이 그대로 노출됨 — 스크린리더 사용성 저하",
       "testData": "관측 alt=\"df23cd0d-c7f9-4611-abaf-21353e05b873.png\"",
       "result": "",
       "assignee": "",
@@ -433,8 +412,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 17,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_CO_018",
@@ -448,7 +426,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) \"입점 브랜드\" 섹션에서 H&M 로고 alt 속성 확인",
-      "expected": "alt 텍스트가 \"H&M\"으로 노출되어야 하나, 실제로는 \"H&amp;amp;amp;amp;M\" 형태로 앰퍼샌드가 4중 인코딩되어 노출됨 — HTML 이스케이프 처리 로직 결함",
+      "expected": "1) alt 텍스트가 \"H&M\"으로 노출되어야 하나, 실제로는 \"H&amp;amp;amp;amp;M\" 형태로 앰퍼샌드가 4중 인코딩되어 노출됨 — HTML 이스케이프 처리 로직 결함",
       "testData": "관측 alt=\"H&amp;amp;amp;amp;M\"",
       "result": "",
       "assignee": "",
@@ -457,8 +435,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 18,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_CO_019",
@@ -471,8 +448,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 로그인 접속(500 에러 화면 노출)\n2) 브라우저 탭 타이틀 확인",
-      "expected": "정상 화면은 타이틀이 노출되어야 하나, /login 에러 화면은 탭 타이틀이 공란으로 노출된다",
+      "steps": "1) /login 접속(500 에러 화면 노출)\n2) 브라우저 탭 타이틀 확인",
+      "expected": "1) 정상 화면은 타이틀이 노출되어야 하나, /login 에러 화면은 탭 타이틀이 공란으로 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -481,8 +458,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 19,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_CO_020",
@@ -496,7 +472,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) OS/브라우저 다크모드 설정 활성화 후 메인(/) 접속",
-      "expected": "사이트가 다크 테마로 전환되어 노출된다",
+      "expected": "1) 사이트가 다크 테마로 전환되어 노출된다\n* [확인필요] 다크모드 지원 여부 자체가 미확인 — 미지원 시 라이트 테마 고정 노출이 정상",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -505,8 +481,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 20,
-      "remark": "",
-      "verifyNote": "다크모드 지원 여부 자체가 미확인 — 미지원 시 라이트 테마 고정 노출이 정상"
+      "remark": ""
     },
     {
       "majorCategory": "시스템",
@@ -518,7 +493,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 워크플로우관리 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /workflow 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) ID/워크플로우 명칭/유형 코드/설명/사용여부/등록일 컬럼과 함께 목록이 노출된다",
       "testData": "",
       "result": "",
@@ -529,8 +504,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 21,
-      "tcId": "TC_CO_021",
-      "verifyNote": ""
+      "tcId": "TC_CO_021"
     },
     {
       "majorCategory": "시스템",
@@ -542,7 +516,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 워크플로우관리 진입 2) \"신규 등록\" 버튼 클릭",
+      "steps": "1) /workflow 진입 2) \"신규 등록\" 버튼 클릭",
       "expected": "1) 2) 신규 워크플로우 등록 화면(폼)으로 이동한다",
       "testData": "",
       "result": "",
@@ -553,8 +527,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 22,
-      "tcId": "TC_CO_022",
-      "verifyNote": ""
+      "tcId": "TC_CO_022"
     },
     {
       "majorCategory": "시스템",
@@ -566,7 +539,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태, 진행 중인 워크플로우 인스턴스 없음",
-      "steps": "1) Admin 모니터링 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /workflow/monitoring 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) \"진행 중 PO 목록\"이 0건으로 노출된다(PO No/Workflow Name/Version Id/Node Name/Status Code 컬럼 존재)",
       "testData": "",
       "result": "",
@@ -577,8 +550,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 23,
-      "tcId": "TC_CO_023",
-      "verifyNote": ""
+      "tcId": "TC_CO_023"
     },
     {
       "majorCategory": "시스템",
@@ -590,7 +562,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 공통코드관리 진입 2) 대분류코드 입력 후 \"조회\" 클릭",
+      "steps": "1) /system/master/code 진입 2) 대분류코드 입력 후 \"조회\" 클릭",
       "expected": "1) 2) 입력한 대분류코드에 해당하는 공통코드만 목록에 노출된다",
       "testData": "",
       "result": "",
@@ -601,8 +573,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 24,
-      "tcId": "TC_CO_024",
-      "verifyNote": ""
+      "tcId": "TC_CO_024"
     },
     {
       "majorCategory": "시스템",
@@ -614,7 +585,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 공통코드관리 진입 2) \"신규코드 등록\" 버튼 클릭",
+      "steps": "1) /system/master/code 진입 2) \"신규코드 등록\" 버튼 클릭",
       "expected": "1) 2) 신규 공통코드 등록 화면(폼)으로 이동한다",
       "testData": "",
       "result": "",
@@ -625,8 +596,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 25,
-      "tcId": "TC_CO_025",
-      "verifyNote": ""
+      "tcId": "TC_CO_025"
     },
     {
       "majorCategory": "시스템",
@@ -638,7 +608,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 다국어관리 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /system/master/i18n 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 메시지 키/메시지 그룹 코드/설명/사용여부/작성자/등록일시 컬럼과 함께 목록이 노출된다",
       "testData": "",
       "result": "",
@@ -649,8 +619,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 26,
-      "tcId": "TC_CO_026",
-      "verifyNote": ""
+      "tcId": "TC_CO_026"
     },
     {
       "majorCategory": "시스템",
@@ -662,7 +631,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 다국어관리 진입 2) 그룹 코드 선택 후 \"조회\" 클릭",
+      "steps": "1) /system/master/i18n 진입 2) 그룹 코드 선택 후 \"조회\" 클릭",
       "expected": "1) 2) 선택한 그룹 코드에 해당하는 메시지만 목록에 노출된다",
       "testData": "",
       "result": "",
@@ -673,8 +642,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 27,
-      "tcId": "TC_CO_027",
-      "verifyNote": ""
+      "tcId": "TC_CO_027"
     },
     {
       "majorCategory": "시스템",
@@ -686,7 +654,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 프로그램관리 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /system/master/program 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) \"데이터가 없습니다\" 문구와 함께 조회권한/저장권한/엑셀권한/삭제권한/수정권한 컬럼 구조가 노출된다",
       "testData": "",
       "result": "",
@@ -697,8 +665,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 28,
-      "tcId": "TC_CO_028",
-      "verifyNote": ""
+      "tcId": "TC_CO_028"
     },
     {
       "majorCategory": "시스템",
@@ -710,7 +677,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 메뉴관리 진입 2) 메뉴그룹 선택 후 \"조회\" 클릭",
+      "steps": "1) /system/master/menu 진입 2) 메뉴그룹 선택 후 \"조회\" 클릭",
       "expected": "1) 2) 선택한 메뉴그룹의 메뉴 트리와 메뉴코드/메뉴아이콘/폴더여부/권한코드별(조회/저장/엑셀/삭제/수정) 설정 필드가 노출된다",
       "testData": "",
       "result": "",
@@ -721,8 +688,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 29,
-      "tcId": "TC_CO_029",
-      "verifyNote": ""
+      "tcId": "TC_CO_029"
     },
     {
       "majorCategory": "시스템",
@@ -734,8 +700,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 화면관리 진입 2) \"Professional Mint\" 프리셋 선택 3) \"저장 및 적용\" 클릭",
-      "expected": "1) 2) LIGHT DEFAULT/DARK MODE/MINT FRESH/Professional Mint/Elegant Indigo/Warm Sunset/Soft Pastel/Midnight Emerald/System Dark 프리셋이 노출되고 선택 시 미리보기가 변경된다 3) 저장 시 실제 Admin 화면 테마에 적용된다",
+      "steps": "1) /system/publishing-guide 진입 2) \"Professional Mint\" 프리셋 선택 3) \"저장 및 적용\" 클릭",
+      "expected": "1) 2) LIGHT DEFAULT/DARK MODE/MINT FRESH/Professional Mint/Elegant Indigo/Warm Sunset/Soft Pastel/Midnight Emerald/System Dark 프리셋이 노출되고 선택 시 미리보기가 변경된다 3) 저장 시 실제 Admin 화면 테마에 적용된다\n* [확인필요] Front 사이트에도 영향을 주는지 여부는 미확인",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -745,8 +711,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 30,
-      "tcId": "TC_CO_030",
-      "verifyNote": "Front 사이트에도 영향을 주는지 여부는 미확인"
+      "tcId": "TC_CO_030"
     },
     {
       "majorCategory": "시스템",
@@ -758,7 +723,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 화면관리 진입 2) 폰트 크기 \"14PX\" 선택, 버튼 스타일 \"PILL\" 선택",
+      "steps": "1) /system/publishing-guide 진입 2) 폰트 크기 \"14PX\" 선택, 버튼 스타일 \"PILL\" 선택",
       "expected": "1) 2) 선택한 옵션이 미리보기 영역에 즉시 반영된다",
       "testData": "",
       "result": "",
@@ -769,8 +734,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 31,
-      "tcId": "TC_CO_031",
-      "verifyNote": ""
+      "tcId": "TC_CO_031"
     },
     {
       "majorCategory": "시스템",
@@ -782,8 +746,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 대시보드관리 진입 2) \"총 방문자수\" 위젯 숨김으로 전환 3) \"적용하기\" 클릭",
-      "expected": "1) 2) 3) 표시 24개/숨김 1개로 카운트가 갱신되고, 실제 대시보드 홈 화면에서 해당 위젯이 숨겨진다",
+      "steps": "1) /system/dashboard 진입 2) \"총 방문자수\" 위젯 숨김으로 전환 3) \"적용하기\" 클릭",
+      "expected": "1) 2) 3) 표시 24개/숨김 1개로 카운트가 갱신되고, 실제 대시보드 홈 화면에서 해당 위젯이 숨겨진다\n* [확인필요] 실제 대시보드 홈 화면 반영 여부 미검증",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -793,8 +757,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 32,
-      "tcId": "TC_CO_032",
-      "verifyNote": "[확인필요] 실제 대시보드 홈 화면 반영 여부 미검증"
+      "tcId": "TC_CO_032"
     },
     {
       "majorCategory": "시스템",
@@ -806,7 +769,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태, 위젯 순서/표시 설정 변경됨",
-      "steps": "1) Admin 대시보드관리 진입 2) \"초기화\" 버튼 클릭",
+      "steps": "1) /system/dashboard 진입 2) \"초기화\" 버튼 클릭",
       "expected": "1) 2) 위젯 순서와 표시/숨김 상태가 기본값으로 복원된다",
       "testData": "",
       "result": "",
@@ -817,8 +780,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 33,
-      "tcId": "TC_CO_033",
-      "verifyNote": ""
+      "tcId": "TC_CO_033"
     },
     {
       "majorCategory": "시스템",
@@ -830,7 +792,7 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 권한관리 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /system/auth/master 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 권한코드/권한명/기본권한여부/사용여부 컬럼과 함께 권한그룹 목록이 노출된다",
       "testData": "",
       "result": "",
@@ -841,8 +803,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 34,
-      "tcId": "TC_CO_034",
-      "verifyNote": ""
+      "tcId": "TC_CO_034"
     },
     {
       "majorCategory": "시스템",
@@ -854,7 +815,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 권한관리 진입 2) \"신규 등록\" 버튼 클릭",
+      "steps": "1) /system/auth/master 진입 2) \"신규 등록\" 버튼 클릭",
       "expected": "1) 2) 신규 권한그룹 등록 화면(폼)으로 이동한다",
       "testData": "",
       "result": "",
@@ -865,8 +826,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 35,
-      "tcId": "TC_CO_035",
-      "verifyNote": ""
+      "tcId": "TC_CO_035"
     },
     {
       "majorCategory": "시스템",
@@ -878,7 +838,7 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 관리자관리 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /system/auth/user 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) Login ID/사용자명/직급/직위/Email/사용여부 컬럼과 함께 관리자 목록이 노출된다(devel 계정 포함 여부 확인)",
       "testData": "",
       "result": "",
@@ -889,8 +849,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 36,
-      "tcId": "TC_CO_036",
-      "verifyNote": ""
+      "tcId": "TC_CO_036"
     },
     {
       "majorCategory": "시스템",
@@ -902,8 +861,8 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 관리자관리 진입 2) \"신규 등록\" 버튼 클릭",
-      "expected": "1) 2) 신규 관리자 계정 등록 화면(폼)으로 이동한다",
+      "steps": "1) /system/auth/user 진입 2) \"신규 등록\" 버튼 클릭",
+      "expected": "1) 2) 신규 관리자 계정 등록 화면(폼)으로 이동한다\n* [확인필요] 신규 관리자 등록 시 권한 부여 절차/승인 프로세스 존재 여부 미확인",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -913,8 +872,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 37,
-      "tcId": "TC_CO_037",
-      "verifyNote": "신규 관리자 등록 시 권한 부여 절차/승인 프로세스 존재 여부 미확인"
+      "tcId": "TC_CO_037"
     },
     {
       "majorCategory": "시스템",
@@ -926,7 +884,7 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 권한별메뉴 진입 2) 권한그룹에서 임의 권한코드 선택",
+      "steps": "1) /system/auth/menu-auth 진입 2) 권한그룹에서 임의 권한코드 선택",
       "expected": "1) 2) 선택한 권한코드가 각 메뉴별로 보유한 조회/저장/엑셀/삭제/수정 권한 여부가 매트릭스로 노출된다",
       "testData": "",
       "result": "",
@@ -937,8 +895,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 38,
-      "tcId": "TC_CO_038",
-      "verifyNote": ""
+      "tcId": "TC_CO_038"
     },
     {
       "majorCategory": "시스템",
@@ -950,8 +907,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 메뉴별권한 진입 2) 메뉴그룹에서 임의 메뉴 선택",
-      "expected": "1) 2) 선택한 메뉴에 대해 각 권한코드별 조회/저장/엑셀/삭제/수정 권한 매트릭스가 노출된다",
+      "steps": "1) /system/auth/menu 진입 2) 메뉴그룹에서 임의 메뉴 선택",
+      "expected": "1) 2) 선택한 메뉴에 대해 각 권한코드별 조회/저장/엑셀/삭제/수정 권한 매트릭스가 노출된다\n* [확인필요] 권한별메뉴(TC_CO_037) 화면에서 설정한 값과 상호 일치하는지(양방향 데이터 정합성) 미검증",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -961,8 +918,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 39,
-      "tcId": "TC_CO_039",
-      "verifyNote": "[확인필요] 권한별메뉴(TC_CO_037) 화면에서 설정한 값과 상호 일치하는지(양방향 데이터 정합성) 미검증"
+      "tcId": "TC_CO_039"
     },
     {
       "majorCategory": "시스템",
@@ -974,7 +930,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 배치관리 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /system/server/schedule 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) JOB Name/JOB Group/Cron/Desc/Params/Prev Fire Time/Next Fire Time/State 컬럼과 하단 \"Schedule Log\" 실행 이력 영역이 노출된다",
       "testData": "",
       "result": "",
@@ -985,8 +941,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 40,
-      "tcId": "TC_CO_040",
-      "verifyNote": ""
+      "tcId": "TC_CO_040"
     },
     {
       "majorCategory": "시스템",
@@ -998,7 +953,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 배치관리 진입 2) \"SCHEDULE 추가\" 버튼 클릭",
+      "steps": "1) /system/server/schedule 진입 2) \"SCHEDULE 추가\" 버튼 클릭",
       "expected": "1) 2) 신규 배치 스케줄(Cron) 등록 화면(폼)으로 이동한다",
       "testData": "",
       "result": "",
@@ -1009,8 +964,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 41,
-      "tcId": "TC_CO_041",
-      "verifyNote": ""
+      "tcId": "TC_CO_041"
     },
     {
       "majorCategory": "시스템",
@@ -1022,7 +976,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태(devel), 직전 로그인 이력 존재",
-      "steps": "1) Admin 로그인내역조회 진입 2) 사용자명 \"devel\" 입력 후 \"조회\" 클릭",
+      "steps": "1) /system/server/login-log 진입 2) 사용자명 \"devel\" 입력 후 \"조회\" 클릭",
       "expected": "1) 2) devel 계정의 로그인 시도 이력(성공/실패, Access IP, 등록일시)이 노출된다",
       "testData": "",
       "result": "",
@@ -1033,8 +987,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 42,
-      "tcId": "TC_CO_042",
-      "verifyNote": ""
+      "tcId": "TC_CO_042"
     },
     {
       "majorCategory": "시스템",
@@ -1046,7 +999,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태, 직전 작업 이력 존재",
-      "steps": "1) Admin 관리자로그관리 진입 2) 사용자명 \"devel\" 입력 후 \"조회\" 클릭",
+      "steps": "1) /system/server/log 진입 2) 사용자명 \"devel\" 입력 후 \"조회\" 클릭",
       "expected": "1) 2) devel 계정이 이번 세션 중 수행한 조회/저장 등 작업(API 호출) 이력이 프로그램명별로 노출된다",
       "testData": "",
       "result": "",
@@ -1057,8 +1010,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 43,
-      "tcId": "TC_CO_043",
-      "verifyNote": ""
+      "tcId": "TC_CO_043"
     },
     {
       "majorCategory": "시스템",
@@ -1070,8 +1022,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 검색엔진관리 진입 2) \"조회\" 버튼 클릭",
-      "expected": "1) 2) Health/Status/Index/Time Field/UUID/Pri/Rep/Docs Count/Docs Deleted 컬럼과 함께 인덱스 목록이 노출된다",
+      "steps": "1) /system/server/search 진입 2) \"조회\" 버튼 클릭",
+      "expected": "1) 2) Health/Status/Index/Time Field/UUID/Pri/Rep/Docs Count/Docs Deleted 컬럼과 함께 인덱스 목록이 노출된다\n* [확인필요] Health 상태가 실제 정상(green)인지 확인 필요 — 상품/카테고리 검색 기능과 연계된 인프라이므로 이상 시 Front 검색 기능 영향 가능",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1081,8 +1033,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 44,
-      "tcId": "TC_CO_044",
-      "verifyNote": "Health 상태가 실제 정상(green)인지 확인 필요 — 상품/카테고리 검색 기능과 연계된 인프라이므로 이상 시 Front 검색 기능 영향 가능"
+      "tcId": "TC_CO_044"
     },
     {
       "majorCategory": "시스템",
@@ -1094,7 +1045,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin Agent관리 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /system/server/agents 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) Agent ID/Agent Name/Agent Type/Persona/Icon/Description/Active 컬럼과 함께 목록이 노출된다",
       "testData": "",
       "result": "",
@@ -1105,8 +1056,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 45,
-      "tcId": "TC_CO_045",
-      "verifyNote": ""
+      "tcId": "TC_CO_045"
     },
     {
       "majorCategory": "시스템",
@@ -1118,7 +1068,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin Agent관리 진입 2) \"등록\" 버튼 클릭",
+      "steps": "1) /system/server/agents 진입 2) \"등록\" 버튼 클릭",
       "expected": "1) 2) 신규 Agent 등록 화면(폼)으로 이동한다",
       "testData": "",
       "result": "",
@@ -1129,8 +1079,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 46,
-      "tcId": "TC_CO_046",
-      "verifyNote": ""
+      "tcId": "TC_CO_046"
     },
     {
       "majorCategory": "시스템",
@@ -1142,7 +1091,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태, 등록된 Tool 없음",
-      "steps": "1) Admin Tool관리 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /system/server/tools 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) \"데이터가 없습니다\" 문구와 함께 Tool ID/Tool Name/Tool Group/Description/Active/Implemented 컬럼 구조가 노출된다",
       "testData": "",
       "result": "",
@@ -1153,8 +1102,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 47,
-      "tcId": "TC_CO_047",
-      "verifyNote": ""
+      "tcId": "TC_CO_047"
     },
     {
       "majorCategory": "시스템",
@@ -1166,8 +1114,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin Sample 진입",
-      "expected": "전시 시작일/종료일 입력, 브랜드/카테고리 선택, 체크박스(1~3번), 제조사/모델명/가격 데이터그리드(Tesla Model Y 등) 예제가 노출된다\n* 실사용 화면이 아닌 UI 컴포넌트 예시 페이지로 확인됨 — QA 대상에서 제외 검토",
+      "steps": "1) /system/sample 진입",
+      "expected": "1) 전시 시작일/종료일 입력, 브랜드/카테고리 선택, 체크박스(1~3번), 제조사/모델명/가격 데이터그리드(Tesla Model Y 등) 예제가 노출된다\n* 실사용 화면이 아닌 UI 컴포넌트 예시 페이지로 확인됨 — QA 대상에서 제외 검토",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1177,8 +1125,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 48,
-      "tcId": "TC_CO_048",
-      "verifyNote": ""
+      "tcId": "TC_CO_048"
     },
     {
       "majorCategory": "시스템",
@@ -1190,7 +1137,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin PUSH관리 진입 2) 발송상태 필터 선택 후 \"조회\" 클릭",
+      "steps": "1) /system/push 진입 2) 발송상태 필터 선택 후 \"조회\" 클릭",
       "expected": "1) 2) 선택한 발송상태에 해당하는 PUSH 발송 이력만 목록에 노출된다",
       "testData": "",
       "result": "",
@@ -1201,8 +1148,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 49,
-      "tcId": "TC_CO_049",
-      "verifyNote": ""
+      "tcId": "TC_CO_049"
     },
     {
       "majorCategory": "시스템",
@@ -1214,8 +1160,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin PUSH관리 진입 2) \"PUSH 등록\" 버튼 클릭",
-      "expected": "1) 2) 신규 PUSH 발송 등록 화면(폼)으로 이동한다",
+      "steps": "1) /system/push 진입 2) \"PUSH 등록\" 버튼 클릭",
+      "expected": "1) 2) 신규 PUSH 발송 등록 화면(폼)으로 이동한다\n* [확인필요] 실제 발송 시 Front 사용자 단말에 반영되는지 여부는 별도 검증 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1225,8 +1171,7 @@
       "system": "BO",
       "remark": "",
       "displayNo": 50,
-      "tcId": "TC_CO_050",
-      "verifyNote": "[확인필요] 실제 발송 시 Front 사용자 단말에 반영되는지 여부는 별도 검증 필요"
+      "tcId": "TC_CO_050"
     }
   ]
 }

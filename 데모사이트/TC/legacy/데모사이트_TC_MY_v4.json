@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "MY",
     "moduleName": "마이페이지",
-    "version": 5,
+    "version": 4,
     "changeHistory": [
       {
         "version": 1,
@@ -24,11 +24,6 @@
         "version": 4,
         "date": "2026-08-20",
         "summary": "DEF_데모사이트_008 재검증 결과 오탐으로 확정 — Admin에서 확인한 주문(O260820790055)이 jspark81이 아닌 봇 계정(mbrId 406) 소유였음이 원인. jspark81은 실제 주문 이력이 없어 Front가 Empty State를 보이는 것이 정상 동작. TC_MY_026 내용 정정, 자동화 코드(MY.spec.js)의 잘못된 어서션 제거"
-      },
-      {
-        "version": 5,
-        "date": "2026-08-21",
-        "summary": "TC 표기 개선(배치6): 테스트 수행 절차의 URL을 화면명으로 표기(25건), 기대결과 단일 항목 넘버링 제거(17건), [확인필요]/스펙확정 주석을 별도 verifyNote 필드로 분리하여 뷰어에서 RED 강조 표시하도록 개선(5건). 스크린샷 확보 과정에서 TC_MY_005(DEF_004) 증상이 500 에러→OAuth CORS 실패로 변경된 것을 확인, 현재 증상 기준으로 TC 내용 갱신"
       }
     ]
   },
@@ -44,8 +39,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태 (jspark81, 주문 이력 없음)",
-      "steps": "1) 마이페이지 주문내역 진입",
-      "expected": "\"최근 주문 내역이 없습니다\" 문구와 \"쇼핑하러 가기\" 버튼이 노출된다",
+      "steps": "1) /mypage/order 진입",
+      "expected": "1) \"최근 주문 내역이 없습니다\" 문구와 \"쇼핑하러 가기\" 버튼이 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -54,8 +49,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 1,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_002",
@@ -68,8 +62,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 주문내역 진입 2) 조회기간 필터 영역 확인",
-      "expected": "\"오늘/최근 7일/최근 1개월/최근 3개월/최근 6개월/전체\" 6개 옵션이 노출된다",
+      "steps": "1) /mypage/order 진입 2) 조회기간 필터 영역 확인",
+      "expected": "1) \"오늘/최근 7일/최근 1개월/최근 3개월/최근 6개월/전체\" 6개 옵션이 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -78,8 +72,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 2,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_003",
@@ -92,8 +85,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 주문내역 진입 2) 주문상태 드롭다운 클릭",
-      "expected": "\"전체/주문완료/결제완료/출하지시/출고완료/배송완료/구매확정/주문취소/주문실패\" 9개 옵션이 노출된다",
+      "steps": "1) /mypage/order 진입 2) 주문상태 드롭다운 클릭",
+      "expected": "1) \"전체/주문완료/결제완료/출하지시/출고완료/배송완료/구매확정/주문취소/주문실패\" 9개 옵션이 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -102,8 +95,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 3,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_004",
@@ -117,7 +109,7 @@
       "priority": "P3",
       "precondition": "로그인 회원 상태, 주문내역 Empty State 노출 상태",
       "steps": "1) \"쇼핑하러 가기\" 버튼 클릭",
-      "expected": "메인(/) 페이지로 이동한다",
+      "expected": "1) 메인(/) 페이지로 이동한다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -126,8 +118,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 4,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_005",
@@ -136,13 +127,13 @@
       "minorCategory": "서버에러",
       "platform": "Web",
       "type": "기능",
-      "item": "[결함] SNS 연결설정 화면 진입 시 카카오/네이버 OAuth 요청 CORS 실패 검증",
+      "item": "[확인필요][결함] SNS 연결설정 화면 500 에러 재현 검증",
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 SNS연결설정 진입",
-      "expected": "SNS 연동 상태(연동/미연동) 화면이 콘솔·네트워크 에러 없이 정상 노출되어야 함",
-      "testData": "접속 URL=/mypage/social",
+      "steps": "1) /mypage/social 진입",
+      "expected": "1) SNS 연동 상태 화면이 정상 노출되어야 하나, 실제로는 \"시스템 오류가 발생했습니다\" 500 Internal Server Error 화면이 노출됨\n* [확인필요] 서버 컴포넌트 렌더링 에러 원인 파악 및 수정 필요 — DEF 결함 등록 대상",
+      "testData": "접속 URL=/mypage/social, 응답코드=500",
       "result": "",
       "assignee": "",
       "issueSummary": "",
@@ -150,8 +141,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 5,
-      "remark": "2026-08-21: 500 에러 결함이 재검증 과정에서 CORS 에러로 증상이 바뀐 것을 확인, 내용 갱신",
-      "verifyNote": "2026-08-21 재검증: 최초 발견 시(2026-08-20) 500 Internal Server Error였으나 현재는 200으로 페이지 자체는 정상 렌더링됨. 다만 페이지 진입 시 카카오(kauth.kakao.com)/네이버(nid.naver.com) OAuth 인증 요청이 자동으로 발생하며 CORS 정책으로 실패(net::ERR_FAILED) — 콘솔 에러 감지 규칙에 의해 여전히 결함으로 분류됨. 이 데모 환경이 지속적으로 변경되고 있어(봇 트래픽/개발 반영) 증상이 달라진 것으로 추정"
+      "remark": ""
     },
     {
       "tcId": "TC_MY_006",
@@ -164,8 +154,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태 (jspark81, 위시리스트에 2건 보유)",
-      "steps": "1) 마이페이지 위시리스트 진입",
-      "expected": "총 2건(\"Dior 소프트 브라운 니트 가디건\", \"H&M 빈티지 체크 셔츠\")이 가격/할인율과 함께 노출된다",
+      "steps": "1) /mypage/wishlist 진입",
+      "expected": "1) 총 2건(\"Dior 소프트 브라운 니트 가디건\", \"H&M 빈티지 체크 셔츠\")이 가격/할인율과 함께 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -174,8 +164,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 6,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_007",
@@ -188,8 +177,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태, 위시리스트에 1건 이상 보유",
-      "steps": "1) 마이페이지 위시리스트 진입 2) \"전체 삭제\" 버튼 클릭",
-      "expected": "위시리스트 항목이 모두 삭제되고 Empty State가 노출된다",
+      "steps": "1) /mypage/wishlist 진입 2) \"전체 삭제\" 버튼 클릭",
+      "expected": "1) 위시리스트 항목이 모두 삭제되고 Empty State가 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -198,8 +187,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 7,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_008",
@@ -212,8 +200,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 위시리스트 진입 2) 하단 안내 영역 확인",
-      "expected": "\"찜한 상품은 최대 100개까지 저장됩니다\" 안내 문구가 노출된다",
+      "steps": "1) /mypage/wishlist 진입 2) 하단 안내 영역 확인",
+      "expected": "1) \"찜한 상품은 최대 100개까지 저장됩니다\" 안내 문구가 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -222,8 +210,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 8,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_009",
@@ -236,8 +223,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태 (jspark81, 등록된 배송지 없음)",
-      "steps": "1) 마이페이지 배송주소록관리 진입",
-      "expected": "\"등록된 배송지가 없습니다\" 문구가 노출된다",
+      "steps": "1) /mypage/address 진입",
+      "expected": "1) \"등록된 배송지가 없습니다\" 문구가 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -246,8 +233,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 9,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_010",
@@ -260,8 +246,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 배송주소록관리 진입 2) \"+ 새 배송지 등록\" 버튼 클릭",
-      "expected": "배송지 등록 폼(모달 또는 화면)이 노출된다",
+      "steps": "1) /mypage/address 진입 2) \"+ 새 배송지 등록\" 버튼 클릭",
+      "expected": "1) 배송지 등록 폼(모달 또는 화면)이 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -270,8 +256,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 10,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_011",
@@ -284,8 +269,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 배송주소록관리 진입 2) 하단 안내 영역 확인",
-      "expected": "\"배송지는 최대 5개까지 등록이 가능합니다\", \"기본 배송지를 설정하시면 주문 시 해당 주소가 자동으로 입력됩니다\" 안내 문구가 노출된다",
+      "steps": "1) /mypage/address 진입 2) 하단 안내 영역 확인",
+      "expected": "1) \"배송지는 최대 5개까지 등록이 가능합니다\", \"기본 배송지를 설정하시면 주문 시 해당 주소가 자동으로 입력됩니다\" 안내 문구가 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -294,8 +279,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 11,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_012",
@@ -308,8 +292,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태 (jspark81, 보유 쿠폰 없음)",
-      "steps": "1) 마이페이지 쿠폰(/mypage쿠폰(/coupon)) 진입",
-      "expected": "\"보유한 쿠폰이 없습니다\" 문구가 노출된다",
+      "steps": "1) /mypage/coupon 진입",
+      "expected": "1) \"보유한 쿠폰이 없습니다\" 문구가 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -318,8 +302,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 12,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_013",
@@ -332,7 +315,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 쿠폰(/mypage쿠폰(/coupon)) 진입 2) \"사용가능\" 탭 클릭 3) \"사용완료/만료\" 탭 클릭",
+      "steps": "1) /mypage/coupon 진입 2) \"사용가능\" 탭 클릭 3) \"사용완료/만료\" 탭 클릭",
       "expected": "1) 2) 3) 각 탭 클릭 시 해당 조건의 쿠폰만 필터링되어 노출된다(전체 항목 개수와 합이 일치)",
       "testData": "",
       "result": "",
@@ -342,8 +325,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 13,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_014",
@@ -356,8 +338,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태 (jspark81, 문의 이력 없음)",
-      "steps": "1) 마이페이지 1:1문의 진입",
-      "expected": "\"총 0건\", \"조건에 맞는 문의 내역이 없습니다\" 문구가 노출된다",
+      "steps": "1) /mypage/inquiry 진입",
+      "expected": "1) \"총 0건\", \"조건에 맞는 문의 내역이 없습니다\" 문구가 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -366,8 +348,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 14,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_015",
@@ -380,8 +361,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 1:1문의 진입 2) \"문의하기\" 버튼 클릭",
-      "expected": "1:1 문의 작성 화면(또는 모달)로 이동한다",
+      "steps": "1) /mypage/inquiry 진입 2) \"문의하기\" 버튼 클릭",
+      "expected": "1) 1:1 문의 작성 화면(또는 모달)로 이동한다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -390,8 +371,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 15,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_016",
@@ -404,7 +384,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 리뷰목록 진입 2) \"작성한 리뷰\" 탭 클릭",
+      "steps": "1) /mypage/review 진입 2) \"작성한 리뷰\" 탭 클릭",
       "expected": "1) 2) 탭에 따라 각각 다른 목록(작성 가능/작성 완료)이 노출된다",
       "testData": "",
       "result": "",
@@ -414,8 +394,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 16,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_017",
@@ -428,8 +407,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "로그인 회원 상태 (jspark81, 구매/배송완료 상품 없음)",
-      "steps": "1) 마이페이지 리뷰목록 진입 (\"작성 가능한 리뷰\" 탭 기본 선택)",
-      "expected": "\"작성 가능한 리뷰가 없습니다\" 문구가 노출된다",
+      "steps": "1) /mypage/review 진입 (\"작성 가능한 리뷰\" 탭 기본 선택)",
+      "expected": "1) \"작성 가능한 리뷰가 없습니다\" 문구가 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -438,8 +417,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 17,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_018",
@@ -452,8 +430,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태 (jspark81 계정)",
-      "steps": "1) 마이페이지 개인정보수정 진입",
-      "expected": "이름=박지숙, 아이디=jspark81(수정불가 추정), 생년월일=2026.08.18이 초기값으로 노출된다",
+      "steps": "1) /mypage/edit 진입",
+      "expected": "1) 이름=박지숙, 아이디=jspark81(수정불가 추정), 생년월일=2026.08.18이 초기값으로 노출된다\n* [확인필요] 아이디 필드의 실제 수정 가능 여부 미확인",
       "testData": "jspark81 계정 프로필: 이름=박지숙, 아이디=jspark81",
       "result": "",
       "assignee": "",
@@ -462,8 +440,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 18,
-      "remark": "",
-      "verifyNote": "아이디 필드의 실제 수정 가능 여부 미확인"
+      "remark": ""
     },
     {
       "tcId": "TC_MY_019",
@@ -476,7 +453,7 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 개인정보수정 진입 2) 전화번호/이메일 필드 값 변경 3) \"저장\" 버튼 클릭",
+      "steps": "1) /mypage/edit 진입 2) 전화번호/이메일 필드 값 변경 3) \"저장\" 버튼 클릭",
       "expected": "1) 2) 변경한 값이 입력된다 3) 저장 성공 안내와 함께 변경된 값이 반영된다",
       "testData": "전화번호=01099998888, 이메일=jspark81_test@3top.co.kr",
       "result": "",
@@ -486,8 +463,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 19,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_020",
@@ -500,7 +476,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 개인정보수정 진입 2) 이메일 수신 동의 \"미동의\"로 변경 3) \"저장\" 버튼 클릭",
+      "steps": "1) /mypage/edit 진입 2) 이메일 수신 동의 \"미동의\"로 변경 3) \"저장\" 버튼 클릭",
       "expected": "1) 2) 3) 변경한 수신동의 상태가 저장되고 재진입 시에도 유지된다",
       "testData": "이메일 수신동의=미동의",
       "result": "",
@@ -510,8 +486,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 20,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_021",
@@ -524,7 +499,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 개인정보수정 진입 2) 전화번호 값 변경 3) \"취소\" 버튼 클릭 4) 재진입",
+      "steps": "1) /mypage/edit 진입 2) 전화번호 값 변경 3) \"취소\" 버튼 클릭 4) 재진입",
       "expected": "1) 2) 3) 4) 변경 전 원래 값이 그대로 유지된다",
       "testData": "",
       "result": "",
@@ -534,8 +509,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 21,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_022",
@@ -548,8 +522,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 개인정보수정 진입 2) 비밀번호 영역 \"변경하기\" 버튼 클릭",
-      "expected": "현재 비밀번호/새 비밀번호 입력 폼(모달 또는 화면)이 노출된다",
+      "steps": "1) /mypage/edit 진입 2) 비밀번호 영역 \"변경하기\" 버튼 클릭",
+      "expected": "1) 현재 비밀번호/새 비밀번호 입력 폼(모달 또는 화면)이 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -558,8 +532,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 22,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_MY_023",
@@ -572,8 +545,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 회원탈퇴 진입 2) 비밀번호 미입력 상태로 \"확인\" 버튼 클릭",
-      "expected": "1) 2) \"비밀번호를 입력해주세요\" 등 안내와 함께 진행이 차단된다",
+      "steps": "1) /mypage/withdraw 진입 2) 비밀번호 미입력 상태로 \"확인\" 버튼 클릭",
+      "expected": "1) 2) \"비밀번호를 입력해주세요\" 등 안내와 함께 진행이 차단된다\n* [확인필요] 실제 안내 문구 및 차단 여부 확인 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -582,8 +555,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 23,
-      "remark": "",
-      "verifyNote": "실제 안내 문구 및 차단 여부 확인 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_MY_024",
@@ -596,8 +568,8 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 회원탈퇴 진입 2) 잘못된 비밀번호 입력 후 \"확인\" 클릭",
-      "expected": "1) 2) \"비밀번호가 일치하지 않습니다\" 안내와 함께 탈퇴가 차단된다",
+      "steps": "1) /mypage/withdraw 진입 2) 잘못된 비밀번호 입력 후 \"확인\" 클릭",
+      "expected": "1) 2) \"비밀번호가 일치하지 않습니다\" 안내와 함께 탈퇴가 차단된다\n* [확인필요] 실제 안내 문구 확인 필요",
       "testData": "비밀번호=wrongpassword",
       "result": "",
       "assignee": "",
@@ -606,8 +578,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 24,
-      "remark": "",
-      "verifyNote": "실제 안내 문구 확인 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_MY_025",
@@ -620,7 +591,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "로그인 회원 상태",
-      "steps": "1) 마이페이지 회원탈퇴 진입 2) \"취소\" 버튼 클릭",
+      "steps": "1) /mypage/withdraw 진입 2) \"취소\" 버튼 클릭",
       "expected": "1) 2) 회원 탈퇴가 진행되지 않고 이전 화면(마이페이지)으로 복귀한다",
       "testData": "",
       "result": "",
@@ -630,8 +601,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 25,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "마이페이지",
@@ -643,8 +613,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "jspark81 계정, 실제 완료된 주문 없음",
-      "steps": "1) jspark81 Front 로그인 후 마이페이지 주문내역 진입\n2) 조회기간 \"전체\" 선택 후 \"조회\" 클릭",
-      "expected": "1) 2) \"최근 주문 내역이 없습니다\"가 노출됨 — jspark81 명의의 실제 주문이 없으므로 정상 동작",
+      "steps": "1) jspark81 Front 로그인 후 /mypage/order 진입\n2) 조회기간 \"전체\" 선택 후 \"조회\" 클릭",
+      "expected": "1) 2) \"최근 주문 내역이 없습니다\"가 노출됨 — jspark81 명의의 실제 주문이 없으므로 정상 동작\n* [확인필요] 재검증 시 Admin 주문리스트의 주문(O260820790055)을 jspark81 소유로 오인했으나, 실제 조회 결과 해당 주문은 봇 계정(mbrId=406, 봇_186324) 소유로 확인됨(오늘 생성된 주문 4건 모두 봇 계정). jspark81로 실제 신규 주문을 생성해 Front-Admin 동기화를 재검증하려 했으나 TossPayments 결제위젯 연동 단계에서 Playwright 자동화가 어려워 완료하지 못함 — 결제위젯을 우회하지 않는 별도 테스트 데이터 준비 방안 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -654,8 +624,7 @@
       "system": "FO",
       "remark": "2026-08-20: DEF_008 오탐으로 정정(TC_OP_016에서 확인한 주문이 jspark81 소유가 아니었음이 원인) — 결함 아님",
       "displayNo": 26,
-      "tcId": "TC_MY_026",
-      "verifyNote": "재검증 시 Admin 주문리스트의 주문(O260820790055)을 jspark81 소유로 오인했으나, 실제 조회 결과 해당 주문은 봇 계정(mbrId=406, 봇_186324) 소유로 확인됨(오늘 생성된 주문 4건 모두 봇 계정). jspark81로 실제 신규 주문을 생성해 Front-Admin 동기화를 재검증하려 했으나 TossPayments 결제위젯 연동 단계에서 Playwright 자동화가 어려워 완료하지 못함 — 결제위젯을 우회하지 않는 별도 테스트 데이터 준비 방안 필요"
+      "tcId": "TC_MY_026"
     }
   ]
 }

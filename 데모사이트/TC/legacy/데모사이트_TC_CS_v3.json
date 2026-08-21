@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "CS",
     "moduleName": "고객센터/정책",
-    "version": 4,
+    "version": 3,
     "changeHistory": [
       {
         "version": 1,
@@ -19,11 +19,6 @@
         "version": 3,
         "date": "2026-08-20",
         "summary": "뷰어 스키마 정비: testData 플레이스홀더(\"특이 테스트 데이터 없음\"/\"-\") 빈 값으로 정정, remark(비고) 필드 신규 추가(기본값 빈 문자열) — 뷰어 컬럼 구조 개편(구분→비고, 테스트데이터 위치 이동)에 따른 데이터 정합"
-      },
-      {
-        "version": 4,
-        "date": "2026-08-21",
-        "summary": "TC 표기 개선(배치6): 테스트 수행 절차의 URL을 화면명으로 표기(9건), 기대결과 단일 항목 넘버링 제거(4건), [확인필요]/스펙확정 주석을 별도 verifyNote 필드로 분리하여 뷰어에서 RED 강조 표시하도록 개선(2건)"
       }
     ]
   },
@@ -39,8 +34,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 공지사항 진입",
-      "expected": "등록된 공지사항 목록(제목, 등록일)이 노출된다(현재 3건: \"서비스 개선을 위한 의견 접수 안내\", \"시스템 점검 안내\", \"3top 오픈 안내\", 모두 2026.06.23)",
+      "steps": "1) /customer/notice 진입",
+      "expected": "1) 등록된 공지사항 목록(제목, 등록일)이 노출된다(현재 3건: \"서비스 개선을 위한 의견 접수 안내\", \"시스템 점검 안내\", \"3top 오픈 안내\", 모두 2026.06.23)",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -49,8 +44,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 1,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_CS_002",
@@ -63,7 +57,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 공지사항 진입 2) 공지사항 항목 클릭",
+      "steps": "1) /customer/notice 진입 2) 공지사항 항목 클릭",
       "expected": "1) 2) 해당 공지사항의 상세 내용이 노출된다",
       "testData": "",
       "result": "",
@@ -73,8 +67,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 2,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_CS_003",
@@ -87,7 +80,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) FAQ 진입 2) \"배송\" 탭 클릭",
+      "steps": "1) /customer/faq 진입 2) \"배송\" 탭 클릭",
       "expected": "1) 2) \"TOP 10/회원·혜택/주문·결제/배송/관세·세금/교환·반품·환불/이벤트/제휴사/기타\" 탭이 노출되고, 선택한 탭에 해당하는 FAQ만 필터링되어 노출된다",
       "testData": "",
       "result": "",
@@ -97,8 +90,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 3,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_CS_004",
@@ -111,7 +103,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) FAQ 진입 2) 검색창에 키워드 입력 후 검색",
+      "steps": "1) /customer/faq 진입 2) 검색창에 키워드 입력 후 검색",
       "expected": "1) 2) 입력한 키워드가 포함된 FAQ 항목만 노출된다",
       "testData": "검색어=배송",
       "result": "",
@@ -121,8 +113,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 4,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_CS_005",
@@ -135,8 +126,8 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 푸터 \"개인정보처리방침\" 링크 클릭 또는 개인정보처리방침 직접 접속",
-      "expected": "개인정보처리방침 전문이 노출되어야 하나, 실제로는 \"404 - 페이지를 찾을 수 없습니다\" 화면이 노출됨",
+      "steps": "1) 푸터 \"개인정보처리방침\" 링크 클릭 또는 /policy 직접 접속",
+      "expected": "1) 개인정보처리방침 전문이 노출되어야 하나, 실제로는 \"404 - 페이지를 찾을 수 없습니다\" 화면이 노출됨\n* [확인필요] 페이지 미구현 또는 라우팅 오류로 추정 — DEF 결함 등록 대상",
       "testData": "접속 URL=/policy, 응답코드=404",
       "result": "",
       "assignee": "",
@@ -145,8 +136,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 5,
-      "remark": "",
-      "verifyNote": "[확인필요] 페이지 미구현 또는 라우팅 오류로 추정 — DEF 결함 등록 대상"
+      "remark": ""
     },
     {
       "tcId": "TC_CS_006",
@@ -159,8 +149,8 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 푸터 \"이용약관\" 링크 클릭 또는 이용약관 직접 접속",
-      "expected": "이용약관 전문이 노출되어야 하나, 실제로는 \"404 - 페이지를 찾을 수 없습니다\" 화면이 노출됨",
+      "steps": "1) 푸터 \"이용약관\" 링크 클릭 또는 /service 직접 접속",
+      "expected": "1) 이용약관 전문이 노출되어야 하나, 실제로는 \"404 - 페이지를 찾을 수 없습니다\" 화면이 노출됨\n* [확인필요] 페이지 미구현 또는 라우팅 오류로 추정 — DEF 결함 등록 대상",
       "testData": "접속 URL=/service, 응답코드=404",
       "result": "",
       "assignee": "",
@@ -169,8 +159,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 6,
-      "remark": "",
-      "verifyNote": "[확인필요] 페이지 미구현 또는 라우팅 오류로 추정 — DEF 결함 등록 대상"
+      "remark": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -182,7 +171,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태, 등록된 클레임 없음",
-      "steps": "1) Admin 클레임리스트 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /claim/list 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) \"데이터가 없습니다\" 문구가 노출된다(현재 클레임 0건 — Front에서 취소/반품/교환 신청 이력 없음)",
       "testData": "",
       "result": "",
@@ -193,8 +182,7 @@
       "system": "BO",
       "displayNo": 7,
       "tcId": "TC_CS_007",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -206,8 +194,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 클레임리스트 진입",
-      "expected": "주문매체/클레임일시/클레임번호/주문번호/전시카테고리/브랜드명/회원등급/클레임상태/배송상태 컬럼이 노출된다",
+      "steps": "1) /claim/list 진입",
+      "expected": "1) 주문매체/클레임일시/클레임번호/주문번호/전시카테고리/브랜드명/회원등급/클레임상태/배송상태 컬럼이 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -217,8 +205,7 @@
       "system": "BO",
       "displayNo": 8,
       "tcId": "TC_CS_008",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -230,7 +217,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 클레임리스트 진입 2) 클레임상태 드롭다운 클릭",
+      "steps": "1) /claim/list 진입 2) 클레임상태 드롭다운 클릭",
       "expected": "1) 2) \"전체/취소신청/취소완료/반품신청/반품완료/배송중지/교환신청/교환완료\" 7개 옵션이 노출된다",
       "testData": "",
       "result": "",
@@ -241,8 +228,7 @@
       "system": "BO",
       "displayNo": 9,
       "tcId": "TC_CS_009",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     }
   ]
 }

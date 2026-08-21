@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PD",
     "moduleName": "상품전시(+전시)",
-    "version": 10,
+    "version": 9,
     "changeHistory": [
       {
         "version": 1,
@@ -49,11 +49,6 @@
         "version": 9,
         "date": "2026-08-20",
         "summary": "Phase 4(배치5): Front-Admin 상품정보·전시관리 데이터 정합성 검증 4건 추가"
-      },
-      {
-        "version": 10,
-        "date": "2026-08-21",
-        "summary": "TC 표기 개선(배치6): 테스트 수행 절차의 URL을 화면명으로 표기(76건), 기대결과 단일 항목 넘버링 제거(96건), [확인필요]/스펙확정 주석을 별도 verifyNote 필드로 분리하여 뷰어에서 RED 강조 표시하도록 개선(25건)"
       }
     ]
   },
@@ -69,8 +64,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 상품상세 진입",
-      "expected": "상품명 \"빈티지 체크 셔츠\", 브랜드 \"H&M\", 할인가 139,000원, 정가 159,000원(취소선), 할인율 13%가 노출된다",
+      "steps": "1) /products/99 진입",
+      "expected": "1) 상품명 \"빈티지 체크 셔츠\", 브랜드 \"H&M\", 할인가 139,000원, 정가 159,000원(취소선), 할인율 13%가 노출된다",
       "testData": "상품코드=PD0000039",
       "result": "Pass",
       "assignee": "",
@@ -79,8 +74,7 @@
       "origin": "기존",
       "displayNo": 1,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_002",
@@ -93,8 +87,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 상품상세 진입\n2) 상품코드 영역 확인",
-      "expected": "\"상품 코드: PD0000039\" 형식으로 노출된다",
+      "steps": "1) /products/99 진입\n2) 상품코드 영역 확인",
+      "expected": "1) \"상품 코드: PD0000039\" 형식으로 노출된다",
       "testData": "",
       "result": "Pass",
       "assignee": "",
@@ -103,8 +97,7 @@
       "origin": "기존",
       "displayNo": 2,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_003",
@@ -117,8 +110,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 상품상세 진입\n2) 별점/리뷰수 영역 확인",
-      "expected": "★★★★★ 별점과 \"(311 리뷰)\" 건수가 노출된다",
+      "steps": "1) /products/99 진입\n2) 별점/리뷰수 영역 확인",
+      "expected": "1) ★★★★★ 별점과 \"(311 리뷰)\" 건수가 노출된다",
       "testData": "",
       "result": "Pass",
       "assignee": "",
@@ -127,8 +120,7 @@
       "origin": "기존",
       "displayNo": 3,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_028",
@@ -141,8 +133,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 상품상세(존재하지 않는 상품ID) (존재하지 않는 상품ID) 접속",
-      "expected": "404 또는 \"상품을 찾을 수 없습니다\" 안내 화면이 노출되고 500 서버 에러가 발생하지 않는다",
+      "steps": "1) /products/999999 (존재하지 않는 상품ID) 접속",
+      "expected": "1) 404 또는 \"상품을 찾을 수 없습니다\" 안내 화면이 노출되고 500 서버 에러가 발생하지 않는다",
       "testData": "상품ID=999999(미존재)",
       "result": "Fail",
       "assignee": "",
@@ -151,8 +143,7 @@
       "origin": "기존",
       "displayNo": 4,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_029",
@@ -165,8 +156,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 상품상세 진입 후 개발자도구 Console/Network 탭 확인",
-      "expected": "콘솔 에러 및 4xx/5xx 응답이 없다",
+      "steps": "1) /products/99 진입 후 개발자도구 Console/Network 탭 확인",
+      "expected": "1) 콘솔 에러 및 4xx/5xx 응답이 없다",
       "testData": "",
       "result": "Pass",
       "assignee": "",
@@ -175,8 +166,7 @@
       "origin": "기존",
       "displayNo": 5,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_030",
@@ -189,8 +179,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 상품상세 진입\n2) 브레드크럼 \"남성\" 클릭",
-      "expected": "/categories/110 (남성 카테고리) 페이지로 이동한다",
+      "steps": "1) /products/99 진입\n2) 브레드크럼 \"남성\" 클릭",
+      "expected": "1) /categories/110 (남성 카테고리) 페이지로 이동한다",
       "testData": "",
       "result": "Pass",
       "assignee": "",
@@ -199,8 +189,7 @@
       "origin": "기존",
       "displayNo": 6,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_031",
@@ -213,8 +202,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록 진입",
-      "expected": "\"총 30개\" 형태로 실제 목록 건수가 표기된다",
+      "steps": "1) /categories/110 진입",
+      "expected": "1) \"총 30개\" 형태로 실제 목록 건수가 표기된다",
       "testData": "카테고리=남성(110), 총건수=30",
       "result": "",
       "assignee": "",
@@ -223,8 +212,7 @@
       "origin": "기존",
       "displayNo": 7,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_032",
@@ -237,8 +225,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 색상 \"파랑\" 체크박스 선택",
-      "expected": "파랑 색상 상품만 목록에 필터링되어 노출된다",
+      "steps": "1) /categories/110 진입\n2) 색상 \"파랑\" 체크박스 선택",
+      "expected": "1) 파랑 색상 상품만 목록에 필터링되어 노출된다",
       "testData": "필터=색상:파랑",
       "result": "",
       "assignee": "",
@@ -247,8 +235,7 @@
       "origin": "기존",
       "displayNo": 8,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_033",
@@ -261,8 +248,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 브랜드 필터 7개 전체 체크박스 선택",
-      "expected": "필터 없이 노출되는 것과 동일하게 카테고리 전체 상품이 노출되고 에러가 발생하지 않는다",
+      "steps": "1) /categories/110 진입\n2) 브랜드 필터 7개 전체 체크박스 선택",
+      "expected": "1) 필터 없이 노출되는 것과 동일하게 카테고리 전체 상품이 노출되고 에러가 발생하지 않는다",
       "testData": "필터=브랜드:전체 7개",
       "result": "",
       "assignee": "",
@@ -271,8 +258,7 @@
       "origin": "기존",
       "displayNo": 9,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_034",
@@ -285,8 +271,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록?minPrice=-99999 형태로 가격 파라미터에 음수 값을 직접 주입하여 접속",
-      "expected": "서버 에러(500) 없이 무시되거나 최소값(0원) 기준으로 안전하게 처리된다",
+      "steps": "1) /categories/110?minPrice=-99999 형태로 가격 파라미터에 음수 값을 직접 주입하여 접속",
+      "expected": "1) 서버 에러(500) 없이 무시되거나 최소값(0원) 기준으로 안전하게 처리된다",
       "testData": "쿼리파라미터 minPrice=-99999",
       "result": "",
       "assignee": "",
@@ -295,8 +281,7 @@
       "origin": "기존",
       "displayNo": 10,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_035",
@@ -309,8 +294,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 사이즈 \"S\", \"M\" 체크박스 동시 선택",
-      "expected": "S 또는 M 사이즈를 보유한 상품이 목록에 노출된다",
+      "steps": "1) /categories/110 진입\n2) 사이즈 \"S\", \"M\" 체크박스 동시 선택",
+      "expected": "1) S 또는 M 사이즈를 보유한 상품이 목록에 노출된다",
       "testData": "필터=사이즈:S+M",
       "result": "",
       "assignee": "",
@@ -319,8 +304,7 @@
       "origin": "기존",
       "displayNo": 11,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_036",
@@ -333,8 +317,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 스타일 \"모던\" 체크박스 선택",
-      "expected": "모던 스타일 상품만 목록에 필터링되어 노출된다",
+      "steps": "1) /categories/110 진입\n2) 스타일 \"모던\" 체크박스 선택",
+      "expected": "1) 모던 스타일 상품만 목록에 필터링되어 노출된다",
       "testData": "필터=스타일:모던",
       "result": "",
       "assignee": "",
@@ -343,8 +327,7 @@
       "origin": "기존",
       "displayNo": 12,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_037",
@@ -357,8 +340,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 브랜드 \"ZARA\", \"H&M\" 체크박스 동시 선택",
-      "expected": "ZARA 또는 H&M 브랜드 상품만 목록에 필터링되어 노출된다",
+      "steps": "1) /categories/110 진입\n2) 브랜드 \"ZARA\", \"H&M\" 체크박스 동시 선택",
+      "expected": "1) ZARA 또는 H&M 브랜드 상품만 목록에 필터링되어 노출된다",
       "testData": "필터=브랜드:ZARA+H&M",
       "result": "",
       "assignee": "",
@@ -367,8 +350,7 @@
       "origin": "기존",
       "displayNo": 13,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_038",
@@ -381,8 +363,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 가격 슬라이더 최소값을 0원으로 설정",
-      "expected": "0원 이상 전체 상품이 목록에 노출된다",
+      "steps": "1) /categories/110 진입\n2) 가격 슬라이더 최소값을 0원으로 설정",
+      "expected": "1) 0원 이상 전체 상품이 목록에 노출된다",
       "testData": "가격범위=0원~430,000원(전체)",
       "result": "",
       "assignee": "",
@@ -391,8 +373,7 @@
       "origin": "기존",
       "displayNo": 14,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_039",
@@ -405,8 +386,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 가격 슬라이더 최대값을 430,000원으로 설정",
-      "expected": "최대값 이하 전체 상품이 목록에 노출되고 상한을 초과하는 상품은 제외된다",
+      "steps": "1) /categories/110 진입\n2) 가격 슬라이더 최대값을 430,000원으로 설정",
+      "expected": "1) 최대값 이하 전체 상품이 목록에 노출되고 상한을 초과하는 상품은 제외된다",
       "testData": "가격상한=430,000원",
       "result": "",
       "assignee": "",
@@ -415,8 +396,7 @@
       "origin": "기존",
       "displayNo": 15,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_040",
@@ -429,8 +409,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 색상 \"검정\", 사이즈 \"M\", 브랜드 \"ZARA\" 동시 선택",
-      "expected": "3개 조건을 모두 만족하는 상품만 목록에 노출된다",
+      "steps": "1) /categories/110 진입\n2) 색상 \"검정\", 사이즈 \"M\", 브랜드 \"ZARA\" 동시 선택",
+      "expected": "1) 3개 조건을 모두 만족하는 상품만 목록에 노출된다",
       "testData": "필터=색상:검정+사이즈:M+브랜드:ZARA",
       "result": "",
       "assignee": "",
@@ -439,8 +419,7 @@
       "origin": "기존",
       "displayNo": 16,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_041",
@@ -453,8 +432,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 조합 시 결과가 없는 필터(예: 가격 0~1,000원 + 브랜드 Dior) 적용",
-      "expected": "\"조건에 맞는 상품이 없습니다\" 등 Empty State 안내가 노출되고 에러가 발생하지 않는다",
+      "steps": "1) /categories/110 진입\n2) 조합 시 결과가 없는 필터(예: 가격 0~1,000원 + 브랜드 Dior) 적용",
+      "expected": "1) \"조건에 맞는 상품이 없습니다\" 등 Empty State 안내가 노출되고 에러가 발생하지 않는다",
       "testData": "필터=가격:0~1,000원+브랜드:Dior",
       "result": "",
       "assignee": "",
@@ -463,8 +442,7 @@
       "origin": "기존",
       "displayNo": 17,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_042",
@@ -477,8 +455,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 정렬 셀렉트에서 \"최신순\" 선택",
-      "expected": "등록일 최신순으로 목록이 재정렬된다",
+      "steps": "1) /categories/110 진입\n2) 정렬 셀렉트에서 \"최신순\" 선택",
+      "expected": "1) 등록일 최신순으로 목록이 재정렬된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -487,8 +465,7 @@
       "origin": "기존",
       "displayNo": 18,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_043",
@@ -501,8 +478,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "색상 필터가 이미 적용된 상태",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 색상 \"파랑\" 필터 적용\n3) 정렬을 \"이름순\"으로 변경",
-      "expected": "필터링된 상품만 재정렬되어야 하나, 정렬 변경 시 필터가 초기화될 가능성이 있음",
+      "steps": "1) /categories/110 진입\n2) 색상 \"파랑\" 필터 적용\n3) 정렬을 \"이름순\"으로 변경",
+      "expected": "1) 필터링된 상품만 재정렬되어야 하나, 정렬 변경 시 필터가 초기화될 가능성이 있음\n* [확인필요] 필터·정렬 조합 처리 방식 확정 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -511,8 +488,7 @@
       "origin": "기존",
       "displayNo": 19,
       "system": "FO",
-      "remark": "",
-      "verifyNote": "필터·정렬 조합 처리 방식 확정 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_044",
@@ -525,8 +501,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 정렬 셀렉트에서 \"낮은가격순\" 선택",
-      "expected": "판매가 오름차순으로 목록이 재정렬된다",
+      "steps": "1) /categories/110 진입\n2) 정렬 셀렉트에서 \"낮은가격순\" 선택",
+      "expected": "1) 판매가 오름차순으로 목록이 재정렬된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -535,8 +511,7 @@
       "origin": "기존",
       "displayNo": 20,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_045",
@@ -549,8 +524,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록?sort=<script>alert(1)</script> 형태로 정렬 파라미터에 스크립트 값을 직접 주입하여 접속",
-      "expected": "스크립트가 실행되지 않고(alert 미노출) 기본 정렬값으로 안전하게 대체 처리된다",
+      "steps": "1) /categories/110?sort=<script>alert(1)</script> 형태로 정렬 파라미터에 스크립트 값을 직접 주입하여 접속",
+      "expected": "1) 스크립트가 실행되지 않고(alert 미노출) 기본 정렬값으로 안전하게 대체 처리된다",
       "testData": "쿼리파라미터 sort=<script>alert(1)</script>",
       "result": "",
       "assignee": "",
@@ -559,8 +534,7 @@
       "origin": "기존",
       "displayNo": 21,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_046",
@@ -573,8 +547,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 페이지네이션 \"2\" 클릭",
-      "expected": "2페이지 상품 목록으로 갱신된다",
+      "steps": "1) /categories/110 진입\n2) 페이지네이션 \"2\" 클릭",
+      "expected": "1) 2페이지 상품 목록으로 갱신된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -583,8 +557,7 @@
       "origin": "기존",
       "displayNo": 22,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_047",
@@ -597,8 +570,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 페이지네이션 마지막 페이지(4) 클릭",
-      "expected": "4페이지 목록이 노출되고 \"다음\" 버튼이 비활성화(또는 클릭 무반응)된다",
+      "steps": "1) /categories/110 진입\n2) 페이지네이션 마지막 페이지(4) 클릭",
+      "expected": "1) 4페이지 목록이 노출되고 \"다음\" 버튼이 비활성화(또는 클릭 무반응)된다",
       "testData": "전체페이지=4",
       "result": "",
       "assignee": "",
@@ -607,8 +580,7 @@
       "origin": "기존",
       "displayNo": 23,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_048",
@@ -621,8 +593,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Acc_NonMember (비로그인)",
-      "steps": "1) 남성 카테고리 목록 진입\n2) 상품 카드 \"위시리스트 추가\" 버튼 클릭",
-      "expected": "결과 확인 필요",
+      "steps": "1) /categories/110 진입\n2) 상품 카드 \"위시리스트 추가\" 버튼 클릭",
+      "expected": "1) 결과 확인 필요\n* [확인필요] 로그인 유도 여부 미확정",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -631,8 +603,7 @@
       "origin": "기존",
       "displayNo": 24,
       "system": "FO",
-      "remark": "",
-      "verifyNote": "로그인 유도 여부 미확정"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_049",
@@ -645,8 +616,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 (여성) 진입",
-      "expected": "여성 카테고리 전용 필터/상품 목록이 정상 노출된다(남성 카테고리 필터값과 혼입되지 않음)",
+      "steps": "1) /categories/111 (여성) 진입",
+      "expected": "1) 여성 카테고리 전용 필터/상품 목록이 정상 노출된다(남성 카테고리 필터값과 혼입되지 않음)",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -655,8 +626,7 @@
       "origin": "기존",
       "displayNo": 25,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_050",
@@ -669,8 +639,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 액세서리 카테고리 목록 (액세서리) 진입",
-      "expected": "액세서리 카테고리 전용 필터/상품 목록이 정상 노출된다",
+      "steps": "1) /categories/112 (액세서리) 진입",
+      "expected": "1) 액세서리 카테고리 전용 필터/상품 목록이 정상 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -679,8 +649,7 @@
       "origin": "기존",
       "displayNo": 26,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -697,14 +666,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 정렬 기준을 \"최신순\"으로 변경",
-      "expected": "노출된 상품 목록이 등록일 기준 최신순으로 정렬되어 있다",
+      "steps": "1) /categories/111 진입\n2) 정렬 기준을 \"최신순\"으로 변경",
+      "expected": "1) 노출된 상품 목록이 등록일 기준 최신순으로 정렬되어 있다",
       "testData": "",
       "origin": "신규",
       "displayNo": 27,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -721,14 +689,13 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 정렬 기준을 \"이름순\"으로 변경",
-      "expected": "노출된 상품명이 가나다/알파벳 순으로 정렬되어 있다",
+      "steps": "1) /categories/111 진입\n2) 정렬 기준을 \"이름순\"으로 변경",
+      "expected": "1) 노출된 상품명이 가나다/알파벳 순으로 정렬되어 있다",
       "testData": "",
       "origin": "신규",
       "displayNo": 28,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -745,14 +712,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 정렬 기준을 \"낮은가격순\"으로 변경",
-      "expected": "노출된 상품의 판매가가 오름차순으로 정렬되어 있다",
+      "steps": "1) /categories/111 진입\n2) 정렬 기준을 \"낮은가격순\"으로 변경",
+      "expected": "1) 노출된 상품의 판매가가 오름차순으로 정렬되어 있다",
       "testData": "",
       "origin": "신규",
       "displayNo": 29,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -769,14 +735,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 정렬 기준을 \"높은가격순\"으로 변경",
-      "expected": "노출된 상품의 판매가가 내림차순으로 정렬되어 있다",
+      "steps": "1) /categories/111 진입\n2) 정렬 기준을 \"높은가격순\"으로 변경",
+      "expected": "1) 노출된 상품의 판매가가 내림차순으로 정렬되어 있다",
       "testData": "",
       "origin": "신규",
       "displayNo": 30,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -793,14 +758,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 색상 필터 \"파랑\" 체크",
-      "expected": "노출된 상품이 모두 색상 옵션에 \"파랑\"을 포함한다",
+      "steps": "1) /categories/111 진입\n2) 색상 필터 \"파랑\" 체크",
+      "expected": "1) 노출된 상품이 모두 색상 옵션에 \"파랑\"을 포함한다",
       "testData": "색상=파랑",
       "origin": "신규",
       "displayNo": 31,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -817,14 +781,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 사이즈 필터 \"S\", \"M\" 동시 체크",
-      "expected": "노출된 상품이 모두 사이즈 옵션에 S 또는 M을 포함한다",
+      "steps": "1) /categories/111 진입\n2) 사이즈 필터 \"S\", \"M\" 동시 체크",
+      "expected": "1) 노출된 상품이 모두 사이즈 옵션에 S 또는 M을 포함한다",
       "testData": "사이즈=S,M",
       "origin": "신규",
       "displayNo": 32,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -841,14 +804,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 브랜드 필터 \"ZARA\" 체크",
-      "expected": "노출된 상품이 모두 브랜드 \"ZARA\"이다",
+      "steps": "1) /categories/111 진입\n2) 브랜드 필터 \"ZARA\" 체크",
+      "expected": "1) 노출된 상품이 모두 브랜드 \"ZARA\"이다",
       "testData": "브랜드=ZARA",
       "origin": "신규",
       "displayNo": 33,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -865,14 +827,13 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 필터 영역의 \"평점\" 섹션 확인",
-      "expected": "\"평점\" 필터 하위에 선택 가능한 옵션(별점 단계 등)이 노출된다",
+      "steps": "1) /categories/111 진입\n2) 필터 영역의 \"평점\" 섹션 확인",
+      "expected": "1) \"평점\" 필터 하위에 선택 가능한 옵션(별점 단계 등)이 노출된다 — 스펙 확정 시 재검증 필요 (현재는 제목만 노출되고 옵션 컨테이너가 비어있음이 관측됨: <div class=\"space-y-3\"></div>)",
       "testData": "",
       "origin": "신규",
       "displayNo": 34,
       "system": "FO",
-      "remark": "",
-      "verifyNote": "스펙 확정 시 재검증 필요 (현재는 제목만 노출되고 옵션 컨테이너가 비어있음이 관측됨: <div class=\"space-y-3\"></div>)"
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -889,14 +850,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 가격 슬라이더를 최소값(0원)으로 설정",
-      "expected": "0원 이상 상품이 정상적으로 노출된다",
+      "steps": "1) /categories/111 진입\n2) 가격 슬라이더를 최소값(0원)으로 설정",
+      "expected": "1) 0원 이상 상품이 정상적으로 노출된다",
       "testData": "가격=0원(최소)",
       "origin": "신규",
       "displayNo": 35,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -913,14 +873,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 가격 슬라이더를 최대값(460,000원)으로 설정",
-      "expected": "460,000원 이하 상품이 정상적으로 노출된다",
+      "steps": "1) /categories/111 진입\n2) 가격 슬라이더를 최대값(460,000원)으로 설정",
+      "expected": "1) 460,000원 이하 상품이 정상적으로 노출된다",
       "testData": "가격=460,000원(최대)",
       "origin": "신규",
       "displayNo": 36,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -937,14 +896,13 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 가격 슬라이더를 0원~230,000원 구간으로 설정",
-      "expected": "설정한 가격 범위(0원~230,000원) 조건에 부합하는 상품만 노출된다",
+      "steps": "1) /categories/111 진입\n2) 가격 슬라이더를 0원~230,000원 구간으로 설정",
+      "expected": "1) 설정한 가격 범위(0원~230,000원) 조건에 부합하는 상품만 노출된다",
       "testData": "가격=0~230,000원(임의 중간값)",
       "origin": "신규",
       "displayNo": 37,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -967,8 +925,7 @@
       "origin": "신규",
       "displayNo": 38,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -985,14 +942,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입 후 1페이지 상품 목록 기록\n2) 페이지네이션 \"2\" 클릭 후 상품 목록 기록",
-      "expected": "1페이지와 2페이지에 노출된 상품이 서로 중복되지 않는다",
+      "steps": "1) /categories/111 진입 후 1페이지 상품 목록 기록\n2) 페이지네이션 \"2\" 클릭 후 상품 목록 기록",
+      "expected": "1) 1페이지와 2페이지에 노출된 상품이 서로 중복되지 않는다",
       "testData": "",
       "origin": "신규",
       "displayNo": 39,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1009,14 +965,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 브랜드 필터 \"ZARA\" 체크\n3) 가격 슬라이더를 0원~200,000원으로 설정",
-      "expected": "노출된 상품이 브랜드=ZARA 이고 가격 0~200,000원 조건을 모두 만족한다",
+      "steps": "1) /categories/111 진입\n2) 브랜드 필터 \"ZARA\" 체크\n3) 가격 슬라이더를 0원~200,000원으로 설정",
+      "expected": "1) 노출된 상품이 브랜드=ZARA 이고 가격 0~200,000원 조건을 모두 만족한다",
       "testData": "브랜드=ZARA, 가격=0~200,000원",
       "origin": "신규",
       "displayNo": 40,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1033,14 +988,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입 시 \"총 20개\" 표기 확인\n2) 브랜드 필터 \"ZARA\" 체크",
-      "expected": "필터 적용 후 표시되는 총 건수가 실제 노출된 상품 카드 개수와 일치한다",
+      "steps": "1) /categories/111 진입 시 \"총 20개\" 표기 확인\n2) 브랜드 필터 \"ZARA\" 체크",
+      "expected": "1) 필터 적용 후 표시되는 총 건수가 실제 노출된 상품 카드 개수와 일치한다",
       "testData": "브랜드=ZARA",
       "origin": "신규",
       "displayNo": 41,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1057,14 +1011,13 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입",
-      "expected": "화면 상단에 현재 카테고리명 \"여성\"이 타이틀(h2)로 노출된다",
+      "steps": "1) /categories/111 진입",
+      "expected": "1) 화면 상단에 현재 카테고리명 \"여성\"이 타이틀(h2)로 노출된다",
       "testData": "",
       "origin": "신규",
       "displayNo": 42,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1081,14 +1034,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 상품 카드 \"어반 실루엣 여성 블루종 자켓\" 클릭",
+      "steps": "1) /categories/111 진입\n2) 상품 카드 \"어반 실루엣 여성 블루종 자켓\" 클릭",
       "expected": "1) 상품상세 페이지(/products/111)로 정상 이동한다\n2) 상세 페이지의 상품명/가격/브랜드가 목록 카드에 표기된 값과 일치한다",
       "testData": "상품=어반 실루엣 여성 블루종 자켓(상품코드 PD0000052)",
       "origin": "신규",
       "displayNo": 43,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1105,14 +1057,13 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "NEW 배지가 부여된 상품이 목록에 존재하는 상태",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 상품 카드의 배지 영역 확인",
-      "expected": "신규 등록 상품 카드에 \"NEW\" 배지가 노출된다",
+      "steps": "1) /categories/111 진입\n2) 상품 카드의 배지 영역 확인",
+      "expected": "1) 신규 등록 상품 카드에 \"NEW\" 배지가 노출된다",
       "testData": "",
       "origin": "신규",
       "displayNo": 44,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1129,14 +1080,13 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "BEST 배지가 부여된 상품이 목록에 존재하는 상태",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 상품 카드의 배지 영역 확인",
-      "expected": "인기 상품 카드에 \"BEST\" 배지가 노출된다",
+      "steps": "1) /categories/111 진입\n2) 상품 카드의 배지 영역 확인",
+      "expected": "1) 인기 상품 카드에 \"BEST\" 배지가 노출된다",
       "testData": "",
       "origin": "신규",
       "displayNo": 45,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1153,14 +1103,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "할인이 적용된 상품이 목록에 존재하는 상태",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 상품 카드 \"어반 실루엣 여성 블루종 자켓\" 가격 영역 확인",
-      "expected": "정가(₩279,000), 할인가(₩264,000), 할인율(5%)이 함께 표기된다",
+      "steps": "1) /categories/111 진입\n2) 상품 카드 \"어반 실루엣 여성 블루종 자켓\" 가격 영역 확인",
+      "expected": "1) 정가(₩279,000), 할인가(₩264,000), 할인율(5%)이 함께 표기된다",
       "testData": "상품=어반 실루엣 여성 블루종 자켓",
       "origin": "신규",
       "displayNo": 46,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1177,14 +1126,13 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "할인이 적용되지 않은 상품이 목록에 존재하는 상태",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 상품 카드 \"소프트 웜 그레이 경량 패딩\" 가격 영역 확인",
-      "expected": "정가(₩459,000)만 단독으로 표기되고 할인가/할인율은 노출되지 않는다",
+      "steps": "1) /categories/111 진입\n2) 상품 카드 \"소프트 웜 그레이 경량 패딩\" 가격 영역 확인",
+      "expected": "1) 정가(₩459,000)만 단독으로 표기되고 할인가/할인율은 노출되지 않는다",
       "testData": "상품=소프트 웜 그레이 경량 패딩(lululemon)",
       "origin": "신규",
       "displayNo": 47,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1201,14 +1149,13 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 상품 카드의 브랜드명 영역 확인",
-      "expected": "각 상품 카드에 브랜드명(예: ZARA, lululemon, Dior 등)이 노출된다",
+      "steps": "1) /categories/111 진입\n2) 상품 카드의 브랜드명 영역 확인",
+      "expected": "1) 각 상품 카드에 브랜드명(예: ZARA, lululemon, Dior 등)이 노출된다",
       "testData": "",
       "origin": "신규",
       "displayNo": 48,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1226,13 +1173,12 @@
       "priority": "P3",
       "precondition": "품절 상태인 상품이 존재하는 경우",
       "steps": "1) 품절 상품이 포함된 카테고리 목록 진입\n2) 품절 상품 카드 확인",
-      "expected": "1) 품절 상품 카드에 품절 표기(배지 등)가 노출된다\n2) 상세 진입 시 구매 버튼이 비활성화되거나 안내 문구가 노출된다",
+      "expected": "1) 품절 상품 카드에 품절 표기(배지 등)가 노출된다\n2) 상세 진입 시 구매 버튼이 비활성화되거나 안내 문구가 노출된다 — 스펙 확정 시 재검증 필요 (오늘 관측 범위에는 품절 상품 없음)",
       "testData": "",
       "origin": "신규",
       "displayNo": 49,
       "system": "FO",
-      "remark": "",
-      "verifyNote": "스펙 확정 시 재검증 필요 (오늘 관측 범위에는 품절 상품 없음)"
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1249,14 +1195,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "비로그인(Guest) 상태",
-      "steps": "1) 여성 카테고리 목록 진입\n2) 임의 상품 카드의 \"위시리스트 추가\" 버튼 클릭",
-      "expected": "로그인 페이지로 이동하거나 로그인 유도 안내가 노출된다",
+      "steps": "1) /categories/111 진입\n2) 임의 상품 카드의 \"위시리스트 추가\" 버튼 클릭",
+      "expected": "1) 로그인 페이지로 이동하거나 로그인 유도 안내가 노출된다",
       "testData": "",
       "origin": "신규",
       "displayNo": 50,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1273,14 +1218,13 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태 (testAccounts.json의 jspark81 계정)",
-      "steps": "1) jspark81 계정으로 로그인\n2) 여성 카테고리 목록 진입\n3) 임의 상품 카드의 \"위시리스트 추가\" 버튼 클릭",
-      "expected": "위시리스트에 정상 추가되고, 버튼 상태(아이콘/문구)가 \"추가됨\"으로 전환된다",
+      "steps": "1) jspark81 계정으로 로그인\n2) /categories/111 진입\n3) 임의 상품 카드의 \"위시리스트 추가\" 버튼 클릭",
+      "expected": "1) 위시리스트에 정상 추가되고, 버튼 상태(아이콘/문구)가 \"추가됨\"으로 전환된다",
       "testData": "계정=jspark81",
       "origin": "신규",
       "displayNo": 51,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1298,13 +1242,12 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 상품상세 진입\n2) 상품 설명 영역 확인",
-      "expected": "상품 설명 텍스트(\"차분한 브라운 컬러가 주는 따뜻한 무드가...\")가 노출된다",
+      "steps": "1) /products/96 진입\n2) 상품 설명 영역 확인",
+      "expected": "1) 상품 설명 텍스트(\"차분한 브라운 컬러가 주는 따뜻한 무드가...\")가 노출된다",
       "testData": "",
       "displayNo": 52,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1322,13 +1265,12 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 상품상세 진입\n2) 리뷰 수 \"(0 리뷰)\" 확인\n3) 별점 영역 확인",
-      "expected": "리뷰 0건임에도 별점이 만점(★★★★★)으로 표시된다",
+      "steps": "1) /products/96 진입\n2) 리뷰 수 \"(0 리뷰)\" 확인\n3) 별점 영역 확인",
+      "expected": "1) 리뷰 0건임에도 별점이 만점(★★★★★)으로 표시된다 — 리뷰 없는 상품의 기본 별점 표기 기준(별점 미노출/0점 표시 등)이 의도된 것인지 정책 확인 필요",
       "testData": "",
       "displayNo": 53,
       "system": "FO",
-      "remark": "",
-      "verifyNote": "리뷰 없는 상품의 기본 별점 표기 기준(별점 미노출/0점 표시 등)이 의도된 것인지 정책 확인 필요"
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1346,13 +1288,12 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "NEW 배지가 부여된 상품인 경우",
-      "steps": "1) 상품상세 진입\n2) 상품명 근처 배지 영역 확인",
-      "expected": "\"NEW\" 배지가 노출된다",
+      "steps": "1) /products/96 진입\n2) 상품명 근처 배지 영역 확인",
+      "expected": "1) \"NEW\" 배지가 노출된다",
       "testData": "",
       "displayNo": 54,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1370,13 +1311,12 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "비로그인(Guest) 상태",
-      "steps": "1) 상품상세 진입\n2) \"위시리스트 추가\" 버튼 클릭",
-      "expected": "로그인 페이지로 이동하거나 로그인 유도 안내가 노출된다",
+      "steps": "1) /products/96 진입\n2) \"위시리스트 추가\" 버튼 클릭",
+      "expected": "1) 로그인 페이지로 이동하거나 로그인 유도 안내가 노출된다",
       "testData": "",
       "displayNo": 55,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "platform": "Web",
@@ -1394,13 +1334,12 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "로그인 회원 상태 (testAccounts.json의 jspark81 계정)",
-      "steps": "1) jspark81 계정으로 로그인\n2) 상품상세 진입\n3) \"위시리스트 추가\" 버튼 클릭",
-      "expected": "위시리스트에 정상 추가되고, 버튼 상태(아이콘/문구)가 \"추가됨\"으로 전환된다",
+      "steps": "1) jspark81 계정으로 로그인\n2) /products/96 진입\n3) \"위시리스트 추가\" 버튼 클릭",
+      "expected": "1) 위시리스트에 정상 추가되고, 버튼 상태(아이콘/문구)가 \"추가됨\"으로 전환된다",
       "testData": "계정=jspark81",
       "displayNo": 56,
       "system": "FO",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_086",
@@ -1414,7 +1353,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 배너 영역을 5초 이상 관찰",
-      "expected": "\"99% 쿠폰 드로우\" → \"지금 사야 입어요\" → \"라이프 블프\" 순서로 배너가 자동 전환된다",
+      "expected": "1) \"99% 쿠폰 드로우\" → \"지금 사야 입어요\" → \"라이프 블프\" 순서로 배너가 자동 전환된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1423,8 +1362,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 57,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_087",
@@ -1438,7 +1376,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 배너 영역의 우측 화살표(›) 클릭",
-      "expected": "다음 배너 슬라이드로 즉시 전환된다",
+      "expected": "1) 다음 배너 슬라이드로 즉시 전환된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1447,8 +1385,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 58,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_088",
@@ -1462,7 +1399,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 마지막 배너(\"라이프 블프\")까지 이동\n3) 우측 화살표(›) 재클릭",
-      "expected": "첫 번째 배너(\"99% 쿠폰 드로우\")로 순환 이동하거나, 순환하지 않는 정책이면 화살표가 비활성화된다",
+      "expected": "1) 첫 번째 배너(\"99% 쿠폰 드로우\")로 순환 이동하거나, 순환하지 않는 정책이면 화살표가 비활성화된다\n* [확인필요] 순환 정책 확정 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1471,8 +1408,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 59,
-      "remark": "",
-      "verifyNote": "순환 정책 확정 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_092",
@@ -1486,7 +1422,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) \"남자\" 하이라이트 배너 클릭",
-      "expected": "/categories/110 (남성 카테고리) 페이지로 이동한다",
+      "expected": "1) /categories/110 (남성 카테고리) 페이지로 이동한다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1495,8 +1431,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 60,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_093",
@@ -1510,7 +1445,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) \"여자\" 하이라이트 배너 클릭",
-      "expected": "/categories/111 (여성 카테고리) 페이지로 이동한다",
+      "expected": "1) /categories/111 (여성 카테고리) 페이지로 이동한다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1519,8 +1454,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 61,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_094",
@@ -1534,7 +1468,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) \"악세사리\" 하이라이트 배너 클릭",
-      "expected": "/categories/112 (액세서리 카테고리) 페이지로 이동한다",
+      "expected": "1) /categories/112 (액세서리 카테고리) 페이지로 이동한다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1543,8 +1477,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 62,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_095",
@@ -1558,7 +1491,7 @@
       "priority": "P3",
       "precondition": "인기 상품으로 등록된 데이터가 없는 상태(가정)",
       "steps": "1) 인기 상품 데이터가 없는 상태로 메인(/) 진입",
-      "expected": "빈 캐러셀이나 레이아웃 깨짐 없이 섹션 자체가 숨김 처리되거나 Empty 안내가 노출된다",
+      "expected": "1) 빈 캐러셀이나 레이아웃 깨짐 없이 섹션 자체가 숨김 처리되거나 Empty 안내가 노출된다\n* [확인필요] 현재는 데이터가 항상 존재해 실측 불가, 관리자 데이터 제거 후 재검증 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1567,8 +1500,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 63,
-      "remark": "",
-      "verifyNote": "현재는 데이터가 항상 존재해 실측 불가, 관리자 데이터 제거 후 재검증 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_096",
@@ -1582,7 +1514,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) \"인기 상품\" 섹션에서 배지가 2개 이상인 카드(예: 빈티지 체크 셔츠) 확인",
-      "expected": "NEW, ONLY, BEST 배지가 중첩 없이 각각 구분되어 노출된다",
+      "expected": "1) NEW, ONLY, BEST 배지가 중첩 없이 각각 구분되어 노출된다",
       "testData": "상품코드=PD0000039(빈티지 체크 셔츠), 배지=NEW+ONLY+BEST",
       "result": "",
       "assignee": "",
@@ -1591,8 +1523,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 64,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_097",
@@ -1606,7 +1537,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) \"인기 상품\" 섹션에서 \"빈티지 체크 셔츠\" 카드 클릭",
-      "expected": "/products/99 상품상세 페이지로 이동하고 동일 상품명이 노출된다",
+      "expected": "1) /products/99 상품상세 페이지로 이동하고 동일 상품명이 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1615,8 +1546,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 65,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_098",
@@ -1630,7 +1560,7 @@
       "priority": "P1",
       "precondition": "특이 사전조건 없음",
       "steps": "1) \"인기 상품\" 섹션에서 \"빈티지 체크 셔츠\" 카드의 정가/할인가/할인율 확인\n2) (정가-할인가)/정가 계산식으로 실측 대조",
-      "expected": "화면 표기 할인율(13%)이 (159,000-139,000)/159,000=12.58%를 반올림한 값과 일치한다",
+      "expected": "1) 화면 표기 할인율(13%)이 (159,000-139,000)/159,000=12.58%를 반올림한 값과 일치한다",
       "testData": "정가=₩159,000, 할인가=₩139,000, 표기할인율=13%",
       "result": "",
       "assignee": "",
@@ -1639,8 +1569,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 66,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_099",
@@ -1654,7 +1583,7 @@
       "priority": "P3",
       "precondition": "최신 상품 등록 건수가 캐러셀 1페이지 노출 개수보다 적은 상태(가정)",
       "steps": "1) 최신 상품이 소수(1~2건)만 등록된 상태로 메인(/) 진입",
-      "expected": "좌우 여백이 깨지지 않고 등록된 개수만큼만 정렬되어 노출되며 이동 화살표는 비활성화된다",
+      "expected": "1) 좌우 여백이 깨지지 않고 등록된 개수만큼만 정렬되어 노출되며 이동 화살표는 비활성화된다\n* [확인필요] 실제 소량 데이터 상태 재현 후 검증 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1663,8 +1592,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 67,
-      "remark": "",
-      "verifyNote": "[확인필요] 실제 소량 데이터 상태 재현 후 검증 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_100",
@@ -1678,7 +1606,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) \"최신 상품\" 섹션에서 할인율 배지가 없는 카드(예: 클래식 퍼 후드 하프 코트) 확인",
-      "expected": "정가만 단독 노출되고 취소선/할인율 영역은 노출되지 않는다",
+      "expected": "1) 정가만 단독 노출되고 취소선/할인율 영역은 노출되지 않는다\n* [확인필요] 정가 단독 노출 시 취소선 잔여 여백 발생 여부 재검증 필요",
       "testData": "상품=클래식 퍼 후드 하프 코트, 가격=₩359,000(할인없음)",
       "result": "",
       "assignee": "",
@@ -1687,8 +1615,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 68,
-      "remark": "",
-      "verifyNote": "정가 단독 노출 시 취소선 잔여 여백 발생 여부 재검증 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_101",
@@ -1702,7 +1629,7 @@
       "priority": "P3",
       "precondition": "Acc_NonMember (비로그인)",
       "steps": "1) 상품 카드의 \"위시리스트 추가\" 버튼 클릭",
-      "expected": "결과 확인 필요",
+      "expected": "1) 결과 확인 필요\n* [확인필요] 로그인 페이지(/login)로 유도되는지, 비로그인 위시리스트가 임시 저장되는지 스펙 확정 후 재검증. 현재 /login 자체가 500 에러 상태라 유도 시나리오 검증이 차단됨",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1711,8 +1638,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 69,
-      "remark": "",
-      "verifyNote": "로그인 페이지(/login)로 유도되는지, 비로그인 위시리스트가 임시 저장되는지 스펙 확정 후 재검증. 현재 /login 자체가 500 에러 상태라 유도 시나리오 검증이 차단됨"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_102",
@@ -1726,7 +1652,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) \"입점 브랜드\" 섹션에서 ZARA 로고 클릭",
-      "expected": "/display/brand/zara 브랜드관 페이지로 이동한다",
+      "expected": "1) /display/brand/zara 브랜드관 페이지로 이동한다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1735,8 +1661,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 70,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_103",
@@ -1750,7 +1675,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) \"입점 브랜드\" 섹션에서 GUESS 로고 클릭",
-      "expected": "https://guesskorea.com/ 로 이동한다",
+      "expected": "1) https://guesskorea.com/ 로 이동한다\n* [확인필요] 새 탭으로 열리는지, 현재 탭 이탈 방식인지 기획 의도 확인 필요 (관측 결과 target 속성 없어 현재 탭 이동)",
       "testData": "href=https://guesskorea.com/",
       "result": "",
       "assignee": "",
@@ -1759,8 +1684,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 71,
-      "remark": "",
-      "verifyNote": "새 탭으로 열리는지, 현재 탭 이탈 방식인지 기획 의도 확인 필요 (관측 결과 target 속성 없어 현재 탭 이동)"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_104",
@@ -1774,7 +1698,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) \"취향이 시작되는 곳, 3TOP\" 섹션에서 \"SALE\" 버튼 클릭",
-      "expected": "/display/hot-deal 페이지로 이동한다",
+      "expected": "1) /display/hot-deal 페이지로 이동한다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1783,8 +1707,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 72,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_105",
@@ -1798,7 +1721,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) \"취향이 시작되는 곳, 3TOP\" 섹션에서 \"MD's PICK\" 버튼 클릭",
-      "expected": "/display/mds-pick 페이지로 이동한다",
+      "expected": "1) /display/mds-pick 페이지로 이동한다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1807,8 +1730,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 73,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_106",
@@ -1821,8 +1743,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) SALE(HotDeal) 진입",
-      "expected": "\"등록된 컨텐츠가 없습니다\" 안내 문구가 노출된다",
+      "steps": "1) /display/hot-deal 진입",
+      "expected": "1) \"등록된 컨텐츠가 없습니다\" 안내 문구가 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1831,8 +1753,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 74,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_107",
@@ -1845,8 +1766,8 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 헤더 \"SALE\" 메뉴 노출 확인\n2) SALE(HotDeal) 접속하여 실제 등록 콘텐츠 확인",
-      "expected": "헤더 SALE 메뉴 진입 시 실제 세일 상품/기획전이 노출되어야 하나, 관측 시점 콘텐츠가 비어 있음",
+      "steps": "1) 헤더 \"SALE\" 메뉴 노출 확인\n2) /display/hot-deal 접속하여 실제 등록 콘텐츠 확인",
+      "expected": "1) 헤더 SALE 메뉴 진입 시 실제 세일 상품/기획전이 노출되어야 하나, 관측 시점 콘텐츠가 비어 있음\n* [확인필요] 데이터 미등록(운영 이슈)인지 기능 결함인지 확인 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1855,8 +1776,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 75,
-      "remark": "",
-      "verifyNote": "데이터 미등록(운영 이슈)인지 기능 결함인지 확인 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_108",
@@ -1879,8 +1799,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 76,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_109",
@@ -1894,7 +1813,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 헤더 \"전체카테고리\" 메뉴에 마우스 오버(hover)",
-      "expected": "남성/여성/액세서리 카테고리 트리가 드롭다운으로 노출된다",
+      "expected": "1) 남성/여성/액세서리 카테고리 트리가 드롭다운으로 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1903,8 +1822,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 77,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_110",
@@ -1918,7 +1836,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) \"전체카테고리\" 메뉴 hover\n2) \"남성\" 하위 트리 확인",
-      "expected": "아우터>점퍼, 상의 항목이 노출되고 각각 /categories/113, /categories/116, /categories/114로 연결된다",
+      "expected": "1) 아우터>점퍼, 상의 항목이 노출되고 각각 /categories/113, /categories/116, /categories/114로 연결된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1927,8 +1845,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 78,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_111",
@@ -1942,7 +1859,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) \"전체카테고리\" 메뉴 hover\n2) \"여성\" 하위 트리 확인",
-      "expected": "드레스, 상의 항목이 노출되고 각각 /categories/115, /categories/117로 연결된다",
+      "expected": "1) 드레스, 상의 항목이 노출되고 각각 /categories/115, /categories/117로 연결된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1951,8 +1868,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 79,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_112",
@@ -1966,7 +1882,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) \"전체카테고리\" 메뉴 hover\n2) \"액세서리\" 하위 트리 확인",
-      "expected": "액세서리 하위 항목이 /categories/112 기준으로 노출된다",
+      "expected": "1) 액세서리 하위 항목이 /categories/112 기준으로 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -1975,8 +1891,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 80,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_113",
@@ -1990,7 +1905,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 헤더 \"BRAND\" 메뉴 hover\n2) \"텍스트1\"~\"텍스트5\" 항목 클릭",
-      "expected": "각 항목에 대응하는 실제 콘텐츠로 이동한다",
+      "expected": "1) 각 항목에 대응하는 실제 콘텐츠로 이동한다\n* [확인필요] 관측 결과 href=\"\", \"#\"로 설정된 placeholder 상태 — 실제 배치 콘텐츠로 교체 필요",
       "testData": "항목=텍스트1~5, href=\"\"/\"#\"",
       "result": "",
       "assignee": "",
@@ -1999,8 +1914,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 81,
-      "remark": "",
-      "verifyNote": "관측 결과 href=\"\", \"#\"로 설정된 placeholder 상태 — 실제 배치 콘텐츠로 교체 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_114",
@@ -2014,7 +1928,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 임의의 하위 페이지 진입\n2) 헤더 \"3TOP\" 로고 클릭",
-      "expected": "메인(/) 페이지로 이동한다",
+      "expected": "1) 메인(/) 페이지로 이동한다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -2023,8 +1937,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 82,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_115",
@@ -2038,7 +1951,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 브라우저 탭 타이틀 및 meta description 확인(개발자도구 Elements > head)",
-      "expected": "타이틀 \"Top online store\", meta description \"Top online store\" 노출",
+      "expected": "1) 타이틀 \"Top online store\", meta description \"Top online store\" 노출\n* [확인필요] 국문 서비스(3TOP)에 영문 placeholder 타이틀/설명이 그대로 노출 — 실서비스 문구로 교체 필요",
       "testData": "title=\"Top online store\", meta description=\"Top online store\"",
       "result": "",
       "assignee": "",
@@ -2047,8 +1960,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 83,
-      "remark": "",
-      "verifyNote": "국문 서비스(3TOP)에 영문 placeholder 타이틀/설명이 그대로 노출 — 실서비스 문구로 교체 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_116",
@@ -2062,7 +1974,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 하단 스크롤\n2) \"개인정보처리방침\" 링크 클릭",
-      "expected": "개인정보처리방침 페이지로 이동한다",
+      "expected": "1) 개인정보처리방침 페이지로 이동한다\n* [확인필요] 실제 목적지 경로 및 콘텐츠 존재 여부 미확인",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -2071,8 +1983,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 84,
-      "remark": "",
-      "verifyNote": "실제 목적지 경로 및 콘텐츠 존재 여부 미확인"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_117",
@@ -2086,7 +1997,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 하단 스크롤\n2) \"이용약관\" 링크 클릭",
-      "expected": "이용약관 페이지로 이동한다",
+      "expected": "1) 이용약관 페이지로 이동한다\n* [확인필요] 실제 목적지 경로 및 콘텐츠 존재 여부 미확인",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -2095,8 +2006,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 85,
-      "remark": "",
-      "verifyNote": "실제 목적지 경로 및 콘텐츠 존재 여부 미확인"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_118",
@@ -2110,7 +2020,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 하단 스크롤\n2) \"공지사항\" 링크 클릭",
-      "expected": "공지사항 목록 페이지로 이동한다",
+      "expected": "1) 공지사항 목록 페이지로 이동한다\n* [확인필요] 실제 목적지 경로 미확인",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -2119,8 +2029,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 86,
-      "remark": "",
-      "verifyNote": "실제 목적지 경로 미확인"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_119",
@@ -2134,7 +2043,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 하단 스크롤\n2) \"자주하는질문\" 링크 클릭",
-      "expected": "FAQ 목록 페이지로 이동한다",
+      "expected": "1) FAQ 목록 페이지로 이동한다\n* [확인필요] 실제 목적지 경로 미확인",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -2143,8 +2052,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 87,
-      "remark": "",
-      "verifyNote": "실제 목적지 경로 미확인"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_120",
@@ -2158,7 +2066,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 최하단 확인",
-      "expected": "실서비스 회사명이 아닌 \"© 2026 YOUR COMPANY. ALL RIGHTS RESERVED.\" 플레이스홀더 문구가 그대로 노출됨",
+      "expected": "1) 실서비스 회사명이 아닌 \"© 2026 YOUR COMPANY. ALL RIGHTS RESERVED.\" 플레이스홀더 문구가 그대로 노출됨 — 실서비스 문구로 교체 필요",
       "testData": "현재 표기=\"© 2026 YOUR COMPANY. ALL RIGHTS RESERVED.\"",
       "result": "",
       "assignee": "",
@@ -2167,8 +2075,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 88,
-      "remark": "",
-      "verifyNote": "실서비스 문구로 교체 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_121",
@@ -2182,7 +2089,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 최하단 확인",
-      "expected": "PayPal 아이콘(alt=\"PayPal\")이 정상 노출된다",
+      "expected": "1) PayPal 아이콘(alt=\"PayPal\")이 정상 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -2191,8 +2098,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 89,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_122",
@@ -2206,7 +2112,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 뷰포트를 375x812(모바일)로 축소\n2) 메인(/) 배너 및 카테고리 하이라이트 영역 확인",
-      "expected": "요소 겹침/가로 스크롤 없이 반응형으로 재배치된다",
+      "expected": "1) 요소 겹침/가로 스크롤 없이 반응형으로 재배치된다\n* [확인필요] Figma 모바일 시안 없어 실측 기준값 확정 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -2215,8 +2121,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 90,
-      "remark": "",
-      "verifyNote": "Figma 모바일 시안 없어 실측 기준값 확정 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_123",
@@ -2230,7 +2135,7 @@
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 개발자도구 Console 탭 확인",
-      "expected": "배너 3건(TC_DSP_004~006) 결함 관련 404를 제외한 콘솔 에러/경고가 없다",
+      "expected": "1) 배너 3건(TC_DSP_004~006) 결함 관련 404를 제외한 콘솔 에러/경고가 없다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -2239,8 +2144,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 91,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_124",
@@ -2254,7 +2158,7 @@
       "priority": "P1",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 메인(/) 진입\n2) 개발자도구 Network 탭에서 전체 요청 상태코드 확인",
-      "expected": "배너 상세보기 CTA 3건(www.naver.com!/www.3top.co.kr/www.google.com) 관련 404 외 4xx/5xx 응답이 없다",
+      "expected": "1) 배너 상세보기 CTA 3건(www.naver.com!/www.3top.co.kr/www.google.com) 관련 404 외 4xx/5xx 응답이 없다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -2263,8 +2167,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 92,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_125",
@@ -2278,7 +2181,7 @@
       "priority": "P3",
       "precondition": "특이 사전조건 없음",
       "steps": "1) 개발자도구 Network에서 Throttling: Slow 3G 설정\n2) 메인(/) 새로고침 후 스크롤",
-      "expected": "뷰포트 진입 전 이미지는 지연 로딩되고 로딩 중 스켈레톤/블러 placeholder가 노출된다",
+      "expected": "1) 뷰포트 진입 전 이미지는 지연 로딩되고 로딩 중 스켈레톤/블러 placeholder가 노출된다\n* [확인필요] 실제 적용 여부 미확인",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -2287,8 +2190,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 93,
-      "remark": "",
-      "verifyNote": "실제 적용 여부 미확인"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_126",
@@ -2301,8 +2203,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 아우터 카테고리 목록 진입",
-      "expected": "브레드크럼 \"남성 > 아우터\" 노출, 총 9개 상품이 노출된다",
+      "steps": "1) /categories/113 진입",
+      "expected": "1) 브레드크럼 \"남성 > 아우터\" 노출, 총 9개 상품이 노출된다",
       "testData": "카테고리ID=113",
       "result": "",
       "assignee": "",
@@ -2311,8 +2213,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 94,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_127",
@@ -2325,8 +2226,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 상의(남성) 카테고리 목록 진입",
-      "expected": "브레드크럼 \"남성 > 상의\" 노출, 총 22개 상품이 노출된다",
+      "steps": "1) /categories/114 진입",
+      "expected": "1) 브레드크럼 \"남성 > 상의\" 노출, 총 22개 상품이 노출된다",
       "testData": "카테고리ID=114",
       "result": "",
       "assignee": "",
@@ -2335,8 +2236,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 95,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_128",
@@ -2349,8 +2249,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 드레스 카테고리 목록 진입",
-      "expected": "브레드크럼 \"여성 > 드레스\" 노출, 총 3개 상품이 노출된다",
+      "steps": "1) /categories/115 진입",
+      "expected": "1) 브레드크럼 \"여성 > 드레스\" 노출, 총 3개 상품이 노출된다",
       "testData": "카테고리ID=115",
       "result": "",
       "assignee": "",
@@ -2359,8 +2259,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 96,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_129",
@@ -2373,8 +2272,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 점퍼 카테고리 목록 진입",
-      "expected": "브레드크럼 \"남성 > 아우터 > 점퍼\"(3단계)가 노출되고, 총 8개 상품이 노출된다",
+      "steps": "1) /categories/116 진입",
+      "expected": "1) 브레드크럼 \"남성 > 아우터 > 점퍼\"(3단계)가 노출되고, 총 8개 상품이 노출된다\n* [확인필요] 점퍼는 GNB상 아우터/상의와 같은 레벨로 보이나 실제로는 아우터 하위 카테고리 — 이 3단계 구조가 의도된 설계인지 확인 필요",
       "testData": "카테고리ID=116",
       "result": "",
       "assignee": "",
@@ -2383,8 +2282,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 97,
-      "remark": "",
-      "verifyNote": "점퍼는 GNB상 아우터/상의와 같은 레벨로 보이나 실제로는 아우터 하위 카테고리 — 이 3단계 구조가 의도된 설계인지 확인 필요"
+      "remark": ""
     },
     {
       "tcId": "TC_PD_130",
@@ -2397,8 +2295,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 상의(여성) 카테고리 목록 진입",
-      "expected": "브레드크럼 \"여성 > 상의\" 노출, 총 17개 상품이 노출된다\n* 114(남성 상의)와 카테고리명이 동일(\"상의\")하므로 브레드크럼 상위 경로로만 구분됨",
+      "steps": "1) /categories/117 진입",
+      "expected": "1) 브레드크럼 \"여성 > 상의\" 노출, 총 17개 상품이 노출된다\n* 114(남성 상의)와 카테고리명이 동일(\"상의\")하므로 브레드크럼 상위 경로로만 구분됨",
       "testData": "카테고리ID=117",
       "result": "",
       "assignee": "",
@@ -2407,8 +2305,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 98,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "tcId": "TC_PD_131",
@@ -2421,7 +2318,7 @@
       "baseDoc": "- · 패턴: 카테고리필터적용",
       "priority": "P2",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 아우터 카테고리 목록(/categories/113), 드레스 카테고리 목록(/categories/115), 점퍼 카테고리 목록(/categories/116) 각각 진입\n2) 필터 영역에 노출되는 필터 종류 확인",
+      "steps": "1) /categories/113(아우터), /categories/115(드레스), /categories/116(점퍼) 각각 진입\n2) 필터 영역에 노출되는 필터 종류 확인",
       "expected": "1) 113은 사이즈/스타일/브랜드/평점/가격(색상 없음)\n2) 115는 색상/사이즈/브랜드/평점/가격(스타일 없음)\n3) 116은 사이즈/브랜드/평점/가격만 노출(색상/스타일 없음) — 카테고리 성격에 맞는 필터만 선별 노출됨",
       "testData": "카테고리ID=113,115,116",
       "result": "",
@@ -2431,8 +2328,7 @@
       "origin": "신규",
       "system": "FO",
       "displayNo": 99,
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "상품",
@@ -2444,7 +2340,7 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 상품관리 진입 2) \"조회\" 버튼 클릭",
+      "steps": "1) /product/product 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 상품코드/상품명/상품명(영문)/표준카테고리/브랜드명/원산지/총재고수량/판매가능수량/전시여부 컬럼과 함께 상품 목록이 노출되며, \"에코스레드 자수 롤업 티셔츠\"(PD0000001) 등 Front에서 확인된 상품과 데이터가 일치한다",
       "testData": "상품코드=PD0000001",
       "result": "",
@@ -2455,8 +2351,7 @@
       "system": "BO",
       "displayNo": 100,
       "tcId": "TC_PD_132",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "상품",
@@ -2468,7 +2363,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 상품관리 진입 2) 브랜드 필터에 \"lululemon\" 선택 후 \"조회\" 클릭",
+      "steps": "1) /product/product 진입 2) 브랜드 필터에 \"lululemon\" 선택 후 \"조회\" 클릭",
       "expected": "1) 2) 선택한 브랜드의 상품만 목록에 노출된다",
       "testData": "브랜드=lululemon",
       "result": "",
@@ -2479,8 +2374,7 @@
       "system": "BO",
       "displayNo": 101,
       "tcId": "TC_PD_133",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "상품",
@@ -2492,7 +2386,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 상품관리 진입 2) 판매상태 드롭다운 클릭",
+      "steps": "1) /product/product 진입 2) 판매상태 드롭다운 클릭",
       "expected": "1) 2) \"전체/판매대기/판매중/일시품절/판매종료\" 옵션이 노출된다",
       "testData": "",
       "result": "",
@@ -2503,8 +2397,7 @@
       "system": "BO",
       "displayNo": 102,
       "tcId": "TC_PD_134",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "상품",
@@ -2516,7 +2409,7 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 상품관리 진입 2) \"등록\" 버튼 클릭",
+      "steps": "1) /product/product 진입 2) \"등록\" 버튼 클릭",
       "expected": "1) 2) 상품 신규 등록 화면(폼)으로 이동한다",
       "testData": "",
       "result": "",
@@ -2527,8 +2420,7 @@
       "system": "BO",
       "displayNo": 103,
       "tcId": "TC_PD_135",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "전시",
@@ -2540,8 +2432,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 전시카테고리관리 진입",
-      "expected": "\"전시 카테고리 관리\"/\"전시 컨텐츠 관리\" 탭과 카테고리 트리, 우측 기본정보 폼(카테고리 경로/전시카테고리명/전시카테고리 번호/사용여부/Leaf Category 여부/PC 정렬순서/템플릿/상품진열)이 노출된다",
+      "steps": "1) /display/standard/category 진입",
+      "expected": "1) \"전시 카테고리 관리\"/\"전시 컨텐츠 관리\" 탭과 카테고리 트리, 우측 기본정보 폼(카테고리 경로/전시카테고리명/전시카테고리 번호/사용여부/Leaf Category 여부/PC 정렬순서/템플릿/상품진열)이 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -2551,8 +2443,7 @@
       "system": "BO",
       "displayNo": 104,
       "tcId": "TC_PD_136",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "전시",
@@ -2564,7 +2455,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 전시카테고리관리 진입 2) \"카테고리 등록\" 버튼 클릭",
+      "steps": "1) /display/standard/category 진입 2) \"카테고리 등록\" 버튼 클릭",
       "expected": "1) 2) 신규 카테고리 등록을 위한 입력 폼이 노출된다",
       "testData": "",
       "result": "",
@@ -2575,8 +2466,7 @@
       "system": "BO",
       "displayNo": 105,
       "tcId": "TC_PD_137",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "전시",
@@ -2588,8 +2478,8 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 전시코너관리 진입",
-      "expected": "코너명/사용여부/코너설명/컨텐츠 유형/작성자/등록일시/수정자/수정일시 컬럼이 노출된다",
+      "steps": "1) /display/standard/corner 진입",
+      "expected": "1) 코너명/사용여부/코너설명/컨텐츠 유형/작성자/등록일시/수정자/수정일시 컬럼이 노출된다",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -2599,8 +2489,7 @@
       "system": "BO",
       "displayNo": 106,
       "tcId": "TC_PD_138",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "전시",
@@ -2612,7 +2501,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 전시템플릿관리 진입 2) 템플릿 유형 드롭다운 클릭",
+      "steps": "1) /display/standard/template 진입 2) 템플릿 유형 드롭다운 클릭",
       "expected": "1) 2) \"전체/카테고리/페이지\" 옵션이 노출된다",
       "testData": "",
       "result": "",
@@ -2623,8 +2512,7 @@
       "system": "BO",
       "displayNo": 107,
       "tcId": "TC_PD_139",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "전시",
@@ -2636,8 +2524,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 전시페이지관리 진입 2) 좌측 페이지 트리 확인",
-      "expected": "1) 2) GNB > 메인 > (메인20251112/BEST SELLERS/NEW ARRIVALS/HOT DEAL/BRANDS 등) 트리 구조가 노출되며, \"HOT DEAL\"/\"BRANDS(ZARA/H&M)\" 등 Front에서 확인된 전시 영역과 대응되는 페이지 노드가 존재한다",
+      "steps": "1) /display/standard/page 진입 2) 좌측 페이지 트리 확인",
+      "expected": "1) 2) GNB > 메인 > (메인20251112/BEST SELLERS/NEW ARRIVALS/HOT DEAL/BRANDS 등) 트리 구조가 노출되며, \"HOT DEAL\"/\"BRANDS(ZARA/H&M)\" 등 Front에서 확인된 전시 영역과 대응되는 페이지 노드가 존재한다\n* [확인필요] 각 페이지 노드와 Front 실제 화면 간 1:1 매핑 관계는 상세 확인 필요",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -2647,8 +2535,7 @@
       "system": "BO",
       "displayNo": 108,
       "tcId": "TC_PD_140",
-      "remark": "",
-      "verifyNote": "각 페이지 노드와 Front 실제 화면 간 1:1 매핑 관계는 상세 확인 필요"
+      "remark": ""
     },
     {
       "majorCategory": "전시",
@@ -2660,7 +2547,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 전시페이지관리 진입 2) \"페이지 등록\" 버튼 클릭",
+      "steps": "1) /display/standard/page 진입 2) \"페이지 등록\" 버튼 클릭",
       "expected": "1) 2) 신규 페이지 등록을 위한 입력 폼이 노출된다",
       "testData": "",
       "result": "",
@@ -2671,8 +2558,7 @@
       "system": "BO",
       "displayNo": 109,
       "tcId": "TC_PD_141",
-      "remark": "",
-      "verifyNote": ""
+      "remark": ""
     },
     {
       "majorCategory": "상품",
@@ -2684,8 +2570,8 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "Admin 로그인 상태, 대상 상품 존재(예: PD0000001)",
-      "steps": "1) [BO] Admin 상품관리에서 임의 상품의 판매가/재고수량/전시여부 변경 후 저장\n2) [FO] Front 해당 상품 PDP 및 카테고리 목록에서 변경값 확인",
-      "expected": "1) 2) 변경한 가격/재고/전시여부가 Front에 즉시 또는 배치 주기 내에 반영되어야 함",
+      "steps": "1) [BO] Admin /product/product에서 임의 상품의 판매가/재고수량/전시여부 변경 후 저장\n2) [FO] Front 해당 상품 PDP 및 카테고리 목록에서 변경값 확인",
+      "expected": "1) 2) 변경한 가격/재고/전시여부가 Front에 즉시 또는 배치 주기 내에 반영되어야 함\n* [확인필요] 실제 변경 테스트는 운영 데이터 훼손 방지를 위해 미실행 — TC_PD_102에서 정적 데이터 일치는 이미 확인됨(동적 변경 반영 여부만 미검증)",
       "testData": "상품코드=PD0000001",
       "result": "",
       "assignee": "",
@@ -2695,8 +2581,7 @@
       "system": "FO",
       "remark": "",
       "displayNo": 110,
-      "tcId": "TC_PD_142",
-      "verifyNote": "[확인필요] 실제 변경 테스트는 운영 데이터 훼손 방지를 위해 미실행 — TC_PD_102에서 정적 데이터 일치는 이미 확인됨(동적 변경 반영 여부만 미검증)"
+      "tcId": "TC_PD_142"
     },
     {
       "majorCategory": "전시",
@@ -2708,7 +2593,7 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 전시카테고리관리에서 카테고리 트리(전시카테고리명/사용여부/PC 정렬순서) 확인\n2) Front GNB 및 /categories/{id} 페이지에서 동일 카테고리명·순서 확인",
+      "steps": "1) Admin /display/standard/category에서 카테고리 트리(전시카테고리명/사용여부/PC 정렬순서) 확인\n2) Front GNB 및 /categories/{id} 페이지에서 동일 카테고리명·순서 확인",
       "expected": "1) 2) Admin에 설정된 카테고리명과 정렬순서가 Front GNB/카테고리 페이지의 실제 노출 순서·명칭과 일치한다\n* 남성/여성/액세서리 및 하위 아우터/상의/드레스/점퍼(TC_PD_126~130) 구조와 대조 시 일치 확인됨",
       "testData": "",
       "result": "",
@@ -2719,8 +2604,7 @@
       "system": "FO",
       "remark": "",
       "displayNo": 111,
-      "tcId": "TC_PD_143",
-      "verifyNote": ""
+      "tcId": "TC_PD_143"
     },
     {
       "majorCategory": "전시",
@@ -2732,8 +2616,8 @@
       "baseDoc": "-",
       "priority": "P2",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 전시페이지관리(Admin 전시페이지관리(/display/standard/page))에서 \"HOT DEAL\" 노드 컨텐츠 설정 확인\n2) Front SALE(HotDeal)(/display/hot-deal)(SALE) 페이지 확인",
-      "expected": "1) 2) Admin에 설정된 컨텐츠와 Front SALE 페이지의 실제 노출 내용이 일치한다",
+      "steps": "1) Admin /display/standard/page에서 \"HOT DEAL\" 노드 컨텐츠 설정 확인\n2) Front /display/hot-deal(SALE) 페이지 확인",
+      "expected": "1) 2) Admin에 설정된 컨텐츠와 Front SALE 페이지의 실제 노출 내용이 일치한다\n* 현재 Front SALE 페이지는 \"등록된 컨텐츠가 없습니다\" Empty State로 노출(TC_PD_106) — Admin 측에도 등록된 컨텐츠가 없는 것이 원인인지 대조 확인 필요 [확인필요]",
       "testData": "",
       "result": "",
       "assignee": "",
@@ -2743,8 +2627,7 @@
       "system": "FO",
       "remark": "",
       "displayNo": 112,
-      "tcId": "TC_PD_144",
-      "verifyNote": "현재 Front SALE 페이지는 \"등록된 컨텐츠가 없습니다\" Empty State로 노출(TC_PD_106) — Admin 측에도 등록된 컨텐츠가 없는 것이 원인인지 대조 확인 필요 [확인필요]"
+      "tcId": "TC_PD_144"
     },
     {
       "majorCategory": "전시",
@@ -2756,7 +2639,7 @@
       "baseDoc": "-",
       "priority": "P3",
       "precondition": "Admin 로그인 상태",
-      "steps": "1) Admin 전시페이지관리(Admin 전시페이지관리(/display/standard/page))에서 \"BRANDS>ZARA\",\"BRANDS>H&M\" 노드 확인\n2) Front 브랜드관(ZARA)(/display/brand/zara), 브랜드관(H&M)(/display/brand/hm) 페이지 확인",
+      "steps": "1) Admin /display/standard/page에서 \"BRANDS>ZARA\",\"BRANDS>H&M\" 노드 확인\n2) Front /display/brand/zara, /display/brand/hm 페이지 확인",
       "expected": "1) 2) Admin에 설정된 브랜드관 노드와 Front 브랜드관 페이지 노출 내용이 일치한다",
       "testData": "",
       "result": "",
@@ -2767,8 +2650,7 @@
       "system": "FO",
       "remark": "",
       "displayNo": 113,
-      "tcId": "TC_PD_145",
-      "verifyNote": ""
+      "tcId": "TC_PD_145"
     }
   ]
 }
