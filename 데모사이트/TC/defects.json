@@ -154,7 +154,7 @@
     "module": "이벤트",
     "severity": "P2",
     "status": "신규",
-    "summary": "이벤트 > 메인배너 3종 CTA 클릭 시 전부 404, 대체 경로도 전부 404",
+    "summary": "사이트 전반 > 프로토콜 누락된 배너/링크(www.naver.com 등)가 내부 경로로 오인식되어 다수 화면에서 404 발생",
     "detectedAt": "2026-08-20",
     "source": "observation",
     "screenshot": "TC/defects/DEF_데모사이트_007.png",
@@ -170,11 +170,16 @@
         "at": "2026-08-20",
         "status": "신규",
         "note": "PR 모듈 재분류(TC_PR_006~008) 및 대체 경로 전수 확인 후 정식 결함으로 등록. 이벤트 페이지 자체 부재로 결론"
+      },
+      {
+        "at": "2026-08-21",
+        "status": "신규",
+        "note": "Phase 5 전체 재실행 중 영향 범위가 사이트 전역(카테고리/브랜드관/푸터/GNB 등)임을 확인, 범위 갱신"
       }
     ],
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
     "testSteps": "1) 메인(/) 진입\n2) 배너 1~3번 각각의 \"상세보기\" 버튼 클릭\n3) /event, /events, /promotion, /campaign, /coupon, /coupon-event 직접 접속 시도",
-    "actualResult": "배너 3종(\"99% 쿠폰 드로우\"/\"지금 사야 입어요\"/\"라이프 블프\")의 \"상세보기\" CTA href가 각각 www.naver.com!, www.3top.co.kr, www.google.com(프로토콜 없음)으로 설정되어 사이트 내부 상대경로로 오인식되어 3건 모두 404 발생. 대체 목적지 경로(/event, /events, /promotion, /campaign, /coupon, /coupon-event) 6종도 전수 확인했으나 모두 404",
+    "actualResult": "배너 3종(\"99% 쿠폰 드로우\"/\"지금 사야 입어요\"/\"라이프 블프\")의 \"상세보기\" CTA href가 각각 www.naver.com!, www.3top.co.kr, www.google.com(프로토콜 없음)으로 설정되어 사이트 내부 상대경로로 오인식되어 3건 모두 404 발생. 대체 목적지 경로(/event, /events, /promotion, /campaign, /coupon, /coupon-event) 6종도 전수 확인했으나 모두 404 — 2026-08-21 Phase 5 전체 재실행 중 동일 원인(href 프로토콜 누락)이 메인배너 외에도 카테고리 하이라이트 배너(TC_PD_092~094), 브랜드관 히어로 CTA(TC_PD_104/105), 입점 브랜드 링크(TC_PD_102), 푸터(TC_PD_120), 비로그인/로그인 GNB(TC_MB_036/043, TC_MY_013) 등 사이트 전반의 공유 배너/푸터 컴포넌트에서 광범위하게 발생함을 확인 — 메인 페이지 국한 이슈가 아니라 사이트 전역 영향.",
     "expectedResult": "각 배너에 대응하는 이벤트/기획전 상세 페이지로 정상 이동해야 함"
   },
   {
@@ -234,5 +239,53 @@
     "testSteps": "1) jspark81 Front 로그인 확인(정상 동작)\n2) Admin devel 로그인 후 /member 진입\n3) 로그인아이디에 \"jspark81\" 입력 후 \"조회\" 클릭",
     "actualResult": "(최초 오탐) 회원이름 필드에 잘못 입력하여 0건 / (재검증) 로그인아이디 필드로 정확히 검색 시 mbrId=382 정상 조회",
     "expectedResult": "(오탐) 애초에 잘못된 필드로 검색했던 테스트 오류였으므로 이 결함 자체가 성립하지 않음"
+  },
+  {
+    "defectId": "DEF_데모사이트_010",
+    "tcId": "TC_PD_106",
+    "module": "상품전시",
+    "severity": "P2",
+    "status": "신규",
+    "summary": "상품전시 > SALE(hot-deal) 페이지 접속 시 500 에러 발생",
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) /display/hot-deal 직접 접속",
+    "actualResult": "HTTP 500 Internal Server Error 발생 (Empty State 안내 화면 대신 서버 에러)",
+    "expectedResult": "등록된 콘텐츠가 없으면 \"등록된 컨텐츠가 없습니다\" 같은 Empty State가 노출되어야 하며 500 에러가 발생하지 않아야 함",
+    "detectedAt": "2026-08-21",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_데모사이트_010.png",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-08-21",
+        "status": "신규",
+        "note": "Phase 5 전체 재실행 중 자동화 테스트(TC_PD_106)에서 발견"
+      }
+    ]
+  },
+  {
+    "defectId": "DEF_데모사이트_011",
+    "tcId": "-",
+    "module": "시스템(공통)",
+    "severity": "P1",
+    "status": "신규",
+    "summary": "시스템 > Admin 로그인 시 브라우저 언어가 한국어(ko-KR)면 로그인 API가 500 에러로 실패",
+    "testEnv": "Chromium (Playwright, locale=ko-KR), http://192.168.10.116:30280",
+    "testSteps": "1) 브라우저 locale을 ko-KR로 설정한 상태로 Admin /login 접속\n2) devel 계정으로 로그인 시도",
+    "actualResult": "POST /api/v1.0/login 요청이 매번 HTTP 500을 반환 (응답 본문: {\"message\":\"org.mybatis.spring.MyBatisSystemException\",\"status\":500}). locale을 영어(en-US 등)로 바꾸면 정상 로그인됨(200) — 서버가 Accept-Language 헤더가 한국어일 때 처리하는 로직(MyBatis 쿼리 매핑)에서 예외 발생하는 것으로 추정. 실제 한국어 사용 환경의 관리자는 사실상 Admin에 로그인할 수 없는 상태.",
+    "expectedResult": "브라우저 언어 설정과 무관하게 로그인 API가 정상 동작해야 함",
+    "detectedAt": "2026-08-21",
+    "source": "observation",
+    "screenshot": "TC/defects/DEF_데모사이트_011.png",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-08-21",
+        "status": "신규",
+        "note": "Phase 5 전체 재실행 중 Admin 의존 TC 약 58건이 원인 불명으로 대량 실패하는 것을 발견, 근본 원인 조사 끝에 로케일 의존 서버 500 에러로 확인. 자동화 코드/재시도 로직 문제가 아님을 확인(수동 재현으로 검증)"
+      }
+    ]
   }
 ]

@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "CS",
     "moduleName": "고객센터/정책",
-    "version": 6,
+    "version": 5,
     "changeHistory": [
       {
         "version": 1,
@@ -29,11 +29,6 @@
         "version": 5,
         "date": "2026-08-21",
         "summary": "Phase 5 재실행 결과 반영(배치7): DEF_005/006 확인용 TC는 Fail 유지, Admin클레임리스트 TC(DEF_011 영향)는 N/T 처리."
-      },
-      {
-        "version": 6,
-        "date": "2026-08-21",
-        "summary": "Phase 5 재실행(①③ 수정 반영 후) 실제 실행결과를 나머지 4건에 반영 (결함으로 막히지 않은 항목의 Pass/Fail)."
       }
     ]
   },
@@ -52,7 +47,7 @@
       "steps": "1) 공지사항 진입",
       "expected": "등록된 공지사항 목록(제목, 등록일)이 노출된다(현재 3건: \"서비스 개선을 위한 의견 접수 안내\", \"시스템 점검 안내\", \"3top 오픈 안내\", 모두 2026.06.23)",
       "testData": "",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -76,7 +71,7 @@
       "steps": "1) 공지사항 진입 2) 공지사항 항목 클릭",
       "expected": "1) 2) 해당 공지사항의 상세 내용이 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -100,7 +95,7 @@
       "steps": "1) FAQ 진입 2) \"배송\" 탭 클릭",
       "expected": "1) 2) \"TOP 10/회원·혜택/주문·결제/배송/관세·세금/교환·반품·환불/이벤트/제휴사/기타\" 탭이 노출되고, 선택한 탭에 해당하는 FAQ만 필터링되어 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -124,7 +119,7 @@
       "steps": "1) FAQ 진입 2) 검색창에 키워드 입력 후 검색",
       "expected": "1) 2) 입력한 키워드가 포함된 FAQ 항목만 노출된다",
       "testData": "검색어=배송",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",

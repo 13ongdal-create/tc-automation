@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PR",
     "moduleName": "이벤트/기획전/쿠폰행사",
-    "version": 6,
+    "version": 5,
     "changeHistory": [
       {
         "version": 1,
@@ -29,11 +29,6 @@
         "version": 5,
         "date": "2026-08-21",
         "summary": "TC 표기 개선(배치6): 테스트 수행 절차의 URL을 화면명으로 표기(7건), 기대결과 단일 항목 넘버링 제거(3건), [확인필요]/스펙확정 주석을 별도 verifyNote 필드로 분리하여 뷰어에서 RED 강조 표시하도록 개선(2건)"
-      },
-      {
-        "version": 6,
-        "date": "2026-08-21",
-        "summary": "Phase 5 재실행 결과 반영(배치7): DEF_007 확인용 TC_PR_006~008은 Fail 유지(issueLink 연결), 나머지 결함(DEF_001/002/011)에 막힌 TC는 N/T 처리."
       }
     ]
   },
@@ -51,7 +46,7 @@
       "steps": "1) Admin 쿠폰관리(/promotion쿠폰(/coupon)) 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 소행사번호/소행사명/행사시작일시/행사종료일시/쿠폰명/쿠폰유형/정액·정률/할인액(률)/최소주문금액 컬럼과 함께 쿠폰 4건이 노출된다(예: \"20% 할인 쿠폰(아우터)\" 정률 20%, 최소주문금액 10,000원)",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -59,7 +54,7 @@
       "system": "BO",
       "displayNo": 1,
       "tcId": "TC_PR_001",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -75,7 +70,7 @@
       "steps": "1) Admin 쿠폰관리(/promotion쿠폰(/coupon)) 진입 2) \"조회\" 버튼 클릭 3) 쿠폰유형 컬럼 확인",
       "expected": "1) 2) 3) 등록된 쿠폰이 상품쿠폰/즉시할인/장바구니쿠폰 유형으로 구분되어 노출된다",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -83,7 +78,7 @@
       "system": "BO",
       "displayNo": 2,
       "tcId": "TC_PR_002",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -99,7 +94,7 @@
       "steps": "1) Admin 쿠폰관리(/promotion쿠폰(/coupon)) 진입 2) 쿠폰유형 필터에 \"즉시할인\" 선택 후 \"조회\" 클릭",
       "expected": "1) 2) 즉시할인 유형의 쿠폰만 목록에 노출된다",
       "testData": "쿠폰유형=즉시할인",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -107,7 +102,7 @@
       "system": "BO",
       "displayNo": 3,
       "tcId": "TC_PR_003",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -123,7 +118,7 @@
       "steps": "1) Admin 쿠폰관리(/promotion쿠폰(/coupon)) 진입 2) \"등록\" 버튼 클릭",
       "expected": "1) 2) 신규 쿠폰 행사 등록 화면(폼)으로 이동한다",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -131,7 +126,7 @@
       "system": "BO",
       "displayNo": 4,
       "tcId": "TC_PR_004",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -147,7 +142,7 @@
       "steps": "1) Admin에서 쿠폰 행사 발급 대상/조건 확인 2) jspark81로 Front 로그인 후 마이페이지 쿠폰(/mypage쿠폰(/coupon)) 진입",
       "expected": "1) 2) 발급 조건에 해당하면 Front 마이페이지 쿠폰함에 쿠폰이 노출되어야 하나, 현재 jspark81의 쿠폰함은 비어있음(TC_MY_012)",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -155,7 +150,7 @@
       "system": "BO",
       "displayNo": 5,
       "tcId": "TC_PR_005",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
+      "remark": "",
       "verifyNote": "쿠폰 발급이 자동인지 수동 다운로드/응모(PR 모듈) 방식인지, 발급 조건 미충족인지 확인 필요"
     },
     {
@@ -172,7 +167,7 @@
       "steps": "1) 메인(/) 진입\n2) 1번째 배너의 \"상세보기\" 버튼 클릭",
       "expected": "쿠폰 이벤트 상세 페이지로 이동한다\n* \"99% 쿠폰 드로우\" 배너 CTA가 프로토콜 없는 외부 도메인 문자열(href)로 설정되어 있어 클릭 시 사이트 내부 경로로 오인식되어 404 발생. 대체 목적지 페이지(/event, /promotion, /campaign, /coupon 등) 존재 여부도 확인했으나 전부 404 — 이벤트/기획전 페이지 자체가 미구현 상태로 확인됨(DEF_데모사이트_007)",
       "testData": "대상 링크: href=\"www.naver.com!\"",
-      "result": "Fail",
+      "result": "",
       "assignee": "",
       "issueSummary": "이벤트/기획전 페이지 부재로 배너 CTA 클릭 시 404",
       "issueLink": "DEF_데모사이트_007",
@@ -196,7 +191,7 @@
       "steps": "1) 메인(/) 진입\n2) 2번째 배너의 \"상세보기\" 버튼 클릭",
       "expected": "아우터 할인전 상세 페이지로 이동한다\n* \"지금 사야 입어요\" 배너 CTA가 프로토콜 없는 외부 도메인 문자열(href)로 설정되어 있어 클릭 시 사이트 내부 경로로 오인식되어 404 발생. 대체 목적지 페이지(/event, /promotion, /campaign, /coupon 등) 존재 여부도 확인했으나 전부 404 — 이벤트/기획전 페이지 자체가 미구현 상태로 확인됨(DEF_데모사이트_007)",
       "testData": "대상 링크: href=\"www.3top.co.kr\"",
-      "result": "Fail",
+      "result": "",
       "assignee": "",
       "issueSummary": "이벤트/기획전 페이지 부재로 배너 CTA 클릭 시 404",
       "issueLink": "DEF_데모사이트_007",
@@ -220,7 +215,7 @@
       "steps": "1) 메인(/) 진입\n2) 3번째 배너의 \"상세보기\" 버튼 클릭",
       "expected": "블랙프라이데이 기획전 페이지로 이동한다\n* \"라이프 블프\" 배너 CTA가 프로토콜 없는 외부 도메인 문자열(href)로 설정되어 있어 클릭 시 사이트 내부 경로로 오인식되어 404 발생. 대체 목적지 페이지(/event, /promotion, /campaign, /coupon 등) 존재 여부도 확인했으나 전부 404 — 이벤트/기획전 페이지 자체가 미구현 상태로 확인됨(DEF_데모사이트_007)",
       "testData": "대상 링크: href=\"www.google.com\"",
-      "result": "Fail",
+      "result": "",
       "assignee": "",
       "issueSummary": "이벤트/기획전 페이지 부재로 배너 CTA 클릭 시 404",
       "issueLink": "DEF_데모사이트_007",
@@ -243,13 +238,13 @@
       "steps": "1) Admin 대행사관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 프로모션 대행사 아이디/명/시작일시/종료일시/사용여부/작성자/등록일시 컬럼과 \"등록\" 버튼이 노출된다(현재 0건)",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "BO",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "displayNo": 9,
       "tcId": "TC_PR_009",
       "verifyNote": ""

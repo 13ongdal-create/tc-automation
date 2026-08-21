@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "OP",
     "moduleName": "구매프로세스",
-    "version": 9,
+    "version": 8,
     "changeHistory": [
       {
         "version": 1,
@@ -44,11 +44,6 @@
         "version": 8,
         "date": "2026-08-21",
         "summary": "Phase 5 재실행 결과 반영(배치7): Admin 로그인 결함(DEF_011)에 막힌 Admin주문리스트/배송지관리 TC를 N/T 처리."
-      },
-      {
-        "version": 9,
-        "date": "2026-08-21",
-        "summary": "Phase 5 재실행(①③ 수정 반영 후) 실제 실행결과를 나머지 4건에 반영 (결함으로 막히지 않은 항목의 Pass/Fail)."
       }
     ]
   },
@@ -67,7 +62,7 @@
       "steps": "1) 장바구니 진입",
       "expected": "\"장바구니에 담긴 상품이 없습니다\" 안내 문구가 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -91,7 +86,7 @@
       "steps": "1) 장바구니 진입\n2) \"계속 쇼핑하기\" 버튼 클릭",
       "expected": "상품 목록/메인 페이지로 이동한다",
       "testData": "",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -115,7 +110,7 @@
       "steps": "1) 상품 목록(카테고리)에서 임의의 상품 진입 후 노출된 사이즈 중 하나 선택, 수량 1로 \"장바구니 담기\" 클릭\n2) 장바구니(/cart) 진입",
       "expected": "1) 장바구니 담기 성공 안내가 노출된다\n2) 장바구니 목록에 선택한 상품명이 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -331,7 +326,7 @@
       "steps": "1) 장바구니 진입 후 개발자도구 Console/Network 탭 확인",
       "expected": "콘솔 에러 및 4xx/5xx 응답이 없다",
       "testData": "",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",

@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "OP",
     "moduleName": "구매프로세스",
-    "version": 9,
+    "version": 6,
     "changeHistory": [
       {
         "version": 1,
@@ -34,21 +34,6 @@
         "version": 6,
         "date": "2026-08-21",
         "summary": "TC 표기 개선(배치6): 테스트 수행 절차의 URL을 화면명으로 표기(19건), 기대결과 단일 항목 넘버링 제거(14건), [확인필요]/스펙확정 주석을 별도 verifyNote 필드로 분리하여 뷰어에서 RED 강조 표시하도록 개선(11건)"
-      },
-      {
-        "version": 7,
-        "date": "2026-08-21",
-        "summary": "Phase 5 재실행 중 발견된 라이브 데이터 드리프트 대응: TC_OP_003이 참조하던 특정 상품(/products/99)이 판매종료되어, 임의의 상품으로 진입해 검증하도록 일반화."
-      },
-      {
-        "version": 8,
-        "date": "2026-08-21",
-        "summary": "Phase 5 재실행 결과 반영(배치7): Admin 로그인 결함(DEF_011)에 막힌 Admin주문리스트/배송지관리 TC를 N/T 처리."
-      },
-      {
-        "version": 9,
-        "date": "2026-08-21",
-        "summary": "Phase 5 재실행(①③ 수정 반영 후) 실제 실행결과를 나머지 4건에 반영 (결함으로 막히지 않은 항목의 Pass/Fail)."
       }
     ]
   },
@@ -67,7 +52,7 @@
       "steps": "1) 장바구니 진입",
       "expected": "\"장바구니에 담긴 상품이 없습니다\" 안내 문구가 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -91,7 +76,7 @@
       "steps": "1) 장바구니 진입\n2) \"계속 쇼핑하기\" 버튼 클릭",
       "expected": "상품 목록/메인 페이지로 이동한다",
       "testData": "",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -112,17 +97,17 @@
       "baseDoc": "-",
       "priority": "P1",
       "precondition": "특이 사전조건 없음",
-      "steps": "1) 상품 목록(카테고리)에서 임의의 상품 진입 후 노출된 사이즈 중 하나 선택, 수량 1로 \"장바구니 담기\" 클릭\n2) 장바구니(/cart) 진입",
-      "expected": "1) 장바구니 담기 성공 안내가 노출된다\n2) 장바구니 목록에 선택한 상품명이 노출된다",
-      "testData": "",
-      "result": "Pass",
+      "steps": "1) 상품상세(/products/99)에서 사이즈 M, 수량 1로 \"장바구니 담기\" 클릭\n2) 장바구니(/cart) 진입",
+      "expected": "1) 장바구니 담기 성공 안내가 노출된다\n2) 장바구니 목록에 \"빈티지 체크 셔츠(M/1개)\"가 노출된다",
+      "testData": "상품코드=PD0000039, 사이즈=M, 수량=1",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 3,
-      "remark": "특정 상품ID(/products/99)가 판매종료되어 임의의 상품 기준으로 일반화(2026-08-21)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -331,7 +316,7 @@
       "steps": "1) 장바구니 진입 후 개발자도구 Console/Network 탭 확인",
       "expected": "콘솔 에러 및 4xx/5xx 응답이 없다",
       "testData": "",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -426,7 +411,7 @@
       "steps": "1) Admin 주문리스트 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 주문매체/주문일시/주문번호/전시카테고리/브랜드명/회원등급/주문상태/첫구매여부/배송상태/주문금액 컬럼과 함께 주문 목록이 노출된다(현재 1건: PC/lululemon/Newbie/결제완료/상품준비중/109,000원)",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -434,7 +419,7 @@
       "system": "BO",
       "displayNo": 16,
       "tcId": "TC_OP_016",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -450,7 +435,7 @@
       "steps": "1) Admin 주문리스트 진입 2) 주문상태 드롭다운 클릭",
       "expected": "1) 2) \"전체/주문완료/결제완료/출하지시/출고완료/배송완료/구매확정/주문취소/주문실패\" 옵션이 노출되며, Front 마이페이지 주문내역 화면(TC_MY_003)의 주문상태 옵션과 동일하다",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -458,7 +443,7 @@
       "system": "BO",
       "displayNo": 17,
       "tcId": "TC_OP_017",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -474,7 +459,7 @@
       "steps": "1) Admin 주문리스트 진입 2) 결제수단 드롭다운 클릭",
       "expected": "1) 2) \"전체/카드/간편결제/계좌이체/가상계좌/휴대폰/포인트\" 옵션이 노출된다",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -482,7 +467,7 @@
       "system": "BO",
       "displayNo": 18,
       "tcId": "TC_OP_018",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -498,7 +483,7 @@
       "steps": "1) Admin 주문리스트 진입 2) 주문매체 \"PC\" 선택 3) \"초기화\" 버튼 클릭",
       "expected": "1) 2) 3) 선택했던 필터 값이 모두 기본값(전체)으로 초기화된다",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -506,7 +491,7 @@
       "system": "BO",
       "displayNo": 19,
       "tcId": "TC_OP_019",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -522,13 +507,13 @@
       "steps": "1) Admin 배송지관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 회원번호/회원명/배송지명/수령인명/휴대폰번호/우편번호/주소/상세주소/기본배송지여부 컬럼과 함께 목록이 노출된다(현재 0건)",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "BO",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "displayNo": 20,
       "tcId": "TC_OP_020",
       "verifyNote": ""

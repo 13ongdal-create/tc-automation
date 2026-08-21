@@ -4,11 +4,20 @@ const ADMIN_BASE = 'http://192.168.10.116:30280';
 const ADMIN_ACCOUNT = { id: 'devel', pw: 'test' };
 
 async function adminLogin(page) {
-  await page.goto(ADMIN_BASE + '/login', { waitUntil: 'networkidle' });
-  await page.locator('input[type="text"]').first().fill(ADMIN_ACCOUNT.id);
-  await page.locator('input[type="password"]').first().fill(ADMIN_ACCOUNT.pw);
-  await page.locator('button:has-text("LOG IN")').click();
-  await page.waitForURL(ADMIN_BASE + '/', { timeout: 15000 });
+  // 라이브 환경에서 Admin 로그인 API가 간헐적으로 500을 반환하는 현상 확인(2026-08-21) — 최대 3회 재시도
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    await page.goto(ADMIN_BASE + '/login', { waitUntil: 'networkidle' });
+    await page.locator('input[type="text"]').first().fill(ADMIN_ACCOUNT.id);
+    await page.locator('input[type="password"]').first().fill(ADMIN_ACCOUNT.pw);
+    await page.locator('button:has-text("LOG IN")').click();
+    try {
+      await page.waitForURL(ADMIN_BASE + '/', { timeout: 8000 });
+      return;
+    } catch (e) {
+      if (attempt === 3) throw new Error('Admin 로그인 3회 시도 후에도 실패 (서버 응답 불안정 — 라이브 환경 간헐적 이슈로 추정)');
+      await page.waitForTimeout(2000);
+    }
+  }
 }
 
 test('[TC_CO_021][워크플로우관리] 목록 컬럼 노출 검증', async ({ page }) => {

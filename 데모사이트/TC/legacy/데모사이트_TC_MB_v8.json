@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "MB",
     "moduleName": "회원",
-    "version": 10,
+    "version": 8,
     "changeHistory": [
       {
         "version": 1,
@@ -44,16 +44,6 @@
         "version": 8,
         "date": "2026-08-21",
         "summary": "TC 표기 개선(배치6): 테스트 수행 절차의 URL을 화면명으로 표기(40건), 기대결과 단일 항목 넘버링 제거(44건), [확인필요]/스펙확정 주석을 별도 verifyNote 필드로 분리하여 뷰어에서 RED 강조 표시하도록 개선(20건)"
-      },
-      {
-        "version": 9,
-        "date": "2026-08-21",
-        "summary": "Phase 5 재실행 결과 반영(배치7): 기존/신규 결함(DEF_001/002/007/011)에 막힌 TC를 N/T로 처리, 관련 결함ID를 비고에 기재."
-      },
-      {
-        "version": 10,
-        "date": "2026-08-21",
-        "summary": "Phase 5 재실행(①③ 수정 반영 후) 실제 실행결과를 나머지 2건에 반영 (결함으로 막히지 않은 항목의 Pass/Fail)."
       }
     ]
   },
@@ -912,14 +902,14 @@
       "steps": "1) 메인 페이지(/) 접속\n2) GNB 우측 영역 확인",
       "expected": "\"회원가입\", \"로그인\" 링크가 노출된다",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "displayNo": 36,
       "system": "FO",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -936,14 +926,14 @@
       "steps": "1) jspark81 계정으로 로그인\n2) 메인 페이지(/) GNB 우측 영역 확인",
       "expected": "\"OOO님 안녕하세요\", \"로그아웃\" 링크가 노출되고 \"회원가입/로그인\"은 더 이상 노출되지 않는다",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "displayNo": 37,
       "system": "FO",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -960,7 +950,7 @@
       "steps": "1) 마이페이지 URL 직접 접속",
       "expected": "/login?callbackUrl=%2Fmypage 로 리다이렉트되어 로그인 페이지가 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -984,14 +974,14 @@
       "steps": "1) jspark81 계정으로 로그인\n2) 마이페이지 진입",
       "expected": "주문내역/SNS 연결설정/위시리스트/배송주소록 관리/쿠폰/1:1 문의/리뷰 목록 서브메뉴가 노출된다",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "displayNo": 39,
       "system": "FO",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -1008,14 +998,14 @@
       "steps": "1) jspark81 계정으로 로그인\n2) 마이페이지 진입 후 기본 정보 영역 확인",
       "expected": "이름/등급/아이디/생년월일/전화번호/이메일/이메일 수신동의/SMS 수신동의/PUSH 수신동의 항목이 실제 계정 정보와 일치하여 노출된다",
       "testData": "jspark81 계정 프로필: 이름=박지숙, 아이디=jspark81, 이메일=jspark81@3top.co.kr",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "displayNo": 40,
       "system": "FO",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -1032,14 +1022,14 @@
       "steps": "1) jspark81 계정으로 로그인\n2) 상품 장바구니 담기 후 장바구니 진입\n3) \"주문하기\" 클릭",
       "expected": "체크아웃 배송정보의 이름/이메일/전화번호 필드가 마이페이지에 저장된 회원 정보로 자동 채워진다",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "displayNo": 41,
       "system": "FO",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -1056,7 +1046,7 @@
       "steps": "1) 비로그인 상태로 상품 장바구니 담기 후 장바구니 진입\n2) \"주문하기\" 클릭",
       "expected": "체크아웃 배송정보의 이름/이메일/전화번호/주소 필드가 모두 공란으로 노출되어 직접 입력이 필요하다",
       "testData": "",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1080,14 +1070,14 @@
       "steps": "1) jspark81 계정으로 로그인\n2) GNB \"로그아웃\" 클릭",
       "expected": "GNB가 즉시 \"회원가입/로그인\" 상태로 전환된다",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "displayNo": 43,
       "system": "FO",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -1103,7 +1093,7 @@
       "steps": "1) Admin 회원관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 회원번호/회원명/회원상태/Login ID/Email/휴대폰번호/성별/생년월일/마지막로그인일시/비밀번호에러횟수/가입일시 컬럼과 함께 회원 목록이 노출된다",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1111,7 +1101,7 @@
       "system": "BO",
       "displayNo": 44,
       "tcId": "TC_MB_044",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -1127,7 +1117,7 @@
       "steps": "1) Admin 회원관리 진입 2) 로그인아이디에 \"test1\" 입력 후 \"조회\" 클릭",
       "expected": "1) 2) 입력한 아이디와 일치하는 회원만 목록에 노출된다",
       "testData": "로그인아이디=test1",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1135,7 +1125,7 @@
       "system": "BO",
       "displayNo": 45,
       "tcId": "TC_MB_045",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -1151,7 +1141,7 @@
       "steps": "1) Admin 회원관리 진입 2) 로그인아이디에 \"jspark81\" 입력 후 \"조회\" 클릭",
       "expected": "1) 2) jspark81 계정(mbrId=382, 박지숙)이 목록에 정상 조회된다",
       "testData": "로그인아이디=jspark81",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1159,7 +1149,7 @@
       "system": "BO",
       "displayNo": 46,
       "tcId": "TC_MB_046",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "2026-08-20 재검증: 최초 테스트 시 \"회원이름\" 필드에 로그인아이디를 입력하는 오류로 미노출 결함(DEF_009)으로 오판했음. \"로그인아이디\" 필드로 정확히 검색 시 정상 조회 확인 — 결함 아님(DEF_009 재검증완료-오탐)",
       "verifyNote": ""
     },
     {
@@ -1175,7 +1165,7 @@
       "steps": "1) Admin 회원관리 진입 (\"조회\" 클릭 전)",
       "expected": "목록이 비어있는 초기 상태로 노출되며, \"조회\" 버튼 클릭 전까지 데이터가 자동 조회되지 않는다",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1183,7 +1173,7 @@
       "system": "BO",
       "displayNo": 47,
       "tcId": "TC_MB_047",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "verifyNote": ""
     },
     {
@@ -1247,13 +1237,13 @@
       "steps": "1) Admin 리뷰관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 리뷰번호/회원명/상품번호/상품명/별점/리뷰내용/전시여부/포토리뷰/등록일시 컬럼과 전시여부·리뷰유형·별점 필터가 노출된다(현재 등록된 리뷰 0건)",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "BO",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "displayNo": 50,
       "tcId": "TC_MB_050",
       "verifyNote": ""
@@ -1271,13 +1261,13 @@
       "steps": "1) Admin 라벨관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) \"사이즈가 맞아요\"/\"가성비 좋아요\"/\"좋아요\"/\"편하고 시원하네요\" 등 승인완료 상태의 대표 라벨과 매칭건수가 노출된다",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "BO",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "displayNo": 51,
       "tcId": "TC_MB_051",
       "verifyNote": ""
@@ -1295,13 +1285,13 @@
       "steps": "1) Admin 라벨관리 진입",
       "expected": "\"승인\"/\"철회\"/\"유사라벨찾기\"/\"통합\"/\"삭제\" 관리 버튼이 노출된다",
       "testData": "",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "BO",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "displayNo": 52,
       "tcId": "TC_MB_052",
       "verifyNote": ""

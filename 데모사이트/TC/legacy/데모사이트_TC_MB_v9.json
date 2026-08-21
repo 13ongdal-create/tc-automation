@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "MB",
     "moduleName": "회원",
-    "version": 10,
+    "version": 9,
     "changeHistory": [
       {
         "version": 1,
@@ -49,11 +49,6 @@
         "version": 9,
         "date": "2026-08-21",
         "summary": "Phase 5 재실행 결과 반영(배치7): 기존/신규 결함(DEF_001/002/007/011)에 막힌 TC를 N/T로 처리, 관련 결함ID를 비고에 기재."
-      },
-      {
-        "version": 10,
-        "date": "2026-08-21",
-        "summary": "Phase 5 재실행(①③ 수정 반영 후) 실제 실행결과를 나머지 2건에 반영 (결함으로 막히지 않은 항목의 Pass/Fail)."
       }
     ]
   },
@@ -960,7 +955,7 @@
       "steps": "1) 마이페이지 URL 직접 접속",
       "expected": "/login?callbackUrl=%2Fmypage 로 리다이렉트되어 로그인 페이지가 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1056,7 +1051,7 @@
       "steps": "1) 비로그인 상태로 상품 장바구니 담기 후 장바구니 진입\n2) \"주문하기\" 클릭",
       "expected": "체크아웃 배송정보의 이름/이메일/전화번호/주소 필드가 모두 공란으로 노출되어 직접 입력이 필요하다",
       "testData": "",
-      "result": "Pass",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
