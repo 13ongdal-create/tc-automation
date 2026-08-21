@@ -45,6 +45,7 @@
   table.stats th,table.stats td{border:1px solid var(--border);padding:6px 8px;text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums;}
   table.stats th{background:var(--headbg);}
   table.stats td.modname{text-align:left;}
+  table.stats tr.stats-total td{font-weight:700;background:var(--headbg);}
 
   .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
   .tab-btn{border-radius:20px;font-size:12px;padding:6px 12px;}
@@ -419,7 +420,20 @@ function render() {
     const passRate = executed ? ((pass/executed)*100).toFixed(0) : 0;
     const failRate = executed ? ((fail/executed)*100).toFixed(0) : 0;
     return `<tr><td class="modname">${m}</td><td>${total}</td><td>${pass}</td><td>${fail}</td><td>${blocked}</td><td>${na}</td><td>${nt}</td><td>${none}</td><td>${rate}%</td><td>${passRate}%</td><td>${failRate}%</td></tr>`;
-  }).join('');
+  }).join('') + (() => {
+    const total = TC_DATA.length;
+    const pass = TC_DATA.filter(t => t.result === 'Pass').length;
+    const fail = TC_DATA.filter(t => t.result === 'Fail').length;
+    const blocked = TC_DATA.filter(t => t.result === 'Blocked').length;
+    const na = TC_DATA.filter(t => t.result === 'N/A').length;
+    const nt = TC_DATA.filter(t => t.result === 'N/T').length;
+    const none = TC_DATA.filter(t => !t.result).length;
+    const executed = total - none;
+    const rate = total ? ((executed/total)*100).toFixed(0) : 0;
+    const passRate = executed ? ((pass/executed)*100).toFixed(0) : 0;
+    const failRate = executed ? ((fail/executed)*100).toFixed(0) : 0;
+    return `<tr class="stats-total"><td class="modname">합계</td><td>${total}</td><td>${pass}</td><td>${fail}</td><td>${blocked}</td><td>${na}</td><td>${nt}</td><td>${none}</td><td>${rate}%</td><td>${passRate}%</td><td>${failRate}%</td></tr>`;
+  })();
 
   const tbody = document.getElementById('tcBody');
   const kw = filterState.keyword;
