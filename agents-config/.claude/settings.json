@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//d/tc-automation/**)",
+      "Write(//d/tc-automation/**)",
+      "Edit(//d/tc-automation/**)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git diff*)",
+      "Bash(cd *tc-automation* && git *)",
+      "Bash(git -C *tc-automation* *)",
+      "Bash(node *)",
+      "Bash(pandoc *)",
+      "Bash(mkdir -p *)",
+      "Bash(unzip *)",
+      "Bash(npx playwright test*)",
+      "Bash(PW_RUN_ID=* npx playwright test*)",
+      "Bash(D:/tc-automation/node_modules/.bin/playwright.cmd test*)",
+      "Bash(PW_RUN_ID=* D:/tc-automation/node_modules/.bin/playwright.cmd test*)"
+    ]
+  }
+}
