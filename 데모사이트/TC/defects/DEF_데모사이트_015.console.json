@@ -1,0 +1,12 @@
+{
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "failedRequests": [
+    "404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g",
+    "404 http://192.168.10.116:30180/www.google.com?_rsc=3lb4g",
+    "404 http://192.168.10.116:30180/www.3top.co.kr?_rsc=3lb4g"
+  ]
+}

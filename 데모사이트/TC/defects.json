@@ -337,5 +337,105 @@
         "note": "자동화 재실행(TC_PD_067) 중 발견. 라이브 카탈로그 변동으로 2페이지 존재 여부가 매번 달라 항상 재현되지는 않으나, 오늘 재현된 실패 건을 근거로 정식 결함 등록"
       }
     ]
+  },
+  {
+    "defectId": "DEF_데모사이트_014",
+    "tcId": "TC_PD_041",
+    "module": "상품전시",
+    "severity": "P2",
+    "status": "신규",
+    "summary": "상품전시 > 필터 조합 결과 0건일 때 Empty State 안내 문구 미노출",
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) 카테고리(110) 목록 진입 2) 가격 슬라이더 최대값을 10,000원으로 축소 3) 브랜드 필터 DIOR 체크",
+    "actualResult": "\"총 0개\"로 정상 집계되나, 상품 그리드 영역이 완전히 비어있을 뿐 \"조건에 맞는 상품이 없습니다\" 등 Empty State 안내 문구가 전혀 노출되지 않음",
+    "expectedResult": "필터 조합 결과가 0건이면 사용자에게 명확한 Empty State 안내 문구가 노출되어야 함",
+    "detectedAt": "2026-08-24",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_데모사이트_014.png",
+    "consoleLog": "TC/defects/DEF_데모사이트_014.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-08-24",
+        "status": "신규",
+        "note": "Phase 5 자동화 백필(PD 모듈 미커버 45건 추가) 중 발견"
+      }
+    ]
+  },
+  {
+    "defectId": "DEF_데모사이트_015",
+    "tcId": "TC_PD_086",
+    "module": "전시",
+    "severity": "P3",
+    "status": "신규",
+    "summary": "전시 > 메인 배너가 자동으로 전환되지 않음",
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) 메인(/) 진입 2) 배너 영역을 15초 이상 관찰",
+    "actualResult": "15초 이상 관찰해도 첫 번째 배너(\"99% 쿠폰 드로우\")가 계속 고정 노출되며 자동 전환되지 않음. 화살표를 수동 클릭하면 정상적으로 다음 슬라이드로 전환됨(수동 네비게이션은 정상)",
+    "expectedResult": "\"99% 쿠폰 드로우\" → \"지금 사야 입어요\" → \"라이프 블프\" 순서로 일정 주기마다 자동 전환되어야 함",
+    "detectedAt": "2026-08-24",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_데모사이트_015.png",
+    "consoleLog": "TC/defects/DEF_데모사이트_015.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-08-24",
+        "status": "신규",
+        "note": "Phase 5 자동화 백필(PD 모듈 미커버 45건 추가) 중 발견"
+      }
+    ]
+  },
+  {
+    "defectId": "DEF_데모사이트_016",
+    "tcId": "TC_PD_108",
+    "module": "전시",
+    "severity": "P3",
+    "status": "신규",
+    "summary": "전시 > 스타일 매거진 게시물 카드 클릭 시 상세 페이지로 이동하지 않음",
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) 메인(/) 진입 2) \"스타일 매거진\" 섹션의 \"2026년 최신 아우터 트렌드\" 게시물 카드 클릭",
+    "actualResult": "클릭해도 URL이 변경되지 않고 페이지 이동이 전혀 발생하지 않음(카드가 실제 링크/클릭 핸들러에 연결되어 있지 않은 것으로 추정)",
+    "expectedResult": "해당 게시물 상세 페이지로 이동해야 함",
+    "detectedAt": "2026-08-24",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_데모사이트_016.png",
+    "consoleLog": "TC/defects/DEF_데모사이트_016.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-08-24",
+        "status": "신규",
+        "note": "Phase 5 자동화 백필(PD 모듈 미커버 45건 추가) 중 발견"
+      }
+    ]
+  },
+  {
+    "defectId": "DEF_데모사이트_017",
+    "tcId": "TC_PD_113",
+    "module": "전시",
+    "severity": "P3",
+    "status": "신규",
+    "summary": "전시 > 헤더 BRAND 드롭다운 항목(텍스트1~5)이 실제 콘텐츠 없이 빈 href로 방치됨",
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) 헤더 \"BRAND\" 메뉴 hover 2) 드롭다운의 \"텍스트1\" 항목 href 속성 확인",
+    "actualResult": "항목 자체가 <a href=\"\"> 형태의 placeholder로, 실제 클릭해도 이동할 콘텐츠가 연결되어 있지 않음(텍스트2~5도 동일 패턴으로 추정)",
+    "expectedResult": "각 항목에 대응하는 실제 콘텐츠(브랜드관 등)로 이동해야 함",
+    "detectedAt": "2026-08-24",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_데모사이트_017.png",
+    "consoleLog": "TC/defects/DEF_데모사이트_017.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-08-24",
+        "status": "신규",
+        "note": "Phase 5 자동화 백필(PD 모듈 미커버 45건 추가) 중 발견"
+      }
+    ]
   }
 ]
