@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOPMALL 정책 분석 기록</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#eef0f4; --panel:#ffffff; --text:#1c2130; --muted:#5b6478; --border:#d7dbe4;
+  --ink:#2f4b7c; --ink-strong:#203a63; --gold:#a9772e;
+  --p1:#b3261e; --p2:#8a5a1f; --p3:#2f6f6b;
+  --headbg:#f4f5f9; --warnbg:#fbf1e2; --warnborder:#e3c48a; --warntext:#7a4c14;
+  --rule:#c7cdda; --serif:'Source Serif 4',Georgia,'Noto Serif KR',serif; --sans:'IBM Plex Sans KR','Pretendard',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12141c; --panel:#1a1e2b; --text:#e6e9f2; --muted:#9298ab; --border:#2c3142;
+    --ink:#8fa8dd; --ink-strong:#b9cbef; --gold:#d9a952;
+    --p1:#e57a72; --p2:#d9a952; --p3:#7fbdb6;
+    --headbg:#1d2130; --warnbg:#2c220f; --warnborder:#6b4d1e; --warntext:#e8bd6f;
+    --rule:#333850;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12141c; --panel:#1a1e2b; --text:#e6e9f2; --muted:#9298ab; --border:#2c3142;
+  --ink:#8fa8dd; --ink-strong:#b9cbef; --gold:#d9a952;
+  --p1:#e57a72; --p2:#d9a952; --p3:#7fbdb6;
+  --headbg:#1d2130; --warnbg:#2c220f; --warnborder:#6b4d1e; --warntext:#e8bd6f;
+  --rule:#333850;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:15px;line-height:1.7}
+.top-bar{background:var(--headbg);border-bottom:1px solid var(--border);padding:18px 28px;position:sticky;top:0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;z-index:10}
+.top-bar h1{font-family:var(--serif);font-weight:600;font-size:19px;color:var(--ink-strong);text-wrap:balance}
+.top-bar .sub{font-size:12px;color:var(--muted)}
+.spacer{flex:1}
+.btn{padding:6px 14px;border-radius:7px;border:1px solid var(--border);background:var(--panel);color:var(--text);cursor:pointer;font-size:12px;font-family:var(--sans)}
+.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+main{max-width:900px;margin:0 auto;padding:32px 24px 60px}
+section{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:26px 30px;margin-bottom:24px}
+h2{font-family:var(--serif);font-weight:600;font-size:20px;color:var(--ink-strong);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--rule);text-wrap:balance}
+h3{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:18px 0 8px}
+p{margin-bottom:10px;max-width:65ch}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+table{font-variant-numeric:tabular-nums}
+.tc-wrap{overflow-x:auto}
+th,td{border:1px solid var(--border);padding:8px 12px;text-align:left;vertical-align:top}
+th{background:var(--headbg);font-weight:600;color:var(--ink-strong)}
+.notice{background:var(--headbg);border-left:3px solid var(--ink);padding:12px 16px;border-radius:2px;font-size:13px;color:var(--muted);margin-bottom:18px}
+.warn{background:var(--warnbg);border:1px solid var(--warnborder);border-radius:6px;padding:14px 18px;color:var(--warntext);font-size:13.5px}
+.warn b{display:block;margin-bottom:6px;color:var(--warntext)}
+.tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;background:var(--headbg);border:1px solid var(--border);color:var(--muted)}
+code{background:var(--headbg);padding:1px 5px;border-radius:4px;font-size:12.5px;font-family:ui-monospace,monospace}
+a{color:var(--p3)}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div>
+    <h1>📄 TOPMALL PRD — 정책서 분석 요약</h1>
+    <div class="sub">최초 작성: 2026-08-24 · 근거: TopMall_서비스_업무정책서.xlsx (정책서, 2026-08-20 작성) + TC 자동 생성 배치 산출물</div>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn" id="btnTheme">🌙 다크모드</button>
+</div>
+<main>
+
+<div class="notice">
+이 문서는 고객 제공 기준문서가 아니라, <b>어시스턴트가 실제 정책서(Policy/TopMall_서비스_업무정책서.xlsx)와 기존 TC 산출물을 분석해 정리한 요약본</b>입니다(AGENTS.md 16항 Analysis 폴더 규칙). 정책서 자체가 이미 "결정" 근거를 담고 있는 문서이므로, 이 PRD는 그 내용을 QA 관점에서 재정리한 것이며 임의 추측을 추가하지 않았습니다(AGENTS.md 7항).
+</div>
+
+<section>
+<h2>1. 정책서 개요</h2>
+<p>정책서(<code>TopMall_서비스_업무정책서.xlsx</code>, 작성일 2026-08-20)는 화면설계서·ERD와 짝을 이루는 "결정 기록" 문서로, 기획서의 공백을 <code>fo_api</code>·<code>bo_api</code> 소스 코드와 개발 DB의 실제 구현 규칙을 추출해 정리했다고 문서 자신이 밝히고 있습니다.</p>
+<table>
+<tr><th>확정 여부 표기</th><th>의미</th></tr>
+<tr><td>확정</td><td>코드에 반영되어 실제 동작 중</td></tr>
+<tr><td>확정·미반영</td><td>정책은 확정되었으나 코드 미반영</td></tr>
+<tr><td>미결</td><td>정책 결정이 아직 필요</td></tr>
+<tr><td>확인필요</td><td>기획 의도와 일치하는지 확인 필요</td></tr>
+</table>
+<p>정책서 자체 집계: 총 73개 항목 (확정 66 / 확정·미반영 5 / 미결·확인대기 2).</p>
+<h3>시트 구성 (9개)</h3>
+<p>개요, 회원·인증, 주문·결제, 취소·환불·반품, 리뷰, 장바구니·배송지, 상품·전시, 미결 정책, 코드값 정의</p>
+</section>
+
+<section>
+<h2>2. 미결 정책 (결정 대기 목록)</h2>
+<p>정책서의 "미결 정책" 시트에 등재된 항목으로, 코드는 이미 특정 방식으로 동작 중이지만 그것이 의도된 정책인지 미확정 상태입니다. QA 관점에서는 이 두 항목이 각각 TC로 이미 반영되어 있습니다(TC_POL_001, TC_POL_017).</p>
+<table>
+<tr><th>No</th><th>영역</th><th>정책 항목</th><th>현재 동작</th><th>결정 필요 사항</th><th>관련 TC</th></tr>
+<tr><td>1</td><td>회원·인증</td><td>다중기기 로그인</td><td>로그인 시 기존 Refresh Token 삭제 → 이전 기기 세션 종료</td><td>1기기 전용 정책이 의도인지 확인 필요(R3)</td><td>TC_POL_001</td></tr>
+<tr><td>2</td><td>취소·환불·반품</td><td>반품 프로세스</td><td>반품접수(09) 이후 [회수·입고·검수] → 반품완료(10) 전환 기능 미구현, 반품이 접수 상태에서 멈추고 재고가 영구 미복구</td><td>BO 반품 처리 화면 / 검수결과 분기 / 환불 시점 / 반품기간·배송비 귀책 기준(R22)</td><td>TC_POL_017</td></tr>
+</table>
+</section>
+
+<section>
+<h2>3. 정책 영역 ↔ TC 모듈 매핑</h2>
+<p>정책서 9개 시트와 QA 모듈코드(AGENTS.md 5항 체계와는 별개로 이 프로젝트에서 사용된 코드) 간 매핑입니다. 배치1~4는 URL 관찰(Playwright) 기반, POL 모듈은 정책서 문서를 직접 근거로 작성되었습니다.</p>
+<table>
+<tr><th>모듈코드</th><th>모듈명</th><th>건수</th><th>근거</th></tr>
+<tr><td>CRT</td><td>장바구니</td><td>22건</td><td>URL 관찰 기반</td></tr>
+<tr><td>ORD</td><td>주문/결제</td><td>24건</td><td>URL 관찰 기반</td></tr>
+<tr><td>MY</td><td>마이페이지</td><td>14건</td><td>URL 관찰 기반</td></tr>
+<tr><td>CLM</td><td>취소/반품</td><td>14건</td><td>changeHistory에 "보편 이커머스 기준 적용"이라고 명시 — ⚠️ 4항 참조</td></tr>
+<tr><td>PR</td><td>프로모션/쿠폰</td><td>12건</td><td>URL 관찰 기반</td></tr>
+<tr><td>PD</td><td>상품목록/상세</td><td>24건</td><td>URL 관찰 기반</td></tr>
+<tr><td>MBR</td><td>회원가입/로그인</td><td>16건</td><td>URL 관찰 기반</td></tr>
+<tr><td>POL</td><td>정책서 기반 보완</td><td>40건</td><td>정책서(TopMall_서비스_업무정책서.xlsx) 직접 근거</td></tr>
+<tr><td colspan="2"><b>캐노니컬 JSON 존재 소계</b></td><td><b>166건</b></td><td></td></tr>
+<tr><td>DSP</td><td>전시</td><td>10건</td><td>⚠️ HTML 뷰어에만 존재, 캐노니컬 JSON 없음</td></tr>
+<tr><td>SYS</td><td>시스템(공통)</td><td>10건</td><td>⚠️ HTML 뷰어에만 존재, 캐노니컬 JSON 없음</td></tr>
+<tr><td>E2E(FULL)</td><td>E2E Bridge</td><td>10건</td><td>⚠️ 통합 뷰어에만 존재, 개별 배치 뷰어·JSON 모두 없음</td></tr>
+<tr><td colspan="2"><b>전체 합계(추정)</b></td><td><b>약 196건</b></td><td></td></tr>
+</table>
+</section>
+
+<section>
+<h2>4. 발견된 데이터 정합성 이슈 (후속 조치 필요, 이번 작업 범위 아님)</h2>
+<p>노션 동기화 구조를 만들며 기존 TOPMALL TC 산출물을 점검하는 과정에서 아래 이슈를 발견했습니다. TC 작성까지만 진행하는 프로젝트 특성상 실제 QA 수행에는 지장이 없으나, AGENTS.md 기준과 어긋나는 부분이라 투명하게 기록합니다.</p>
+<div class="warn">
+<b>① 캐노니컬 JSON 누락 (모듈 3종, 총 30건)</b>
+DSP(전시, 10건)·SYS(시스템, 10건)·E2E Bridge(10건) TC가 HTML 뷰어에만 하드코딩되어 있고, 대응하는 <code>TOPMALL_TC_{모듈}.json</code> 캐노니컬 파일이 없습니다. AGENTS.md 10항은 JSON을 유일한 원본(source of truth)으로 규정하므로, 이 30건은 버전관리·변경이력 추적이 되지 않는 상태입니다.
+</div>
+<div class="warn" style="margin-top:10px">
+<b>② 기준문서 인용 방식 불일치</b>
+CRT/ORD/MY/CLM/PR/PD/MBR 7개 모듈은 <code>reference</code> 필드가 전부 <code>-</code>로, changeHistory에는 "URL 관찰 기반"이라 적혀 있습니다. 실제 정책서가 존재함에도(POL 모듈만 이를 근거로 사용) 나머지 모듈은 정책서와 대조한 기록이 없어, 정책서 내용과 실제 TC가 얼마나 일치하는지 확인되지 않은 상태입니다.
+</div>
+<div class="warn" style="margin-top:10px">
+<b>③ CLM 모듈의 근거 원칙 위반 가능성</b>
+CLM(취소/반품) 모듈의 <code>changeHistory</code>에는 "보편 이커머스 기준 적용"이라고 명시되어 있어, AGENTS.md 7항이 금지하는 "일반적인 UX 패턴" 근거로 작성되었을 가능성이 있습니다. 반면 정책서에는 취소·환불·반품 시트가 별도로 존재하므로, 실제로는 정책서 대조가 가능했던 영역입니다.
+</div>
+<p style="margin-top:12px;font-size:12.5px;color:var(--muted)">→ 위 3개 이슈는 사용자 확인 후 별도 작업(캐노니컬 JSON 백필, 정책서 재대조)으로 처리하는 것을 권장합니다. TOPMALL은 테스트 실행(Phase 5) 계획이 없으므로 시급성은 낮습니다.</p>
+</section>
+
+<section>
+<h2>5. 환경 정보</h2>
+<table>
+<tr><th>구분</th><th>값</th></tr>
+<tr><td>Front URL</td><td>http://192.168.10.198:3003/</td></tr>
+<tr><td>Admin URL</td><td>http://192.168.10.198:3000/</td></tr>
+<tr><td>테스트 계정</td><td>jspark81 (통합계정, Front+Admin 공용)</td></tr>
+<tr><td>테스트 범위</td><td>TC 작성(Phase 4)까지만 — 테스트 실행/자동화 계획 없음 (사용자 확정, 2026-08-24)</td></tr>
+</table>
+</section>
+
+</main>
+<script>
+document.getElementById('btnTheme').addEventListener('click', ()=>{
+  const isDark = document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme', isDark?'':'dark');
+});
+</script>
+</body>
+</html>
