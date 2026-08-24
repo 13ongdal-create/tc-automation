@@ -32,9 +32,9 @@ D:\tc-automation\                 <- 이 프로젝트 전체의 루트이자 유
 
 ### 방법 A — 이전 대화를 그대로 이어가기
 1. 터미널(PowerShell)을 엽니다.
-2. 아래 명령으로 이동합니다:
+2. 아래 명령으로 이동합니다 (2026-08-24 통합 이후로는 `agents-config` 하위가 아니라 `tc-automation` 루트에서 실행합니다 — `CLAUDE.md`가 여기서 AGENTS.md/SKILL.md를 자동으로 불러옵니다):
    ```
-   cd D:\tc-automation\agents-config
+   cd D:\tc-automation
    ```
 3. 클로드 코드를 이어가기 모드로 실행합니다:
    ```
@@ -46,7 +46,7 @@ D:\tc-automation\                 <- 이 프로젝트 전체의 루트이자 유
    ```
 
 ### 방법 B — 새 대화로 시작 (그래도 규칙은 동일하게 적용됨)
-1. 같은 폴더(`D:\tc-automation\agents-config`)에서 그냥 `claude`만 실행해도, AGENTS.md/SKILL.md를 읽어 동일한 규칙으로 동작합니다.
+1. 같은 폴더(`D:\tc-automation`)에서 그냥 `claude`만 실행해도, `CLAUDE.md`가 AGENTS.md/SKILL.md를 자동으로 불러와 동일한 규칙으로 동작합니다.
 2. 예전 대화 맥락이 필요하면 "데모사이트 프로젝트 이어서 진행해줘"처럼 프로젝트명을 알려주면 됩니다 — 실제 데이터는 `데모사이트\TC\` 등에 그대로 있습니다.
 
 <!-- [2026-08-24 Slack bot(큐돌이) 사용 종료로 주석 처리]
