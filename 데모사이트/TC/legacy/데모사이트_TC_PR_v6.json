@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PR",
     "moduleName": "이벤트/기획전/쿠폰행사",
-    "version": 7,
+    "version": 6,
     "changeHistory": [
       {
         "version": 1,
@@ -34,11 +34,6 @@
         "version": 6,
         "date": "2026-08-21",
         "summary": "Phase 5 재실행 결과 반영(배치7): DEF_007 확인용 TC_PR_006~008은 Fail 유지(issueLink 연결), 나머지 결함(DEF_001/002/011)에 막힌 TC는 N/T 처리."
-      },
-      {
-        "version": 7,
-        "date": "2026-08-25",
-        "summary": "자동화 코드 백필: 미커버 1건(TC_PR_010, Admin 가격할인관리)에 test() 신규 작성 및 실행. Admin 로그인이 기존 DEF_011(ko-KR 500)로 실패해 N/T 처리. 검증 범위는 개별 상품 할인가 대조가 아니라 활성 가격할인 소행사 행사 존재 여부로 좁힘(마스터 그리드가 상품코드/할인율을 직접 노출하지 않음) — 원 TC의 [확인필요] 태그 유지."
       }
     ]
   },
@@ -272,13 +267,13 @@
       "steps": "1) [BO] Admin 가격할인관리에서 임의 상품에 가격할인 행사 등록\n2) [FO] Front 해당 상품 PDP·카테고리 목록에서 할인가/할인율 배지 확인",
       "expected": "1) 2) Admin에 등록한 할인율이 Front 상품가·배지(예: \"-32%\")에 정확히 반영되어야 함",
       "testData": "-",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "displayNo": 10,
       "tcId": "TC_PR_010",
       "verifyNote": "실제 등록 테스트 미실행 — 현재 Front에 노출 중인 할인 상품들이 이 Admin 화면을 통해 설정된 것인지 배경 확인 필요"

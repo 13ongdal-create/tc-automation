@@ -3,11 +3,11 @@
     "project": "데모사이트",
     "module": "전체",
     "moduleName": "통합(Full) 뷰어",
-    "version": 6,
-    "generatedAt": "2026-08-25",
+    "version": 5,
+    "generatedAt": "2026-08-24",
     "sourceModules": [
       "PD v15(113건)",
-      "PR v7(10건)",
+      "PR v6(10건)",
       "MB v11(53건)",
       "OP v10(22건)",
       "CO v6(50건)",
@@ -2978,7 +2978,8 @@
       "tcId": "TC_PR_001",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "module": "PR"
+      "module": "PR",
+      "moduleName": "이벤트/기획전/쿠폰행사"
     },
     {
       "majorCategory": "구매프로세스",
@@ -3003,7 +3004,8 @@
       "tcId": "TC_PR_002",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "module": "PR"
+      "module": "PR",
+      "moduleName": "이벤트/기획전/쿠폰행사"
     },
     {
       "majorCategory": "구매프로세스",
@@ -3028,7 +3030,8 @@
       "tcId": "TC_PR_003",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "module": "PR"
+      "module": "PR",
+      "moduleName": "이벤트/기획전/쿠폰행사"
     },
     {
       "majorCategory": "구매프로세스",
@@ -3053,7 +3056,8 @@
       "tcId": "TC_PR_004",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "module": "PR"
+      "module": "PR",
+      "moduleName": "이벤트/기획전/쿠폰행사"
     },
     {
       "majorCategory": "예외·회귀",
@@ -3078,7 +3082,8 @@
       "tcId": "TC_PR_005",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "쿠폰 발급이 자동인지 수동 다운로드/응모(PR 모듈) 방식인지, 발급 조건 미충족인지 확인 필요",
-      "module": "PR"
+      "module": "PR",
+      "moduleName": "이벤트/기획전/쿠폰행사"
     },
     {
       "tcId": "TC_PR_006",
@@ -3103,7 +3108,8 @@
       "displayNo": 6,
       "remark": "",
       "verifyNote": "",
-      "module": "PR"
+      "module": "PR",
+      "moduleName": "이벤트/기획전/쿠폰행사"
     },
     {
       "tcId": "TC_PR_007",
@@ -3128,7 +3134,8 @@
       "displayNo": 7,
       "remark": "",
       "verifyNote": "",
-      "module": "PR"
+      "module": "PR",
+      "moduleName": "이벤트/기획전/쿠폰행사"
     },
     {
       "tcId": "TC_PR_008",
@@ -3153,7 +3160,8 @@
       "displayNo": 8,
       "remark": "",
       "verifyNote": "",
-      "module": "PR"
+      "module": "PR",
+      "moduleName": "이벤트/기획전/쿠폰행사"
     },
     {
       "majorCategory": "이벤트",
@@ -3178,7 +3186,8 @@
       "displayNo": 9,
       "tcId": "TC_PR_009",
       "verifyNote": "",
-      "module": "PR"
+      "module": "PR",
+      "moduleName": "이벤트/기획전/쿠폰행사"
     },
     {
       "majorCategory": "이벤트",
@@ -3193,17 +3202,18 @@
       "steps": "1) [BO] Admin 가격할인관리에서 임의 상품에 가격할인 행사 등록\n2) [FO] Front 해당 상품 PDP·카테고리 목록에서 할인가/할인율 배지 확인",
       "expected": "1) 2) Admin에 등록한 할인율이 Front 상품가·배지(예: \"-32%\")에 정확히 반영되어야 함",
       "testData": "-",
-      "result": "N/T",
+      "result": "",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "",
       "displayNo": 10,
       "tcId": "TC_PR_010",
       "verifyNote": "실제 등록 테스트 미실행 — 현재 Front에 노출 중인 할인 상품들이 이 Admin 화면을 통해 설정된 것인지 배경 확인 필요",
-      "module": "PR"
+      "module": "PR",
+      "moduleName": "이벤트/기획전/쿠폰행사"
     },
     {
       "tcId": "TC_MB_001",

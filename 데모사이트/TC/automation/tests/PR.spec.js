@@ -94,3 +94,32 @@ test('[TC_PR_009][Admin대행사관리] 목록 컬럼 노출 검증', async ({ p
   await page.waitForTimeout(1000);
   await expect(page.getByText('대행사 목록')).toBeVisible();
 });
+
+test('[TC_PR_010][Admin가격할인관리] [확인필요] 등록된 소행사 가격할인 행사가 Front 반영 배경 확인', async ({ page }) => {
+  // 실측(2026-08-24, en-US locale 관찰 스크립트): /promotion/sale은 "소행사" 단위 가격할인 캠페인
+  // 목록(No./프로모션 대행사 아이디/소행사번호/소행사명/사용여부/행사시작일시/행사종료일시)이며,
+  // 개별 상품코드·할인율이 이 마스터 그리드에 직접 노출되지 않아(더블클릭 시 상세 화면 전환 없음),
+  // Front 특정 상품의 할인가와 1:1로 대조하는 것은 이번 백필 범위에서 확인 불가 — 원 TC의
+  // verifyNote("실제 등록 테스트 미실행 — 배경 확인 필요")와 동일한 결론. 대신 "현재 활성 중인
+  // 가격할인 소행사 행사가 실제로 존재하는지"만 검증하도록 범위를 좁혔다(BACKFILL_ISSUES.md ## PR 참고).
+  await adminLogin(page);
+  await page.goto(ADMIN_BASE + '/promotion/sale', { waitUntil: 'load' });
+  await page.getByRole('button', { name: '1년', exact: true }).click();
+  await page.getByRole('button', { name: '조회', exact: true }).click();
+  await page.waitForTimeout(1200);
+
+  const rows = await page.locator('.ag-center-cols-container .ag-row').all();
+  expect(rows.length).toBeGreaterThan(0);
+
+  const today = new Date();
+  let activeFound = false;
+  for (const row of rows) {
+    const cells = await row.locator('.ag-cell').allTextContents();
+    const [, , , , useYn, startAt, endAt] = cells;
+    if (useYn !== '사용') continue;
+    const start = new Date(startAt.replace(/\./g, '-').replace(' ', 'T'));
+    const end = new Date(endAt.replace(/\./g, '-').replace(' ', 'T'));
+    if (start <= today && today <= end) { activeFound = true; break; }
+  }
+  expect(activeFound).toBe(true);
+});
