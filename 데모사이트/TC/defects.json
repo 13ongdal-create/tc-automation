@@ -117,6 +117,11 @@
         "at": "2026-08-20",
         "status": "신규",
         "note": "Phase 1 재관찰(배치2, 고객센터/정책 화면 전수 확인) 중 최초 발견. 기존 DEF_데모사이트_001/002에서도 /login 페이지 프리페치 리소스로 /policy 404가 부수적으로 관측된 바 있음 — 동일 원인으로 추정"
+      },
+      {
+        "at": "2026-08-24",
+        "status": "신규",
+        "note": "MB 모듈 자동화 백필 중 재확인: 로그인/마이페이지/회원가입 등 더 넓은 화면에서도 동일 패턴(프리페치 404)으로 재현됨을 확인 — 영향 범위가 기존 파악보다 넓음"
       }
     ],
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
@@ -141,6 +146,11 @@
         "at": "2026-08-20",
         "status": "신규",
         "note": "Phase 1 재관찰(배치2, 고객센터/정책 화면 전수 확인) 중 최초 발견. DEF_데모사이트_005와 동일 패턴(푸터 링크 목적지 미구현)"
+      },
+      {
+        "at": "2026-08-24",
+        "status": "신규",
+        "note": "MB 모듈 자동화 백필 중 재확인: 로그인/마이페이지/회원가입 등 더 넓은 화면에서도 동일 패턴(프리페치 404)으로 재현됨을 확인 — 영향 범위가 기존 파악보다 넓음"
       }
     ],
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
@@ -175,6 +185,11 @@
         "at": "2026-08-21",
         "status": "신규",
         "note": "Phase 5 전체 재실행 중 영향 범위가 사이트 전역(카테고리/브랜드관/푸터/GNB 등)임을 확인, 범위 갱신"
+      },
+      {
+        "at": "2026-08-24",
+        "status": "신규",
+        "note": "MB 모듈 자동화 백필 중 재확인: 로그인/마이페이지/회원가입 등 더 넓은 화면에서도 동일 패턴(프리페치 404)으로 재현됨을 확인 — 영향 범위가 기존 파악보다 넓음"
       }
     ],
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
@@ -435,6 +450,56 @@
         "at": "2026-08-24",
         "status": "신규",
         "note": "Phase 5 자동화 백필(PD 모듈 미커버 45건 추가) 중 발견"
+      }
+    ]
+  },
+  {
+    "defectId": "DEF_데모사이트_018",
+    "tcId": "TC_MB_023",
+    "module": "회원",
+    "severity": "P2",
+    "status": "신규",
+    "summary": "회원 > 비밀번호 찾기(/forgot-password) 경로 프리페치 시 404 발생, 로그인·마이페이지·회원가입 등 다수 화면에 영향",
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) 로그인/마이페이지/회원가입 등 화면 진입 2) 개발자도구 Network 탭에서 프리페치 요청 확인",
+    "actualResult": "\"비밀번호를 잊으셨나요?\" 링크가 참조하는 것으로 보이는 /forgot-password 경로가 다수 화면에서 프리페치되며 404 발생 (TC_MB_023/037/039/040/041/043 등에서 반복 확인)",
+    "expectedResult": "/forgot-password 경로가 실제 존재하거나, 존재하지 않는다면 해당 경로로 프리페치/링크되지 않아야 함",
+    "detectedAt": "2026-08-24",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_데모사이트_018.png",
+    "consoleLog": "TC/defects/DEF_데모사이트_018.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-08-24",
+        "status": "신규",
+        "note": "MB 모듈 자동화 백필 중 발견 — DEF_005/006/007과 유사한 프리페치 404 클러스터의 일부"
+      }
+    ]
+  },
+  {
+    "defectId": "DEF_데모사이트_019",
+    "tcId": "TC_MB_002",
+    "module": "회원",
+    "severity": "P2",
+    "status": "신규",
+    "summary": "회원 > 회원가입(/register) 화면 진입 시 /privacy 경로 프리페치 404 발생",
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) /register 진입 2) 개발자도구 Network 탭에서 프리페치 요청 확인",
+    "actualResult": "회원가입 화면의 개인정보 관련 링크가 참조하는 것으로 보이는 /privacy 경로가 프리페치되며 404 발생(실제 경로는 /policy로 추정). register 페이지를 방문하는 다수 TC에서 반복 확인되었으나 100% 재현은 아님(간헐적)",
+    "expectedResult": "/privacy 경로가 실제 존재하거나, 존재하지 않는다면 실제 경로(/policy 등)로 연결되어야 함",
+    "detectedAt": "2026-08-24",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_데모사이트_019.png",
+    "consoleLog": "TC/defects/DEF_데모사이트_019.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-08-24",
+        "status": "신규",
+        "note": "MB 모듈 자동화 백필 중 발견 — register 페이지 미커버 TC 다수(002~026 등)가 이 결함으로 N/T 처리됨"
       }
     ]
   }

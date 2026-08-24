@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데모사이트 QA TC 뷰어 - 회원(MB)</title>
+<style>
+  :root{
+    --bg:#f6f8fa; --panel:#ffffff; --text:#1f2328; --muted:#656d76;
+    --border:#d0d7de; --accent:#0969da; --accent2:#0550ae;
+    --p1:#cf222e; --p2:#9a6700; --p3:#0969da;
+    --pass:#1a7f37; --fail:#cf222e; --blocked:#9a6700; --na:#8c959f; --none:#d0d7de;
+    --headbg:#f6f8fa;
+  }
+  html[data-theme="dark"]{
+    --bg:#0d1117; --panel:#161b22; --text:#e6edf3; --muted:#8b949e;
+    --border:#30363d; --accent:#58a6ff; --accent2:#79c0ff;
+    --p1:#f85149; --p2:#d29922; --p3:#58a6ff;
+    --headbg:#161b22;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--bg);color:var(--text);}
+  header{position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .header-title{display:flex;align-items:center;gap:12px;}
+  .header-badge{width:34px;height:34px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  header h1{font-size:16px;margin:0;line-height:1.3;}
+  header .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+  .header-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  button{cursor:pointer;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:20px;padding:7px 14px;font-size:12.5px;font-weight:600;white-space:nowrap;}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+  button.primary:hover{background:var(--accent2);}
+  button:hover{filter:brightness(0.97);}
+  .container{padding:16px 20px 60px;max-width:1600px;margin:0 auto;}
+
+  .kpis{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0;}
+  .kpi{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px 16px;}
+  .kpi .num{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .kpi .label{font-size:12px;color:var(--muted);}
+  .kpi.p1 .num{color:var(--p1);} .kpi.p2 .num{color:var(--p2);} .kpi.p3 .num{color:var(--p3);}
+  .kpi.def-new .num{color:var(--p1);} .kpi.def-progress .num{color:var(--accent);} .kpi.def-done .num{color:var(--pass);}
+
+  .stats-wrap{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:16px;overflow-x:auto;}
+  .stats-wrap h3{margin:0 0 10px;font-size:14px;}
+  table.stats{width:100%;border-collapse:collapse;font-size:12px;}
+  table.stats th,table.stats td{border:1px solid var(--border);padding:6px 8px;text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums;}
+  table.stats th{background:var(--headbg);}
+  table.stats td.modname{text-align:left;}
+  table.stats tr.stats-total td{font-weight:700;background:var(--headbg);}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+  .tab-btn{border-radius:20px;font-size:12px;padding:6px 12px;}
+  .tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .tab-btn.tab-defect{border-color:var(--fail);color:var(--fail);}
+  .tab-btn.tab-defect.active{background:var(--fail);border-color:var(--fail);color:#fff;}
+
+  .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+  .toolbar .count{font-size:13px;color:var(--muted);}
+
+  .filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .filter-bar input[type="text"]{flex:1;min-width:200px;padding:8px 10px;font-size:13px;border-radius:8px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+  .filter-bar select{padding:8px 10px;font-size:13px;border-radius:8px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+
+  /* 표준 "고정 헤더 스프레드시트" 패턴: 테이블 영역 자체를 독립 스크롤 박스로 만들고,
+     그 박스 기준(top:0)으로 헤더를 고정 — 페이지 전체 스크롤/외부 헤더 높이에 의존하지 않음.
+     이전에 JS로 외부 헤더 높이를 계산해 top 오프셋을 맞추던 방식은 타이밍/브라우저 편차로
+     계속 깨졌기 때문에 이 방식으로 교체 (2026-08-18) */
+  .table-wrap{background:var(--panel);border:1px solid var(--border);border-radius:10px;max-height:70vh;overflow:auto;}
+  table.tc{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:12px;}
+  table.tc th,table.tc td{border-bottom:1px solid var(--border);border-right:1px solid var(--border);padding:6px 7px;vertical-align:top;word-break:break-word;overflow-wrap:break-word;white-space:pre-wrap;}
+  table.tc th:first-child,table.tc td:first-child{border-left:1px solid var(--border);}
+  table.tc thead th{border-top:1px solid var(--border);}
+  table.tc th{background:var(--headbg);position:sticky;top:0;z-index:10;font-size:11.5px;}
+  table.tc td.center{text-align:center;}
+  .badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:11px;color:#fff;}
+  .badge.P1{background:var(--p1);} .badge.P2{background:var(--p2);} .badge.P3{background:var(--p3);}
+  .verify-note{color:var(--fail);font-weight:700;margin-bottom:4px;}
+  .defect-section{margin-bottom:8px;} .defect-section:last-child{margin-bottom:0;}
+  .defect-section-label{display:block;font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:0.03em;margin-bottom:2px;}
+  .defect-section-body{white-space:pre-wrap;}
+  select.result-select{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+  select.result-select[data-val="Pass"]{color:var(--pass);font-weight:600;}
+  select.result-select[data-val="Fail"]{color:var(--fail);font-weight:600;}
+  select.result-select[data-val="Blocked"]{color:var(--blocked);font-weight:600;}
+  input.free-input{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+
+  .col-no{width:2.5%} .col-id{width:5.5%} .col-system{width:2.5%} .col-cat{width:3%} .col-mod{width:3.5%} .col-sub{width:3.5%}
+  .col-platform{width:2.5%} .col-type{width:2.5%} .col-title{width:10%} .col-ref{width:3.5%}
+  .col-priority{width:2.5%} .col-testdata{width:5%} .col-precond{width:5.5%} .col-proc{width:8.5%} .col-expected{width:8.5%}
+  .col-result{width:4.5%} .col-assignee{width:3.5%} .col-issue{width:8%} .col-issuelink{width:8%} .col-remark{width:8%}
+
+  .col-def-id{width:9%} .col-def-mod{width:6%} .col-def-sev{width:5%} .col-def-status{width:8%}
+  .col-def-summary{width:18%} .col-def-detail{width:24%} .col-def-thumb{width:8%} .col-def-date{width:7%} .col-def-tc{width:7%} .col-def-link{width:8%}
+  img.def-thumb{width:100%;max-height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer;display:block;}
+  a.defect-tc-link{color:var(--accent);text-decoration:underline;cursor:pointer;}
+  select.defect-status-select{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+  select.defect-status-select[data-val="신규"]{color:var(--p1);font-weight:600;}
+  select.defect-status-select[data-val="처리중"]{color:var(--accent);font-weight:600;}
+  select.defect-status-select[data-val="재검증대기"]{color:var(--p2);font-weight:600;}
+  select.defect-status-select[data-val="완료"]{color:var(--pass);font-weight:600;}
+  select.defect-status-select[data-val="보류"]{color:var(--muted);font-weight:600;}
+  select.defect-status-select[data-val="재발생"]{color:var(--fail);font-weight:700;}
+  #defectTable tbody tr{cursor:pointer;}
+  #defectTable tbody tr:hover{background:var(--headbg);}
+  #defectModalImg{max-width:100%;border-radius:8px;border:1px solid var(--border);display:block;margin-top:10px;}
+  #defectModalHistory{margin:8px 0 0;padding-left:18px;font-size:12px;color:var(--muted);line-height:1.7;}
+
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--panel);border-radius:12px;max-width:720px;width:92%;max-height:80vh;overflow-y:auto;padding:20px;}
+  .modal h2{margin-top:0;font-size:16px;}
+  .modal table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px;}
+  .modal table th,.modal table td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top;}
+  .modal table th{background:var(--headbg);}
+  .modal .modal-note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6;}
+  .modal-close{float:right;}
+  .status-confirmed{color:var(--pass);font-weight:600;}
+  .status-unconfirmed{color:var(--muted);}
+
+  .footnote{font-size:11.5px;color:var(--muted);margin-top:14px;line-height:1.6;}
+  .version-note{font-size:11px;color:var(--muted);}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-title">
+    <div class="header-badge">🧪</div>
+    <div>
+      <h1>데모사이트 QA TC 뷰어 <span style="color:var(--accent);">v10</span> — 회원(MB)</h1>
+      <div class="sub">Interactive TC Viewer · 총 53건 (기존 35 / 신규 18)</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button id="btnAccMatrix">👤 테스트 계정 매트릭스</button>
+    <button id="btnFlowMap">🧭 User Flow Map</button>
+    <a href="http://192.168.10.116:30180/" target="_blank" rel="noopener"><button type="button">🔗 테스트사이트 바로가기</button></a>
+    <a href="results/index.html"><button type="button">📜 실행결과 이력</button></a>
+    <button id="btnXlsx" class="primary">📊 XLSX 다운로드</button>
+    <button id="btnJsonSave" class="primary">💾 JSON 저장</button>
+    <button id="btnJsonLoad">📂 JSON 파일 연결/불러오기</button>
+    <input type="file" id="jsonFileInput" accept="application/json" style="display:none;">
+    <span id="tcFileStatus" style="font-size:11px;color:var(--muted);">미연결 (저장 시 다운로드)</span>
+    <button id="btnTheme">🌙 다크모드</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="stats-wrap" id="statsWrapBlock">
+    <h3 id="statsToggle" style="cursor:pointer;user-select:none;display:flex;align-items:center;gap:6px;">
+      <span id="statsToggleIcon">▶</span> 소분류별 실행현황 통계
+    </h3>
+    <div style="overflow-x:auto;display:none;" id="statsTableWrap">
+    <table class="stats" id="statsTable">
+      <thead>
+        <tr><th>소분류</th><th>전체</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>N/T</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>Fail율</th></tr>
+      </thead>
+      <tbody id="statsBody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis">
+    <div class="kpi"><div class="num" id="kpiTotal">0</div><div class="label">전체 TC</div></div>
+    <div class="kpi p1"><div class="num" id="kpiP1">0</div><div class="label">P1</div></div>
+    <div class="kpi p2"><div class="num" id="kpiP2">0</div><div class="label">P2</div></div>
+    <div class="kpi p3"><div class="num" id="kpiP3">0</div><div class="label">P3</div></div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="filter-bar" id="filterBarBlock">
+    <input id="searchInput" type="text" placeholder="TC ID / 테스트 항목 키워드 검색">
+    <select id="filterPriority"><option value="">우선순위 전체</option></select>
+    <select id="filterType"><option value="">유형 전체</option></select>
+    <select id="filterOrigin"><option value="">구분 전체</option></select>
+    <button id="btnResetFilter">초기화</button>
+  </div>
+
+  <div class="toolbar" id="toolbarBlock">
+    <div class="count" id="filteredCount"></div>
+  </div>
+
+  <div class="table-wrap" id="tcTableWrap">
+    <table class="tc">
+      <thead>
+        <tr>
+          <th class="col-no">No.</th>
+          <th class="col-id">TC ID</th>
+          <th class="col-system">system</th>
+          <th class="col-cat">대분류</th>
+          <th class="col-mod">중분류</th>
+          <th class="col-sub">소분류</th>
+          <th class="col-platform">플랫폼</th>
+          <th class="col-type">유형</th>
+          <th class="col-title">테스트 항목</th>
+          <th class="col-ref">기준문서</th>
+          <th class="col-priority">우선순위</th>
+          <th class="col-testdata">테스트 데이터</th>
+          <th class="col-precond">사전조건</th>
+          <th class="col-proc">테스트 수행 절차</th>
+          <th class="col-expected">기대 결과</th>
+          <th class="col-result">실행결과</th>
+          <th class="col-assignee">담당자</th>
+          <th class="col-issue">이슈내용</th>
+          <th class="col-issuelink">이슈링크</th>
+          <th class="col-remark">비고</th>
+        </tr>
+      </thead>
+      <tbody id="tcBody"></tbody>
+    </table>
+  </div>
+
+  <div id="defectPanel" style="display:none;">
+    <div class="kpis" id="defectKpis">
+      <div class="kpi"><div class="num" id="defKpiTotal">0</div><div class="label">전체 결함</div></div>
+      <div class="kpi def-new"><div class="num" id="defKpiNew">0</div><div class="label">신규</div></div>
+      <div class="kpi def-progress"><div class="num" id="defKpiProgress">0</div><div class="label">처리중</div></div>
+      <div class="kpi def-done"><div class="num" id="defKpiDone">0</div><div class="label">완료</div></div>
+    </div>
+
+    <div class="tabs" id="defectFilterPills"></div>
+
+    <div class="toolbar" style="gap:8px;">
+      <button id="btnDefectSave" class="primary">💾 결함 저장</button>
+      <button id="btnDefectFileConnect">📂 defects.json 파일 연결/불러오기</button>
+      <span id="defectFileStatus" style="font-size:11px;color:var(--muted);">미연결 (저장 시 다운로드)</span>
+    </div>
+
+    <div class="toolbar">
+      <div class="count" id="defectFilteredCount"></div>
+    </div>
+
+    <div class="table-wrap" id="defectTableWrapOuter">
+      <table class="tc" id="defectTable">
+        <thead>
+          <tr>
+            <th class="col-def-id">결함ID</th>
+            <th class="col-def-mod">모듈</th>
+            <th class="col-def-sev">심각도</th>
+            <th class="col-def-status">상태</th>
+            <th class="col-def-summary">요약</th>
+            <th class="col-def-detail">상세내용</th>
+            <th class="col-def-thumb">스크린샷</th>
+            <th class="col-def-date">발견일</th>
+            <th class="col-def-tc">관련 TC ID</th>
+            <th class="col-def-link">비고</th>
+          </tr>
+        </thead>
+        <tbody id="defectBody"></tbody>
+      </table>
+    </div>
+    <div class="footnote">※ 결함 행 클릭 시 스크린샷을 확인할 수 있습니다 (상태/담당자/이슈링크 드롭다운·입력란 클릭 시에는 열리지 않습니다). "관련 TC ID"를 클릭하면 해당 TC 목록 위치로 이동합니다.</div>
+  </div>
+
+  <div class="footnote">
+    ※ 실행결과/담당자/이슈내용/이슈링크/결함 상태는 기본적으로 브라우저 메모리에만 저장되어 새로고침 시 초기화됩니다. "JSON 파일 연결/불러오기"로 원본 파일을 한 번 연결하면, 이후 "저장" 클릭 시 다운로드 없이 그 파일에 바로 반영됩니다(Chrome/Edge 등 File System Access API 지원 브라우저 한정 — 미지원 브라우저는 다운로드로 대체).<br>
+    ※ [확인필요] 태그가 붙은 TC는 근거 문서/화면이 아직 확보되지 않은 항목입니다 (AGENTS.md 7항). 스펙 확정 시 재검증이 필요합니다.<br>
+    <span class="version-note">meta.changeHistory: v1(2026-08-21) 레거시 파일 데모사이트_TC_ALL_2026-08-14.json에서 이전 (회원가입/로그인 폼 검증 범위, 35건) / v2(2026-08-21) Phase 4: 로그인/비로그인 사전조건별 신규 시나리오 8건 추가 (TC_MB_036~043) — GNB 상태표시/마이페이지 접근제어·정보노출/체크아웃 배송정보 연동/로그아웃, /products/99 및 /mypage /checkout 관측 기반 / v3(2026-08-20) system 컬럼(FO/BO) 전 항목 backfill(전부 FO) — 데모사이트 전체화면 재관찰에 따른 모듈코드 체계 재정의(patterns.md) / v4(2026-08-20) Phase 4(배치3): Admin 회원관리 신규 4건 추가(system:BO) — jspark81 계정이 Admin 목록에서 확인되지 않는 데이터정합성 이슈 발견 / v5(2026-08-20) 뷰어 스키마 정비: testData 플레이스홀더("특이 테스트 데이터 없음"/"-") 빈 값으로 정정, remark(비고) 필드 신규 추가(기본값 빈 문자열) — 뷰어 컬럼 구조 개편(구분→비고, 테스트데이터 위치 이동)에 따른 데이터 정합 / v6(2026-08-20) Phase 4(배치5): Front-Admin 회원정보 정합성 검증 2건 + Admin 리뷰관리/라벨관리 신규 관찰 4건 추가(누락됐던 Admin "회원" 그룹 하위 메뉴 보완) / v7(2026-08-20) DEF_데모사이트_009 재검증 결과 오탐(false positive)으로 확정 — Admin 회원관리 검색 시 "회원이름" 필드에 로그인아이디를 입력한 테스트 오류였음. 정확한 "로그인아이디" 필드로 검색 시 jspark81 정상 조회, Front-Admin 회원정보 필드값 완전 일치 확인. TC_MB_046/048 내용 정정, MB.spec.js 자동화 코드의 필드 선택자 버그 수정 / v8(2026-08-21) TC 표기 개선(배치6): 테스트 수행 절차의 URL을 화면명으로 표기(40건), 기대결과 단일 항목 넘버링 제거(44건), [확인필요]/스펙확정 주석을 별도 verifyNote 필드로 분리하여 뷰어에서 RED 강조 표시하도록 개선(20건) / v9(2026-08-21) Phase 5 재실행 결과 반영(배치7): 기존/신규 결함(DEF_001/002/007/011)에 막힌 TC를 N/T로 처리, 관련 결함ID를 비고에 기재. / v10(2026-08-21) Phase 5 재실행(①③ 수정 반영 후) 실제 실행결과를 나머지 2건에 반영 (결함으로 막히지 않은 항목의 Pass/Fail).</span>
+  </div>
+</div>
+
+<div class="modal-overlay" id="defectModalOverlay">
+  <div class="modal">
+    <button class="modal-close" data-close="defect">닫기</button>
+    <h2 id="defectModalTitle"></h2>
+    <div id="defectModalSummary" style="font-size:13px;"></div>
+    <img id="defectModalImg" alt="결함 스크린샷" onerror="this.style.display='none'; document.getElementById('defectModalImgMissing').style.display='block';">
+    <div class="modal-note" id="defectModalImgMissing" style="display:none;">※ 스크린샷 파일을 찾을 수 없습니다.</div>
+    <div class="modal-note">이력</div>
+    <ul id="defectModalHistory"></ul>
+  </div>
+</div>
+
+<div class="modal-overlay" id="accModalOverlay">
+  <div class="modal">
+    <button class="modal-close" data-close="acc">닫기</button>
+    <h2>테스트 계정 매트릭스</h2>
+    <table>
+      <thead><tr><th>대상</th><th>유형</th><th>계정</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td>Front</td><td>일반회원</td><td>jspark81</td><td>사용자 제공 (2026-08-18), 로그인 상태 검증용</td></tr>
+        <tr><td>Admin</td><td>관리자</td><td>devel</td><td>사용자 제공 (2026-08-20), Admin(BO) 관측용</td></tr>
+      </tbody>
+    </table>
+    <div class="modal-note">※ 비밀번호는 보안상 이 화면에 표기하지 않습니다 — <code>tc-automation데모사이트TC	estAccounts.json</code>에서 확인 (git 미추적).</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="flowModalOverlay">
+  <div class="modal">
+    <button class="modal-close" data-close="flow">닫기</button>
+    <h2>User Flow Map (상품전시 기준)</h2>
+    <table>
+      <thead><tr><th>단계</th><th>내용</th><th>확인 상태</th></tr></thead>
+      <tbody>
+        <tr><td>1. 카테고리 진입</td><td>/categories/111 진입 → 카테고리명("여성") 타이틀, 필터(색상/사이즈/브랜드/가격), 정렬 4종, 상품 목록 노출</td><td class="status-confirmed">Playwright 관측 확인</td></tr>
+        <tr><td>2. 목록 탐색</td><td>필터/정렬/페이지네이션 적용 → 조건에 맞는 상품유닛(카드) 재노출</td><td class="status-confirmed">Playwright 관측 확인</td></tr>
+        <tr><td>3. 상품상세 진입</td><td>상품 카드 클릭 → /products/{id} 이동, 상품명·가격·브랜드·브레드크럼 노출</td><td class="status-confirmed">Playwright 관측 확인 (TC_PD_072)</td></tr>
+        <tr><td>4. 위시리스트/장바구니</td><td>로그인/비로그인 상태별 위시리스트 버튼 클릭 처리</td><td class="status-unconfirmed">[확인필요] 미실행 — Phase 5 대기 (TC_PD_079/080)</td></tr>
+        <tr><td>5. 결제/주문완료</td><td>-</td><td class="status-unconfirmed">[확인필요] 미관찰 — 장바구니·결제 페이지 관찰 필요</td></tr>
+      </tbody>
+    </table>
+    <div class="modal-note">※ "확인 상태"가 [확인필요]인 단계는 아직 Playwright로 관찰/실행하지 않아 추측으로 채우지 않았습니다 (AGENTS.md 7항).</div>
+  </div>
+</div>
+
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script>
+const TC_DATA = [{"tcId":"TC_MB_001","majorCategory":"회원","midCategory":"회원가입","minorCategory":"필수값검증","platform":"Web","type":"기능","item":"[확인필요] 전체 필드 미입력 후 제출 시 차단 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입(전체 필드 공란)\n2) \"회원가입\" 버튼 클릭","expected":"제출이 차단되고 미입력 필드에 안내 문구가 노출된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":1,"system":"FO","remark":"","verifyNote":"화면상 \"*\" 필수 표시는 있으나 HTML required 속성이 없어 실제 차단 로직(JS) 존재 여부 확인 필요"},{"tcId":"TC_MB_002","majorCategory":"회원","midCategory":"회원가입","minorCategory":"이름","platform":"Web","type":"Boundary","item":"[확인필요] 이름(mbrName) 미입력 유효성 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입, 이름만 공란으로 두고 나머지 입력\n2) \"회원가입\" 버튼 클릭","expected":"\"이름을 입력해주세요\" 등 안내와 함께 제출이 차단된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":2,"system":"FO","remark":"","verifyNote":"실제 안내 문구 확인 필요"},{"tcId":"TC_MB_003","majorCategory":"회원","midCategory":"회원가입","minorCategory":"아이디","platform":"Web","type":"Boundary","item":"[확인필요] 아이디(loginId) 미입력 유효성 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입, 아이디만 공란으로 두고 나머지 입력\n2) \"회원가입\" 버튼 클릭","expected":"\"아이디를 입력해주세요\" 등 안내와 함께 제출이 차단된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":3,"system":"FO","remark":"","verifyNote":"실제 안내 문구 확인 필요"},{"tcId":"TC_MB_004","majorCategory":"회원","midCategory":"회원가입","minorCategory":"아이디중복","platform":"Web","type":"기능","item":"[확인필요] 아이디 중복 체크 동작 검증","baseDoc":"-","priority":"P2","precondition":"이미 가입된 아이디 존재(가정)","steps":"1) 회원가입 진입\n2) 기존 가입된 아이디와 동일한 값 입력","expected":"\"이미 사용중인 아이디입니다\" 등 중복 안내가 노출된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":4,"system":"FO","remark":"","verifyNote":"실시간 중복체크 UI(버튼/자동체크) 제공 여부 미확인"},{"tcId":"TC_MB_005","majorCategory":"회원","midCategory":"회원가입","minorCategory":"비밀번호정책","platform":"Web","type":"유효성","item":"[확인필요] 비밀번호 정책(영문·숫자·특수문자 조합 8자 이상) 미충족 차단 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 비밀번호란에 \"1234\"(정책 미충족) 입력 후 제출","expected":"\"영문, 숫자, 특수문자 조합 8자 이상\" 안내와 함께 제출이 차단된다","testData":"비밀번호=1234","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":5,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_006","majorCategory":"회원","midCategory":"회원가입","minorCategory":"비밀번호길이","platform":"Web","type":"Boundary","item":"비밀번호 길이 경계값(7자/8자) 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 비밀번호란에 7자리 조합값 입력 후 제출\n3) 8자리 조합값으로 재입력 후 제출","expected":"1) 7자리는 정책 미충족으로 차단된다\n2) 3) 8자리는 조합 조건 충족 시 통과된다","testData":"7자=Ab1!234, 8자=Ab1!2345","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":6,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_007","majorCategory":"회원","midCategory":"회원가입","minorCategory":"비밀번호확인","platform":"Web","type":"유효성","item":"[확인필요] 비밀번호-비밀번호확인 불일치 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 비밀번호와 비밀번호 확인란에 서로 다른 값 입력 후 제출","expected":"\"비밀번호가 일치하지 않습니다\" 안내와 함께 제출이 차단된다","testData":"비밀번호=Ab1!2345, 확인=Ab1!9999","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":7,"system":"FO","remark":"","verifyNote":"실제 안내 문구 확인 필요"},{"tcId":"TC_MB_008","majorCategory":"회원","midCategory":"회원가입","minorCategory":"휴대폰번호","platform":"Web","type":"유효성","item":"[확인필요] 휴대폰번호 형식 미준수 입력 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 휴대폰번호란에 \"123\"(자릿수 부족) 입력 후 제출","expected":"\"올바른 휴대폰번호 형식이 아닙니다\" 안내와 함께 제출이 차단된다","testData":"휴대폰번호=123","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":8,"system":"FO","remark":"","verifyNote":"실제 안내 문구 확인 필요"},{"tcId":"TC_MB_009","majorCategory":"품질·비기능","midCategory":"회원가입","minorCategory":"보안","platform":"Web","type":"보안","item":"휴대폰번호 필드 문자/특수문자 입력 처리 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 휴대폰번호란에 \"abc!@#\" 입력 후 제출","expected":"숫자 형식이 아닌 값은 거부되고 안내가 노출된다","testData":"휴대폰번호=abc!@#","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":9,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_010","majorCategory":"회원","midCategory":"회원가입","minorCategory":"생년월일","platform":"Web","type":"UI","item":"생년월일 date picker 입력 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 생년월일 date input에 유효 날짜 선택","expected":"선택한 날짜가 입력값으로 반영된다","testData":"생년월일=2000-01-01","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":10,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_011","majorCategory":"예외·회귀","midCategory":"회원가입","minorCategory":"생년월일","platform":"Web","type":"유효성","item":"[확인필요] 생년월일 미래 날짜 입력 차단 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 생년월일에 미래 날짜(2099-01-01) 입력 후 제출","expected":"\"올바른 생년월일이 아닙니다\" 안내와 함께 제출이 차단된다","testData":"생년월일=2099-01-01","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":11,"system":"FO","remark":"","verifyNote":"실제 차단 여부 확인 필요"},{"tcId":"TC_MB_012","majorCategory":"회원","midCategory":"회원가입","minorCategory":"주소찾기","platform":"Web","type":"기능","item":"[확인필요] 주소 찾기 버튼 클릭 시 우편번호 검색 팝업 노출 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) \"주소 찾기\" 버튼 클릭","expected":"우편번호/주소 검색 팝업(다음 우편번호 서비스 등)이 노출된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":12,"system":"FO","remark":"","verifyNote":"연동 서비스 및 팝업 방식 미확인"},{"tcId":"TC_MB_013","majorCategory":"회원","midCategory":"회원가입","minorCategory":"주소연동","platform":"Web","type":"기능","item":"[확인필요] 우편번호 선택 후 주소 자동 입력 연동 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) \"주소 찾기\" 팝업에서 임의 주소 선택","expected":"우편번호(postCode)와 주소(address) 필드가 자동으로 채워진다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":13,"system":"FO","remark":"","verifyNote":"연동 동작 미확인"},{"tcId":"TC_MB_014","majorCategory":"회원","midCategory":"회원가입","minorCategory":"상세주소","platform":"Web","type":"기능","item":"상세주소 입력 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 상세주소(dtlAddrText)란에 \"101동 202호\" 입력","expected":"입력값이 정상 반영된다","testData":"상세주소=101동 202호","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":14,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_015","majorCategory":"회원","midCategory":"회원가입","minorCategory":"성별","platform":"Web","type":"기능","item":"성별 라디오 \"남\" 선택 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 성별 \"남\" 라디오 선택","expected":"\"남\" 라디오 버튼이 선택 상태로 표시된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":15,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_016","majorCategory":"회원","midCategory":"회원가입","minorCategory":"성별","platform":"Web","type":"기능","item":"성별 라디오 \"여\" 선택 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 성별 \"여\" 라디오 선택","expected":"\"여\" 라디오 버튼이 선택 상태로 표시된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":16,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_017","majorCategory":"회원","midCategory":"회원가입","minorCategory":"성별","platform":"Web","type":"유효성","item":"[확인필요] 성별 미선택 상태 제출 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입(성별 미선택), 나머지 필드 입력 후 제출","expected":"성별 미선택 시 제출이 차단된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":17,"system":"FO","remark":"","verifyNote":"실제 차단 여부 확인 필요"},{"tcId":"TC_MB_018","majorCategory":"회원","midCategory":"회원가입","minorCategory":"이메일","platform":"Web","type":"유효성","item":"이메일 형식 미준수 입력 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 이메일란에 \"abc.com\"(@ 누락) 입력 후 제출","expected":"\"올바른 이메일 형식이 아닙니다\" 안내와 함께 제출이 차단된다","testData":"이메일=abc.com","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":18,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_019","majorCategory":"회원","midCategory":"회원가입","minorCategory":"이메일","platform":"Web","type":"기능","item":"이메일 정상 형식 입력 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 이메일란에 \"test@example.com\" 입력","expected":"정상 형식으로 인식되어 에러 표시가 없다","testData":"이메일=test@example.com","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":19,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_020","majorCategory":"회원","midCategory":"회원가입","minorCategory":"약관동의","platform":"Web","type":"유효성","item":"[확인필요] 개인정보수집동의 미체크 시 제출 차단 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입, 개인정보수집동의 체크박스 미체크 상태로 나머지 필드 입력\n2) \"회원가입\" 버튼 클릭","expected":"\"개인정보 수집에 동의해주세요\" 안내와 함께 제출이 차단된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":20,"system":"FO","remark":"","verifyNote":"실제 안내 문구 확인 필요"},{"tcId":"TC_MB_021","majorCategory":"회원","midCategory":"회원가입","minorCategory":"가입성공","platform":"Web","type":"기능","item":"[확인필요] 전체 필드 정상 입력 후 회원가입 성공 검증","baseDoc":"-","priority":"P1","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 전체 필수 필드에 유효값 입력, 개인정보수집동의 체크\n3) \"회원가입\" 버튼 클릭","expected":"회원가입이 성공 처리되고 완료 안내가 노출된다","testData":"이름=홍길동, 아이디=testuser01, 비밀번호=Ab1!2345, 휴대폰=01012341234, 이메일=test@example.com","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":21,"system":"FO","remark":"","verifyNote":"실제 제출 시 서버 처리 결과 미확인(가입 API 응답 확인 필요)"},{"tcId":"TC_MB_022","majorCategory":"회원","midCategory":"회원가입","minorCategory":"가입후이동","platform":"Web","type":"기능","item":"[확인필요] 회원가입 성공 후 이동 경로 검증","baseDoc":"-","priority":"P2","precondition":"회원가입 성공 처리됨","steps":"1) 회원가입 완료 후 화면 확인","expected":"로그인 페이지 또는 메인으로 자동 이동한다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":22,"system":"FO","remark":"","verifyNote":"로그인 자동 처리 여부 및 이동 경로 확인 필요"},{"tcId":"TC_MB_023","majorCategory":"회원","midCategory":"회원가입","minorCategory":"로그인이동","platform":"Web","type":"기능","item":"\"이미 계정이 있으신가요? 로그인\" 링크 이동 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) \"로그인\" 링크 클릭","expected":"/login 경로로 이동은 되나, 로그인 페이지 자체가 500 에러(TC_MB_029)로 화면이 정상 노출되지 않는다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":23,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_024","majorCategory":"회원","midCategory":"회원가입","minorCategory":"입력길이제한","platform":"Web","type":"유효성","item":"[확인필요] 필드별 최대 길이(maxlength) 제한 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 이름란에 100자 이상 문자열 입력","expected":"정책상 최대 길이에서 입력이 차단되거나 제출 시 에러가 노출된다","testData":"이름=100자 이상 문자열","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":24,"system":"FO","remark":"","verifyNote":"관측 결과 전체 입력 필드에 maxlength 속성이 없어 클라이언트 단 길이 제한 여부 확인 필요"},{"tcId":"TC_MB_025","majorCategory":"품질·비기능","midCategory":"회원가입","minorCategory":"보안","platform":"Web","type":"보안","item":"아이디/이름 필드 SQL인젝션 문자열 안전 처리 검증","baseDoc":"-","priority":"P1","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 아이디란에 `' OR 1=1 --` 입력 후 제출","expected":"입력값이 이스케이프 처리되어 서버 에러 없이 일반 유효성 검증 로직대로 처리된다(500 에러 미발생)","testData":"아이디=' OR 1=1 --","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":25,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_026","majorCategory":"품질·비기능","midCategory":"회원가입","minorCategory":"보안","platform":"Web","type":"보안","item":"회원가입 폼 XSS 스크립트 입력 안전 처리 검증","baseDoc":"-","priority":"P1","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입\n2) 이름란에 `\u003cscript>alert(1)\u003c/script>` 입력 후 제출","expected":"스크립트가 실행되지 않고(alert 미노출) 입력값이 이스케이프되어 처리된다","testData":"이름=\u003cscript>alert(1)\u003c/script>","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":26,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_027","majorCategory":"회원","midCategory":"헤더진입","minorCategory":"회원가입","platform":"Web","type":"기능","item":"헤더 \"회원가입\" 링크 이동 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 메인(/) 진입\n2) 헤더 \"회원가입\" 링크 클릭","expected":"/register 페이지로 이동한다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":27,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_028","majorCategory":"회원","midCategory":"헤더진입","minorCategory":"로그인","platform":"Web","type":"기능","item":"헤더 \"로그인\" 링크 이동 검증(콜백 파라미터 포함)","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 메인(/) 진입\n2) 헤더 \"로그인\" 링크 클릭","expected":"/login?callbackUrl=%2F 경로로 이동은 되나, 500 에러(TC_MB_029)로 로그인 화면이 노출되지 않는다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":28,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_029","majorCategory":"회원","midCategory":"로그인","minorCategory":"서버에러","platform":"Web","type":"기능","item":"[확인필요][결함] 로그인 페이지 접속 시 500 에러 재현 검증","baseDoc":"-","priority":"P1","precondition":"특이 사전조건 없음","steps":"1) 로그인 직접 접속","expected":"로그인 폼이 정상 노출되어야 하나, 실제로는 \"시스템 오류가 발생했습니다\" 500 Internal Server Error 화면이 노출됨","testData":"접속 URL=/login, 응답코드=500","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":29,"system":"FO","remark":"","verifyNote":"[확인필요] 서버 컴포넌트 렌더링 에러 원인 파악 및 수정 필요 — DEF 결함 등록 대상"},{"tcId":"TC_MB_030","majorCategory":"예외·회귀","midCategory":"로그인","minorCategory":"에러화면","platform":"Web","type":"기능","item":"로그인 500 에러 화면 \"다시 시도하기\" 버튼 동작 검증","baseDoc":"-","priority":"P2","precondition":"/login 접속하여 500 에러 화면 노출 상태","steps":"1) 에러 화면의 \"다시 시도하기\" 버튼 클릭","expected":"재시도 시에도 동일하게 500 에러가 재현된다(서버 측 결함이므로 클라이언트 재시도로 해결되지 않음)","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":30,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_031","majorCategory":"회원","midCategory":"로그인","minorCategory":"에러화면","platform":"Web","type":"기능","item":"로그인 500 에러 화면 \"홈으로 이동\" 버튼 동작 검증","baseDoc":"-","priority":"P2","precondition":"/login 접속하여 500 에러 화면 노출 상태","steps":"1) 에러 화면의 \"홈으로 이동\" 버튼 클릭","expected":"메인(/) 페이지로 정상 이동한다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":31,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_032","majorCategory":"예외·회귀","midCategory":"로그인영향도","minorCategory":"파급효과","platform":"Web","type":"회귀","item":"[확인필요] 로그인 불가로 인한 회원전용 기능 접근 불가 영향도 검증","baseDoc":"-","priority":"P1","precondition":"특이 사전조건 없음","steps":"1) 위시리스트/리뷰작성/마이페이지/주문결제 등 로그인 필요 기능 각각 접근 시도","expected":"로그인 필요 안내 또는 로그인 페이지로 유도되어야 하나, 로그인 페이지 자체가 500 에러 상태라 전체 회원 전용 기능이 사실상 사용 불가함","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":32,"system":"FO","remark":"","verifyNote":"결함 수정 후 전체 회원 기능 재검증 필요"},{"tcId":"TC_MB_033","majorCategory":"회원","midCategory":"회원가입","minorCategory":"새로고침","platform":"Web","type":"기능","item":"[확인필요] 폼 입력 중 새로고침 시 입력값 초기화 여부 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입, 일부 필드 입력\n2) 브라우저 새로고침(F5)","expected":"입력값이 초기화되고 공란 폼이 노출된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":33,"system":"FO","remark":"","verifyNote":"임시 저장(draft) 기능 존재 여부 확인 필요"},{"tcId":"TC_MB_034","majorCategory":"회원","midCategory":"반응형","minorCategory":"모바일뷰","platform":"Web","type":"UI","item":"[확인필요] 회원가입/로그인 페이지 모바일 레이아웃 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 뷰포트를 375x812(모바일)로 축소\n2) 회원가입 폼 레이아웃 확인","expected":"입력 필드가 가로 스크롤 없이 세로로 재배치된다","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":34,"system":"FO","remark":"","verifyNote":"모바일 시안 기준값 없어 실측 확정 필요"},{"tcId":"TC_MB_035","majorCategory":"품질·비기능","midCategory":"회원가입","minorCategory":"콘솔에러","platform":"Web","type":"회귀","item":"회원가입 페이지 콘솔/네트워크 에러 없음 검증(로그인 페이지 대조군)","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 회원가입 진입 후 개발자도구 Console/Network 탭 확인","expected":"콘솔 에러 및 4xx/5xx 응답이 없다 (대조: /login은 TC_MB_029에서 500 에러로 실패 확인됨)","testData":"","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"기존","displayNo":35,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_036","majorCategory":"회원","midCategory":"회원","minorCategory":"GNB 상태표시","platform":"Web","type":"UI","item":"비로그인 상태 GNB \"회원가입/로그인\" 노출 검증","baseDoc":"-","priority":"P2","precondition":"비로그인(Guest) 상태","steps":"1) 메인 페이지(/) 접속\n2) GNB 우측 영역 확인","expected":"\"회원가입\", \"로그인\" 링크가 노출된다","testData":"","result":"N/T","assignee":"","issueSummary":"","issueLink":"","origin":"신규","displayNo":36,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)","verifyNote":""},{"tcId":"TC_MB_037","majorCategory":"회원","midCategory":"회원","minorCategory":"GNB 상태표시","platform":"Web","type":"UI","item":"로그인 상태 GNB \"OOO님 안녕하세요/로그아웃\" 노출 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태 (testAccounts.json의 jspark81 계정)","steps":"1) jspark81 계정으로 로그인\n2) 메인 페이지(/) GNB 우측 영역 확인","expected":"\"OOO님 안녕하세요\", \"로그아웃\" 링크가 노출되고 \"회원가입/로그인\"은 더 이상 노출되지 않는다","testData":"","result":"N/T","assignee":"","issueSummary":"","issueLink":"","origin":"신규","displayNo":37,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)","verifyNote":""},{"tcId":"TC_MB_038","majorCategory":"회원","midCategory":"회원","minorCategory":"마이페이지 접근제어","platform":"Web","type":"기능","item":"비로그인 상태 마이페이지 접근 시 로그인 페이지로 리다이렉트 검증","baseDoc":"-","priority":"P1","precondition":"비로그인(Guest) 상태","steps":"1) 마이페이지 URL 직접 접속","expected":"/login?callbackUrl=%2Fmypage 로 리다이렉트되어 로그인 페이지가 노출된다","testData":"","result":"Pass","assignee":"","issueSummary":"","issueLink":"","origin":"신규","displayNo":38,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_039","majorCategory":"회원","midCategory":"회원","minorCategory":"마이페이지 서브메뉴","platform":"Web","type":"UI","item":"로그인 상태 마이페이지 서브메뉴 노출 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태 (testAccounts.json의 jspark81 계정)","steps":"1) jspark81 계정으로 로그인\n2) 마이페이지 진입","expected":"주문내역/SNS 연결설정/위시리스트/배송주소록 관리/쿠폰/1:1 문의/리뷰 목록 서브메뉴가 노출된다","testData":"","result":"N/T","assignee":"","issueSummary":"","issueLink":"","origin":"신규","displayNo":39,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)","verifyNote":""},{"tcId":"TC_MB_040","majorCategory":"회원","midCategory":"회원","minorCategory":"마이페이지 기본정보","platform":"Web","type":"데이터","item":"로그인 상태 기본정보 노출 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태 (testAccounts.json의 jspark81 계정)","steps":"1) jspark81 계정으로 로그인\n2) 마이페이지 진입 후 기본 정보 영역 확인","expected":"이름/등급/아이디/생년월일/전화번호/이메일/이메일 수신동의/SMS 수신동의/PUSH 수신동의 항목이 실제 계정 정보와 일치하여 노출된다","testData":"jspark81 계정 프로필: 이름=박지숙, 아이디=jspark81, 이메일=jspark81@3top.co.kr","result":"N/T","assignee":"","issueSummary":"","issueLink":"","origin":"신규","displayNo":40,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)","verifyNote":""},{"tcId":"TC_MB_041","majorCategory":"구매프로세스","midCategory":"회원","minorCategory":"체크아웃 연동","platform":"Web","type":"데이터","item":"로그인 상태 체크아웃 배송정보 자동 채움 검증","baseDoc":"-","priority":"P1","precondition":"로그인 회원 상태 (jspark81 계정), 장바구니에 상품 1건 이상 담긴 상태","steps":"1) jspark81 계정으로 로그인\n2) 상품 장바구니 담기 후 장바구니 진입\n3) \"주문하기\" 클릭","expected":"체크아웃 배송정보의 이름/이메일/전화번호 필드가 마이페이지에 저장된 회원 정보로 자동 채워진다","testData":"","result":"N/T","assignee":"","issueSummary":"","issueLink":"","origin":"신규","displayNo":41,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)","verifyNote":""},{"tcId":"TC_MB_042","majorCategory":"구매프로세스","midCategory":"회원","minorCategory":"체크아웃 연동","platform":"Web","type":"데이터","item":"비로그인 상태 체크아웃 배송정보 공란 검증","baseDoc":"-","priority":"P2","precondition":"비로그인(Guest) 상태, 장바구니에 상품 1건 이상 담긴 상태","steps":"1) 비로그인 상태로 상품 장바구니 담기 후 장바구니 진입\n2) \"주문하기\" 클릭","expected":"체크아웃 배송정보의 이름/이메일/전화번호/주소 필드가 모두 공란으로 노출되어 직접 입력이 필요하다","testData":"","result":"Pass","assignee":"","issueSummary":"","issueLink":"","origin":"신규","displayNo":42,"system":"FO","remark":"","verifyNote":""},{"tcId":"TC_MB_043","majorCategory":"회원","midCategory":"회원","minorCategory":"로그아웃","platform":"Web","type":"기능","item":"로그아웃 클릭 시 GNB 비회원 상태 전환 검증","baseDoc":"-","priority":"P2","precondition":"로그인 회원 상태 (testAccounts.json의 jspark81 계정)","steps":"1) jspark81 계정으로 로그인\n2) GNB \"로그아웃\" 클릭","expected":"GNB가 즉시 \"회원가입/로그인\" 상태로 전환된다","testData":"","result":"N/T","assignee":"","issueSummary":"","issueLink":"","origin":"신규","displayNo":43,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)","verifyNote":""},{"majorCategory":"회원","midCategory":"Admin회원관리","minorCategory":"목록컬럼","platform":"Admin","type":"UI","item":"Admin 회원관리 목록 컬럼 노출 검증","baseDoc":"-","priority":"P2","precondition":"Admin 로그인 상태 (devel 계정)","steps":"1) Admin 회원관리 진입 2) \"조회\" 버튼 클릭","expected":"1) 2) 회원번호/회원명/회원상태/Login ID/Email/휴대폰번호/성별/생년월일/마지막로그인일시/비밀번호에러횟수/가입일시 컬럼과 함께 회원 목록이 노출된다","testData":"","result":"N/T","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"BO","displayNo":44,"tcId":"TC_MB_044","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)","verifyNote":""},{"majorCategory":"회원","midCategory":"Admin회원관리","minorCategory":"검색","platform":"Admin","type":"기능","item":"검색 필드(회원이름/로그인아이디/이메일/전화번호) 조회 동작 검증","baseDoc":"-","priority":"P2","precondition":"Admin 로그인 상태","steps":"1) Admin 회원관리 진입 2) 로그인아이디에 \"test1\" 입력 후 \"조회\" 클릭","expected":"1) 2) 입력한 아이디와 일치하는 회원만 목록에 노출된다","testData":"로그인아이디=test1","result":"N/T","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"BO","displayNo":45,"tcId":"TC_MB_045","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)","verifyNote":""},{"majorCategory":"예외·회귀","midCategory":"Admin회원관리","minorCategory":"데이터정합성","platform":"Admin","type":"데이터","item":"Front 회원(jspark81) Admin 회원관리 목록 노출 여부 검증","baseDoc":"-","priority":"P1","precondition":"Admin 로그인 상태, jspark81 계정은 Front에 가입되어 있음","steps":"1) Admin 회원관리 진입 2) 로그인아이디에 \"jspark81\" 입력 후 \"조회\" 클릭","expected":"1) 2) jspark81 계정(mbrId=382, 박지숙)이 목록에 정상 조회된다","testData":"로그인아이디=jspark81","result":"N/T","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"BO","displayNo":46,"tcId":"TC_MB_046","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)","verifyNote":""},{"majorCategory":"회원","midCategory":"Admin회원관리","minorCategory":"초기상태","platform":"Admin","type":"UI","item":"회원관리 진입 시(조회 전) 목록 초기 상태 검증","baseDoc":"-","priority":"P3","precondition":"Admin 로그인 상태","steps":"1) Admin 회원관리 진입 (\"조회\" 클릭 전)","expected":"목록이 비어있는 초기 상태로 노출되며, \"조회\" 버튼 클릭 전까지 데이터가 자동 조회되지 않는다","testData":"","result":"N/T","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"BO","displayNo":47,"tcId":"TC_MB_047","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)","verifyNote":""},{"majorCategory":"회원","midCategory":"회원정보","minorCategory":"Front-Admin정합성","platform":"Web","type":"데이터","item":"Admin 회원정보와 Front 마이페이지 표시값 일치 여부 검증","baseDoc":"-","priority":"P2","precondition":"jspark81 Front 로그인 상태","steps":"1) [FO] Front 마이페이지 개인정보수정(/mypage/edit)에서 회원정보(이름/전화번호/이메일 등) 확인\n2) [BO] Admin 회원관리(Admin 회원관리(/member))에서 동일 계정 조회 시도","expected":"1) 2) Front(이름=박지숙, 이메일=jspark81@3top.co.kr, 전화번호=01084131696, 생년월일=20260818)와 Admin 회원관리 조회 결과(동일 항목)가 모두 일치함을 확인","testData":"-","result":"Pass","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","remark":"2026-08-20: DEF_009 오탐 재확인 과정에서 Admin 정상 조회 확인 및 Front-Admin 필드값 일치 확인 완료","displayNo":48,"tcId":"TC_MB_048","verifyNote":""},{"majorCategory":"회원","midCategory":"회원상태관리","minorCategory":"Front-Admin정합성","platform":"Admin","type":"기능","item":"[확인필요] Admin 회원상태 변경 시 Front 로그인 차단 여부 검증","baseDoc":"-","priority":"P1","precondition":"Admin 로그인 상태, 대상 회원 계정 존재","steps":"1) [BO] Admin 회원관리에서 임의 회원의 \"회원상태\"를 정상 외 상태(휴면/탈퇴 등)로 변경\n2) [FO] 해당 계정으로 Front 로그인 시도","expected":"1) 2) 회원상태에 따라 Front 로그인이 차단되거나 안내 문구가 노출되어야 함","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","remark":"DEF_009는 오탐으로 정정됨(TC_MB_046 참고) — 본 TC는 별개 항목으로 계속 [확인필요] 유지","displayNo":49,"tcId":"TC_MB_049","verifyNote":"실제 상태 변경 및 로그인 차단 동작 미실행(운영 데이터 훼손 방지를 위해 실제 계정으로는 미실행, 테스트 계정 마련 후 재검증 필요)"},{"majorCategory":"회원","midCategory":"Admin리뷰관리","minorCategory":"목록조회","platform":"Admin","type":"UI","item":"Admin 리뷰관리 목록 및 필터(전시여부/리뷰유형/별점) 노출 검증","baseDoc":"-","priority":"P3","precondition":"Admin 로그인 상태","steps":"1) Admin 리뷰관리 진입 2) \"조회\" 버튼 클릭","expected":"1) 2) 리뷰번호/회원명/상품번호/상품명/별점/리뷰내용/전시여부/포토리뷰/등록일시 컬럼과 전시여부·리뷰유형·별점 필터가 노출된다(현재 등록된 리뷰 0건)","testData":"","result":"N/T","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"BO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)","displayNo":50,"tcId":"TC_MB_050","verifyNote":""},{"majorCategory":"회원","midCategory":"Admin라벨관리","minorCategory":"목록조회","platform":"Admin","type":"데이터","item":"Admin 라벨관리 대표 라벨 목록 노출 검증","baseDoc":"-","priority":"P2","precondition":"Admin 로그인 상태, 대표 라벨 데이터 존재","steps":"1) Admin 라벨관리 진입 2) \"조회\" 버튼 클릭","expected":"1) 2) \"사이즈가 맞아요\"/\"가성비 좋아요\"/\"좋아요\"/\"편하고 시원하네요\" 등 승인완료 상태의 대표 라벨과 매칭건수가 노출된다","testData":"","result":"N/T","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"BO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)","displayNo":51,"tcId":"TC_MB_051","verifyNote":""},{"majorCategory":"회원","midCategory":"Admin라벨관리","minorCategory":"관리기능","platform":"Admin","type":"기능","item":"Admin 라벨관리 승인/철회/유사라벨찾기/통합/삭제 버튼 노출 검증","baseDoc":"-","priority":"P3","precondition":"Admin 로그인 상태","steps":"1) Admin 라벨관리 진입","expected":"\"승인\"/\"철회\"/\"유사라벨찾기\"/\"통합\"/\"삭제\" 관리 버튼이 노출된다","testData":"","result":"N/T","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"BO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)","displayNo":52,"tcId":"TC_MB_052","verifyNote":""},{"majorCategory":"회원","midCategory":"Front-Admin정합성","minorCategory":"라벨노출","platform":"Web","type":"데이터","item":"[확인필요] Admin 대표 라벨이 Front 상품상세 리뷰 영역에 노출되는지 검증","baseDoc":"-","priority":"P3","precondition":"Admin에 승인완료 상태의 대표 라벨 존재(예: \"사이즈가 맞아요\", 매칭 23건)","steps":"1) Admin 라벨관리에서 매칭건수가 높은 라벨이 걸린 상품 확인\n2) Front 해당 상품 PDP 리뷰 영역 확인","expected":"1) 2) 해당 대표 라벨이 뱃지/태그 형태로 Front PDP에 노출되어야 함","testData":"-","result":"","assignee":"","issueSummary":"","issueLink":"","origin":"신규","system":"FO","remark":"","displayNo":53,"tcId":"TC_MB_053","verifyNote":"라벨-상품 매핑 상세 미확인, Front PDP 리뷰 영역에서 라벨 뱃지 UI 자체를 관찰하지 못함"}];
+const DEFECT_DATA = [{"defectId":"DEF_데모사이트_001","tcId":"TC_PD_084","module":"상품상세","severity":"P2","status":"신규","summary":"상품상세 > 비로그인 상태에서 위시리스트 버튼 클릭 시 로그인 페이지 자체에서 리소스 3건 404로 실패","detectedAt":"2026-08-19","source":"automation","screenshot":"TC/defects/DEF_데모사이트_001.png","assignee":"","issueLink":"","history":[{"at":"2026-08-19","status":"신규","note":"Playwright 자동 실행 중 최초 발견 (TC_PD_084)"}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) 비로그인 상태로 /products/96 진입\n2) \"위시리스트 추가\" 버튼 클릭 → /login으로 이동","actualResult":"이동된 /login 페이지에서 /forgot-password, /policy, /service 리소스 3건이 404로 실패 (콘솔/네트워크 에러 자동감지로 실패 처리됨)","expectedResult":"로그인 페이지로 정상 이동하고, 콘솔 에러/4xx·5xx 응답 없이 로그인 유도 화면이 노출되어야 함"},{"defectId":"DEF_데모사이트_002","tcId":"TC_PD_085","module":"상품상세","severity":"P2","status":"신규","summary":"상품상세 > 로그인 진행 중 로그인 페이지에서 리소스 3건 404로 실패","detectedAt":"2026-08-19","source":"automation","screenshot":"TC/defects/DEF_데모사이트_002.png","assignee":"","issueLink":"","history":[{"at":"2026-08-19","status":"신규","note":"Playwright 자동 실행 중 최초 발견 (TC_PD_085). 8/18 상품전시 테스트 관찰 시에도 동일 현상 발견된 바 있음 (그때는 결함 등록 보류)."}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) jspark81 계정으로 로그인 (로그인 페이지 진입 포함)\n2) /products/96 진입\n3) \"위시리스트 추가\" 버튼 클릭","actualResult":"로그인 과정에서 진입한 /login 페이지에서 /forgot-password, /policy, /service 리소스 3건이 404로 실패 (콘솔/네트워크 에러 자동감지로 실패 처리됨)","expectedResult":"콘솔 에러 및 4xx/5xx 응답 없이 로그인 및 위시리스트 추가가 정상 완료되어야 함"},{"defectId":"DEF_데모사이트_003","tcId":"TC_PD_028","module":"상품상세","severity":"P2","status":"신규","summary":"상품상세 > 존재하지 않는 상품ID 접근 시 404 대신 500 에러 발생","detectedAt":"2026-08-19","source":"automation","screenshot":"TC/defects/DEF_데모사이트_003.png","assignee":"","issueLink":"","history":[{"at":"2026-08-19","status":"신규","note":"Playwright 자동 실행 중 최초 발견 (TC_PD_028). /login 500 결함(DEF_데모사이트_001/002 근본 원인과 별개, 존재하지 않는 리소스 접근 시 서버 컴포넌트 렌더링 예외)과 동일한 크래시 유형."}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) /products/999999 (존재하지 않는 상품ID) 접속","actualResult":"HTTP 500 에러 발생 (Next.js Server Components render 단계에서 예외 발생)","expectedResult":"404 또는 \"상품을 찾을 수 없습니다\" 안내 화면이 노출되고 500 서버 에러가 발생하지 않아야 함"},{"defectId":"DEF_데모사이트_004","tcId":"TC_MY_005","module":"마이페이지","severity":"P1","status":"신규","summary":"마이페이지 > SNS연결설정 진입 시 카카오/네이버 OAuth 요청 CORS 실패","detectedAt":"2026-08-20","source":"observation","screenshot":"TC/defects/DEF_데모사이트_004.png","assignee":"","issueLink":"","history":[{"at":"2026-08-20","status":"신규","note":"Phase 1 재관찰(배치2, 마이페이지 서브 화면 전수 확인) 중 최초 발견"},{"at":"2026-08-21","status":"신규","note":"스크린샷 캡처 메커니즘 점검(사용자 요청) 중 실제 자동화 테스트 재실행 결과 증상이 500 에러에서 카카오/네이버 OAuth CORS 실패로 변경된 것을 확인. 데모 환경이 지속 변경되는 것으로 추정. TC_MY_005/MY.spec.js 내용을 현재 증상 기준으로 갱신"}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) jspark81 계정으로 로그인\n2) /mypage/social 진입","actualResult":"2026-08-20 최초 발견 시 500 Internal Server Error(Error Digest: 2806040409)였으나, 2026-08-21 재검증 결과 페이지 자체는 200으로 정상 렌더링됨. 다만 진입 시 카카오(kauth.kakao.com)/네이버(nid.naver.com) OAuth 인증 요청이 자동 발생하며 CORS 정책 위반으로 실패(net::ERR_FAILED, \"Failed to fetch RSC payload\")가 콘솔에 기록됨 — 콘솔 에러 자동감지 규칙에 의해 결함으로 유지","expectedResult":"SNS 연동 상태(연동/미연동) 화면이 정상 노출되어야 함"},{"defectId":"DEF_데모사이트_005","tcId":"TC_CS_005","module":"고객센터","severity":"P1","status":"신규","summary":"고객센터 > 개인정보처리방침(/policy) 접근 시 404 에러 발생","detectedAt":"2026-08-20","source":"observation","screenshot":"TC/defects/DEF_데모사이트_005.png","assignee":"","issueLink":"","history":[{"at":"2026-08-20","status":"신규","note":"Phase 1 재관찰(배치2, 고객센터/정책 화면 전수 확인) 중 최초 발견. 기존 DEF_데모사이트_001/002에서도 /login 페이지 프리페치 리소스로 /policy 404가 부수적으로 관측된 바 있음 — 동일 원인으로 추정"}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) 푸터 \"개인정보처리방침\" 링크 클릭 또는 /policy 직접 접속","actualResult":"\"404 - 페이지를 찾을 수 없습니다\" 화면 노출","expectedResult":"개인정보처리방침 전문이 노출되어야 함"},{"defectId":"DEF_데모사이트_006","tcId":"TC_CS_006","module":"고객센터","severity":"P1","status":"신규","summary":"고객센터 > 이용약관(/service) 접근 시 404 에러 발생","detectedAt":"2026-08-20","source":"observation","screenshot":"TC/defects/DEF_데모사이트_006.png","assignee":"","issueLink":"","history":[{"at":"2026-08-20","status":"신규","note":"Phase 1 재관찰(배치2, 고객센터/정책 화면 전수 확인) 중 최초 발견. DEF_데모사이트_005와 동일 패턴(푸터 링크 목적지 미구현)"}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) 푸터 \"이용약관\" 링크 클릭 또는 /service 직접 접속","actualResult":"\"404 - 페이지를 찾을 수 없습니다\" 화면 노출","expectedResult":"이용약관 전문이 노출되어야 함"},{"defectId":"DEF_데모사이트_007","tcId":"TC_PR_006","module":"이벤트","severity":"P2","status":"신규","summary":"사이트 전반 > 프로토콜 누락된 배너/링크(www.naver.com 등)가 내부 경로로 오인식되어 다수 화면에서 404 발생","detectedAt":"2026-08-20","source":"observation","screenshot":"TC/defects/DEF_데모사이트_007.png","assignee":"","issueLink":"","history":[{"at":"2026-08-19","status":"신규","note":"legacy DSP 관측 시 최초 발견(당시 [확인필요] 상태로 TC_PD_089~091에 기록)"},{"at":"2026-08-20","status":"신규","note":"PR 모듈 재분류(TC_PR_006~008) 및 대체 경로 전수 확인 후 정식 결함으로 등록. 이벤트 페이지 자체 부재로 결론"},{"at":"2026-08-21","status":"신규","note":"Phase 5 전체 재실행 중 영향 범위가 사이트 전역(카테고리/브랜드관/푸터/GNB 등)임을 확인, 범위 갱신"}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) 메인(/) 진입\n2) 배너 1~3번 각각의 \"상세보기\" 버튼 클릭\n3) /event, /events, /promotion, /campaign, /coupon, /coupon-event 직접 접속 시도","actualResult":"배너 3종(\"99% 쿠폰 드로우\"/\"지금 사야 입어요\"/\"라이프 블프\")의 \"상세보기\" CTA href가 각각 www.naver.com!, www.3top.co.kr, www.google.com(프로토콜 없음)으로 설정되어 사이트 내부 상대경로로 오인식되어 3건 모두 404 발생. 대체 목적지 경로(/event, /events, /promotion, /campaign, /coupon, /coupon-event) 6종도 전수 확인했으나 모두 404 — 2026-08-21 Phase 5 전체 재실행 중 동일 원인(href 프로토콜 누락)이 메인배너 외에도 카테고리 하이라이트 배너(TC_PD_092~094), 브랜드관 히어로 CTA(TC_PD_104/105), 입점 브랜드 링크(TC_PD_102), 푸터(TC_PD_120), 비로그인/로그인 GNB(TC_MB_036/043, TC_MY_013) 등 사이트 전반의 공유 배너/푸터 컴포넌트에서 광범위하게 발생함을 확인 — 메인 페이지 국한 이슈가 아니라 사이트 전역 영향.","expectedResult":"각 배너에 대응하는 이벤트/기획전 상세 페이지로 정상 이동해야 함"},{"defectId":"DEF_데모사이트_008","tcId":"TC_MY_026","module":"마이페이지","severity":"P1","status":"완료","summary":"마이페이지 > [오탐 종결] 참조했던 주문이 봇 계정 소유로 확인되어 결함 아님","detectedAt":"2026-08-20","source":"observation","screenshot":"","assignee":"","issueLink":"","history":[{"at":"2026-08-20","status":"신규","note":"Front-Admin 데이터 정합성 재검토(배치5) 중 발견 — 조회기간 필터를 \"전체\"로 명시 선택 후 재조회해도 동일 현상 재현 확인"},{"at":"2026-08-20","status":"완료","note":"사용자 요청으로 근본 원인 재조사 — Admin 주문 상세(GET /api/v1.0/order/O260820790055) 조회 결과 mbrId=\"406\", mbrName=\"봇_186324\"로 확인됨(jspark81의 mbrId는 382). 해당 일자 생성된 주문 4건 전부 봇 계정(378/379/406/407) 소유로 jspark81 명의 주문은 존재하지 않음. Front 표시가 정확했던 것으로 결론, 오탐으로 종결"}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180 (Front) / http://192.168.10.116:30280 (Admin)","testSteps":"1) jspark81 Front 로그인 후 /mypage/order 진입\n2) 조회기간 \"전체\" 선택 후 \"조회\" 클릭\n3) Admin devel 로그인 후 /order/list에서 동일 계정 주문 확인","actualResult":"Front: \"최근 주문 내역이 없습니다\" / Admin: 주문번호 O260820790055 1건 정상 조회됨(단, 해당 주문은 jspark81이 아닌 봇 계정 소유로 확인됨)","expectedResult":"(오탐) 애초에 비교 대상 주문이 jspark81 소유가 아니었으므로 이 결함 자체가 성립하지 않음"},{"defectId":"DEF_데모사이트_009","tcId":"TC_MB_046","module":"회원","severity":"P1","status":"완료","summary":"회원 > [오탐 종결] 검색 필드 오류로 인한 오판, 로그인아이디 필드로는 정상 조회됨","detectedAt":"2026-08-20","source":"observation","screenshot":"","assignee":"","issueLink":"","history":[{"at":"2026-08-20","status":"신규","note":"배치3에서 [확인필요]로 최초 발견(TC_MB_046). Front-Admin 데이터 정합성 재검토(배치5) 중 정식 결함으로 승격 — DEF_데모사이트_008(주문내역 미동기화)과 함께 Front/Admin 데이터베이스 분리 가능성을 시사하는 연관 결함으로 판단"},{"at":"2026-08-20","status":"완료","note":"사용자 요청으로 근본 원인 재조사 — 실제 API 호출(GET /api/v1.0/member?mbrName=jspark81)을 확인한 결과 \"회원이름\"(mbrName) 필드에 로그인아이디 값이 입력되어 0건이 나온 것으로 확인(jspark81은 로그인아이디이지 실제 이름이 아님, 실제 이름은 \"박지숙\"). \"로그인아이디\" 필드(GET /api/v1.0/member?loginId=jspark81)로 재검색 시 mbrId=382 레코드가 정상 조회되며 Front 로그인 응답과 완전히 일치. 오탐으로 종결"}],"testEnv":"Chromium (Playwright), http://192.168.10.116:30180 (Front) / http://192.168.10.116:30280 (Admin)","testSteps":"1) jspark81 Front 로그인 확인(정상 동작)\n2) Admin devel 로그인 후 /member 진입\n3) 로그인아이디에 \"jspark81\" 입력 후 \"조회\" 클릭","actualResult":"(최초 오탐) 회원이름 필드에 잘못 입력하여 0건 / (재검증) 로그인아이디 필드로 정확히 검색 시 mbrId=382 정상 조회","expectedResult":"(오탐) 애초에 잘못된 필드로 검색했던 테스트 오류였으므로 이 결함 자체가 성립하지 않음"},{"defectId":"DEF_데모사이트_010","tcId":"TC_PD_106","module":"상품전시","severity":"P2","status":"신규","summary":"상품전시 > SALE(hot-deal) 페이지 접속 시 500 에러 발생","testEnv":"Chromium (Playwright), http://192.168.10.116:30180","testSteps":"1) /display/hot-deal 직접 접속","actualResult":"HTTP 500 Internal Server Error 발생 (Empty State 안내 화면 대신 서버 에러)","expectedResult":"등록된 콘텐츠가 없으면 \"등록된 컨텐츠가 없습니다\" 같은 Empty State가 노출되어야 하며 500 에러가 발생하지 않아야 함","detectedAt":"2026-08-21","source":"automation","screenshot":"TC/defects/DEF_데모사이트_010.png","assignee":"","issueLink":"","history":[{"at":"2026-08-21","status":"신규","note":"Phase 5 전체 재실행 중 자동화 테스트(TC_PD_106)에서 발견"}]},{"defectId":"DEF_데모사이트_011","tcId":"-","module":"시스템(공통)","severity":"P1","status":"신규","summary":"시스템 > Admin 로그인 시 브라우저 언어가 한국어(ko-KR)면 로그인 API가 500 에러로 실패","testEnv":"Chromium (Playwright, locale=ko-KR), http://192.168.10.116:30280","testSteps":"1) 브라우저 locale을 ko-KR로 설정한 상태로 Admin /login 접속\n2) devel 계정으로 로그인 시도","actualResult":"POST /api/v1.0/login 요청이 매번 HTTP 500을 반환 (응답 본문: {\"message\":\"org.mybatis.spring.MyBatisSystemException\",\"status\":500}). locale을 영어(en-US 등)로 바꾸면 정상 로그인됨(200) — 서버가 Accept-Language 헤더가 한국어일 때 처리하는 로직(MyBatis 쿼리 매핑)에서 예외 발생하는 것으로 추정. 실제 한국어 사용 환경의 관리자는 사실상 Admin에 로그인할 수 없는 상태.","expectedResult":"브라우저 언어 설정과 무관하게 로그인 API가 정상 동작해야 함","detectedAt":"2026-08-21","source":"observation","screenshot":"TC/defects/DEF_데모사이트_011.png","assignee":"","issueLink":"","history":[{"at":"2026-08-21","status":"신규","note":"Phase 5 전체 재실행 중 Admin 의존 TC 약 58건이 원인 불명으로 대량 실패하는 것을 발견, 근본 원인 조사 끝에 로케일 의존 서버 500 에러로 확인. 자동화 코드/재시도 로직 문제가 아님을 확인(수동 재현으로 검증)"}]}];
+const DEFECT_TAB = '🐞 결함현황';
+let currentTab = '전체';
+let filterState = { keyword: '', priority: '', type: '', origin: '' };
+let defectFilterStatus = '전체';
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// 검색어를 하이라이트(배경 마킹) 처리. esc() 이후 텍스트에 <mark>를 삽입.
+function hl(s, kw) {
+  const escaped = esc(s);
+  if (!kw) return escaped;
+  const idx = escaped.toLowerCase().indexOf(kw.toLowerCase());
+  if (idx === -1) return escaped;
+  return escaped.slice(0, idx) + '<mark>' + escaped.slice(idx, idx + kw.length) + '</mark>' + escaped.slice(idx + kw.length);
+}
+
+// 기대결과 셀: verifyNote가 있으면 RED 폰트로 "[확인필요-...]" 를 결과 위에 표시
+function expectedCell(t) {
+  if (!t.verifyNote) return esc(t.expected);
+  return `<div class="verify-note">[확인필요-${esc(t.verifyNote)}]</div>${esc(t.expected)}`;
+}
+
+// "비"+검색어(예: 검색어="회원" → "비회원")로 매칭된 항목은 일반 매칭보다 후순위로 정렬.
+// 하나의 항목(tcId+item)에 일반 매칭이 하나라도 있으면 우선순위로 취급.
+function isSecondaryMatch(t, kw) {
+  const text = (t.tcId + ' ' + t.item).toLowerCase();
+  const k = kw.toLowerCase();
+  let idx = text.indexOf(k);
+  let hasPrimary = false, hasSecondary = false;
+  while (idx !== -1) {
+    if (idx > 0 && text[idx - 1] === '비') hasSecondary = true;
+    else hasPrimary = true;
+    idx = text.indexOf(k, idx + 1);
+  }
+  return hasSecondary && !hasPrimary;
+}
+
+function setupFilterBar() {
+  const prioritySel = document.getElementById('filterPriority');
+  const typeSel = document.getElementById('filterType');
+  const originSel = document.getElementById('filterOrigin');
+  [...new Set(TC_DATA.map(t => t.priority))].sort().forEach(v => {
+    prioritySel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`);
+  });
+  [...new Set(TC_DATA.map(t => t.type))].sort().forEach(v => {
+    typeSel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`);
+  });
+  [...new Set(TC_DATA.map(t => t.origin))].forEach(v => {
+    originSel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`);
+  });
+
+  document.getElementById('searchInput').addEventListener('input', (e) => { filterState.keyword = e.target.value.trim().toLowerCase(); render(); });
+  prioritySel.addEventListener('change', (e) => { filterState.priority = e.target.value; render(); });
+  typeSel.addEventListener('change', (e) => { filterState.type = e.target.value; render(); });
+  originSel.addEventListener('change', (e) => { filterState.origin = e.target.value; render(); });
+  document.getElementById('btnResetFilter').addEventListener('click', () => {
+    filterState = { keyword: '', priority: '', type: '', origin: '' };
+    document.getElementById('searchInput').value = '';
+    prioritySel.value = ''; typeSel.value = ''; originSel.value = '';
+    render();
+  });
+}
+
+function render() {
+  const tabsEl = document.getElementById('tabs');
+  const subs = ['전체', ...new Set(TC_DATA.map(t => t.midCategory)), DEFECT_TAB];
+  tabsEl.innerHTML = subs.map(s => `<button class="tab-btn ${s===currentTab?'active':''} ${s===DEFECT_TAB?'tab-defect':''}" data-tab="${esc(s)}">${esc(s)}</button>`).join('');
+  tabsEl.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => { currentTab = b.dataset.tab; render(); });
+
+  const defectMode = currentTab === DEFECT_TAB;
+  ['statsWrapBlock', 'kpis', 'filterBarBlock', 'toolbarBlock', 'tcTableWrap'].forEach(id => {
+    document.getElementById(id).style.display = defectMode ? 'none' : '';
+  });
+  document.getElementById('defectPanel').style.display = defectMode ? '' : 'none';
+  if (defectMode) { renderDefects(); return; }
+
+  let filtered = currentTab === '전체' ? TC_DATA : TC_DATA.filter(t => t.midCategory === currentTab);
+  if (filterState.keyword) {
+    const kw = filterState.keyword;
+    filtered = filtered.filter(t => (t.tcId + ' ' + t.item).toLowerCase().includes(kw));
+    // "비"+검색어 매칭은 후순위 정렬 (예: 검색어 "회원" → "비회원" 항목은 뒤로)
+    filtered = [...filtered].sort((a, b) => isSecondaryMatch(a, kw) - isSecondaryMatch(b, kw));
+  }
+  if (filterState.priority) filtered = filtered.filter(t => t.priority === filterState.priority);
+  if (filterState.type) filtered = filtered.filter(t => t.type === filterState.type);
+  if (filterState.origin) filtered = filtered.filter(t => t.origin === filterState.origin);
+  document.getElementById('filteredCount').textContent = `${filtered.length}건 표시 중 (전체 ${TC_DATA.length}건)`;
+
+  document.getElementById('kpiTotal').textContent = TC_DATA.length;
+  document.getElementById('kpiP1').textContent = TC_DATA.filter(t => t.priority === 'P1').length;
+  document.getElementById('kpiP2').textContent = TC_DATA.filter(t => t.priority === 'P2').length;
+  document.getElementById('kpiP3').textContent = TC_DATA.filter(t => t.priority === 'P3').length;
+
+  const statsBody = document.getElementById('statsBody');
+  const mods = [...new Set(TC_DATA.map(t => t.midCategory))];
+  statsBody.innerHTML = mods.map(m => {
+    const items = TC_DATA.filter(t => t.midCategory === m);
+    const total = items.length;
+    const pass = items.filter(t => t.result === 'Pass').length;
+    const fail = items.filter(t => t.result === 'Fail').length;
+    const blocked = items.filter(t => t.result === 'Blocked').length;
+    const na = items.filter(t => t.result === 'N/A').length;
+    const nt = items.filter(t => t.result === 'N/T').length;
+    const none = items.filter(t => !t.result).length;
+    const executed = total - none;
+    const rate = total ? ((executed/total)*100).toFixed(0) : 0;
+    const passRate = executed ? ((pass/executed)*100).toFixed(0) : 0;
+    const failRate = executed ? ((fail/executed)*100).toFixed(0) : 0;
+    return `<tr><td class="modname">${m}</td><td>${total}</td><td>${pass}</td><td>${fail}</td><td>${blocked}</td><td>${na}</td><td>${nt}</td><td>${none}</td><td>${rate}%</td><td>${passRate}%</td><td>${failRate}%</td></tr>`;
+  }).join('') + (() => {
+    const total = TC_DATA.length;
+    const pass = TC_DATA.filter(t => t.result === 'Pass').length;
+    const fail = TC_DATA.filter(t => t.result === 'Fail').length;
+    const blocked = TC_DATA.filter(t => t.result === 'Blocked').length;
+    const na = TC_DATA.filter(t => t.result === 'N/A').length;
+    const nt = TC_DATA.filter(t => t.result === 'N/T').length;
+    const none = TC_DATA.filter(t => !t.result).length;
+    const executed = total - none;
+    const rate = total ? ((executed/total)*100).toFixed(0) : 0;
+    const passRate = executed ? ((pass/executed)*100).toFixed(0) : 0;
+    const failRate = executed ? ((fail/executed)*100).toFixed(0) : 0;
+    return `<tr class="stats-total"><td class="modname">합계</td><td>${total}</td><td>${pass}</td><td>${fail}</td><td>${blocked}</td><td>${na}</td><td>${nt}</td><td>${none}</td><td>${rate}%</td><td>${passRate}%</td><td>${failRate}%</td></tr>`;
+  })();
+
+  const tbody = document.getElementById('tcBody');
+  const kw = filterState.keyword;
+  tbody.innerHTML = filtered.map(t => `
+    <tr data-id="${esc(t.tcId)}">
+      <td class="center">${esc(t.displayNo)}</td>
+      <td>${hl(t.tcId, kw)}</td>
+      <td class="center"><span class="badge ${t.system==='BO'?'P1':'P3'}">${esc(t.system||'FO')}</span></td>
+      <td>${esc(t.majorCategory)}</td>
+      <td>${esc(t.midCategory)}</td>
+      <td>${esc(t.minorCategory||'')}</td>
+      <td class="center">${esc(t.platform)}</td>
+      <td class="center">${esc(t.type)}</td>
+      <td>${hl(t.item, kw)}</td>
+      <td>${esc(t.baseDoc||'-')}</td>
+      <td class="center"><span class="badge ${esc(t.priority)}">${esc(t.priority)}</span></td>
+      <td>${esc(t.testData||'')}</td>
+      <td>${esc(t.precondition === '특이 사전조건 없음' ? '' : t.precondition)}</td>
+      <td>${esc(t.steps)}</td>
+      <td>${expectedCell(t)}</td>
+      <td>${resultSelect(t)}</td>
+      <td><input class="free-input assignee" value="${esc(t.assignee||'')}"></td>
+      <td>${esc(t.issueSummary||'')}</td>
+      <td><input class="free-input issuelink" value="${esc(t.issueLink||'')}"></td>
+      <td><input class="free-input remark" value="${esc(t.remark||'')}"></td>
+    </tr>
+  `).join('');
+  tbody.querySelectorAll('input.remark').forEach(inp => inp.onchange = () => { TC_DATA.find(t=>t.tcId===inp.closest('tr').dataset.id).remark = inp.value; });
+
+  tbody.querySelectorAll('select.result-select').forEach(sel => {
+    sel.onchange = () => {
+      const tcId = sel.closest('tr').dataset.id;
+      const item = TC_DATA.find(t => t.tcId === tcId);
+      item.result = sel.value;
+      sel.dataset.val = sel.value;
+      render();
+    };
+  });
+  tbody.querySelectorAll('input.assignee').forEach(inp => inp.onchange = () => { TC_DATA.find(t=>t.tcId===inp.closest('tr').dataset.id).assignee = inp.value; });
+  tbody.querySelectorAll('input.issuelink').forEach(inp => inp.onchange = () => { TC_DATA.find(t=>t.tcId===inp.closest('tr').dataset.id).issueLink = inp.value; });
+}
+
+function resultSelect(t) {
+  const opts = ['', 'Pass', 'Fail', 'Blocked', 'N/A', 'N/T'];
+  return `<select class="result-select" data-val="${t.result||''}">${opts.map(o => `<option value="${o}" ${t.result===o?'selected':''}>${o||'미실행'}</option>`).join('')}</select>`;
+}
+
+function handleThumbError(img) {
+  img.outerHTML = '<span style="color:var(--muted);font-size:11px;">스크린샷 없음</span>';
+}
+
+function defectDetailCell(def) {
+  const sections = [];
+  if (def.testEnv) sections.push(['환경', def.testEnv]);
+  if (def.testSteps) sections.push(['절차', def.testSteps]);
+  if (def.actualResult) sections.push(['실제결과', def.actualResult]);
+  if (def.expectedResult) sections.push(['기대결과', def.expectedResult]);
+  return sections.map(([label, text]) =>
+    `<div class="defect-section"><span class="defect-section-label">[${esc(label)}]</span><div class="defect-section-body">${esc(text)}</div></div>`
+  ).join('');
+}
+
+function defectStatusSelect(def) {
+  const opts = ['신규', '처리중', '재검증대기', '완료', '보류', '재발생'];
+  return `<select class="defect-status-select" data-val="${esc(def.status)}">${opts.map(o => `<option value="${o}" ${def.status===o?'selected':''}>${o}</option>`).join('')}</select>`;
+}
+
+function renderDefects() {
+  const total = DEFECT_DATA.length;
+  const byStatus = s => DEFECT_DATA.filter(d => d.status === s).length;
+  document.getElementById('defKpiTotal').textContent = total;
+  document.getElementById('defKpiNew').textContent = byStatus('신규');
+  document.getElementById('defKpiProgress').textContent = byStatus('처리중');
+  document.getElementById('defKpiDone').textContent = byStatus('완료');
+
+  const pillsEl = document.getElementById('defectFilterPills');
+  const statuses = ['전체', '신규', '처리중', '재검증대기', '완료', '보류', '재발생'];
+  pillsEl.innerHTML = statuses.map(s => `<button class="tab-btn ${s===defectFilterStatus?'active':''}" data-status="${esc(s)}">${esc(s)} (${s==='전체'?total:byStatus(s)})</button>`).join('');
+  pillsEl.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => { defectFilterStatus = b.dataset.status; renderDefects(); });
+
+  const filtered = defectFilterStatus === '전체' ? DEFECT_DATA : DEFECT_DATA.filter(d => d.status === defectFilterStatus);
+  document.getElementById('defectFilteredCount').textContent = `${filtered.length}건 표시 중 (전체 ${total}건)`;
+
+  const tbody = document.getElementById('defectBody');
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px;">등록된 결함이 없습니다.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.map(def => `
+    <tr data-defid="${esc(def.defectId)}">
+      <td>${esc(def.defectId)}</td>
+      <td class="center">${esc(def.module)}</td>
+      <td class="center"><span class="badge ${esc(def.severity)}">${esc(def.severity)}</span></td>
+      <td>${defectStatusSelect(def)}</td>
+      <td>${esc(def.summary)}</td>
+      <td>${defectDetailCell(def)}</td>
+      <td>${def.screenshot ? `<img class="def-thumb" src="defects/${esc(def.defectId)}.png" alt="${esc(def.defectId)} 스크린샷" onerror="handleThumbError(this)">` : '<span style="color:var(--muted);font-size:11px;">-</span>'}</td>
+      <td class="center">${esc(def.detectedAt||'')}</td>
+      <td><a href="#" class="defect-tc-link" data-tcid="${esc(def.tcId)}">${esc(def.tcId)}</a></td>
+      <td><input class="free-input def-issuelink" value="${esc(def.issueLink||'')}"></td>
+    </tr>
+  `).join('');
+
+  tbody.querySelectorAll('select.defect-status-select').forEach(sel => {
+    sel.onclick = (e) => e.stopPropagation();
+    sel.onchange = (e) => {
+      e.stopPropagation();
+      const id = sel.closest('tr').dataset.defid;
+      DEFECT_DATA.find(dd => dd.defectId === id).status = sel.value;
+      renderDefects();
+    };
+  });
+  tbody.querySelectorAll('input.def-issuelink').forEach(inp => {
+    inp.onclick = (e) => e.stopPropagation();
+    inp.onchange = (e) => { e.stopPropagation(); DEFECT_DATA.find(dd => dd.defectId === inp.closest('tr').dataset.defid).issueLink = inp.value; };
+  });
+  tbody.querySelectorAll('a.defect-tc-link').forEach(a => {
+    a.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const tcId = a.dataset.tcid;
+      const tc = TC_DATA.find(t => t.tcId === tcId);
+      if (!tc) { alert(tcId + ' 항목을 TC 목록에서 찾을 수 없습니다.'); return; }
+      currentTab = tc.midCategory;
+      filterState.keyword = tcId.toLowerCase();
+      render();
+      document.getElementById('searchInput').value = tcId;
+      setTimeout(() => {
+        const row = document.querySelector('#tcBody tr[data-id="' + tcId + '"]');
+        if (row) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    };
+  });
+  tbody.querySelectorAll('tr[data-defid]').forEach(tr => {
+    tr.onclick = () => {
+      const def = DEFECT_DATA.find(dd => dd.defectId === tr.dataset.defid);
+      openDefectModal(def);
+    };
+  });
+}
+
+function openDefectModal(def) {
+  document.getElementById('defectModalTitle').textContent = `${def.defectId} — ${def.tcId}`;
+  document.getElementById('defectModalSummary').textContent = def.summary;
+  const img = document.getElementById('defectModalImg');
+  img.style.display = '';
+  document.getElementById('defectModalImgMissing').style.display = 'none';
+  img.src = 'defects/' + def.defectId + '.png';
+  document.getElementById('defectModalHistory').innerHTML = (def.history || []).map(h => `<li>[${esc(h.at)}] ${esc(h.status)} — ${esc(h.note)}</li>`).join('');
+  document.getElementById('defectModalOverlay').classList.add('open');
+}
+
+document.getElementById('btnTheme').onclick = () => {
+  const html = document.documentElement;
+  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+};
+
+document.getElementById('statsToggle').onclick = () => {
+  const wrap = document.getElementById('statsTableWrap');
+  const icon = document.getElementById('statsToggleIcon');
+  const open = wrap.style.display !== 'none';
+  wrap.style.display = open ? 'none' : '';
+  icon.textContent = open ? '▶' : '▼';
+};
+
+document.getElementById('btnAccMatrix').onclick = () => document.getElementById('accModalOverlay').classList.add('open');
+document.getElementById('btnFlowMap').onclick = () => document.getElementById('flowModalOverlay').classList.add('open');
+document.querySelectorAll('.modal-close').forEach(btn => btn.onclick = (e) => e.target.closest('.modal-overlay').classList.remove('open'));
+document.querySelectorAll('.modal-overlay').forEach(ov => ov.onclick = (e) => { if (e.target === ov) ov.classList.remove('open'); });
+
+function buildSummaryRows() {
+  const mods = [...new Set(TC_DATA.map(t => t.midCategory))];
+  return mods.map(m => {
+    const items = TC_DATA.filter(t => t.midCategory === m);
+    const total = items.length;
+    const pass = items.filter(t => t.result === 'Pass').length;
+    const fail = items.filter(t => t.result === 'Fail').length;
+    const blocked = items.filter(t => t.result === 'Blocked').length;
+    const na = items.filter(t => t.result === 'N/A').length;
+    const nt = items.filter(t => t.result === 'N/T').length;
+    const none = items.filter(t => !t.result).length;
+    const executed = total - none;
+    return {
+      '소분류': m, '전체': total, 'Pass': pass, 'Fail': fail, 'Blocked': blocked, 'N/A': na, 'N/T': nt, '미실행': none,
+      '수행율': total ? Math.round((executed/total)*100)+'%' : '0%',
+      'Pass율': executed ? Math.round((pass/executed)*100)+'%' : '0%',
+      'Fail율': executed ? Math.round((fail/executed)*100)+'%' : '0%',
+    };
+  });
+}
+
+document.getElementById('btnXlsx').onclick = () => {
+  const wb = XLSX.utils.book_new();
+
+  const summarySheet = XLSX.utils.json_to_sheet(buildSummaryRows());
+  XLSX.utils.book_append_sheet(wb, summarySheet, 'Summary');
+
+  const tcRows = TC_DATA.map(t => ({
+    'No.': t.displayNo, 'TC ID': t.tcId, 'system': t.system, '대분류': t.majorCategory, '중분류': t.midCategory,
+    '소분류': t.minorCategory, '플랫폼': t.platform, '유형': t.type, '테스트 항목': t.item, '기준문서': t.baseDoc,
+    '우선순위': t.priority, '테스트 데이터': t.testData, '사전조건': t.precondition, '테스트 수행 절차': t.steps,
+    '기대 결과': t.expected, '실행결과': t.result, '담당자': t.assignee, '이슈내용': t.issueSummary,
+    '이슈링크': t.issueLink, '비고': t.remark,
+  }));
+  const tcSheet = XLSX.utils.json_to_sheet(tcRows);
+  XLSX.utils.book_append_sheet(wb, tcSheet, 'TC');
+
+  const defectRows = DEFECT_DATA.map(d => ({
+    '결함ID': d.defectId, '모듈': d.module, '심각도': d.severity, '상태': d.status, '요약': d.summary,
+    '환경': d.testEnv, '절차': d.testSteps, '실제결과': d.actualResult, '기대결과': d.expectedResult,
+    '발견일': d.detectedAt, '관련TC': d.tcId, '이슈링크': d.issueLink,
+  }));
+  const defectSheet = XLSX.utils.json_to_sheet(defectRows);
+  XLSX.utils.book_append_sheet(wb, defectSheet, 'Defect');
+
+  XLSX.writeFile(wb, '데모사이트_TC_MB.xlsx');
+};
+
+const FS_ACCESS_SUPPORTED = 'showOpenFilePicker' in window;
+let tcFileHandle = null;
+let defectFileHandle = null;
+const JSON_PICKER_OPTS = { types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }] };
+
+async function writeToHandle(handle, content) {
+  const writable = await handle.createWritable();
+  await writable.write(content);
+  await writable.close();
+}
+
+function downloadJson(content, filename) {
+  const blob = new Blob([content], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+
+function applyLoadedTcItems(items) {
+  let n = 0;
+  items.forEach(li => {
+    const t = TC_DATA.find(x => x.tcId === li.tcId);
+    if (t) { t.result = li.result; t.assignee = li.assignee; t.issueSummary = li.issueSummary; t.issueLink = li.issueLink; t.remark = li.remark; n++; }
+  });
+  render();
+  return n;
+}
+
+document.getElementById('btnJsonSave').onclick = async () => {
+  const out = { meta: { project: '데모사이트', module: 'MB', moduleName: '회원', version: 10 }, items: TC_DATA };
+  const content = JSON.stringify(out, null, 2);
+  if (tcFileHandle) {
+    try { await writeToHandle(tcFileHandle, content); alert('저장 완료: ' + tcFileHandle.name); return; }
+    catch (err) { alert('직접 저장 실패, 다운로드로 대체합니다: ' + err.message); }
+  }
+  downloadJson(content, '데모사이트_TC_MB.json');
+};
+
+document.getElementById('btnJsonLoad').onclick = async () => {
+  if (!FS_ACCESS_SUPPORTED) { document.getElementById('jsonFileInput').click(); return; }
+  try {
+    const [handle] = await window.showOpenFilePicker(JSON_PICKER_OPTS);
+    const perm = await handle.requestPermission({ mode: 'readwrite' });
+    const file = await handle.getFile();
+    const loaded = JSON.parse(await file.text());
+    const n = applyLoadedTcItems(loaded.items || loaded);
+    if (perm === 'granted') {
+      tcFileHandle = handle;
+      document.getElementById('tcFileStatus').textContent = '🔗 연결됨: ' + handle.name;
+      alert('연결 완료 (' + handle.name + ') · ' + n + '건 불러옴 — 이제 "JSON 저장" 클릭 시 이 파일에 바로 저장됩니다.');
+    } else {
+      alert('읽기 전용으로 ' + n + '건 불러왔습니다 (쓰기 권한 거부 — 저장은 다운로드로 대체됩니다).');
+    }
+  } catch (err) {
+    if (err.name !== 'AbortError') alert('파일 연결/불러오기 실패: ' + err.message);
+  }
+};
+document.getElementById('jsonFileInput').onchange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const loaded = JSON.parse(reader.result);
+      const n = applyLoadedTcItems(loaded.items || loaded);
+      alert(n + '건 불러옴 (이 브라우저는 직접 저장을 지원하지 않아 저장은 다운로드로 진행됩니다)');
+    } catch (err) { alert('JSON 파싱 실패: ' + err.message); }
+  };
+  reader.readAsText(file);
+};
+
+document.getElementById('btnDefectSave').onclick = async () => {
+  const content = JSON.stringify(DEFECT_DATA, null, 2);
+  if (defectFileHandle) {
+    try { await writeToHandle(defectFileHandle, content); alert('저장 완료: ' + defectFileHandle.name); return; }
+    catch (err) { alert('직접 저장 실패, 다운로드로 대체합니다: ' + err.message); }
+  }
+  downloadJson(content, 'defects.json');
+};
+
+document.getElementById('btnDefectFileConnect').onclick = async () => {
+  if (!FS_ACCESS_SUPPORTED) { alert('이 브라우저는 파일 직접 연결을 지원하지 않습니다 (Chrome/Edge 최신 버전 권장). 저장은 다운로드로 진행됩니다.'); return; }
+  try {
+    const [handle] = await window.showOpenFilePicker(JSON_PICKER_OPTS);
+    const perm = await handle.requestPermission({ mode: 'readwrite' });
+    const file = await handle.getFile();
+    const loaded = JSON.parse(await file.text());
+    DEFECT_DATA.length = 0;
+    DEFECT_DATA.push(...loaded);
+    renderDefects();
+    if (perm === 'granted') {
+      defectFileHandle = handle;
+      document.getElementById('defectFileStatus').textContent = '🔗 연결됨: ' + handle.name;
+      alert('연결 완료 (' + handle.name + ') · ' + loaded.length + '건 불러옴 — 이제 "결함 저장" 클릭 시 이 파일에 바로 저장됩니다.');
+    } else {
+      alert('읽기 전용으로 ' + loaded.length + '건 불러왔습니다 (쓰기 권한 거부 — 저장은 다운로드로 대체됩니다).');
+    }
+  } catch (err) {
+    if (err.name !== 'AbortError') alert('파일 연결/불러오기 실패: ' + err.message);
+  }
+};
+
+function updateStickyOffset() {
+  const header = document.querySelector('header');
+  document.documentElement.style.setProperty('--sticky-top', header.offsetHeight + 'px');
+}
+window.addEventListener('resize', updateStickyOffset);
+updateStickyOffset();
+setupFilterBar();
+render();
+</script>
+</body>
+</html>
