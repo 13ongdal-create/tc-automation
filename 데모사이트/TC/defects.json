@@ -287,5 +287,55 @@
         "note": "Phase 5 전체 재실행 중 Admin 의존 TC 약 58건이 원인 불명으로 대량 실패하는 것을 발견, 근본 원인 조사 끝에 로케일 의존 서버 500 에러로 확인. 자동화 코드/재시도 로직 문제가 아님을 확인(수동 재현으로 검증)"
       }
     ]
+  },
+  {
+    "defectId": "DEF_데모사이트_012",
+    "tcId": "TC_PD_058",
+    "module": "상품전시",
+    "severity": "P2",
+    "status": "신규",
+    "summary": "상품전시 > 가격 정렬(낮은가격순/높은가격순) 적용해도 상품 노출 순서가 실제로 정렬되지 않음",
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) 여성 카테고리(/categories/111) 진입\n2) 정렬 드롭다운에서 \"낮은가격순\" 선택(또는 ?sort=lowPrice로 직접 진입)\n3) 노출된 상품 가격 목록 확인",
+    "actualResult": "드롭다운 선택 시 URL은 ?sort=lowPrice(또는 highPrice)로 정상 변경되나, 실제 상품 카드의 가격 노출 순서는 정렬되지 않은 상태 그대로 유지됨(예: 낮은가격순 선택 후에도 49000→44000→42900→48000 순으로 비정렬 노출). 드롭다운 인터랙션이 아니라 해당 쿼리 파라미터로 직접 URL 진입해도 동일하게 재현되어, 프론트 이벤트 문제가 아니라 정렬 로직 자체가 적용되지 않는 것으로 확인. 높은가격순도 동일 증상(하강 정렬이 중간중간 뒤섞임).",
+    "expectedResult": "선택한 정렬 기준(낮은가격순/높은가격순)에 맞게 상품 목록이 실제로 재정렬되어 노출되어야 함",
+    "detectedAt": "2026-08-24",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_데모사이트_012.png",
+    "consoleLog": "TC/defects/DEF_데모사이트_012.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-08-24",
+        "status": "신규",
+        "note": "자동화 재실행(TC_PD_058/059) 중 발견 — 직접 URL 진입(?sort=lowPrice/highPrice)으로 프론트 이벤트 문제가 아님을 확인 후 정식 결함으로 등록"
+      }
+    ]
+  },
+  {
+    "defectId": "DEF_데모사이트_013",
+    "tcId": "TC_PD_067",
+    "module": "상품전시",
+    "severity": "P2",
+    "status": "신규",
+    "summary": "상품전시 > 브랜드 필터 적용 후 페이지네이션 이동 시 필터 조건이 유지되지 않음",
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) 여성 카테고리(/categories/111) 진입\n2) 브랜드 필터 \"ZARA\" 체크\n3) 페이지네이션 \"2\" 버튼 클릭(2페이지가 존재하는 경우)\n4) \"ZARA\" 체크박스 상태 확인",
+    "actualResult": "필터 적용 직후에는 URL이 ?brandId=7로 정상 반영되고 체크 상태도 유지되나, 페이지네이션으로 다른 페이지로 이동하면 체크박스가 해제된 상태로 초기화됨(페이지 이동 URL이 필터 쿼리 파라미터를 유지하지 않는 것으로 추정)",
+    "expectedResult": "페이지 이동 후에도 이전에 적용한 필터 조건이 그대로 유지되어야 함",
+    "detectedAt": "2026-08-24",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_데모사이트_013.png",
+    "consoleLog": "TC/defects/DEF_데모사이트_013.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-08-24",
+        "status": "신규",
+        "note": "자동화 재실행(TC_PD_067) 중 발견. 라이브 카탈로그 변동으로 2페이지 존재 여부가 매번 달라 항상 재현되지는 않으나, 오늘 재현된 실패 건을 근거로 정식 결함 등록"
+      }
+    ]
   }
 ]

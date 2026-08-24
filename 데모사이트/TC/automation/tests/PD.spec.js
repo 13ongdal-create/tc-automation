@@ -424,34 +424,41 @@ test('[TC_PD_085][위시리스트] 로그인 상태 위시리스트 버튼 클�
   // TODO(Phase 5): 위시리스트 추가 상태로 아이콘/문구 전환 여부 어서션
 });
 
+// 페이지 전역에는 브레드크럼과 같은 텍스트를 가진 숨김 중복 요소(예: SEO용 hidden 링크)가
+// 존재해 bare text 검색이 그 숨김 요소를 먼저 집어 실패할 수 있음(2026-08-24 확인, TC_PD_126~130).
+// 반드시 홈 아이콘을 포함한 <ol> 브레드크럼 컨테이너로 범위를 좁혀 검색한다.
+function breadcrumbOf(page) {
+  return page.locator('ol').filter({ has: page.locator('a[aria-label="홈"]') });
+}
+
 test('[TC_PD_126][카테고리진입] 아우터(113) 카테고리 진입 시 브레드크럼/상품목록 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/113', { waitUntil: 'load' });
-  await expect(page.getByText('남성', { exact: true }).first()).toBeVisible();
+  await expect(breadcrumbOf(page).getByText('남성', { exact: true })).toBeVisible();
   // 상품 등록/판매종료에 따라 총 개수가 변동되므로 형식만 검증(2026-08-21)
   await expect(page.getByText(/총\s*\d+개/)).toBeVisible();
 });
 
 test('[TC_PD_127][카테고리진입] 상의-남성(114) 카테고리 진입 시 브레드크럼/상품목록 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/114', { waitUntil: 'load' });
-  await expect(page.getByText('남성', { exact: true }).first()).toBeVisible();
+  await expect(breadcrumbOf(page).getByText('남성', { exact: true })).toBeVisible();
   await expect(page.getByText(/총\s*\d+개/)).toBeVisible();
 });
 
 test('[TC_PD_128][카테고리진입] 드레스(115) 카테고리 진입 시 브레드크럼/상품목록 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/115', { waitUntil: 'load' });
-  await expect(page.getByText('여성', { exact: true }).first()).toBeVisible();
+  await expect(breadcrumbOf(page).getByText('여성', { exact: true })).toBeVisible();
   await expect(page.getByText(/총\s*\d+개/)).toBeVisible();
 });
 
 test('[TC_PD_129][카테고리진입] 점퍼(116) 3단계 브레드크럼(남성>아우터>점퍼) 및 상품목록 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/116', { waitUntil: 'load' });
-  await expect(page.getByText('아우터', { exact: true }).first()).toBeVisible();
+  await expect(breadcrumbOf(page).getByText('아우터', { exact: true })).toBeVisible();
   await expect(page.getByText(/총\s*\d+개/)).toBeVisible();
 });
 
 test('[TC_PD_130][카테고리진입] 상의-여성(117) 카테고리 진입 시 브레드크럼/상품목록 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/117', { waitUntil: 'load' });
-  await expect(page.getByText('여성', { exact: true }).first()).toBeVisible();
+  await expect(breadcrumbOf(page).getByText('여성', { exact: true })).toBeVisible();
   await expect(page.getByText(/총\s*\d+개/)).toBeVisible();
 });
 
