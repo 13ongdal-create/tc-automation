@@ -596,6 +596,10 @@ D:\tc-automation\                     <- 이 프로젝트 관련 모든 것의 �
         └── automation\tests\  <- URL 기반 Playwright 자동화 테스트 (19항)
 ```
 -->
+<!-- [수정 전 2026-08-24] agents-config/slack-bridge가 각자 독립 Git 저장소(tc-automation은 .gitignore로
+미추적)였던 구조. 2026-08-24 로컬 폴더가 알 수 없는 원인으로 삭제되었다가 GitHub 원격 기준으로 복구되는
+사건을 겪은 뒤, 사용자 요청으로 tc-automation 관련 모든 것을 하나의 저장소로 통합(git subtree로 이력 보존
+병합)하기로 결정.
 ```
 D:\tc-automation\                     <- 이 프로젝트 관련 모든 것의 루트 (TC 데이터 Git 저장소 루트이기도 함)
 ├── agents-config\                    <- 규칙/스킬 저장소 (독립 Git 저장소, tc-automation은 .gitignore로 미추적)
@@ -619,6 +623,34 @@ D:\tc-automation\                     <- 이 프로젝트 관련 모든 것의 �
         ├── legacy\    <- 고객 제공 기존 TC 파일이 있는 경우만
         └── automation\tests\  <- URL 기반 Playwright 자동화 테스트 (19항)
 ```
+-->
+```
+D:\tc-automation\                     <- 이 프로젝트 관련 모든 것의 루트이자 유일한 Git 저장소 루트
+                                          (github.com/13ongdal-create/tc-automation, 2026-08-24부터 통합)
+├── agents-config\                    <- 규칙/스킬 (git subtree로 병합, 자체 이력 보존됨)
+│   ├── AGENTS.md                    <- 이 파일 (행동 규칙)
+│   └── skills\qa-test-case-generator\
+│       ├── SKILL.md                 <- TC 생성 스킬 상세 명세
+│       └── references\role-definition.md
+├── slack-bridge\                     <- Slack 연동 서버 (git subtree로 병합, 자체 이력 보존됨) — **2026-08-24부로 미사용** (Slack bot 사용 종료, 코드/자동시작 스크립트는 삭제하지 않고 보존)
+│   └── src\index.js 등
+├── dashboard\                        <- 큐돌이 로컬 웹 대시보드 (2026-08-24 추가, TC 생성/테스트 수행/결함관리 통합 UI)
+├── backup\                           <- 로컬 전용 백업(git 비대상, .gitignore 처리) — 저장소 손상 대비용
+├── _reference\        <- 프로젝트 공통 참조 템플릿 (표준 뷰어, 스킬 원본 등) — 특정 프로젝트 내용 아님
+├── _template\         <- 신규 프로젝트 온보딩용 빈 스캐폴드 (Policy/SB/Requirements/Analysis/TC) — 모든 프로젝트는 반드시 이 스캐폴드에서 시작
+└── {프로젝트명}\       <- _template\을 복사해 온보딩 (17항 참조). 프로젝트마다 독립적으로 존재하며 서로의 내용을 참조/재사용하지 않음
+    ├── project.json   <- 프로젝트 메타데이터 (URL, 단위/통합 구분, 코드/정책기반 — Phase 0에서 생성, 13항)
+    ├── Policy\
+    ├── SB\
+    ├── Requirements\
+    ├── Analysis\      <- 어시스턴트가 생성한 관찰 기반 분석/PRD 산출물 (`{프로젝트명}_PRD.html`, 2026-08-21 추가)
+    └── TC\
+        ├── {모듈코드}.json / .html  <- 모듈별 누적 TC 파일 (버전/변경이력 포함, 10항)
+        ├── patterns.md  <- 재사용 가능한 TC 패턴 라이브러리 (11-1항)
+        ├── legacy\    <- 고객 제공 기존 TC 파일이 있는 경우만
+        └── automation\tests\  <- URL 기반 Playwright 자동화 테스트 (19항)
+```
+**agents-config/slack-bridge는 여전히 각자의 GitHub 저장소(`agents-config`, `slack-bridge`)도 그대로 남아있습니다** (아카이브 목적, 더 이상 push하지 않음) — 실제 작업/커밋/push는 이제 전부 `tc-automation` 하나에서만 이루어집니다.
 
 - 신규 프로젝트 시작 시 **17. 프로젝트 온보딩**을 따릅니다.
 - 생성된 TC 파일의 Git 관리는 **18. Git 버전관리**를 따릅니다.
@@ -656,8 +688,8 @@ D:\tc-automation\                     <- 이 프로젝트 관련 모든 것의 �
 
 ## 18. Git 버전관리
 
-- `tc-automation\`은 하나의 Git 저장소입니다. 모든 프로젝트가 이 저장소 하위에서 함께 버전관리됩니다.
-- **커밋 대상**: `{프로젝트명}\TC\` 산출물(HTML/JSON), 기준문서(Policy/SB/Requirements), `{프로젝트명}\Analysis\` 산출물(PRD 등), `_reference`, `_template`.
+- `tc-automation\`은 하나의 Git 저장소입니다 (`github.com/13ongdal-create/tc-automation`). 모든 프로젝트가 이 저장소 하위에서 함께 버전관리됩니다. **2026-08-24부터 `agents-config\`(이 파일 자신 포함)와 `slack-bridge\`도 git subtree로 이 저장소에 병합되어 같은 곳에서 커밋/push됩니다** — 더 이상 별도 저장소가 아닙니다(각자의 GitHub 저장소는 아카이브로만 남아있고 더 이상 push하지 않음).
+- **커밋 대상**: `{프로젝트명}\TC\` 산출물(HTML/JSON), 기준문서(Policy/SB/Requirements), `{프로젝트명}\Analysis\` 산출물(PRD 등), `_reference`, `_template`, `agents-config\`(규칙/스킬 수정 시), `slack-bridge\`(브릿지 코드 수정 시), `dashboard\`(대시보드 코드 수정 시).
 - **커밋 시점**:
   1. TC 생성 배치가 최종 승인되거나(Phase 4), 테스트 수행 결과가 보고되면(Phase 8) **그 즉시 자동으로 커밋**합니다 — 커밋 자체를 위해 별도로 "커밋해줘" 요청을 받을 필요는 없습니다.
   2. 여러 배치를 이어서 진행 중이면 배치 단위로 커밋합니다 (전체 완료까지 기다리지 않음).
@@ -667,7 +699,7 @@ D:\tc-automation\                     <- 이 프로젝트 관련 모든 것의 �
 Slack 스레드 동시성을 전제하던 설명. Slack bot 사용 종료 후에도 다른 터미널/IDE 창에서 다른 프로젝트를
 동시에 작업할 수 있으므로 위험 자체는 동일해 규칙은 유지, 설명만 일반화. 두 번째 줄(PIPELINE.md 참조)은
 Slack 연동 전용 흐름이라 주석 처리. -->
-- **[중요] `git add`는 반드시 해당 프로젝트 경로만 지정합니다** (`git add "{프로젝트명}"` 등). **`git add -A`/`git add .` 같은 저장소 전체 스테이징은 금지**합니다 — 다른 프로젝트의 TC 생성 작업이 다른 세션에서 동시에 진행 중일 수 있고, 그 프로젝트의 아직 미완성/미승인 상태 변경분까지 이번 커밋에 함께 딸려 들어가는 것을 방지하기 위함입니다. 커밋 전 `git status`로 스테이징된 파일이 해당 프로젝트 범위 안인지 확인합니다.
+- **[중요] `git add`는 반드시 해당 프로젝트(또는 `agents-config\`/`slack-bridge\`/`dashboard\`) 경로만 지정합니다** (`git add "{프로젝트명}"`, `git add agents-config` 등). **`git add -A`/`git add .` 같은 저장소 전체 스테이징은 금지**합니다 — 다른 프로젝트의 TC 생성 작업이 다른 세션에서 동시에 진행 중일 수 있고, 그 프로젝트의 아직 미완성/미승인 상태 변경분까지 이번 커밋에 함께 딸려 들어가는 것을 방지하기 위함입니다. 특히 이제 규칙 파일(`agents-config\`)도 같은 저장소 안에 있으므로, **TC 데이터 변경과 규칙 변경을 같은 커밋에 섞지 않도록** 더 주의합니다. 커밋 전 `git status`로 스테이징된 파일이 해당 범위 안인지 확인합니다.
 <!-- [2026-08-24 Slack bot(큐돌이) 사용 종료로 주석 처리]
 - Slack을 통한 요청/수정/컨펌 연동 시의 상세 흐름은 `tc-automation\_reference\PIPELINE.md`를 따릅니다. **서로 다른 프로젝트(스레드)의 요청은 동시에 처리될 수 있습니다** — 같은 프로젝트/같은 스레드 안에서만 순차 처리가 보장됩니다.
 -->

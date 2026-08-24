@@ -4,22 +4,25 @@
 Claude Code(클로드 코드)를 처음 다시 열거나, 다른 사람이 이 작업을 이어받을 때 참고하세요.
 
 > **2026-08-24부터 Slack bot(`@큐돌이`) 사용을 종료했습니다.** QA 자동화(TC 생성/테스트 실행/결함조회 등) 자체는 계속 진행하며, 인터페이스만 **터미널 또는 IDE(Claude Code 직접 세션)**로 바뀌었습니다. 이 문서의 4~5번(Slack 브릿지 서버 관련)은 참고용으로 남겨두었을 뿐 더 이상 적용되지 않습니다.
+>
+> **또한 2026-08-24부터 `agents-config`/`slack-bridge`가 `tc-automation` 저장소 하나로 통합되었습니다** (git subtree, 이력 보존). 이제 클론/커밋/push는 `tc-automation` 저장소 하나만 신경 쓰면 됩니다.
 
 ---
 
 ## 1. 프로젝트 구조 한눈에 보기
 
 ```
-D:\tc-automation\                 <- 이 프로젝트 전체의 루트
-├── agents-config\                <- 규칙/스킬 저장소 (AGENTS.md, SKILL.md) — 별도 git 저장소
-├── slack-bridge\                 <- Slack 연동 서버 — 별도 git 저장소 (2026-08-24부로 미사용, 4~5번 참고)
+D:\tc-automation\                 <- 이 프로젝트 전체의 루트이자 유일한 git 저장소
+├── agents-config\                <- 규칙/스킬 (AGENTS.md, SKILL.md) — tc-automation 저장소에 통합됨
+├── slack-bridge\                 <- Slack 연동 서버 — tc-automation 저장소에 통합됨 (2026-08-24부로 미사용, 4~5번 참고)
+├── dashboard\                    <- 큐돌이 로컬 웹 대시보드 (2026-08-24 추가)
 ├── _template\                    <- 신규 프로젝트 온보딩용 빈 폴더 틀
 ├── {프로젝트명}\                  <- 프로젝트별 폴더 (예: 데모사이트) — Policy/SB/Requirements/Analysis/TC
 └── ...
 ```
 
 - **AGENTS.md** (`agents-config\AGENTS.md`)와 **SKILL.md** (`agents-config\skills\qa-test-case-generator\SKILL.md`)가 클로드가 따르는 모든 규칙의 원본입니다. 클로드 코드를 이 폴더 구조 안에서 실행하면 별도 설명 없이 이 문서들을 읽고 동일하게 동작합니다.
-- 실제 작업 결과(TC 데이터, 뷰어, PRD 등)는 전부 **git으로 커밋되고 GitHub에 push까지** 되어 있습니다. 대화가 끊기거나 PC가 꺼져도 파일과 이력은 그대로 보존됩니다.
+- 실제 작업 결과(TC 데이터, 뷰어, PRD, 규칙 파일, 브릿지 코드 등)는 전부 **`tc-automation` 저장소 하나로 git 커밋되고 GitHub(`github.com/13ongdal-create/tc-automation`)에 push까지** 되어 있습니다. 대화가 끊기거나 PC가 꺼져도 파일과 이력은 그대로 보존됩니다.
 
 ---
 
@@ -56,7 +59,7 @@ D:\tc-automation\                 <- 이 프로젝트 전체의 루트
 
 | 구성요소 | 계정에 종속? | 이관 방법 |
 |---|---|---|
-| AGENTS.md/SKILL.md, TC 데이터, 뷰어 | 아니오 (git) | GitHub 저장소(`tc-automation`, `agents-config`)에 새 계정을 협업자로 추가 → `git clone` 후 그 폴더에서 클로드 코드 실행 (`slack-bridge`는 2026-08-24부로 미사용이라 필수 아님) |
+| AGENTS.md/SKILL.md, TC 데이터, 뷰어, 브릿지 코드 | 아니오 (git) | GitHub 저장소 `tc-automation` 하나에 새 계정을 협업자로 추가 → `git clone` 후 그 폴더에서 클로드 코드 실행 (2026-08-24부터 agents-config/slack-bridge까지 이 저장소 하나에 통합됨) |
 | 이번 세션에서 쌓인 자동 메모리(피드백/선호도) | 예 (이 PC의 로컬 파일) | git에는 없음. 이 온보딩 문서가 그 역할을 대신합니다 |
 | 대화 이력 자체 | 예 (이 PC/이 계정 로컬) | 다른 계정에서 그대로 열 수 없음 — 다만 git + 이 문서만 있으면 이어가는 데 문제 없음 |
 | 노션 접근 권한 | 예 | 새 계정을 해당 노션 워크스페이스에 멤버로 초대 필요 |

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>큐돌이 대시보드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-badge">Q</span>
+    <span class="brand-name">큐돌이 대시보드</span>
+  </div>
+  <div class="topbar-controls">
+    <label for="projectSelect" class="visually-hidden">프로젝트</label>
+    <select id="projectSelect"></select>
+    <button id="btnRefresh" class="btn btn-outline">새로고침</button>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="kpi-grid" id="kpiGrid">
+    <div class="kpi-card">
+      <div class="kpi-num" id="kpiTotalDefects">–</div>
+      <div class="kpi-label">전체 결함</div>
+    </div>
+    <div class="kpi-card kpi-accent-warn">
+      <div class="kpi-num" id="kpiNewDefects">–</div>
+      <div class="kpi-label">신규 결함</div>
+    </div>
+    <div class="kpi-card kpi-accent-good">
+      <div class="kpi-num" id="kpiPass">–</div>
+      <div class="kpi-label">최근 실행 Pass</div>
+    </div>
+    <div class="kpi-card kpi-accent-bad">
+      <div class="kpi-num" id="kpiFail">–</div>
+      <div class="kpi-label">최근 실행 Fail</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" id="kpiExecRate">–</div>
+      <div class="kpi-label">수행율</div>
+    </div>
+  </section>
+
+  <section class="panel-grid">
+
+    <div class="panel panel-wide">
+      <div class="panel-head">
+        <h2>🐞 결함 관리</h2>
+        <span class="panel-sub">상태·담당자 편집 시 즉시 defects.json에 저장됩니다 (Claude 미사용)</span>
+      </div>
+      <div class="table-wrap">
+        <table id="defectTable">
+          <thead>
+            <tr>
+              <th style="width:14%">결함ID</th>
+              <th style="width:10%">모듈</th>
+              <th style="width:6%">심각도</th>
+              <th style="width:11%">상태</th>
+              <th style="width:11%">담당자</th>
+              <th>요약</th>
+              <th style="width:8%">발견일</th>
+            </tr>
+          </thead>
+          <tbody id="defectTableBody">
+            <tr><td colspan="7" class="empty-row">프로젝트를 선택하세요</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>📜 실행 이력</h2>
+        <span class="panel-sub">TC/results/ 스냅샷</span>
+      </div>
+      <div id="resultsList" class="results-list">
+        <div class="empty-row">프로젝트를 선택하세요</div>
+      </div>
+    </div>
+
+    <div class="panel panel-placeholder">
+      <div class="panel-head">
+        <h2>▶ 테스트 실행 큐</h2>
+        <span class="panel-sub badge-soon">다음 배치 예정</span>
+      </div>
+      <p class="placeholder-text">모듈 선택 → 순차 실행 → 실시간 로그 스트리밍이 이 자리에 들어갑니다.</p>
+    </div>
+
+    <div class="panel panel-placeholder">
+      <div class="panel-head">
+        <h2>💬 사이트분석 · TC 생성</h2>
+        <span class="panel-sub badge-soon">다음 배치 예정</span>
+      </div>
+      <p class="placeholder-text">Claude 세션과 대화하며 Phase별로 진행하는 채팅형 패널이 이 자리에 들어갑니다.</p>
+    </div>
+
+  </section>
+</main>
+
+<script src="/app.js"></script>
+</body>
+</html>
