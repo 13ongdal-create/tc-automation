@@ -7,7 +7,8 @@
 
 ## 1. 목표
 
-- Slack에서 **TC 생성 요청**을 하면 Claude가 정책서/화면설계서/요구사항(`{프로젝트명}\Policy\SB\Requirements`)을 근거로 TC를 생성한다.
+<!-- [수정 전 2026-08-25] - Slack에서 **TC 생성 요청**을 하면 Claude가 정책서/화면설계서/요구사항(`{프로젝트명}\Policy\SB\Requirements`)을 근거로 TC를 생성한다. -->
+- Slack에서 **TC 생성 요청**을 하면 Claude가 정책서/화면설계서/요구사항(`project\{프로젝트명}\Policy\SB\Requirements`)을 근거로 TC를 생성한다.
 - 생성된 TC에 대해 Slack에서 **수정 요청**을 이어갈 수 있다.
 - **컨펌(승인)**이 나면 `tc-automation` 저장소에 커밋 → GitHub(`13ongdal-create/tc-automation`)로 push 된다.
 - 전체 과정이 Slack 채널/스레드에 기록으로 남아, 누가 언제 무엇을 요청·승인했는지 추적 가능해야 한다.
@@ -170,7 +171,8 @@ Anthropic이 제공하는 공식 Slack 통합 기능(`Claude Tag`, `claude.ai/ad
 - 승인 발화는 **요청을 올린 사람 또는 채널 내 지정된 승인자만** 유효하게 처리한다 (권한 검증은 옵션 B 서버 구현 시 필수).
 - **토큰 최소화 원칙**: 결정론적으로 코드만으로 처리 가능한 요청(상태 집계, 정형 필드 수정, 진행 상황 조회)은 Claude를 거치지 않는다. 자연어 이해가 실제로 필요한 경우(TC 생성/수정, 자유 형식 결함 문의 등)에만 Claude를 호출한다.
 
-**평일 자동 노션 현황 보고 (2026-08-20, 2026-08-25 Slack 봇과 분리)**: `slack-bridge/src/dailyReport.js`의 로직(`runDailyReport()`)이 tc-automation/agents-config/slack-bridge 세 저장소의 `git log`를 확인하고 두 노션 페이지("🤖 큐돌이", "📘 Claude QA 자동화")의 "업데이트 이력" 표에 그날 변경사항(없으면 "변경사항 없음")을 기록합니다. 이 실행은 관찰+노션 기록만 하며 코드 수정/커밋/테스트 실행은 하지 않습니다. **2026-08-25부터 Slack 봇 프로세스(`index.js`)와 완전히 분리**되어, `slack-bridge/src/dailyReportStandalone.js`를 Windows 작업 스케줄러(`tc-automation-daily-report`, 평일 10:00 KST)가 매번 새 프로세스로 실행하는 방식으로 동작합니다 — Slack 봇이 꺼져 있어도(현재 상태) 정상 동작하며, 상주 프로세스가 아니므로 재부팅/크래시에도 안전합니다(`.env`의 `DAILY_REPORT_ENABLED=false`로 끌 수 있음, 이 스크립트는 자체적으로 그 값을 읽지 않으므로 끄려면 작업 스케줄러 태스크를 비활성화). 사용자가 특정 날짜 보고에 포함하고 싶은 특별 요청사항이 있으면, 다음 실행 전에 `slack-bridge/data/dailyReportPending.txt`에 그 내용을 적어두면 해당 회차 보고에 반영되고 파일은 자동으로 비워집니다.
+<!-- [수정 전 2026-08-25] **평일 자동 노션 현황 보고 (2026-08-20, 2026-08-25 Slack 봇과 분리)**: `slack-bridge/src/dailyReport.js`의 로직(`runDailyReport()`)이 tc-automation/agents-config/slack-bridge 세 저장소의 `git log`를 확인하고 두 노션 페이지("🤖 큐돌이", "📘 Claude QA 자동화")의 "업데이트 이력" 표에 그날 변경사항(없으면 "변경사항 없음")을 기록합니다. (agents-config/slack-bridge가 각자 독립 저장소였던 시절 문구가 2026-08-24 git subtree 통합 이후에도 코드/문서 양쪽에 남아있던 부분 — 2026-08-25 재점검 중 발견해 정정) -->
+**평일 자동 노션 현황 보고 (2026-08-20, 2026-08-25 Slack 봇과 분리)**: `slack-bridge/src/dailyReport.js`의 로직(`runDailyReport()`)이 tc-automation 저장소(2026-08-24부터 agents-config/slack-bridge를 git subtree로 포함한 단일 저장소) 안에서 경로 범위(`-- slack-bridge`, `-- agents-config`)를 나눠 `git log`를 확인하고 두 노션 페이지("🤖 큐돌이", "📘 Claude QA 자동화")의 "업데이트 이력" 표에 그날 변경사항(없으면 "변경사항 없음")을 기록합니다. 이 실행은 관찰+노션 기록만 하며 코드 수정/커밋/테스트 실행은 하지 않습니다. **2026-08-25부터 Slack 봇 프로세스(`index.js`)와 완전히 분리**되어, `slack-bridge/src/dailyReportStandalone.js`를 Windows 작업 스케줄러(`tc-automation-daily-report`, 평일 10:00 KST)가 매번 새 프로세스로 실행하는 방식으로 동작합니다 — Slack 봇이 꺼져 있어도(현재 상태) 정상 동작하며, 상주 프로세스가 아니므로 재부팅/크래시에도 안전합니다(`.env`의 `DAILY_REPORT_ENABLED=false`로 끌 수 있음, 이 스크립트는 자체적으로 그 값을 읽지 않으므로 끄려면 작업 스케줄러 태스크를 비활성화). 사용자가 특정 날짜 보고에 포함하고 싶은 특별 요청사항이 있으면, 다음 실행 전에 `slack-bridge/data/dailyReportPending.txt`에 그 내용을 적어두면 해당 회차 보고에 반영되고 파일은 자동으로 비워집니다.
 
 ---
 
