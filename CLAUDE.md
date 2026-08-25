@@ -28,7 +28,14 @@ and process (TC schema, Phase 0-8 workflow, defect lifecycle, Notion sync, etc.)
 tc-automation/
 ├── agents-config/          Rules above (AGENTS.md, SKILL.md) + role-definition.md reference
 ├── slack-bridge/           Slack bot that used to trigger TC generation/tests/defect queries.
-│                           Inactive since 2026-08-24 (terminal/IDE is the interface now) but not deleted.
+<!-- [수정 전 2026-08-25] "Inactive since 2026-08-24 (terminal/IDE is the interface now) but not deleted."
+│                           한 줄뿐이었음 — 이후 daily Notion report만 별도 standalone 스크립트로 분리해
+│                           Windows Scheduled Task로 계속 돌아가고 있다는 사실이 반영되지 않은 상태였음. -->
+│                           Inactive since 2026-08-24 (interactive bot; terminal/IDE is the interface now)
+│                           but not deleted. Exception: the daily Notion report runs independently via
+│                           `slack-bridge/src/dailyReportStandalone.js` on a Windows Scheduled Task
+│                           (`tc-automation-daily-report`, weekdays 10:00 KST) — this does NOT start the
+│                           interactive Slack bot (no `@slack/bolt`/`app.start()` involved).
 ├── dashboard/               Local web app (Express) for the same workflow: KPI cards, defect
 │                            list/edit, execution history. See dashboard section below.
 ├── _reference/              Shared docs (pipeline design, policy glossary) — not project-specific
@@ -72,8 +79,18 @@ then hand-copy screenshots/console logs into `project/{프로젝트명}/TC/defec
 cd dashboard && npm install && npm start   # or: npm run dev (auto-restart)
 ```
 
-**slack-bridge** (inactive, kept for reference — do not start unless the user explicitly asks to resume
-Slack usage): `cd slack-bridge && npm start`. Needs `.env` (see `slack-bridge/README.md`).
+<!-- [수정 전 2026-08-25] "slack-bridge (inactive, kept for reference — do not start unless the user
+explicitly asks to resume Slack usage): `cd slack-bridge && npm start`. Needs `.env` (see
+`slack-bridge/README.md`)." 한 문단뿐이었음 — daily report standalone 스크립트/스케줄 작업 존재가 문서화되지
+않았었음. -->
+**slack-bridge (interactive bot)** — inactive, kept for reference — do not start unless the user explicitly
+asks to resume Slack usage: `cd slack-bridge && npm start`. Needs `.env` (see `slack-bridge/README.md`).
+
+**slack-bridge (daily Notion report only)** — this part IS active and runs unattended: a Windows Scheduled
+Task (`tc-automation-daily-report`) executes `node src/dailyReportStandalone.js` from `slack-bridge/` on
+weekdays at 10:00 KST. It only calls the same Notion-sync logic `dailyReport.js` already used (no Slack
+dependency) — do not conflate this with "resuming the Slack bot." Check/modify it with
+`Get-ScheduledTask -TaskName tc-automation-daily-report` (PowerShell), not by starting `npm start`.
 
 ## Tech stack
 
