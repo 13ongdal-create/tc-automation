@@ -17,7 +17,8 @@ D:\tc-automation\                 <- 이 프로젝트 전체의 루트이자 유
 ├── slack-bridge\                 <- Slack 연동 서버 — tc-automation 저장소에 통합됨 (2026-08-24부로 미사용, 4~5번 참고)
 ├── dashboard\                    <- 큐돌이 로컬 웹 대시보드 (2026-08-24 추가)
 ├── _template\                    <- 신규 프로젝트 온보딩용 빈 폴더 틀
-├── {프로젝트명}\                  <- 프로젝트별 폴더 (예: 데모사이트) — Policy/SB/Requirements/Analysis/TC
+├── project\                      <- 프로젝트별 산출물 전용 폴더 (2026-08-25 추가)
+│   └── {프로젝트명}\              <- 프로젝트별 폴더 (예: 데모사이트) — Policy/SB/Requirements/Analysis/TC
 └── ...
 ```
 

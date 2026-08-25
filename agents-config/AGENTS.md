@@ -197,15 +197,15 @@ TC ID | system | 대분류 | 중분류 | 소분류 | 플랫폼 | 유형 | 테스
 
 <!-- [수정 전 2026-08-18] 생성할 때마다 날짜가 붙은 새 스냅샷 파일을 만들던 방식 (같은 모듈이어도 매번 새 파일).
 사용자 요청으로 모듈당 하나의 누적(living) 파일 + 내부 버전 기록 방식으로 변경.
-- 생성된 HTML 뷰어는 채팅 출력과 동시에 실제 파일로 저장합니다: tc-automation\{프로젝트명}\TC\{프로젝트명}_TC_{모듈코드}_{YYYY-MM-DD}.html
-- 동일 배치의 JSON 데이터도 같은 폴더에 저장합니다: tc-automation\{프로젝트명}\TC\{프로젝트명}_TC_{모듈코드}_{YYYY-MM-DD}.json
+- 생성된 HTML 뷰어는 채팅 출력과 동시에 실제 파일로 저장합니다: tc-automation\project\{프로젝트명}\TC\{프로젝트명}_TC_{모듈코드}_{YYYY-MM-DD}.html
+- 동일 배치의 JSON 데이터도 같은 폴더에 저장합니다: tc-automation\project\{프로젝트명}\TC\{프로젝트명}_TC_{모듈코드}_{YYYY-MM-DD}.json
 - 같은 모듈을 같은 날 재생성하는 경우 파일명 끝에 _v2, _v3...를 붙여 기존 파일을 덮어쓰지 않습니다.
 -->
 
 **파일 저장 규칙 (Git 관리 대상)**
 - **모듈당 하나의 최신 포인터 파일**로 관리합니다 (날짜를 파일명에 넣지 않음):
-  - HTML: `tc-automation\{프로젝트명}\TC\{프로젝트명}_TC_{모듈코드}.html`
-  - JSON: `tc-automation\{프로젝트명}\TC\{프로젝트명}_TC_{모듈코드}.json`
+  - HTML: `tc-automation\project\{프로젝트명}\TC\{프로젝트명}_TC_{모듈코드}.html`
+  - JSON: `tc-automation\project\{프로젝트명}\TC\{프로젝트명}_TC_{모듈코드}.json`
 - **추가/수정/삭제 시 반드시 이 파일의 현재(최신) 내용을 먼저 Read한 뒤**, 그 위에 TC를 추가·수정·삭제합니다. 기존 TC를 지우고 처음부터 다시 만들지 않습니다 (요청받은 범위 외의 TC는 그대로 유지).
 <!-- [수정 전 2026-08-18] "포인터 파일을 그 자리에서 버전업"하던 방식.
 사용자 확인 결과 "기존 파일 수정/삭제 금지"가 모든 파일에 적용되는 공통 규칙이므로, 최신 포인터 파일 자체를 덮어쓰기 전 반드시 이전 버전을 legacy\에 별도 보관하는 방식으로 변경.
@@ -624,6 +624,9 @@ D:\tc-automation\                     <- 이 프로젝트 관련 모든 것의 �
         └── automation\tests\  <- URL 기반 Playwright 자동화 테스트 (19항)
 ```
 -->
+<!-- [수정 전 2026-08-25] 프로젝트 폴더가 tc-automation\{프로젝트명}\으로 저장소 루트 바로 아래
+있던 구조. 프로젝트 산출물 폴더와 도구/공통 폴더(agents-config/slack-bridge/dashboard 등)가 같은
+계층에 섞여 있어 구분이 어렵다는 사용자 피드백으로, 프로젝트 폴더만 project\ 하위로 모으기로 결정.
 ```
 D:\tc-automation\                     <- 이 프로젝트 관련 모든 것의 루트이자 유일한 Git 저장소 루트
                                           (github.com/13ongdal-create/tc-automation, 2026-08-24부터 통합)
@@ -650,6 +653,34 @@ D:\tc-automation\                     <- 이 프로젝트 관련 모든 것의 �
         ├── legacy\    <- 고객 제공 기존 TC 파일이 있는 경우만
         └── automation\tests\  <- URL 기반 Playwright 자동화 테스트 (19항)
 ```
+-->
+```
+D:\tc-automation\                     <- 이 프로젝트 관련 모든 것의 루트이자 유일한 Git 저장소 루트
+                                          (github.com/13ongdal-create/tc-automation, 2026-08-24부터 통합)
+├── agents-config\                    <- 규칙/스킬 (git subtree로 병합, 자체 이력 보존됨)
+│   ├── AGENTS.md                    <- 이 파일 (행동 규칙)
+│   └── skills\qa-test-case-generator\
+│       ├── SKILL.md                 <- TC 생성 스킬 상세 명세
+│       └── references\role-definition.md
+├── slack-bridge\                     <- Slack 연동 서버 (git subtree로 병합, 자체 이력 보존됨) — **2026-08-24부로 미사용** (Slack bot 사용 종료, 코드/자동시작 스크립트는 삭제하지 않고 보존)
+│   └── src\index.js 등
+├── dashboard\                        <- 큐돌이 로컬 웹 대시보드 (2026-08-24 추가, TC 생성/테스트 수행/결함관리 통합 UI)
+├── backup\                           <- 로컬 전용 백업(git 비대상, .gitignore 처리) — 저장소 손상 대비용
+├── _reference\        <- 프로젝트 공통 참조 템플릿 (표준 뷰어, 스킬 원본 등) — 특정 프로젝트 내용 아님
+├── _template\         <- 신규 프로젝트 온보딩용 빈 스캐폴드 (Policy/SB/Requirements/Analysis/TC) — 모든 프로젝트는 반드시 이 스캐폴드에서 시작
+└── project\           <- 프로젝트별 산출물 전용 폴더 (2026-08-25 추가 — 도구/공통 폴더와 명확히 구분)
+    └── {프로젝트명}\   <- _template\을 복사해 온보딩 (17항 참조). 프로젝트마다 독립적으로 존재하며 서로의 내용을 참조/재사용하지 않음
+        ├── project.json   <- 프로젝트 메타데이터 (URL, 단위/통합 구분, 코드/정책기반 — Phase 0에서 생성, 13항)
+        ├── Policy\
+        ├── SB\
+        ├── Requirements\
+        ├── Analysis\      <- 어시스턴트가 생성한 관찰 기반 분석/PRD 산출물 (`{프로젝트명}_PRD.html`, 2026-08-21 추가)
+        └── TC\
+            ├── {모듈코드}.json / .html  <- 모듈별 누적 TC 파일 (버전/변경이력 포함, 10항)
+            ├── patterns.md  <- 재사용 가능한 TC 패턴 라이브러리 (11-1항)
+            ├── legacy\    <- 고객 제공 기존 TC 파일이 있는 경우만
+            └── automation\tests\  <- URL 기반 Playwright 자동화 테스트 (19항)
+```
 **agents-config/slack-bridge는 여전히 각자의 GitHub 저장소(`agents-config`, `slack-bridge`)도 그대로 남아있습니다** (아카이브 목적, 더 이상 push하지 않음) — 실제 작업/커밋/push는 이제 전부 `tc-automation` 하나에서만 이루어집니다.
 
 - 신규 프로젝트 시작 시 **17. 프로젝트 온보딩**을 따릅니다.
@@ -660,7 +691,7 @@ D:\tc-automation\                     <- 이 프로젝트 관련 모든 것의 �
 
 ## 17. 프로젝트 온보딩 (신규 프로젝트 추가)
 
-1. `tc-automation\_template\`을 `tc-automation\{프로젝트명}\`으로 복사합니다 (Policy/SB/Requirements/Analysis/TC 빈 폴더 포함). **다른 기존 프로젝트 폴더를 복사하거나 참고하지 않습니다** — 항상 `_template\`에서만 시작합니다.
+1. `tc-automation\_template\`을 `tc-automation\project\{프로젝트명}\`으로 복사합니다 (Policy/SB/Requirements/Analysis/TC 빈 폴더 포함). **다른 기존 프로젝트 폴더를 복사하거나 참고하지 않습니다** — 항상 `_template\`에서만 시작합니다.
 2. 고객/기획 측에서 받은 기준문서를 해당 서브폴더에 넣습니다 (정책서→Policy, 화면설계서→SB, 요구사항→Requirements). **`Analysis\`는 고객 제공 문서를 넣는 곳이 아닙니다** — Phase 1~3에서 어시스턴트가 직접 관찰·정리한 산출물(`{프로젝트명}_PRD.html`)만 여기 저장합니다.
 3. 기존에 운영 중이던 레거시 TC가 있다면 `TC\legacy\`에 넣습니다.
 4. 이후 TC 생성 요청 시 스킬은 자동으로 **이 프로젝트 자신의** `{프로젝트명}\Policy`, `\SB`, `\Requirements`, `\TC\legacy`만을 근거 자료로 스캔합니다 (다른 프로젝트 폴더는 스캔 대상이 아님). `\Analysis\`는 근거 자료가 아니라 이미 정리된 산출물이므로 스캔 대상에서 제외합니다.
@@ -719,8 +750,8 @@ Slack 연동 전용 흐름이라 주석 처리. -->
 2. TC 문서 생성(Phase 3~4): 관찰된 요소를 근거로 기존 컬럼 스키마(SKILL.md 3항)에 맞춰 TC를 작성합니다. 기준문서 컬럼에는 `{URL} (Playwright 관측, {날짜})`를 기재합니다.
 -->
 2. **TC 문서 생성(Phase 3~4)**: 관찰된 요소를 근거로 기존 컬럼 스키마(SKILL.md 3항)에 맞춰 TC를 작성합니다. **기준문서 컬럼은 정책서/화면설계서 등 실제 문서가 존재하는 경우에만 그 문서명을 기재하고, 그 외(Playwright 관측만으로 작성한 경우)에는 `-`로 둡니다.** Playwright 관측 근거(URL/날짜)는 `tc-automation\_scratch\{프로젝트명}\`의 관찰 결과 파일로 이미 추적되므로 TC 행에 중복 기재하지 않습니다.
-3. **자동화 테스트 코드 생성(Phase 4)**: 각 TC의 수행절차/기대결과를 Playwright 테스트로 변환해 `{프로젝트명}\TC\automation\tests\{모듈}.spec.js`에 저장합니다 (1 TC ≈ 1 `test(...)` 블록 원칙). **테스트 제목에 TC ID와 기능명(소분류)을 모두 포함**합니다: `test('[TC_CRT_012][쿠폰적용] 쿠폰 코드 입력 시 즉시 할인 적용 검증', ...)` — 이 형식이어야 특정 TC 하나 또는 특정 기능만 골라 재실행(`--grep`)할 수 있습니다 (19-1항). **반드시 `@playwright/test`가 아니라 `tc-automation\_shared\testFixtures.js`에서 `test`/`expect`를 가져옵니다** (경로는 항상 고정: `require('../../../../_shared/testFixtures')`). 이 공통 fixture가 모든 테스트에 브라우저 콘솔 에러(JS 예외)·실패한 API 요청(4xx/5xx) 자동 감지 + 실패 시 스크린샷 캡처를 적용해줍니다 — 어서션이 통과해도 콘솔/네트워크 에러가 있으면 해당 TC는 자동으로 실패 처리됩니다. **이 시점에는 코드만 생성하고 실행하지 않습니다** — Phase 4 산출물(TC 문서 + 테스트 코드)에 대한 승인까지만 받습니다.
-4. **실행(Phase 5 — 별도 요청 시에만)**: 사용자가 "테스트 실행해줘"/"테스트 수행해줘" 등으로 **명시적으로 요청한 경우에만** **`PW_RUN_ID={프로젝트명}`을 지정해** `npx playwright test --config="{tc-automation 저장소 절대경로}/playwright.config.js" {프로젝트명}/TC/automation/tests/{모듈}.spec.js` 실행 (예: `PW_RUN_ID=ABC마트 npx playwright test --config="D:/tc-automation/playwright.config.js" ABC마트/TC/automation/tests/CRT.spec.js`).
+3. **자동화 테스트 코드 생성(Phase 4)**: 각 TC의 수행절차/기대결과를 Playwright 테스트로 변환해 `project\{프로젝트명}\TC\automation\tests\{모듈}.spec.js`에 저장합니다 (1 TC ≈ 1 `test(...)` 블록 원칙). **테스트 제목에 TC ID와 기능명(소분류)을 모두 포함**합니다: `test('[TC_CRT_012][쿠폰적용] 쿠폰 코드 입력 시 즉시 할인 적용 검증', ...)` — 이 형식이어야 특정 TC 하나 또는 특정 기능만 골라 재실행(`--grep`)할 수 있습니다 (19-1항). **반드시 `@playwright/test`가 아니라 `tc-automation\_shared\testFixtures.js`에서 `test`/`expect`를 가져옵니다** (경로는 항상 고정: `require('../../../../../_shared/testFixtures')` — project\ 하위로 한 단계 더 들어가 있으므로 5단계 up). 이 공통 fixture가 모든 테스트에 브라우저 콘솔 에러(JS 예외)·실패한 API 요청(4xx/5xx) 자동 감지 + 실패 시 스크린샷 캡처를 적용해줍니다 — 어서션이 통과해도 콘솔/네트워크 에러가 있으면 해당 TC는 자동으로 실패 처리됩니다. **이 시점에는 코드만 생성하고 실행하지 않습니다** — Phase 4 산출물(TC 문서 + 테스트 코드)에 대한 승인까지만 받습니다.
+4. **실행(Phase 5 — 별도 요청 시에만)**: 사용자가 "테스트 실행해줘"/"테스트 수행해줘" 등으로 **명시적으로 요청한 경우에만** **`PW_RUN_ID={프로젝트명}`을 지정해** `npx playwright test --config="{tc-automation 저장소 절대경로}/playwright.config.js" project/{프로젝트명}/TC/automation/tests/{모듈}.spec.js` 실행 (예: `PW_RUN_ID=ABC마트 npx playwright test --config="D:/tc-automation/playwright.config.js" project/ABC마트/TC/automation/tests/CRT.spec.js`).
    <!-- [수정 전 2026-08-20] "저장소 루트(tc-automation\)에서" 실행하도록(cd 후 실행) 지시하던 버전.
    현재 작업 디렉터리가 agents-config라 저장소 루트로 매번 cd해야 했는데, Slack 헤드리스 세션에서
    "cd ... && npx playwright test..." 형태의 복합 명령이 .claude/settings.json 허용 패턴과 정확히
@@ -736,7 +767,7 @@ Slack 연동 전용 흐름이라 주석 처리. -->
 
 - **생성 범위 좁히기**: "{모듈} 모듈의 {기능명} 기능만 TC 추가해줘" 요청 시, 10항의 누적 파일을 Read한 뒤 **해당 기능(소분류)에 해당하는 TC만 추가/수정**하고 나머지는 그대로 둡니다.
 - **⚠️ 관찰(Phase 1) 범위도 함께 좁히기**: 기능 단위 요청일 때는 Playwright 관찰도 **그 기능과 직접 관련된 화면/플로우로만 한정**합니다. 같은 상위 모듈에 속한 다른 기능(예: "회원" 모듈 요청 시 회원가입만 요청받았는데 로그인/마이페이지까지 함께 관찰)까지 넓혀서 관찰하지 않습니다 — 범위가 넓어질수록 관찰 시나리오 수가 늘어 실행 시간이 길어지고, 요청받지 않은 범위까지 TC가 생성되는 결과로 이어집니다.
-- **실행 범위 좁히기**: `npx playwright test {프로젝트명}/TC/automation/tests/{모듈}.spec.js --grep "{기능명 또는 TC ID}"` 형태로 `--grep` 옵션을 추가해 해당 기능/TC만 실행합니다. 테스트 제목에 `[TC_ID][기능명]`이 포함되어 있어야 이 필터링이 정확히 동작합니다 (위 3번 규칙).
+- **실행 범위 좁히기**: `npx playwright test project/{프로젝트명}/TC/automation/tests/{모듈}.spec.js --grep "{기능명 또는 TC ID}"` 형태로 `--grep` 옵션을 추가해 해당 기능/TC만 실행합니다. 테스트 제목에 `[TC_ID][기능명]`이 포함되어 있어야 이 필터링이 정확히 동작합니다 (위 3번 규칙).
 - 결과 보고 시 "{모듈} 전체" 대신 "{모듈} > {기능명}" 또는 "TC_ID 1건"처럼 **실제 실행 범위를 명시**합니다.
 <!-- [2026-08-24 수정] "SCREENSHOT: {경로}" 텍스트 마커를 Slack 브릿지가 파싱해 스레드에 이미지로 첨부하던
 버전. Slack bot 사용 종료로 이 마커를 읽어줄 주체가 없어졌으므로, 터미널/IDE 세션에서는 Read 도구로

@@ -526,7 +526,7 @@ TC 세트 생성 후 반드시 아래를 자가 검증합니다:
 
 ## 17. 참고 파일 위치
 
-프로젝트는 `tc-automation\{프로젝트명}\` 아래 `Policy`/`SB`/`Requirements`/`Analysis`/`TC` 5개 표준 서브폴더로 구성됩니다. `Analysis`는 고객 제공 기준문서가 아니라 어시스턴트가 직접 관찰·정리한 PRD 산출물을 담습니다. 신규 프로젝트 온보딩 및 전체 구조는 **AGENTS.md 16~17항**을 따릅니다.
+프로젝트는 `tc-automation\project\{프로젝트명}\` 아래 `Policy`/`SB`/`Requirements`/`Analysis`/`TC` 5개 표준 서브폴더로 구성됩니다. `Analysis`는 고객 제공 기준문서가 아니라 어시스턴트가 직접 관찰·정리한 PRD 산출물을 담습니다. 신규 프로젝트 온보딩 및 전체 구조는 **AGENTS.md 16~17항**을 따릅니다.
 
 <!-- [수정 전 2026-08-18] ABC마트를 실제 프로젝트 예시로 고정 기재했던 버전 (ABC마트 프로젝트 삭제로 더 이상 유효하지 않음)
 ```
@@ -563,6 +563,8 @@ d:\E-Commerce Service Planning Academy\tc-automation\
 │   ├── mediheal_pdp_qa_tc_viewer.html       <- 버튼 세트 참조 (JSON 저장/불러오기)
 │   └── 이커머스_공통정책_유형정의.md          <- 유형별 정의 참고 용어집 (강제 조건 아님, AGENTS.md 7-1항)
 -->
+<!-- [수정 전 2026-08-25] 프로젝트 폴더가 tc-automation\{프로젝트명}\으로 저장소 루트 바로 아래
+있던 구조. 도구/공통 폴더와 프로젝트 폴더 구분을 위해 프로젝트 폴더만 project\ 하위로 이동.
 ```
 D:\tc-automation\
 ├── _reference\                              <- 프로젝트 공통 참조 (모든 프로젝트가 공유, 특정 프로젝트 내용 아님)
@@ -580,6 +582,26 @@ D:\tc-automation\
         ├── automation\tests\   <- URL 기반 Playwright 자동화 테스트 (AGENTS.md 19항)
         ├── defects.json        <- 결함 대장 (AGENTS.md 20항)
         └── defects\            <- 결함 스크린샷 보관
+```
+-->
+```
+D:\tc-automation\
+├── _reference\                              <- 프로젝트 공통 참조 (모든 프로젝트가 공유, 특정 프로젝트 내용 아님)
+│   ├── mediheal_pdp_qa_tc_viewer.html       <- 버튼 세트 참조 (JSON 저장/불러오기)
+│   └── 이커머스_공통정책_유형정의.md          <- 유형별 정의 참고 용어집 (강제 조건 아님, AGENTS.md 7-1항)
+├── _template\                                <- 신규 프로젝트 온보딩용 빈 스캐폴드 — 모든 프로젝트는 반드시 여기서만 시작
+└── project\                                  <- 프로젝트별 산출물 전용 폴더 (2026-08-25 추가)
+    └── {프로젝트명}\                          <- _template\ 복사로 생성. 프로젝트마다 독립적, 서로 내용 참조/재사용 없음
+        ├── Policy\
+        ├── SB\
+        ├── Requirements\
+        └── TC\
+            ├── {모듈코드}.json / .html  <- 모듈별 누적 TC 파일 (버전/변경이력 포함, AGENTS.md 10항)
+            ├── patterns.md         <- 재사용 가능한 TC 패턴 라이브러리 (AGENTS.md 11-1항)
+            ├── legacy\             <- 고객 제공 기존 TC 파일이 있는 경우만
+            ├── automation\tests\   <- URL 기반 Playwright 자동화 테스트 (AGENTS.md 19항)
+            ├── defects.json        <- 결함 대장 (AGENTS.md 20항)
+            └── defects\            <- 결함 스크린샷 보관
 ```
 
 - TC 생성 시 근거 문서 스캔 순서: **해당 프로젝트 자신의** `{프로젝트명}\Policy` → `\SB` → `\Requirements` → `\TC\legacy`만 스캔합니다 (다른 프로젝트 폴더는 절대 참조하지 않음 — AGENTS.md 16항 "프로젝트 간 내용 격리 원칙").

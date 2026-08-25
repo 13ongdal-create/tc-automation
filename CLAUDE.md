@@ -35,16 +35,18 @@ tc-automation/
 ├── _template/               Empty scaffold (Policy/SB/Requirements/Analysis/TC) new projects are copied from
 ├── _shared/testFixtures.js  Playwright fixture every project's automation imports (see below)
 ├── backup/                  Local-only safety snapshot of agents-config, gitignored
-└── {프로젝트명}/             One folder per QA project (e.g. 데모사이트, TOPMALL), each independent:
-    ├── project.json
-    ├── Policy/ SB/ Requirements/ Analysis/
-    └── TC/
-        ├── {모듈코드}.json / .html      Canonical TC data + generated viewer, one pair per module
-        ├── defects.json                 Defect records for the whole project
-        ├── defects/                     Defect screenshots + console logs
-        ├── legacy/                      Superseded versions of the files above (never overwritten in place)
-        ├── results/                     Dated Pass/Fail snapshots from test runs
-        └── automation/tests/*.spec.js   Playwright specs, one per module
+└── project/                 All QA project folders live here (2026-08-25 — separated from the
+                              tooling/shared folders above for clarity)
+    └── {프로젝트명}/         One folder per QA project (e.g. 데모사이트, TOPMALL), each independent:
+        ├── project.json
+        ├── Policy/ SB/ Requirements/ Analysis/
+        └── TC/
+            ├── {모듈코드}.json / .html      Canonical TC data + generated viewer, one pair per module
+            ├── defects.json                 Defect records for the whole project
+            ├── defects/                     Defect screenshots + console logs
+            ├── legacy/                      Superseded versions of the files above (never overwritten in place)
+            ├── results/                     Dated Pass/Fail snapshots from test runs
+            └── automation/tests/*.spec.js   Playwright specs, one per module
 ```
 
 Projects are isolated by design — never pull policy/TC content from one project into another.
@@ -55,14 +57,14 @@ Projects are isolated by design — never pull policy/TC content from one projec
 absolute path rather than `cd`-ing first):
 
 ```bash
-PW_RUN_ID={프로젝트명} npx playwright test --config="D:/tc-automation/playwright.config.js" {프로젝트명}/TC/automation/tests/{모듈}.spec.js
+PW_RUN_ID={프로젝트명} npx playwright test --config="D:/tc-automation/playwright.config.js" project/{프로젝트명}/TC/automation/tests/{모듈}.spec.js
 # single test or feature within a module:
 ... {모듈}.spec.js --grep "TC_PD_058|기능명"
 ```
 
 `PW_RUN_ID` namespaces report/output paths under `_scratch/` so concurrent runs across projects don't
 collide. Results land in `_scratch/playwright-report/{PW_RUN_ID}/results.json` (gitignored — parse it,
-then hand-copy screenshots/console logs into `{프로젝트명}/TC/defects/` for anything kept permanently).
+then hand-copy screenshots/console logs into `project/{프로젝트명}/TC/defects/` for anything kept permanently).
 
 **Dashboard** (local web UI at `http://localhost:4000`):
 
@@ -88,11 +90,11 @@ Slack usage): `cd slack-bridge && npm start`. Needs `.env` (see `slack-bridge/RE
   a failure of the TC itself (AGENTS.md §20-7).
 - Every canonical TC/JSON file bump: copy the pre-edit version to `legacy/` first, then increment
   `meta.version` and append to `meta.changeHistory` — never overwrite history in place.
-- `git add` must be scoped to one project/tool path at a time (`git add "데모사이트"`, `git add dashboard`,
+- `git add` must be scoped to one project/tool path at a time (`git add "project/데모사이트"`, `git add dashboard`,
   `git add agents-config`) — never `git add -A`/`git add .`. `git push` always needs a fresh confirmation
   even when commits are pre-approved.
 - Automation test files import from the shared fixture, always via this exact relative path:
-  `require('../../../../_shared/testFixtures')` — it auto-fails a test on any console error or 4xx/5xx
+  `require('../../../../../_shared/testFixtures')` — it auto-fails a test on any console error or 4xx/5xx
   response even if assertions passed, and captures screenshot + console/network log together on failure.
 
 ## Environment gotchas
