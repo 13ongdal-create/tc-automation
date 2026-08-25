@@ -3,10 +3,12 @@ const fs = require('fs');
 const path = require('path');
 
 const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || 'D:/tc-automation';
+// 프로젝트 폴더는 저장소 루트가 아니라 project/ 하위에 있음 (2026-08-25 디렉토리 구조 개편)
+const PROJECTS_ROOT = path.join(TC_AUTOMATION_ROOT, 'project');
 const STATUS_ORDER = ['신규', '처리중', '재검증대기', '완료', '보류', '재발생'];
 
 function defectsPath(project) {
-  return path.join(TC_AUTOMATION_ROOT, project, 'TC', 'defects.json');
+  return path.join(PROJECTS_ROOT, project, 'TC', 'defects.json');
 }
 
 function load(project) {
@@ -75,4 +77,4 @@ function updateField(project, defectId, field, value) {
   return target;
 }
 
-module.exports = { load, save, summarize, updateField, STATUS_ORDER };
+module.exports = { load, save, summarize, updateField, STATUS_ORDER, PROJECTS_ROOT };

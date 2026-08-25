@@ -11,7 +11,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // TC 폴더 아래 정적 파일(스크린샷, 스냅샷 HTML 등) 그대로 서빙 — 결함 썸네일/실행이력 HTML 열람용
 app.use('/files/:project', (req, res, next) => {
-  express.static(path.join(defectStore.TC_AUTOMATION_ROOT, req.params.project, 'TC'))(req, res, next);
+  express.static(path.join(defectStore.PROJECTS_ROOT, req.params.project, 'TC'))(req, res, next);
 });
 
 app.get('/api/projects', (req, res) => {

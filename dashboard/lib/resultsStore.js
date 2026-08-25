@@ -2,10 +2,10 @@
 // _scratch/{project}/build_results_index.js와 동일한 집계 방식을 재사용 (2026-08-24 대시보드용 이식)
 const fs = require('fs');
 const path = require('path');
-const { TC_AUTOMATION_ROOT } = require('./defectStore');
+const { PROJECTS_ROOT } = require('./defectStore');
 
 function resultsDir(project) {
-  return path.join(TC_AUTOMATION_ROOT, project, 'TC', 'results');
+  return path.join(PROJECTS_ROOT, project, 'TC', 'results');
 }
 
 function listSnapshots(project) {

@@ -30,6 +30,8 @@ function parseParams(text) {
 }
 
 const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || 'D:/tc-automation';
+// 프로젝트 폴더는 저장소 루트가 아니라 project/ 하위에 있음 (2026-08-25 디렉토리 구조 개편)
+const PROJECTS_ROOT = `${TC_AUTOMATION_ROOT}/project`;
 
 // 스레드(channel+thread_ts)별로 현재 실행 중인 claude CLI 프로세스를 추적 - "중단" 요청 시 찾아서 종료
 const activeRuns = new Map();
@@ -54,7 +56,7 @@ function formatElapsed(ms) {
 function findProjectNameInText(text) {
   let entries;
   try {
-    entries = fs.readdirSync(TC_AUTOMATION_ROOT, { withFileTypes: true });
+    entries = fs.readdirSync(PROJECTS_ROOT, { withFileTypes: true });
   } catch {
     return null;
   }
@@ -63,7 +65,7 @@ function findProjectNameInText(text) {
     // 실제 온보딩된 프로젝트인지(= _template 구조를 따르는지) TC 서브폴더 존재로 검증 - 빈 폴더/찌꺼기 제외
     .filter((d) => {
       try {
-        return fs.statSync(`${TC_AUTOMATION_ROOT}/${d.name}/TC`).isDirectory();
+        return fs.statSync(`${PROJECTS_ROOT}/${d.name}/TC`).isDirectory();
       } catch {
         return false;
       }
@@ -89,7 +91,7 @@ function buildInitialPrompt(params) {
   }
   return [
     `tc-automation 저장소 경로: "${TC_AUTOMATION_ROOT}"`,
-    `해당 저장소 내 "${project}" 프로젝트(${TC_AUTOMATION_ROOT}/${project})의 "${module_}" 모듈${feature ? ` 중 "${feature}" 기능만` : ''}에 대한 TC 생성 요청입니다.`,
+    `해당 저장소 내 "${project}" 프로젝트(${PROJECTS_ROOT}/${project})의 "${module_}" 모듈${feature ? ` 중 "${feature}" 기능만` : ''}에 대한 TC 생성 요청입니다.`,
     feature ? `기능 단위 요청입니다 — AGENTS.md 19-1항에 따라 해당 모듈의 누적 TC 파일(10항)을 Read한 뒤 "${feature}" 기능(소분류)에 해당하는 TC만 추가/수정하고, 다른 기능의 기존 TC는 그대로 둡니다. **Phase 1 관찰도 "${feature}" 기능과 직접 관련된 화면/플로우로만 한정**하고, 같은 상위 모듈에 속한 다른 기능(예: 로그인, 마이페이지 등)까지 넓혀서 관찰하지 않습니다.` : null,
     `AGENTS.md, skills/qa-test-case-generator/SKILL.md 규칙을 그대로 따라주세요.`,
     `AGENTS.md 13항의 Phase 워크플로우(Phase 0~8)를 단계별로 따르세요 — 이 프로젝트의 project.json이 없으면 먼저 Phase 0(URL, 단위/통합 구분, 코드/정책기반 질의)부터 진행하고, 있으면 건너뜁니다.`,
@@ -260,7 +262,7 @@ app.command('/tc-test', async ({ command, ack, client }) => {
     prompt: [
       `tc-automation 저장소 경로: "${TC_AUTOMATION_ROOT}"`,
       `"${project}" 프로젝트, 실행 범위: ${scopeLabel} 에 대한 테스트 실행(Phase 5) 요청입니다.`,
-      `"${TC_AUTOMATION_ROOT}/${project}/TC/automation/tests/${module_ ? module_ + '.spec.js' : ''}" 경로에 이미 생성되어 있는 Playwright 자동화 테스트를 실행해주세요 (없다면 그렇게 보고하고 멈추세요 — 먼저 /tc-generate로 TC를 생성해야 합니다).`,
+      `"${PROJECTS_ROOT}/${project}/TC/automation/tests/${module_ ? module_ + '.spec.js' : ''}" 경로에 이미 생성되어 있는 Playwright 자동화 테스트를 실행해주세요 (없다면 그렇게 보고하고 멈추세요 — 먼저 /tc-generate로 TC를 생성해야 합니다).`,
       grepTarget ? `AGENTS.md 19-1항에 따라 \`--grep "${grepTarget}"\` 옵션을 추가해 해당 ${tcId ? 'TC ID' : '기능'}만 실행하세요 (테스트 제목에 [TC_ID][기능명]이 포함되어 있어야 매칭됩니다).` : null,
       `AGENTS.md 19항(실행), 13항 Phase 5~8(테스트 수행 → 오류 공유 → 결함 관리 → 결과 도출) 규칙을 그대로 따라주세요.`,
       `결과 보고 시 실제 실행 범위(${scopeLabel})를 명시해주세요.`,
@@ -410,7 +412,7 @@ app.event('message', async ({ event, client }) => {
           [
             `tc-automation 저장소 경로: "${TC_AUTOMATION_ROOT}"`,
             `"${session.project}" 프로젝트의 결함 관리 요청입니다: "${trimmed}"`,
-            `AGENTS.md 20항(결함 관리) 규칙에 따라 "${session.project}/TC/defects.json"을 조회/수정해주세요. 파일 수정은 즉시 반영하되, Git 커밋은 사용자가 "승인"하기 전까지 하지 마세요.`,
+            `AGENTS.md 20항(결함 관리) 규칙에 따라 "project/${session.project}/TC/defects.json"을 조회/수정해주세요. 파일 수정은 즉시 반영하되, Git 커밋은 사용자가 "승인"하기 전까지 하지 마세요.`,
           ].join('\n'),
           {
             onProcess: (handle) => { activeRuns.set(key, handle); if (lockKey) activeProjectModules.set(lockKey, key); },
