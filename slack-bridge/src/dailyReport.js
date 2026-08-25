@@ -45,7 +45,7 @@ function buildDailyReportPrompt() {
   return [
     `오늘(${today}) 평일 정기 현황 보고를 작성해주세요.`,
     `**이 실행은 "관찰 + 노션 기록"만 수행합니다 — 코드 수정, git commit/push, 자동화 테스트 실행은 하지 않습니다.**`,
-    `"${TC_AUTOMATION_ROOT}"(tc-automation), "${TC_AUTOMATION_ROOT}/agents-config"(agents-config), "${TC_AUTOMATION_ROOT}/slack-bridge"(slack-bridge) 세 저장소 각각에서 \`git log --since="${since}" --oneline\`로 그 이후 변경사항을 확인하세요.`,
+    `"${TC_AUTOMATION_ROOT}" 저장소(2026-08-24부터 agents-config/slack-bridge를 git subtree로 포함한 단일 저장소)에서, 경로 범위를 나눠 \`git log --since="${since}" --oneline -- <path>\`로 그 이후 변경사항을 확인하세요: (a) \`-- slack-bridge\`, (b) \`-- agents-config\`.`,
     `변경사항을 두 갈래로 분류하세요: (a) 큐돌이 봇/인프라 관련(slack-bridge 코드, 권한 설정, 배포 등) → "${QUEOLDI_PAGE}" 페이지, (b) TC 생성/테스트/결함관리 규칙·스킬·워크플로우 관련(AGENTS.md/SKILL.md/role-definition.md) → "${CLAUDE_QA_PAGE}" 페이지.`,
     `각 페이지를 notion-fetch로 먼저 읽고, 변경사항이 있으면 관련 섹션(구현 현황/규칙 구조/리스크 등)을 갱신하세요. 그다음 반드시 두 페이지 모두의 "업데이트 이력" 표에 오늘 날짜로 새 행을 추가하세요 — 변경사항이 없었다면 "변경사항 없음 — 안정적으로 운영 중"으로 기록합니다 (평일 매일 기록이 원칙이며, 변경 유무와 무관하게 두 페이지 다 기록합니다).`,
     pending
