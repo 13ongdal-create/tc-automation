@@ -1,4 +1,4 @@
-const { test, expect } = require('../../../../_shared/testFixtures');
+const { test, expect } = require('../../../../../_shared/testFixtures');
 
 const BASE = 'http://192.168.10.116:30180';
 const ACCOUNT = { id: 'jspark81', pw: 'q1w2e3r4!' };
