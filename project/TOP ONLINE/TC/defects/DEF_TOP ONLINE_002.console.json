@@ -1,0 +1,9 @@
+{
+  "consoleErrors": [],
+  "failedRequests": [],
+  "note": "이 에러는 서버가 200 OK로 렌더링한 Next.js 에러 바운더리 페이지라 콘솔 에러/4xx·5xx 응답으로는 잡히지 않음 — 화면 텍스트 자체가 유일한 증거.",
+  "capturedErrorPageText": "시스템 오류가 발생했습니다.\n\n에러 종류: Error\n\n메시지: An error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the nature of the error.\n\nError Digest: 795149636\n\n에러 상세 정보(Stack Trace) 보기\n다시 시도하기\n홈으로 이동",
+  "capturedAt": "2026-08-25 (Phase 1 관찰 중 /products/98 접속 1회차에서 재현, 이후 이 세션에서 재현 시도 32회 중 재현 0회 — 재현율이 낮고 간헐적임을 시사)",
+  "screenshot": "이 재현 시점에는 별도 스크린샷을 남기지 않음 — 이후 재시도(32회)에서 재현되지 않아 스크린샷 재확보 실패. 화면 텍스트 캡처로 대체.",
+  "relatedObservation": "동일 시그니처(Next.js Server Components 렌더링 500, 프로덕션 빌드라 상세 메시지 생략)가 Phase 1 관찰 중 /login 페이지에서도 총 6회 시도 중 1회 재현된 바 있음 — 서로 다른 라우트에서 동일 클래스 에러가 발생해 사이트 전역 SSR 안정성 이슈로 판단."
+}

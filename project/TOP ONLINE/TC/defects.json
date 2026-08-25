@@ -1,0 +1,44 @@
+[
+  {
+    "defectId": "DEF_TOP ONLINE_001",
+    "tcId": "TC_DSP_007",
+    "module": "MD's PICK",
+    "severity": "P1",
+    "status": "신규",
+    "summary": "MD's PICK > 할인 상품 카드(카드1·카드2)의 판매가가 상품상세 판매가와 불일치",
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) MD's PICK 페이지(/display/mds-pick) 진입 2) 카드1(그린 체크 코튼 셔츠)·카드2(오벌 시그니처 블랙) 판매가 확인 3) 각 카드 \"자세히 보기\" 클릭해 상품상세(/products/98, /products/63) 판매가와 대조",
+    "actualResult": "카드1: MD's PICK 판매가 ₩110,000 vs 상품상세 판매가 ₩120,000 (불일치). 카드2: MD's PICK 판매가 ₩200,000 vs 상품상세 판매가 ₩199,000 (불일치). 두 할인 상품 카드 모두 MD's PICK 표시가가 상품상세보다 낮게 표시됨. 비할인 카드3(₩229,000)은 두 화면이 일치 — 할인 상품에서만 재현되는 전시 컴포넌트의 계통적 결함으로 판단됨. 카드1의 경우 MD's PICK에 표시된 할인율 배지(7%)도 표시 판매가(110,000) 기준 계산값(14.7%)과 불일치하나, 상품상세 자체의 정가·판매가·할인율(120,000/129,000/7%)은 내부적으로 정합함 — 즉 MD's PICK 전시 데이터의 판매가 값 자체가 잘못 스냅샷된 것으로 추정됨.",
+    "expectedResult": "MD's PICK에 표시되는 판매가는 상품상세(원본 상품 데이터) 판매가와 항상 일치해야 한다.",
+    "detectedAt": "2026-08-25",
+    "source": "observation",
+    "screenshot": "TC/defects/DEF_TOP ONLINE_001.png",
+    "consoleLog": "TC/defects/DEF_TOP ONLINE_001.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      { "at": "2026-08-25", "status": "신규", "note": "Phase 1~3 URL 관찰 중 최초 발견 (카드1: TC_DSP_006/007, 카드2: TC_DSP_009 대상)" }
+    ]
+  },
+  {
+    "defectId": "DEF_TOP ONLINE_002",
+    "tcId": "TC_DSP_034",
+    "module": "공통(로그인/상품상세)",
+    "severity": "P1",
+    "status": "신규",
+    "summary": "Front > 로그인·상품상세 등 다수 라우트에서 Next.js Server Components 간헐적 500 에러",
+    "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
+    "testSteps": "1) /login 페이지에서 로그인 시도를 반복 수행(6회) 2) /products/98(상품상세) 접속을 반복 수행(5회)",
+    "actualResult": "/login: 6회 중 1회 \"시스템 오류가 발생했습니다 / An error occurred in the Server Components render... Error Digest: 795149636\" 500 에러 페이지(HTTP 200으로 렌더링됨) 발생, 1회는 에러 메시지 없이 로그인 페이지에 그대로 머무는 무응답 실패, 나머지 4회는 정상 성공. /products/98: 최초 관찰 5회 중 1회 동일 시그니처의 500 에러 페이지 재현(이후 이 세션에서 재현 시도 32회 중 0회 재현되어 재현율이 낮고 매우 간헐적임을 확인). 재시도 시 대부분 성공하나 사용자에게는 실패 시 아무 안내도 없음.",
+    "expectedResult": "페이지 접속/로그인 시도 시 500 에러 없이 항상 정상 렌더링/처리되어야 한다. 서버 측 일시 오류가 불가피하더라도 사용자에게 재시도 안내 등 최소한의 피드백이 있어야 한다.",
+    "detectedAt": "2026-08-25",
+    "source": "observation",
+    "screenshot": "",
+    "consoleLog": "TC/defects/DEF_TOP ONLINE_002.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      { "at": "2026-08-25", "status": "신규", "note": "Phase 1 관찰(/login) 및 Phase 3 재관찰(/products/98) 중 동일 시그니처로 발견. 스크린샷은 최초 재현 시점에 확보하지 못했고 이후 재시도(32회)에서도 재현되지 않아 화면 텍스트 캡처로 대체(TC/defects/DEF_TOP ONLINE_002.console.json 참조)" }
+    ]
+  }
+]
