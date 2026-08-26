@@ -1,10 +1,12 @@
 :root{
-  /* 색상 팔레트 (사용자 제공 디자인 시스템 기준) */
-  --primary: #157dbc;
-  --primary-dark: #0c4e88;
-  --primary-light: #4b94bf;
-  --accent2: #47b1bb;
-  --accent3: #4571ae;
+  /* 색상 팔레트 — 채도/명도를 높인 밝은 톤 (2026-08-26, 사용자 피드백으로 기존 저채도
+     팔레트에서 전환. 기존 저채도 값: primary #157dbc/#0c4e88/#4b94bf, accent2 #47b1bb,
+     good #1a7f37, bad #c0392b, warn #b8860b) */
+  --primary: #0ea5e9;
+  --primary-dark: #0369a1;
+  --primary-light: #38bdf8;
+  --accent2: #14b8a6;
+  --accent3: #6366f1;
 
   --text-primary: #333;
   --text-dark: #222;
@@ -16,12 +18,12 @@
   --bg-hover: #f4f4f4;
   --white: #fff;
 
-  --good: #1a7f37;
-  --good-bg: #e6f4ea;
-  --bad: #c0392b;
-  --bad-bg: #fbe9e7;
-  --warn: #b8860b;
-  --warn-bg: #fbf1de;
+  --good: #16a34a;
+  --good-bg: #dcfce7;
+  --bad: #ef4444;
+  --bad-bg: #fee2e2;
+  --warn: #f59e0b;
+  --warn-bg: #fef3c7;
 
   --radius: 10px;
   --shadow: 0 1px 3px rgba(20,30,40,0.06);
