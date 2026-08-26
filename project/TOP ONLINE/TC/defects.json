@@ -2,7 +2,7 @@
   {
     "defectId": "DEF_TOP ONLINE_001",
     "tcId": "TC_DSP_007",
-    "module": "MD's PICK",
+    "module": "전시(MD's PICK)",
     "severity": "P1",
     "status": "신규",
     "summary": "MD's PICK > 할인 상품 카드(카드1·카드2)의 판매가가 상품상세 판매가와 불일치",
@@ -17,7 +17,8 @@
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-25", "status": "신규", "note": "Phase 1~3 URL 관찰 중 최초 발견 (카드1: TC_DSP_006/007, 카드2: TC_DSP_009 대상)" }
+      { "at": "2026-08-25", "status": "신규", "note": "Phase 1~3 URL 관찰 중 최초 발견 (카드1: TC_DSP_006/007, 카드2: TC_DSP_009 대상)" },
+      { "at": "2026-08-26", "status": "신규", "note": "module 표기 정정: \"MD's PICK\" → \"전시(MD's PICK)\" (TC_DSP.json meta.moduleName 및 실행결과 스냅샷과 표기 불일치 — 사용자 지적으로 발견)" }
     ]
   },
   {
