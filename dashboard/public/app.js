@@ -3,6 +3,17 @@ const STATUS_ORDER = ['신규', '처리중', '재검증대기', '완료', '보�
 const el = {
   projectSelect: document.getElementById('projectSelect'),
   btnRefresh: document.getElementById('btnRefresh'),
+  btnLogout: document.getElementById('btnLogout'),
+  btnHome: document.getElementById('btnHome'),
+  homeView: document.getElementById('homeView'),
+  projectView: document.getElementById('projectView'),
+  projectCards: document.getElementById('projectCards'),
+  btnNewProject: document.getElementById('btnNewProject'),
+  newProjectModal: document.getElementById('newProjectModal'),
+  newProjectForm: document.getElementById('newProjectForm'),
+  newProjectName: document.getElementById('newProjectName'),
+  newProjectError: document.getElementById('newProjectError'),
+  btnCancelNewProject: document.getElementById('btnCancelNewProject'),
   kpiTotalDefects: document.getElementById('kpiTotalDefects'),
   kpiNewDefects: document.getElementById('kpiNewDefects'),
   kpiPass: document.getElementById('kpiPass'),
@@ -18,6 +29,8 @@ const el = {
   btnChatReset: document.getElementById('btnChatReset'),
 };
 
+let allProjects = [];
+
 function esc(s) {
   return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
@@ -25,6 +38,7 @@ function esc(s) {
 async function loadProjects() {
   const res = await fetch('/api/projects');
   const { projects } = await res.json();
+  allProjects = projects;
   el.projectSelect.innerHTML = projects.map((p) => `<option value="${esc(p)}">${esc(p)}</option>`).join('');
   const saved = localStorage.getItem('qdori.project');
   if (saved && projects.includes(saved)) el.projectSelect.value = saved;
@@ -37,6 +51,108 @@ async function loadAll() {
   localStorage.setItem('qdori.project', project);
   await Promise.all([loadKpi(project), loadDefects(project), loadResults(project), loadChatHistory(project)]);
 }
+
+// ── 🏠 홈 (프로젝트 카드) ↔ 📁 프로젝트 상세 화면 전환 ─────────────────────
+function showHome() {
+  el.projectView.style.display = 'none';
+  el.homeView.style.display = 'block';
+  renderProjectCards();
+}
+
+function showProject(project) {
+  if (!project) return showHome();
+  el.projectSelect.value = project;
+  el.homeView.style.display = 'none';
+  el.projectView.style.display = 'block';
+  loadAll();
+}
+
+async function renderProjectCards() {
+  if (!allProjects.length) {
+    el.projectCards.innerHTML = '<div class="empty-row">등록된 프로젝트가 없습니다. "+ 새 프로젝트"로 시작하세요.</div>';
+    return;
+  }
+  el.projectCards.innerHTML = allProjects.map((p) => `<div class="empty-row" data-loading="${esc(p)}">${esc(p)} 불러오는 중…</div>`).join('');
+  const kpis = await Promise.all(
+    allProjects.map((p) =>
+      fetch(`/api/${encodeURIComponent(p)}/kpi`)
+        .then((r) => (r.ok ? r.json() : null))
+        .catch(() => null)
+    )
+  );
+  const cardsHtml = allProjects
+    .map((p, i) => {
+      const k = kpis[i];
+      const stats = k
+        ? `
+        <div class="pc-stats">
+          <div class="pc-stat warn"><span class="n">${k.defects.counts['신규'] || 0}</span><span class="l">신규 결함</span></div>
+          <div class="pc-stat"><span class="n">${k.results.pass}</span><span class="l">Pass</span></div>
+          <div class="pc-stat bad"><span class="n">${k.results.fail}</span><span class="l">Fail</span></div>
+          <div class="pc-stat"><span class="n">${k.results.total ? Math.round((k.results.executed / k.results.total) * 100) + '%' : '–'}</span><span class="l">수행율</span></div>
+        </div>`
+        : '<div class="pc-stats"><span class="l">데이터 없음</span></div>';
+      return `<button type="button" class="project-card" data-project="${esc(p)}"><div class="pc-name">${esc(p)}</div>${stats}</button>`;
+    })
+    .join('');
+  el.projectCards.innerHTML = cardsHtml + '<button type="button" id="btnNewProjectCard" class="project-card-new">+ 새 프로젝트</button>';
+}
+
+el.projectCards.addEventListener('click', (e) => {
+  const newBtn = e.target.closest('#btnNewProjectCard');
+  if (newBtn) return openNewProjectModal();
+  const card = e.target.closest('.project-card');
+  if (card) showProject(card.dataset.project);
+});
+
+el.btnHome.addEventListener('click', showHome);
+
+el.btnRefresh.addEventListener('click', () => {
+  if (el.projectView.style.display === 'none') renderProjectCards();
+  else loadAll();
+});
+
+el.btnLogout.addEventListener('click', async () => {
+  await fetch('/api/logout', { method: 'POST' });
+  location.href = '/login';
+});
+
+// ── + 새 프로젝트 ────────────────────────────────────────────────────────
+function openNewProjectModal() {
+  el.newProjectError.textContent = '';
+  el.newProjectName.value = '';
+  el.newProjectModal.hidden = false;
+  el.newProjectName.focus();
+}
+
+function closeNewProjectModal() {
+  el.newProjectModal.hidden = true;
+}
+
+el.btnNewProject.addEventListener('click', openNewProjectModal);
+el.btnCancelNewProject.addEventListener('click', closeNewProjectModal);
+el.newProjectModal.addEventListener('click', (e) => {
+  if (e.target === el.newProjectModal) closeNewProjectModal();
+});
+
+el.newProjectForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = el.newProjectName.value.trim();
+  el.newProjectError.textContent = '';
+  const res = await fetch('/api/projects', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    el.newProjectError.textContent = data.error || '생성에 실패했습니다.';
+    return;
+  }
+  closeNewProjectModal();
+  await loadProjects();
+  showProject(data.project);
+});
 
 async function loadKpi(project) {
   const res = await fetch(`/api/${encodeURIComponent(project)}/kpi`);
@@ -238,11 +354,10 @@ el.btnChatReset.addEventListener('click', async () => {
   await loadChatHistory(project);
 });
 
-el.projectSelect.addEventListener('change', loadAll);
-el.btnRefresh.addEventListener('click', loadAll);
+el.projectSelect.addEventListener('change', () => showProject(el.projectSelect.value));
 
 (async function init() {
   await loadProjects();
-  await loadAll();
   connectWs();
+  showHome(); // 최초 진입 화면은 항상 홈(프로젝트 카드)
 })();

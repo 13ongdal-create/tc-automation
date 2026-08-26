@@ -23,3 +23,6 @@ playwright-report/
 
 # 테스트 계정/자격증명 (git 미추적 - AGENTS.md 7항)
 **/TC/testAccounts.json
+
+# 대시보드 공유 비밀번호 (2026-08-26 네트워크 공유 인증 추가, 서버가 최초 실행 시 자동 생성)
+/dashboard/.dashboard-password

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA Automation 로그인</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  body{display:flex;align-items:center;justify-content:center;min-height:100vh;}
+  .login-box{
+    background:#fff;border:1px solid var(--divider);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:36px 32px;width:100%;max-width:340px;
+  }
+  .login-brand{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:22px;}
+  .login-box h1{font-size:17px;margin:0;color:var(--text-dark);}
+  .login-box label{display:block;font-size:13px;color:var(--text-secondary);margin-bottom:6px;}
+  .login-box input{
+    width:100%;font-family:inherit;font-size:14px;padding:10px 12px;
+    border:1px solid var(--border);border-radius:6px;margin-bottom:14px;
+  }
+  .login-box input:focus{outline:2px solid var(--primary-light);outline-offset:1px;}
+  .login-box button{width:100%;padding:11px;font-size:14px;}
+  .login-error{color:var(--bad);font-size:12.5px;margin:-6px 0 14px;min-height:1em;}
+</style>
+</head>
+<body>
+<div class="login-box">
+  <div class="login-brand">
+    <span class="brand-badge">Q</span>
+    <h1>QA Automation</h1>
+  </div>
+  <form id="loginForm">
+    <label for="pw">공유 비밀번호</label>
+    <input type="password" id="pw" name="pw" autocomplete="current-password" autofocus required>
+    <div class="login-error" id="loginError"></div>
+    <button type="submit" class="btn btn-primary">로그인</button>
+  </form>
+</div>
+<script>
+  const form = document.getElementById('loginForm');
+  const errorEl = document.getElementById('loginError');
+  const params = new URLSearchParams(location.search);
+  const next = params.get('next') && params.get('next').startsWith('/') ? params.get('next') : '/';
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorEl.textContent = '';
+    const pw = document.getElementById('pw').value;
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw }),
+    });
+    if (res.ok) {
+      location.href = next;
+    } else {
+      const { error } = await res.json().catch(() => ({ error: '로그인에 실패했습니다.' }));
+      errorEl.textContent = error || '비밀번호가 올바르지 않습니다.';
+    }
+  });
+</script>
+</body>
+</html>
