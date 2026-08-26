@@ -63,41 +63,15 @@
       </div>
     </div>
 
-    <div class="panel panel-full">
-      <div class="panel-head">
-        <h2>📊 프로젝트별 수행현황</h2>
-        <div class="chart-legend-inline" id="execLegend"></div>
-      </div>
-      <div id="chartExecStatus" class="stack-chart"></div>
+    <div class="chart-legend-bar">
+      <span class="legend-group-title">수행현황</span>
+      <span class="chart-legend-inline" id="execLegend"></span>
+      <span class="legend-divider"></span>
+      <span class="legend-group-title">결함현황</span>
+      <span class="chart-legend-inline" id="defectLegend"></span>
     </div>
 
-    <div class="panel panel-full">
-      <div class="panel-head">
-        <h2>🐞 프로젝트별 결함현황</h2>
-        <div class="chart-legend-inline" id="defectLegend"></div>
-      </div>
-      <div id="chartDefectStatus" class="stack-chart"></div>
-    </div>
-
-    <div class="panel panel-full">
-      <div class="panel-head"><h2>프로젝트 요약</h2></div>
-      <div class="table-wrap">
-        <table id="homeTable">
-          <thead>
-            <tr>
-              <th>프로젝트</th>
-              <th style="width:11%">전체 결함</th>
-              <th style="width:9%">신규</th>
-              <th style="width:8%">Pass</th>
-              <th style="width:8%">Fail</th>
-              <th style="width:11%">수행율</th>
-              <th style="width:14%">최근 실행일</th>
-            </tr>
-          </thead>
-          <tbody id="homeTableBody"></tbody>
-        </table>
-      </div>
-    </div>
+    <div id="projectBlocks"></div>
   </div>
 </section>
 

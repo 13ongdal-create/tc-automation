@@ -15,11 +15,9 @@ const el = {
   homeKpiPass: document.getElementById('homeKpiPass'),
   homeKpiFail: document.getElementById('homeKpiFail'),
   homeKpiExecRate: document.getElementById('homeKpiExecRate'),
-  chartExecStatus: document.getElementById('chartExecStatus'),
-  chartDefectStatus: document.getElementById('chartDefectStatus'),
+  projectBlocks: document.getElementById('projectBlocks'),
   execLegend: document.getElementById('execLegend'),
   defectLegend: document.getElementById('defectLegend'),
-  homeTableBody: document.getElementById('homeTableBody'),
   btnNewProject: document.getElementById('btnNewProject'),
   btnNewProjectEmpty: document.getElementById('btnNewProjectEmpty'),
   newProjectModal: document.getElementById('newProjectModal'),
@@ -151,100 +149,76 @@ async function renderHomeDashboard() {
 
   renderLegend(el.execLegend, EXEC_ORDER, EXEC_LABELS, EXEC_COLORS);
   renderLegend(el.defectLegend, STATUS_ORDER, Object.fromEntries(STATUS_ORDER.map((s) => [s, s])), STATUS_COLORS);
-  renderExecStatusChart(rows);
-  renderDefectStatusChart(rows);
-  renderHomeTable(rows);
+  renderProjectBlocks(rows);
 }
 
-/** 프로젝트별 수행현황 — 하나의 누적(stacked) 막대에 Pass/Fail/Blocked/N/A/N/T/미실행 비율을 표시 */
-function renderExecStatusChart(rows) {
-  el.chartExecStatus.innerHTML = rows
-    .map(({ project, kpi }) => {
-      const r = kpi ? kpi.results : null;
-      const total = r ? r.total : 0;
-      if (!total) {
-        return `
-        <div class="stack-row" data-project="${esc(project)}">
-          <div class="stack-label"><span class="stack-name">${esc(project)}</span><span class="stack-sub">실행 이력 없음</span></div>
-          <div class="stack-track stack-track-empty"></div>
-        </div>`;
-      }
-      const segs = EXEC_ORDER.map((k) => {
-        const n = r[k] || 0;
-        if (!n) return '';
-        return `<div class="stack-seg" style="width:${(n / total) * 100}%;background:${EXEC_COLORS[k]}" title="${EXEC_LABELS[k]} ${n}건"></div>`;
-      }).join('');
-      const execRate = Math.round((r.executed / total) * 100);
-      return `
-      <div class="stack-row home-table-row" data-project="${esc(project)}">
-        <div class="stack-label"><span class="stack-name">${esc(project)}</span><span class="stack-sub">${total}건 · 수행율 ${execRate}%</span></div>
-        <div class="stack-track">${segs}</div>
-      </div>`;
-    })
+function stackTrack(segments) {
+  const html = segments
+    .filter((s) => s.n > 0)
+    .map((s) => `<div class="stack-seg" style="width:${(s.n / s.total) * 100}%;background:${s.color}" title="${esc(s.label)} ${s.n}건"></div>`)
     .join('');
+  return html ? `<div class="stack-track">${html}</div>` : '<div class="stack-track stack-track-empty"></div>';
 }
 
-/** 프로젝트별 결함현황 — 하나의 누적(stacked) 막대에 신규/처리중/재검증대기/완료/보류/재발생 비율을 표시 */
-function renderDefectStatusChart(rows) {
-  el.chartDefectStatus.innerHTML = rows
-    .map(({ project, kpi }) => {
-      const total = kpi ? kpi.defects.total : 0;
-      if (!total) {
-        return `
-        <div class="stack-row" data-project="${esc(project)}">
-          <div class="stack-label"><span class="stack-name">${esc(project)}</span><span class="stack-sub">등록된 결함 없음</span></div>
-          <div class="stack-track stack-track-empty"></div>
-        </div>`;
-      }
-      const counts = kpi.defects.counts;
-      const segs = STATUS_ORDER.map((s) => {
-        const n = counts[s] || 0;
-        if (!n) return '';
-        return `<div class="stack-seg" style="width:${(n / total) * 100}%;background:${STATUS_COLORS[s]}" title="${s} ${n}건"></div>`;
-      }).join('');
-      return `
-      <div class="stack-row home-table-row" data-project="${esc(project)}">
-        <div class="stack-label"><span class="stack-name">${esc(project)}</span><span class="stack-sub">결함 ${total}건 · 신규 ${counts['신규'] || 0}건</span></div>
-        <div class="stack-track">${segs}</div>
-      </div>`;
-    })
-    .join('');
-}
-
-function renderHomeTable(rows) {
-  el.homeTableBody.innerHTML = rows
+/** 프로젝트 하나당 블록 1개 — 그 안에 수행현황 차트 / 결함현황 차트 / 요약을 나란히 표시 */
+function renderProjectBlocks(rows) {
+  el.projectBlocks.innerHTML = rows
     .map(({ project, kpi }) => {
       const d = kpi ? kpi.defects : { total: 0, counts: {} };
       const r = kpi ? kpi.results : { pass: 0, fail: 0, total: 0, executed: 0, latestDate: null };
-      const execRate = r.total ? Math.round((r.executed / r.total) * 100) + '%' : '–';
+      const execRate = r.total ? Math.round((r.executed / r.total) * 100) : null;
       const lastRun =
         r.latestDate && r.latestDate !== '00000000'
           ? `${r.latestDate.slice(0, 4)}-${r.latestDate.slice(4, 6)}-${r.latestDate.slice(6, 8)}`
           : '–';
+
+      const execTrack = r.total
+        ? stackTrack(EXEC_ORDER.map((k) => ({ n: r[k] || 0, total: r.total, color: EXEC_COLORS[k], label: EXEC_LABELS[k] })))
+        : stackTrack([]);
+      const execCaption = r.total ? `${r.total}건 · 수행율 ${execRate}%` : '실행 이력 없음';
+
+      const defectTrack = d.total
+        ? stackTrack(STATUS_ORDER.map((s) => ({ n: d.counts[s] || 0, total: d.total, color: STATUS_COLORS[s], label: s })))
+        : stackTrack([]);
+      const defectCaption = d.total ? `결함 ${d.total}건 · 신규 ${d.counts['신규'] || 0}건` : '등록된 결함 없음';
+
       return `
-    <tr class="home-table-row" data-project="${esc(project)}">
-      <td class="home-table-name">${esc(project)}</td>
-      <td>${d.total}</td>
-      <td>${d.counts['신규'] || 0}</td>
-      <td>${r.pass}</td>
-      <td>${r.fail}</td>
-      <td>${execRate}</td>
-      <td>${lastRun}</td>
-    </tr>`;
+      <div class="panel project-block" data-project="${esc(project)}">
+        <div class="panel-head">
+          <h2>${esc(project)}</h2>
+          <span class="panel-sub project-block-link">상세보기 →</span>
+        </div>
+        <div class="project-block-body">
+          <div class="pb-col">
+            <div class="pb-col-title">수행현황</div>
+            ${execTrack}
+            <div class="pb-caption">${execCaption}</div>
+          </div>
+          <div class="pb-col">
+            <div class="pb-col-title">결함현황</div>
+            ${defectTrack}
+            <div class="pb-caption">${defectCaption}</div>
+          </div>
+          <div class="pb-col pb-col-summary">
+            <div class="pb-col-title">요약</div>
+            <table class="pb-summary-table">
+              <tr><th>전체 결함</th><td>${d.total}</td></tr>
+              <tr><th>신규</th><td>${d.counts['신규'] || 0}</td></tr>
+              <tr><th>Pass</th><td>${r.pass}</td></tr>
+              <tr><th>Fail</th><td>${r.fail}</td></tr>
+              <tr><th>수행율</th><td>${execRate === null ? '–' : execRate + '%'}</td></tr>
+              <tr><th>최근 실행일</th><td>${lastRun}</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>`;
     })
     .join('');
 }
 
-el.homeTableBody.addEventListener('click', (e) => {
-  const row = e.target.closest('.home-table-row');
-  if (row) showProject(row.dataset.project);
-});
-
-[el.chartExecStatus, el.chartDefectStatus].forEach((container) => {
-  container.addEventListener('click', (e) => {
-    const row = e.target.closest('[data-project]');
-    if (row) showProject(row.dataset.project);
-  });
+el.projectBlocks.addEventListener('click', (e) => {
+  const block = e.target.closest('.project-block');
+  if (block) showProject(block.dataset.project);
 });
 
 el.btnHome.addEventListener('click', showHome);
