@@ -63,15 +63,20 @@
       </div>
     </div>
 
-    <div class="home-charts-grid">
-      <div class="panel">
-        <div class="panel-head"><h2>프로젝트별 Pass / Fail</h2></div>
-        <div id="chartPassFail" class="chart-bars"></div>
+    <div class="panel panel-full">
+      <div class="panel-head">
+        <h2>📊 프로젝트별 수행현황</h2>
+        <div class="chart-legend-inline" id="execLegend"></div>
       </div>
-      <div class="panel">
-        <div class="panel-head"><h2>결함 상태 분포 (전체)</h2></div>
-        <div id="chartDefectStatus"></div>
+      <div id="chartExecStatus" class="stack-chart"></div>
+    </div>
+
+    <div class="panel panel-full">
+      <div class="panel-head">
+        <h2>🐞 프로젝트별 결함현황</h2>
+        <div class="chart-legend-inline" id="defectLegend"></div>
       </div>
+      <div id="chartDefectStatus" class="stack-chart"></div>
     </div>
 
     <div class="panel panel-full">

@@ -187,37 +187,22 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 .home-empty p{margin:0 0 16px;font-size:14px;}
 
 .home-kpi-grid{grid-template-columns:repeat(6,1fr);}
-.home-charts-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;margin:20px 0;}
 
-/* 프로젝트별 Pass/Fail 막대 차트 (순수 CSS, 라이브러리 없음) */
-.chart-bars{display:flex;flex-direction:column;gap:16px;}
-.bar-group{display:flex;flex-direction:column;gap:4px;}
-.bar-group .bar-name{font-size:12.5px;font-weight:700;color:var(--text-dark);margin-bottom:2px;}
-.bar-line{display:flex;align-items:center;gap:8px;}
-.bar-line .bar-tag{width:32px;font-size:10.5px;color:var(--text-secondary);flex-shrink:0;}
-.bar-track{flex:1;background:var(--bg-light);border-radius:4px;height:12px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:4px;min-width:2px;transition:width .25s ease;}
-.bar-fill.pass{background:var(--good);}
-.bar-fill.fail{background:var(--bad);}
-.bar-line .bar-num{width:26px;text-align:right;font-size:11.5px;font-variant-numeric:tabular-nums;color:var(--text-secondary);flex-shrink:0;}
+/* 프로젝트별 수행현황 / 결함현황 — 누적(stacked) 막대 차트, 프로젝트당 한 행 (순수 CSS) */
+.chart-legend-inline{display:flex;flex-wrap:wrap;gap:4px 14px;margin-left:auto;}
+.legend-item{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-secondary);white-space:nowrap;}
+.legend-swatch{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
 
-/* 결함 상태 분포 도넛 차트 (CSS conic-gradient + mask) */
-.donut-row{display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
-.donut-wrap{position:relative;width:130px;height:130px;flex-shrink:0;}
-.donut{
-  width:100%;height:100%;border-radius:50%;
-  -webkit-mask:radial-gradient(closest-side, transparent 62%, #000 63%);
-  mask:radial-gradient(closest-side, transparent 62%, #000 63%);
-}
-.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;}
-.donut-total{font-size:21px;font-weight:800;color:var(--text-dark);font-variant-numeric:tabular-nums;}
-.donut-total-label{font-size:10.5px;color:var(--text-secondary);}
-.donut-legend{display:flex;flex-direction:column;gap:7px;flex:1;min-width:130px;}
-.donut-legend-item{display:flex;align-items:center;gap:8px;font-size:12.5px;}
-.donut-legend-item.is-zero{opacity:0.4;}
-.donut-swatch{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
-.donut-legend-label{flex:1;color:var(--text-primary);}
-.donut-legend-num{font-weight:700;color:var(--text-dark);font-variant-numeric:tabular-nums;}
+.stack-chart{display:flex;flex-direction:column;gap:14px;}
+.stack-row{display:flex;align-items:center;gap:16px;padding:6px 4px;border-radius:6px;cursor:pointer;}
+.stack-row:hover{background:var(--bg-hover);}
+.stack-label{width:180px;flex-shrink:0;display:flex;flex-direction:column;gap:1px;}
+.stack-label .stack-name{font-size:13px;font-weight:700;color:var(--text-dark);word-break:break-all;}
+.stack-label .stack-sub{font-size:11px;color:var(--text-secondary);}
+.stack-track{flex:1;display:flex;height:20px;border-radius:5px;overflow:hidden;background:var(--bg-light);}
+.stack-track-empty{background:repeating-linear-gradient(135deg, var(--bg-light), var(--bg-light) 6px, var(--divider) 6px, var(--divider) 12px);}
+.stack-seg{height:100%;min-width:2px;}
+.stack-seg:not(:last-child){border-right:1px solid rgba(255,255,255,0.6);}
 
 /* 프로젝트 요약 표 */
 .home-table-row{cursor:pointer;}
@@ -243,8 +228,9 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 @media (max-width: 900px){
   .kpi-grid{grid-template-columns:repeat(2,1fr);}
   .home-kpi-grid{grid-template-columns:repeat(3,1fr);}
-  .home-charts-grid{grid-template-columns:1fr;}
   .panel-grid{grid-template-columns:1fr;}
   .panel-wide{grid-column:1;}
   .chat-msg{max-width:92%;}
+  .stack-row{flex-wrap:wrap;}
+  .stack-label{width:100%;}
 }

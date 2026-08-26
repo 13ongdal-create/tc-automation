@@ -15,8 +15,10 @@ const el = {
   homeKpiPass: document.getElementById('homeKpiPass'),
   homeKpiFail: document.getElementById('homeKpiFail'),
   homeKpiExecRate: document.getElementById('homeKpiExecRate'),
-  chartPassFail: document.getElementById('chartPassFail'),
+  chartExecStatus: document.getElementById('chartExecStatus'),
   chartDefectStatus: document.getElementById('chartDefectStatus'),
+  execLegend: document.getElementById('execLegend'),
+  defectLegend: document.getElementById('defectLegend'),
   homeTableBody: document.getElementById('homeTableBody'),
   btnNewProject: document.getElementById('btnNewProject'),
   btnNewProjectEmpty: document.getElementById('btnNewProjectEmpty'),
@@ -88,6 +90,29 @@ const STATUS_COLORS = {
   '재발생': 'var(--bad)',
 };
 
+// 실행결과 값(AGENTS.md 20-7항) 색상 — 결함현황(STATUS_COLORS)과 구분되는 팔레트
+const EXEC_ORDER = ['pass', 'fail', 'blocked', 'na', 'nt', 'none'];
+const EXEC_LABELS = { pass: 'Pass', fail: 'Fail', blocked: 'Blocked', na: 'N/A', nt: 'N/T', none: '미실행' };
+const EXEC_COLORS = {
+  pass: 'var(--good)',
+  fail: 'var(--bad)',
+  blocked: 'var(--warn)',
+  na: 'var(--text-secondary)',
+  nt: 'var(--accent2)',
+  none: 'var(--divider)',
+};
+
+function renderLegend(el, order, labels, colors) {
+  el.innerHTML = order
+    .map(
+      (k) => `
+    <span class="legend-item">
+      <span class="legend-swatch" style="background:${colors[k]}"></span>${esc(labels[k])}
+    </span>`
+    )
+    .join('');
+}
+
 async function renderHomeDashboard() {
   if (!allProjects.length) {
     el.homeEmpty.hidden = false;
@@ -106,12 +131,10 @@ async function renderHomeDashboard() {
   );
   const rows = allProjects.map((p, i) => ({ project: p, kpi: kpis[i] }));
 
-  const statusAgg = Object.fromEntries(STATUS_ORDER.map((s) => [s, 0]));
   let totalDefects = 0, totalNew = 0, totalPass = 0, totalFail = 0, totalExecuted = 0, totalTcs = 0;
   rows.forEach(({ kpi }) => {
     if (!kpi) return;
     totalDefects += kpi.defects.total;
-    STATUS_ORDER.forEach((s) => { statusAgg[s] += kpi.defects.counts[s] || 0; });
     totalNew += kpi.defects.counts['신규'] || 0;
     totalPass += kpi.results.pass;
     totalFail += kpi.results.fail;
@@ -126,67 +149,66 @@ async function renderHomeDashboard() {
   el.homeKpiFail.textContent = totalFail;
   el.homeKpiExecRate.textContent = totalTcs ? Math.round((totalExecuted / totalTcs) * 100) + '%' : '–';
 
-  renderPassFailChart(rows);
-  renderDefectStatusDonut(statusAgg, totalDefects);
+  renderLegend(el.execLegend, EXEC_ORDER, EXEC_LABELS, EXEC_COLORS);
+  renderLegend(el.defectLegend, STATUS_ORDER, Object.fromEntries(STATUS_ORDER.map((s) => [s, s])), STATUS_COLORS);
+  renderExecStatusChart(rows);
+  renderDefectStatusChart(rows);
   renderHomeTable(rows);
 }
 
-function renderPassFailChart(rows) {
-  const withData = rows.filter((r) => r.kpi);
-  if (!withData.length) {
-    el.chartPassFail.innerHTML = '<div class="empty-row">실행 이력이 없습니다</div>';
-    return;
-  }
-  const max = Math.max(1, ...withData.map((r) => Math.max(r.kpi.results.pass, r.kpi.results.fail)));
-  el.chartPassFail.innerHTML = withData
-    .map(
-      ({ project, kpi }) => `
-    <div class="bar-group">
-      <div class="bar-name">${esc(project)}</div>
-      <div class="bar-line">
-        <span class="bar-tag">Pass</span>
-        <div class="bar-track"><div class="bar-fill pass" style="width:${(kpi.results.pass / max) * 100}%"></div></div>
-        <span class="bar-num">${kpi.results.pass}</span>
-      </div>
-      <div class="bar-line">
-        <span class="bar-tag">Fail</span>
-        <div class="bar-track"><div class="bar-fill fail" style="width:${(kpi.results.fail / max) * 100}%"></div></div>
-        <span class="bar-num">${kpi.results.fail}</span>
-      </div>
-    </div>`
-    )
+/** 프로젝트별 수행현황 — 하나의 누적(stacked) 막대에 Pass/Fail/Blocked/N/A/N/T/미실행 비율을 표시 */
+function renderExecStatusChart(rows) {
+  el.chartExecStatus.innerHTML = rows
+    .map(({ project, kpi }) => {
+      const r = kpi ? kpi.results : null;
+      const total = r ? r.total : 0;
+      if (!total) {
+        return `
+        <div class="stack-row" data-project="${esc(project)}">
+          <div class="stack-label"><span class="stack-name">${esc(project)}</span><span class="stack-sub">실행 이력 없음</span></div>
+          <div class="stack-track stack-track-empty"></div>
+        </div>`;
+      }
+      const segs = EXEC_ORDER.map((k) => {
+        const n = r[k] || 0;
+        if (!n) return '';
+        return `<div class="stack-seg" style="width:${(n / total) * 100}%;background:${EXEC_COLORS[k]}" title="${EXEC_LABELS[k]} ${n}건"></div>`;
+      }).join('');
+      const execRate = Math.round((r.executed / total) * 100);
+      return `
+      <div class="stack-row home-table-row" data-project="${esc(project)}">
+        <div class="stack-label"><span class="stack-name">${esc(project)}</span><span class="stack-sub">${total}건 · 수행율 ${execRate}%</span></div>
+        <div class="stack-track">${segs}</div>
+      </div>`;
+    })
     .join('');
 }
 
-function renderDefectStatusDonut(statusAgg, total) {
-  if (!total) {
-    el.chartDefectStatus.innerHTML = '<div class="empty-row">등록된 결함이 없습니다</div>';
-    return;
-  }
-  let cursor = 0;
-  const stops = STATUS_ORDER.filter((s) => statusAgg[s] > 0)
-    .map((s) => {
-      const from = cursor;
-      cursor += (statusAgg[s] / total) * 100;
-      return `${STATUS_COLORS[s]} ${from}% ${cursor}%`;
+/** 프로젝트별 결함현황 — 하나의 누적(stacked) 막대에 신규/처리중/재검증대기/완료/보류/재발생 비율을 표시 */
+function renderDefectStatusChart(rows) {
+  el.chartDefectStatus.innerHTML = rows
+    .map(({ project, kpi }) => {
+      const total = kpi ? kpi.defects.total : 0;
+      if (!total) {
+        return `
+        <div class="stack-row" data-project="${esc(project)}">
+          <div class="stack-label"><span class="stack-name">${esc(project)}</span><span class="stack-sub">등록된 결함 없음</span></div>
+          <div class="stack-track stack-track-empty"></div>
+        </div>`;
+      }
+      const counts = kpi.defects.counts;
+      const segs = STATUS_ORDER.map((s) => {
+        const n = counts[s] || 0;
+        if (!n) return '';
+        return `<div class="stack-seg" style="width:${(n / total) * 100}%;background:${STATUS_COLORS[s]}" title="${s} ${n}건"></div>`;
+      }).join('');
+      return `
+      <div class="stack-row home-table-row" data-project="${esc(project)}">
+        <div class="stack-label"><span class="stack-name">${esc(project)}</span><span class="stack-sub">결함 ${total}건 · 신규 ${counts['신규'] || 0}건</span></div>
+        <div class="stack-track">${segs}</div>
+      </div>`;
     })
-    .join(', ');
-  const legend = STATUS_ORDER.map(
-    (s) => `
-    <div class="donut-legend-item${statusAgg[s] ? '' : ' is-zero'}">
-      <span class="donut-swatch" style="background:${STATUS_COLORS[s]}"></span>
-      <span class="donut-legend-label">${s}</span>
-      <span class="donut-legend-num">${statusAgg[s]}</span>
-    </div>`
-  ).join('');
-  el.chartDefectStatus.innerHTML = `
-    <div class="donut-row">
-      <div class="donut-wrap">
-        <div class="donut" style="background:conic-gradient(${stops})"></div>
-        <div class="donut-center"><span class="donut-total">${total}</span><span class="donut-total-label">전체</span></div>
-      </div>
-      <div class="donut-legend">${legend}</div>
-    </div>`;
+    .join('');
 }
 
 function renderHomeTable(rows) {
@@ -216,6 +238,13 @@ function renderHomeTable(rows) {
 el.homeTableBody.addEventListener('click', (e) => {
   const row = e.target.closest('.home-table-row');
   if (row) showProject(row.dataset.project);
+});
+
+[el.chartExecStatus, el.chartDefectStatus].forEach((container) => {
+  container.addEventListener('click', (e) => {
+    const row = e.target.closest('[data-project]');
+    if (row) showProject(row.dataset.project);
+  });
 });
 
 el.btnHome.addEventListener('click', showHome);

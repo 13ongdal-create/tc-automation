@@ -77,11 +77,15 @@ function latestSummary(project) {
       acc.total += e.total;
       acc.pass += e.pass;
       acc.fail += e.fail;
+      acc.blocked += e.blocked;
+      acc.na += e.na;
+      acc.nt += e.nt;
       acc.executed += e.executed;
       return acc;
     },
-    { total: 0, pass: 0, fail: 0, executed: 0 }
+    { total: 0, pass: 0, fail: 0, blocked: 0, na: 0, nt: 0, executed: 0 }
   );
+  grand.none = grand.total - grand.executed; // 미실행
   return { latestDate: latest.length ? latest.reduce((a, e) => (e.dateStr > a ? e.dateStr : a), '00000000') : null, ...grand };
 }
 
