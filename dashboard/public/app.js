@@ -39,6 +39,7 @@ const el = {
   chatForm: document.getElementById('chatForm'),
   chatInput: document.getElementById('chatInput'),
   btnChatSend: document.getElementById('btnChatSend'),
+  btnChatCancel: document.getElementById('btnChatCancel'),
   btnChatReset: document.getElementById('btnChatReset'),
 };
 
@@ -542,6 +543,7 @@ function setChatBusy(busy) {
   el.chatInput.disabled = busy;
   el.btnChatSend.disabled = busy;
   el.btnChatSend.textContent = busy ? '진행 중…' : '보내기';
+  el.btnChatCancel.hidden = !busy;
   setChatStatus(busy ? '큐돌이가 작업 중입니다…' : '연결됨', busy ? 'ws-busy' : 'ws-connected');
 }
 
@@ -609,6 +611,13 @@ el.chatInput.addEventListener('keydown', (e) => {
     e.preventDefault();
     el.chatForm.requestSubmit();
   }
+});
+
+el.btnChatCancel.addEventListener('click', () => {
+  const project = el.projectSelect.value;
+  if (!project || !ws || ws.readyState !== WebSocket.OPEN) return;
+  ws.send(JSON.stringify({ type: 'cancel', project }));
+  setChatStatus('중단 요청을 보냈습니다…', 'ws-busy');
 });
 
 el.btnChatReset.addEventListener('click', async () => {

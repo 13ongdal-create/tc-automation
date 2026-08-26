@@ -43,6 +43,10 @@ function buildPrompt(project, userText, isFirstMessage) {
     `tc-automation 저장소(현재 작업 디렉터리)에서, "${project}" 프로젝트(project/${project})에 대한 요청입니다.`,
     `agents-config/AGENTS.md, agents-config/skills/qa-test-case-generator/SKILL.md 규칙을 그대로 따라주세요 — 특히 13항의 Phase 0~8 워크플로우(단계별 승인 필요)를 지켜주세요.`,
     `이 대화는 큐돌이 대시보드의 채팅 패널을 통해 진행됩니다 — 사용자에게 보여줄 응답은 마크다운으로 간결하게 정리해주세요.`,
+    `이 세션은 헤드리스(터미널 승인 프롬프트 없음)라 사전 승인된 명령 패턴만 실행됩니다. Bash로`,
+    `node 스크립트를 실행할 때는 반드시 "node _scratch/${project}/{파일명}" 형태로 저장소 루트 기준`,
+    `상대경로 전체를 포함해 호출하세요 — cd로 이동한 뒤 파일명만 쓰거나 node -e 인라인 실행은 승인되지`,
+    `않아 멈춥니다. git은 "git add project/${project}/..."와 "git commit -m ..." 형태만 승인됩니다.`,
     ``,
     `사용자 요청: ${userText}`,
   ].join('\n');

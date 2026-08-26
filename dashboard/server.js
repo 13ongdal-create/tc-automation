@@ -150,11 +150,17 @@ const activeRuns = new Map(); // project -> claudeRunner handle
 // AGENTS.md 16항(프로젝트 격리) 그대로 Write/Edit는 project/** 로만 한정하고, Bash는 실제로
 // 필요한 것만(커밋, 테스트 실행) 콕 집어 허용 — 다중 사용자(공유 비밀번호)로 열려있어 임의
 // 명령 실행(`Bash(node *)` 등 광범위한 규칙)은 의도적으로 제외했습니다.
+// _scratch/**도 함께 허용 — AGENTS.md 9/19항의 Phase 1 관찰(Playwright 헤드리스 접속·DOM 덤프)이
+// 저장하는 유일한 위치로 명시된 곳이라(실제로 이 경로가 막혀 "승인 대기"로 멈춘 사례 확인,
+// 2026-08-26), project/**와 마찬가지로 안전하게 사전 허용할 수 있는 범위입니다.
 const CHAT_ALLOWED_TOOLS = [
   'Write(project/**)',
   'Edit(project/**)',
+  'Write(_scratch/**)',
+  'Edit(_scratch/**)',
   'Bash(git add project/*)',
   'Bash(git commit *)',
+  'Bash(node _scratch/**)', // _scratch/{project}/{file} 두 단계 깊이라 * 대신 **
   'Bash(npx playwright test *)',
 ];
 
