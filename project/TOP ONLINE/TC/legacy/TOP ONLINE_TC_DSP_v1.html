@@ -79,13 +79,13 @@
   select.result-select[data-val="Blocked"]{color:var(--blocked);font-weight:600;}
   input.free-input{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
 
-  .col-no{width:2.5%} .col-id{width:5.5%} .col-system{width:2.5%} .col-cat{width:3%} .col-mod{width:3.5%} .col-sub{width:3.5%} .col-screen{width:3.5%}
-  .col-platform{width:2.5%} .col-type{width:2.5%} .col-title{width:6.5%} .col-ref{width:3.5%}
+  .col-no{width:2.5%} .col-id{width:5.5%} .col-system{width:2.5%} .col-cat{width:3%} .col-mod{width:3.5%} .col-sub{width:3.5%}
+  .col-platform{width:2.5%} .col-type{width:2.5%} .col-title{width:10%} .col-ref{width:3.5%}
   .col-priority{width:2.5%} .col-testdata{width:5%} .col-precond{width:5.5%} .col-proc{width:8.5%} .col-expected{width:8.5%}
   .col-result{width:4.5%} .col-assignee{width:3.5%} .col-issue{width:8%} .col-issuelink{width:8%} .col-remark{width:8%}
 
-  .col-def-id{width:9%} .col-def-mod{width:6%} .col-def-screen{width:6%} .col-def-sev{width:5%} .col-def-status{width:8%}
-  .col-def-summary{width:16%} .col-def-detail{width:20%} .col-def-thumb{width:8%} .col-def-date{width:7%} .col-def-tc{width:7%} .col-def-link{width:8%}
+  .col-def-id{width:9%} .col-def-mod{width:6%} .col-def-sev{width:5%} .col-def-status{width:8%}
+  .col-def-summary{width:18%} .col-def-detail{width:24%} .col-def-thumb{width:8%} .col-def-date{width:7%} .col-def-tc{width:7%} .col-def-link{width:8%}
   img.def-thumb{width:100%;max-height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer;display:block;}
   a.defect-tc-link{color:var(--accent);text-decoration:underline;cursor:pointer;}
   select.defect-status-select{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
@@ -185,7 +185,6 @@
           <th class="col-cat">대분류</th>
           <th class="col-mod">중분류</th>
           <th class="col-sub">소분류</th>
-          <th class="col-screen">화면명</th>
           <th class="col-platform">플랫폼</th>
           <th class="col-type">유형</th>
           <th class="col-title">테스트 항목</th>
@@ -232,7 +231,6 @@
           <tr>
             <th class="col-def-id">결함ID</th>
             <th class="col-def-mod">모듈</th>
-            <th class="col-def-screen">화면명</th>
             <th class="col-def-sev">심각도</th>
             <th class="col-def-status">상태</th>
             <th class="col-def-summary">요약</th>
@@ -511,14 +509,13 @@ function renderDefects() {
 
   const tbody = document.getElementById('defectBody');
   if (!filtered.length) {
-    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:20px;">등록된 결함이 없습니다.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px;">등록된 결함이 없습니다.</td></tr>`;
     return;
   }
   tbody.innerHTML = filtered.map(def => `
     <tr data-defid="${esc(def.defectId)}">
       <td>${esc(def.defectId)}</td>
       <td class="center">${esc(def.module)}</td>
-      <td class="center">${esc(def.screenName||'')}</td>
       <td class="center"><span class="badge ${esc(def.severity)}">${esc(def.severity)}</span></td>
       <td>${defectStatusSelect(def)}</td>
       <td>${esc(def.summary)}</td>
@@ -635,7 +632,7 @@ document.getElementById('btnXlsx').onclick = () => {
   XLSX.utils.book_append_sheet(wb, tcSheet, 'TC');
 
   const defectRows = DEFECT_DATA.map(d => ({
-    '결함ID': d.defectId, '모듈': d.module, '화면명': d.screenName || '', '심각도': d.severity, '상태': d.status, '요약': d.summary,
+    '결함ID': d.defectId, '모듈': d.module, '심각도': d.severity, '상태': d.status, '요약': d.summary,
     '환경': d.testEnv, '절차': d.testSteps, '실제결과': d.actualResult, '기대결과': d.expectedResult,
     '발견일': d.detectedAt, '관련TC': d.tcId, '이슈링크': d.issueLink,
   }));

@@ -2,18 +2,13 @@
   "meta": {
     "project": "TOP ONLINE",
     "module": "DSP",
-    "moduleName": "전시",
-    "version": 2,
+    "moduleName": "전시(MD's PICK)",
+    "version": 1,
     "changeHistory": [
       {
         "version": 1,
         "date": "2026-08-25",
         "summary": "최초 생성 — MD's PICK 전시 페이지(/display/mds-pick) URL 관찰 기반 35건 (Phase 1~3 승인 완료분)"
-      },
-      {
-        "version": 2,
-        "date": "2026-08-26",
-        "summary": "module/화면명 필드 분리 정책 반영: meta.moduleName을 \"전시(MD's PICK)\"에서 \"전시\"로 정정, 전 항목에 screenName=\"MD's PICK\" 추가"
       }
     ]
   },
@@ -40,8 +35,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 1,
-      "screenName": "MD's PICK"
+      "displayNo": 1
     },
     {
       "tcId": "TC_DSP_002",
@@ -65,8 +59,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 2,
-      "screenName": "MD's PICK"
+      "displayNo": 2
     },
     {
       "tcId": "TC_DSP_003",
@@ -90,8 +83,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 3,
-      "screenName": "MD's PICK"
+      "displayNo": 3
     },
     {
       "tcId": "TC_DSP_004",
@@ -115,8 +107,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 4,
-      "screenName": "MD's PICK"
+      "displayNo": 4
     },
     {
       "tcId": "TC_DSP_005",
@@ -140,8 +131,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 5,
-      "screenName": "MD's PICK"
+      "displayNo": 5
     },
     {
       "tcId": "TC_DSP_006",
@@ -165,8 +155,7 @@
       "issueLink": "",
       "remark": "관련 결함: DEF_TOP ONLINE_001",
       "origin": "신규",
-      "displayNo": 6,
-      "screenName": "MD's PICK"
+      "displayNo": 6
     },
     {
       "tcId": "TC_DSP_007",
@@ -190,8 +179,7 @@
       "issueLink": "",
       "remark": "관련 결함: DEF_TOP ONLINE_001",
       "origin": "신규",
-      "displayNo": 7,
-      "screenName": "MD's PICK"
+      "displayNo": 7
     },
     {
       "tcId": "TC_DSP_008",
@@ -215,8 +203,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 8,
-      "screenName": "MD's PICK"
+      "displayNo": 8
     },
     {
       "tcId": "TC_DSP_009",
@@ -240,8 +227,7 @@
       "issueLink": "",
       "remark": "관련 결함: DEF_TOP ONLINE_001",
       "origin": "신규",
-      "displayNo": 9,
-      "screenName": "MD's PICK"
+      "displayNo": 9
     },
     {
       "tcId": "TC_DSP_010",
@@ -265,8 +251,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 10,
-      "screenName": "MD's PICK"
+      "displayNo": 10
     },
     {
       "tcId": "TC_DSP_011",
@@ -290,8 +275,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 11,
-      "screenName": "MD's PICK"
+      "displayNo": 11
     },
     {
       "tcId": "TC_DSP_012",
@@ -315,8 +299,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 12,
-      "screenName": "MD's PICK"
+      "displayNo": 12
     },
     {
       "tcId": "TC_DSP_013",
@@ -340,8 +323,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 13,
-      "screenName": "MD's PICK"
+      "displayNo": 13
     },
     {
       "tcId": "TC_DSP_014",
@@ -365,8 +347,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 14,
-      "screenName": "MD's PICK"
+      "displayNo": 14
     },
     {
       "tcId": "TC_DSP_015",
@@ -390,8 +371,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 15,
-      "screenName": "MD's PICK"
+      "displayNo": 15
     },
     {
       "tcId": "TC_DSP_016",
@@ -415,8 +395,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 16,
-      "screenName": "MD's PICK"
+      "displayNo": 16
     },
     {
       "tcId": "TC_DSP_017",
@@ -440,8 +419,7 @@
       "issueLink": "",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_TOP ONLINE_003, 로그인 경유 시 DEF_TOP ONLINE_002 영향 가능)",
       "origin": "신규",
-      "displayNo": 17,
-      "screenName": "MD's PICK"
+      "displayNo": 17
     },
     {
       "tcId": "TC_DSP_018",
@@ -465,8 +443,7 @@
       "issueLink": "",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_TOP ONLINE_003, 로그인 경유 시 DEF_TOP ONLINE_002 영향 가능)",
       "origin": "신규",
-      "displayNo": 18,
-      "screenName": "MD's PICK"
+      "displayNo": 18
     },
     {
       "tcId": "TC_DSP_019",
@@ -490,8 +467,7 @@
       "issueLink": "",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_TOP ONLINE_003, 로그인 경유 시 DEF_TOP ONLINE_002 영향 가능)",
       "origin": "신규",
-      "displayNo": 19,
-      "screenName": "MD's PICK"
+      "displayNo": 19
     },
     {
       "tcId": "TC_DSP_020",
@@ -515,8 +491,7 @@
       "issueLink": "",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_TOP ONLINE_003, 로그인 경유 시 DEF_TOP ONLINE_002 영향 가능)",
       "origin": "신규",
-      "displayNo": 20,
-      "screenName": "MD's PICK"
+      "displayNo": 20
     },
     {
       "tcId": "TC_DSP_021",
@@ -540,8 +515,7 @@
       "issueLink": "",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_TOP ONLINE_003, 로그인 경유 시 DEF_TOP ONLINE_002 영향 가능)",
       "origin": "신규",
-      "displayNo": 21,
-      "screenName": "MD's PICK"
+      "displayNo": 21
     },
     {
       "tcId": "TC_DSP_022",
@@ -565,8 +539,7 @@
       "issueLink": "",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_TOP ONLINE_003, 로그인 경유 시 DEF_TOP ONLINE_002 영향 가능)",
       "origin": "신규",
-      "displayNo": 22,
-      "screenName": "MD's PICK"
+      "displayNo": 22
     },
     {
       "tcId": "TC_DSP_023",
@@ -590,8 +563,7 @@
       "issueLink": "",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_TOP ONLINE_003, 로그인 경유 시 DEF_TOP ONLINE_002 영향 가능)",
       "origin": "신규",
-      "displayNo": 23,
-      "screenName": "MD's PICK"
+      "displayNo": 23
     },
     {
       "tcId": "TC_DSP_024",
@@ -615,8 +587,7 @@
       "issueLink": "",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_TOP ONLINE_003, 로그인 경유 시 DEF_TOP ONLINE_002 영향 가능)",
       "origin": "신규",
-      "displayNo": 24,
-      "screenName": "MD's PICK"
+      "displayNo": 24
     },
     {
       "tcId": "TC_DSP_025",
@@ -640,8 +611,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 25,
-      "screenName": "MD's PICK"
+      "displayNo": 25
     },
     {
       "tcId": "TC_DSP_026",
@@ -665,8 +635,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 26,
-      "screenName": "MD's PICK"
+      "displayNo": 26
     },
     {
       "tcId": "TC_DSP_027",
@@ -690,8 +659,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 27,
-      "screenName": "MD's PICK"
+      "displayNo": 27
     },
     {
       "tcId": "TC_DSP_028",
@@ -715,8 +683,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 28,
-      "screenName": "MD's PICK"
+      "displayNo": 28
     },
     {
       "tcId": "TC_DSP_029",
@@ -740,8 +707,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 29,
-      "screenName": "MD's PICK"
+      "displayNo": 29
     },
     {
       "tcId": "TC_DSP_030",
@@ -765,8 +731,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 30,
-      "screenName": "MD's PICK"
+      "displayNo": 30
     },
     {
       "tcId": "TC_DSP_031",
@@ -790,8 +755,7 @@
       "issueLink": "",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_TOP ONLINE_003, 로그인 경유 시 DEF_TOP ONLINE_002 영향 가능)",
       "origin": "신규",
-      "displayNo": 31,
-      "screenName": "MD's PICK"
+      "displayNo": 31
     },
     {
       "tcId": "TC_DSP_032",
@@ -815,8 +779,7 @@
       "issueLink": "",
       "remark": "상품 카드 0건(편성 없음) 상태를 실측으로 재현할 수 없어 미실행",
       "origin": "신규",
-      "displayNo": 32,
-      "screenName": "MD's PICK"
+      "displayNo": 32
     },
     {
       "tcId": "TC_DSP_033",
@@ -840,8 +803,7 @@
       "issueLink": "",
       "remark": "",
       "origin": "신규",
-      "displayNo": 33,
-      "screenName": "MD's PICK"
+      "displayNo": 33
     },
     {
       "tcId": "TC_DSP_034",
@@ -865,8 +827,7 @@
       "issueLink": "",
       "remark": "관련 결함: DEF_TOP ONLINE_002. 자동화 코드는 데모사이트 adminLogin() 패턴과 동일하게 재시도 로직 포함 / 결함 자체를 재현/확인하는 목적의 TC — DEF_TOP ONLINE_002 해결 전까지 Fail 유지 (AGENTS.md 20-7항)",
       "origin": "신규",
-      "displayNo": 34,
-      "screenName": "MD's PICK"
+      "displayNo": 34
     },
     {
       "tcId": "TC_DSP_035",
@@ -890,8 +851,7 @@
       "issueLink": "",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_TOP ONLINE_003, 로그인 경유 시 DEF_TOP ONLINE_002 영향 가능)",
       "origin": "신규",
-      "displayNo": 35,
-      "screenName": "MD's PICK"
+      "displayNo": 35
     }
   ]
 }
