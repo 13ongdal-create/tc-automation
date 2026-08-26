@@ -24,6 +24,9 @@ async function gotoWithRetry(page, path, maxAttempts = 3) {
 }
 
 async function loginWithRetry(page, maxAttempts = 3) {
+  // gotoWithRetry(최대 3회) x loginWithRetry(최대 3회) 중첩 재시도라 DEF_TOP ONLINE_002가
+  // 겹치면 기본 30초 테스트 타임아웃을 넘길 수 있어, 로그인을 거치는 테스트는 여유를 둔다.
+  test.setTimeout(60000);
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     await gotoWithRetry(page, '/login?callbackUrl=%2Fdisplay%2Fmds-pick');
     await page.locator('#loginId').fill(ACCOUNT.id);
@@ -33,6 +36,17 @@ async function loginWithRetry(page, maxAttempts = 3) {
     if (!page.url().includes('/login')) return;
   }
   throw new Error('로그인 재시도(' + maxAttempts + '회) 후에도 /login 페이지에 머물러 있음');
+}
+
+// 같은 라이브 계정(jspark81)을 여러 테스트/여러 실행 회차가 공유하다 보니, 이전 실행에서 위시리스트에
+// 담아둔 상태가 다음 실행까지 남아 "위시리스트 추가" 버튼이 안 보여 클릭이 무한 대기하는 문제가 있었다
+// (2026-08-26 Phase 5 재실행 중 확인 — 60초 타임아웃으로 재현). 각 토글 테스트 시작 시 항상 "미담김"
+// 상태로 맞춰서 시작한다.
+async function ensureNotWishlisted(c) {
+  if (await c.getByText('위시리스트 제거').isVisible().catch(() => false)) {
+    await c.getByText('위시리스트 제거').click();
+    await c.page().waitForTimeout(1000);
+  }
 }
 
 function card(page, index) {
@@ -47,10 +61,13 @@ async function detailLinkHref(page, index) {
 }
 
 async function priceOnDetail(page, href) {
+  // 상품상세 페이지는 MD's PICK 카드(₩ 접두)와 달리 "110,000원"(원 접미) 표기를 사용한다
+  // (2026-08-26 Phase 5 실행 중 두 화면의 표기 방식이 다름을 실측 확인).
   await gotoWithRetry(page, href);
   const text = await page.locator('body').innerText();
-  const match = text.match(/([0-9][0-9,]*)원/);
-  return match ? parseInt(match[1].replace(/,/g, ''), 10) : null;
+  const match = text.match(/₩([0-9][0-9,]*)|([0-9][0-9,]*)원/);
+  if (!match) return null;
+  return parseInt((match[1] || match[2]).replace(/,/g, ''), 10);
 }
 
 test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
@@ -74,7 +91,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     await gotoWithRetry(page, PAGE_PATH);
     const c = card(page, 0);
     await expect(c.getByText('RECOMMENDATION')).toBeVisible();
-    await expect(c.getByText(/원/)).toBeVisible();
+    await expect(c.getByText(/₩[0-9,]+/).first()).toBeVisible();
     await expect(c.getByText('위시리스트 추가')).toBeVisible();
     await expect(c.getByText('자세히 보기')).toBeVisible();
   });
@@ -83,7 +100,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     await gotoWithRetry(page, PAGE_PATH);
     const c = card(page, 1);
     await expect(c.getByText('RECOMMENDATION')).toBeVisible();
-    await expect(c.getByText(/원/)).toBeVisible();
+    await expect(c.getByText(/₩[0-9,]+/).first()).toBeVisible();
     await expect(c.getByText('위시리스트 추가')).toBeVisible();
     await expect(c.getByText('자세히 보기')).toBeVisible();
   });
@@ -92,7 +109,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     await gotoWithRetry(page, PAGE_PATH);
     const c = card(page, 2);
     await expect(c.getByText('RECOMMENDATION')).toBeVisible();
-    await expect(c.getByText(/원/)).toBeVisible();
+    await expect(c.getByText(/₩[0-9,]+/).first()).toBeVisible();
     await expect(c.getByText('위시리스트 추가')).toBeVisible();
     await expect(c.getByText('자세히 보기')).toBeVisible();
   });
@@ -102,7 +119,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     await gotoWithRetry(page, PAGE_PATH);
     const c = card(page, 0);
     const text = await c.innerText();
-    const prices = [...text.matchAll(/([0-9][0-9,]*)원/g)].map(m => parseInt(m[1].replace(/,/g, ''), 10));
+    const prices = [...text.matchAll(/₩([0-9][0-9,]*)/g)].map(m => parseInt(m[1].replace(/,/g, ''), 10));
     const rateMatch = text.match(/\((\d+)%\)/) || text.match(/(\d+)%/);
     expect(prices.length).toBeGreaterThanOrEqual(2);
     const [sale, base] = prices[0] < prices[1] ? [prices[0], prices[1]] : [prices[1], prices[0]];
@@ -116,7 +133,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     await gotoWithRetry(page, PAGE_PATH);
     const c = card(page, 0);
     const text = await c.innerText();
-    const prices = [...text.matchAll(/([0-9][0-9,]*)원/g)].map(m => parseInt(m[1].replace(/,/g, ''), 10));
+    const prices = [...text.matchAll(/₩([0-9][0-9,]*)/g)].map(m => parseInt(m[1].replace(/,/g, ''), 10));
     const listSalePrice = Math.min(...prices);
     const href = await detailLinkHref(page, 0);
     const detailPrice = await priceOnDetail(page, href);
@@ -127,7 +144,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     await gotoWithRetry(page, PAGE_PATH);
     const c = card(page, 1);
     const text = await c.innerText();
-    const prices = [...text.matchAll(/([0-9][0-9,]*)원/g)].map(m => parseInt(m[1].replace(/,/g, ''), 10));
+    const prices = [...text.matchAll(/₩([0-9][0-9,]*)/g)].map(m => parseInt(m[1].replace(/,/g, ''), 10));
     const rateMatch = text.match(/(\d+)%/);
     const [sale, base] = prices[0] < prices[1] ? [prices[0], prices[1]] : [prices[1], prices[0]];
     const calcRate = ((base - sale) / base) * 100;
@@ -139,7 +156,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     await gotoWithRetry(page, PAGE_PATH);
     const c = card(page, 1);
     const text = await c.innerText();
-    const prices = [...text.matchAll(/([0-9][0-9,]*)원/g)].map(m => parseInt(m[1].replace(/,/g, ''), 10));
+    const prices = [...text.matchAll(/₩([0-9][0-9,]*)/g)].map(m => parseInt(m[1].replace(/,/g, ''), 10));
     const listSalePrice = Math.min(...prices);
     const href = await detailLinkHref(page, 1);
     const detailPrice = await priceOnDetail(page, href);
@@ -150,7 +167,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     await gotoWithRetry(page, PAGE_PATH);
     const c = card(page, 2);
     const text = await c.innerText();
-    const prices = [...text.matchAll(/([0-9][0-9,]*)원/g)];
+    const prices = [...text.matchAll(/₩([0-9][0-9,]*)/g)];
     expect(prices.length).toBe(1);
     expect(text).not.toMatch(/%\)/);
   });
@@ -159,7 +176,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     await gotoWithRetry(page, PAGE_PATH);
     const c = card(page, 2);
     const text = await c.innerText();
-    const price = parseInt(text.match(/([0-9][0-9,]*)원/)[1].replace(/,/g, ''), 10);
+    const price = parseInt(text.match(/₩([0-9][0-9,]*)/)[1].replace(/,/g, ''), 10);
     const href = await detailLinkHref(page, 2);
     const detailPrice = await priceOnDetail(page, href);
     expect(detailPrice).toBe(price);
@@ -170,7 +187,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     const href = await detailLinkHref(page, 0);
     await gotoWithRetry(page, href);
     const text = await page.locator('body').innerText();
-    const prices = [...text.matchAll(/([0-9][0-9,]*)원/g)].map(m => parseInt(m[1].replace(/,/g, ''), 10));
+    const prices = [...text.matchAll(/₩([0-9][0-9,]*)|([0-9][0-9,]*)원/g)].map(m => parseInt((m[1] || m[2]).replace(/,/g, ''), 10));
     const rateMatch = text.match(/\((\d+)%\)/);
     if (!rateMatch) test.skip(true, '이 상품에 할인율 배지가 없음(할인 없는 상품으로 편성 변경됨)');
     const [sale, base] = prices[0] < prices[1] ? [prices[0], prices[1]] : [prices[1], prices[0]];
@@ -183,7 +200,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     const href = await detailLinkHref(page, 1);
     await gotoWithRetry(page, href);
     const text = await page.locator('body').innerText();
-    const prices = [...text.matchAll(/([0-9][0-9,]*)원/g)].map(m => parseInt(m[1].replace(/,/g, ''), 10));
+    const prices = [...text.matchAll(/₩([0-9][0-9,]*)|([0-9][0-9,]*)원/g)].map(m => parseInt((m[1] || m[2]).replace(/,/g, ''), 10));
     const rateMatch = text.match(/\((\d+)%\)/);
     if (!rateMatch) test.skip(true, '이 상품에 할인율 배지가 없음(할인 없는 상품으로 편성 변경됨)');
     const [sale, base] = prices[0] < prices[1] ? [prices[0], prices[1]] : [prices[1], prices[0]];
@@ -217,6 +234,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     await loginWithRetry(page);
     await gotoWithRetry(page, PAGE_PATH);
     const c = card(page, 0);
+    await ensureNotWishlisted(c);
     const urlBefore = page.url();
     await c.getByText('위시리스트 추가').click();
     await page.waitForTimeout(1000);
@@ -228,6 +246,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     await loginWithRetry(page);
     await gotoWithRetry(page, PAGE_PATH);
     const c = card(page, 0);
+    await ensureNotWishlisted(c);
     const productName = (await c.getByRole('heading').first().innerText()).trim();
     await c.getByText('위시리스트 추가').click();
     await page.waitForTimeout(1000);
@@ -255,6 +274,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     await loginWithRetry(page);
     await gotoWithRetry(page, PAGE_PATH);
     const c = card(page, 1);
+    await ensureNotWishlisted(c);
     await c.getByText('위시리스트 추가').click();
     await page.waitForTimeout(1000);
     await expect(c.getByText('위시리스트 제거')).toBeVisible();
@@ -264,6 +284,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     await loginWithRetry(page);
     await gotoWithRetry(page, PAGE_PATH);
     const c = card(page, 1);
+    await ensureNotWishlisted(c);
     const productName = (await c.getByRole('heading').first().innerText()).trim();
     await c.getByText('위시리스트 추가').click();
     await page.waitForTimeout(1000);
@@ -275,6 +296,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
     await loginWithRetry(page);
     await gotoWithRetry(page, PAGE_PATH);
     const c = card(page, 2);
+    await ensureNotWishlisted(c);
     await c.getByText('위시리스트 추가').click();
     await page.waitForTimeout(1000);
     await expect(c.getByText('위시리스트 제거')).toBeVisible();
@@ -327,7 +349,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
 
   test('[TC_DSP_029][SEO·성능·접근성] 상품 카드 이미지의 지연 로딩(lazy loading) 속성 적용 검증', async ({ page }) => {
     await gotoWithRetry(page, PAGE_PATH);
-    const loadingAttr = await page.locator('img[alt]').nth(1).getAttribute('loading');
+    const loadingAttr = await card(page, 0).locator('img').first().getAttribute('loading');
     expect(loadingAttr).toBe('lazy');
   });
 
@@ -343,7 +365,7 @@ test.describe('MD\'s PICK 전시 페이지 (DSP)', () => {
 
   test('[TC_DSP_031][SEO·성능·접근성] 포커스된 "위시리스트 추가" 버튼에서 Enter 키 입력 시 정상 동작 검증', async ({ page }) => {
     await gotoWithRetry(page, PAGE_PATH);
-    const wishBtn = card(page, 0).getByText('위시리스트 추가');
+    const wishBtn = card(page, 0).getByRole('button', { name: '위시리스트 추가' });
     await wishBtn.focus();
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1000);
