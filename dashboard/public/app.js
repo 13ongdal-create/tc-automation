@@ -7,8 +7,19 @@ const el = {
   btnHome: document.getElementById('btnHome'),
   homeView: document.getElementById('homeView'),
   projectView: document.getElementById('projectView'),
-  projectCards: document.getElementById('projectCards'),
+  homeEmpty: document.getElementById('homeEmpty'),
+  homeDashboard: document.getElementById('homeDashboard'),
+  homeKpiProjects: document.getElementById('homeKpiProjects'),
+  homeKpiDefects: document.getElementById('homeKpiDefects'),
+  homeKpiNew: document.getElementById('homeKpiNew'),
+  homeKpiPass: document.getElementById('homeKpiPass'),
+  homeKpiFail: document.getElementById('homeKpiFail'),
+  homeKpiExecRate: document.getElementById('homeKpiExecRate'),
+  chartPassFail: document.getElementById('chartPassFail'),
+  chartDefectStatus: document.getElementById('chartDefectStatus'),
+  homeTableBody: document.getElementById('homeTableBody'),
   btnNewProject: document.getElementById('btnNewProject'),
+  btnNewProjectEmpty: document.getElementById('btnNewProjectEmpty'),
   newProjectModal: document.getElementById('newProjectModal'),
   newProjectForm: document.getElementById('newProjectForm'),
   newProjectName: document.getElementById('newProjectName'),
@@ -39,24 +50,25 @@ async function loadProjects() {
   const res = await fetch('/api/projects');
   const { projects } = await res.json();
   allProjects = projects;
-  el.projectSelect.innerHTML = projects.map((p) => `<option value="${esc(p)}">${esc(p)}</option>`).join('');
-  const saved = localStorage.getItem('qdori.project');
-  if (saved && projects.includes(saved)) el.projectSelect.value = saved;
-  return el.projectSelect.value;
+  // 플레이스홀더를 항상 기본 선택값으로 둡니다 — 홈이 최초 진입 화면이므로 select도
+  // 특정 프로젝트가 "선택된" 상태로 보이면 안 됩니다 (프로젝트를 고르기 전까지는 미선택 상태 유지).
+  el.projectSelect.innerHTML =
+    '<option value="" disabled selected>프로젝트 선택</option>' +
+    projects.map((p) => `<option value="${esc(p)}">${esc(p)}</option>`).join('');
 }
 
 async function loadAll() {
   const project = el.projectSelect.value;
   if (!project) return;
-  localStorage.setItem('qdori.project', project);
   await Promise.all([loadKpi(project), loadDefects(project), loadResults(project), loadChatHistory(project)]);
 }
 
 // ── 🏠 홈 (프로젝트 카드) ↔ 📁 프로젝트 상세 화면 전환 ─────────────────────
 function showHome() {
+  el.projectSelect.value = '';
   el.projectView.style.display = 'none';
   el.homeView.style.display = 'block';
-  renderProjectCards();
+  renderHomeDashboard();
 }
 
 function showProject(project) {
@@ -67,12 +79,24 @@ function showProject(project) {
   loadAll();
 }
 
-async function renderProjectCards() {
+const STATUS_COLORS = {
+  '신규': 'var(--warn)',
+  '처리중': 'var(--primary)',
+  '재검증대기': 'var(--accent2)',
+  '완료': 'var(--good)',
+  '보류': 'var(--text-secondary)',
+  '재발생': 'var(--bad)',
+};
+
+async function renderHomeDashboard() {
   if (!allProjects.length) {
-    el.projectCards.innerHTML = '<div class="empty-row">등록된 프로젝트가 없습니다. "+ 새 프로젝트"로 시작하세요.</div>';
+    el.homeEmpty.hidden = false;
+    el.homeDashboard.hidden = true;
     return;
   }
-  el.projectCards.innerHTML = allProjects.map((p) => `<div class="empty-row" data-loading="${esc(p)}">${esc(p)} 불러오는 중…</div>`).join('');
+  el.homeEmpty.hidden = true;
+  el.homeDashboard.hidden = false;
+
   const kpis = await Promise.all(
     allProjects.map((p) =>
       fetch(`/api/${encodeURIComponent(p)}/kpi`)
@@ -80,35 +104,124 @@ async function renderProjectCards() {
         .catch(() => null)
     )
   );
-  const cardsHtml = allProjects
-    .map((p, i) => {
-      const k = kpis[i];
-      const stats = k
-        ? `
-        <div class="pc-stats">
-          <div class="pc-stat warn"><span class="n">${k.defects.counts['신규'] || 0}</span><span class="l">신규 결함</span></div>
-          <div class="pc-stat"><span class="n">${k.results.pass}</span><span class="l">Pass</span></div>
-          <div class="pc-stat bad"><span class="n">${k.results.fail}</span><span class="l">Fail</span></div>
-          <div class="pc-stat"><span class="n">${k.results.total ? Math.round((k.results.executed / k.results.total) * 100) + '%' : '–'}</span><span class="l">수행율</span></div>
-        </div>`
-        : '<div class="pc-stats"><span class="l">데이터 없음</span></div>';
-      return `<button type="button" class="project-card" data-project="${esc(p)}"><div class="pc-name">${esc(p)}</div>${stats}</button>`;
-    })
-    .join('');
-  el.projectCards.innerHTML = cardsHtml + '<button type="button" id="btnNewProjectCard" class="project-card-new">+ 새 프로젝트</button>';
+  const rows = allProjects.map((p, i) => ({ project: p, kpi: kpis[i] }));
+
+  const statusAgg = Object.fromEntries(STATUS_ORDER.map((s) => [s, 0]));
+  let totalDefects = 0, totalNew = 0, totalPass = 0, totalFail = 0, totalExecuted = 0, totalTcs = 0;
+  rows.forEach(({ kpi }) => {
+    if (!kpi) return;
+    totalDefects += kpi.defects.total;
+    STATUS_ORDER.forEach((s) => { statusAgg[s] += kpi.defects.counts[s] || 0; });
+    totalNew += kpi.defects.counts['신규'] || 0;
+    totalPass += kpi.results.pass;
+    totalFail += kpi.results.fail;
+    totalExecuted += kpi.results.executed;
+    totalTcs += kpi.results.total;
+  });
+
+  el.homeKpiProjects.textContent = allProjects.length;
+  el.homeKpiDefects.textContent = totalDefects;
+  el.homeKpiNew.textContent = totalNew;
+  el.homeKpiPass.textContent = totalPass;
+  el.homeKpiFail.textContent = totalFail;
+  el.homeKpiExecRate.textContent = totalTcs ? Math.round((totalExecuted / totalTcs) * 100) + '%' : '–';
+
+  renderPassFailChart(rows);
+  renderDefectStatusDonut(statusAgg, totalDefects);
+  renderHomeTable(rows);
 }
 
-el.projectCards.addEventListener('click', (e) => {
-  const newBtn = e.target.closest('#btnNewProjectCard');
-  if (newBtn) return openNewProjectModal();
-  const card = e.target.closest('.project-card');
-  if (card) showProject(card.dataset.project);
+function renderPassFailChart(rows) {
+  const withData = rows.filter((r) => r.kpi);
+  if (!withData.length) {
+    el.chartPassFail.innerHTML = '<div class="empty-row">실행 이력이 없습니다</div>';
+    return;
+  }
+  const max = Math.max(1, ...withData.map((r) => Math.max(r.kpi.results.pass, r.kpi.results.fail)));
+  el.chartPassFail.innerHTML = withData
+    .map(
+      ({ project, kpi }) => `
+    <div class="bar-group">
+      <div class="bar-name">${esc(project)}</div>
+      <div class="bar-line">
+        <span class="bar-tag">Pass</span>
+        <div class="bar-track"><div class="bar-fill pass" style="width:${(kpi.results.pass / max) * 100}%"></div></div>
+        <span class="bar-num">${kpi.results.pass}</span>
+      </div>
+      <div class="bar-line">
+        <span class="bar-tag">Fail</span>
+        <div class="bar-track"><div class="bar-fill fail" style="width:${(kpi.results.fail / max) * 100}%"></div></div>
+        <span class="bar-num">${kpi.results.fail}</span>
+      </div>
+    </div>`
+    )
+    .join('');
+}
+
+function renderDefectStatusDonut(statusAgg, total) {
+  if (!total) {
+    el.chartDefectStatus.innerHTML = '<div class="empty-row">등록된 결함이 없습니다</div>';
+    return;
+  }
+  let cursor = 0;
+  const stops = STATUS_ORDER.filter((s) => statusAgg[s] > 0)
+    .map((s) => {
+      const from = cursor;
+      cursor += (statusAgg[s] / total) * 100;
+      return `${STATUS_COLORS[s]} ${from}% ${cursor}%`;
+    })
+    .join(', ');
+  const legend = STATUS_ORDER.map(
+    (s) => `
+    <div class="donut-legend-item${statusAgg[s] ? '' : ' is-zero'}">
+      <span class="donut-swatch" style="background:${STATUS_COLORS[s]}"></span>
+      <span class="donut-legend-label">${s}</span>
+      <span class="donut-legend-num">${statusAgg[s]}</span>
+    </div>`
+  ).join('');
+  el.chartDefectStatus.innerHTML = `
+    <div class="donut-row">
+      <div class="donut-wrap">
+        <div class="donut" style="background:conic-gradient(${stops})"></div>
+        <div class="donut-center"><span class="donut-total">${total}</span><span class="donut-total-label">전체</span></div>
+      </div>
+      <div class="donut-legend">${legend}</div>
+    </div>`;
+}
+
+function renderHomeTable(rows) {
+  el.homeTableBody.innerHTML = rows
+    .map(({ project, kpi }) => {
+      const d = kpi ? kpi.defects : { total: 0, counts: {} };
+      const r = kpi ? kpi.results : { pass: 0, fail: 0, total: 0, executed: 0, latestDate: null };
+      const execRate = r.total ? Math.round((r.executed / r.total) * 100) + '%' : '–';
+      const lastRun =
+        r.latestDate && r.latestDate !== '00000000'
+          ? `${r.latestDate.slice(0, 4)}-${r.latestDate.slice(4, 6)}-${r.latestDate.slice(6, 8)}`
+          : '–';
+      return `
+    <tr class="home-table-row" data-project="${esc(project)}">
+      <td class="home-table-name">${esc(project)}</td>
+      <td>${d.total}</td>
+      <td>${d.counts['신규'] || 0}</td>
+      <td>${r.pass}</td>
+      <td>${r.fail}</td>
+      <td>${execRate}</td>
+      <td>${lastRun}</td>
+    </tr>`;
+    })
+    .join('');
+}
+
+el.homeTableBody.addEventListener('click', (e) => {
+  const row = e.target.closest('.home-table-row');
+  if (row) showProject(row.dataset.project);
 });
 
 el.btnHome.addEventListener('click', showHome);
 
 el.btnRefresh.addEventListener('click', () => {
-  if (el.projectView.style.display === 'none') renderProjectCards();
+  if (el.projectView.style.display === 'none') renderHomeDashboard();
   else loadAll();
 });
 
@@ -130,6 +243,7 @@ function closeNewProjectModal() {
 }
 
 el.btnNewProject.addEventListener('click', openNewProjectModal);
+el.btnNewProjectEmpty.addEventListener('click', openNewProjectModal);
 el.btnCancelNewProject.addEventListener('click', closeNewProjectModal);
 el.newProjectModal.addEventListener('click', (e) => {
   if (e.target === el.newProjectModal) closeNewProjectModal();

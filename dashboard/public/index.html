@@ -23,14 +23,76 @@
   </div>
 </header>
 
-<!-- 🏠 홈 — 프로젝트 전체 개요 + 신규 생성 -->
+<!-- 🏠 홈 — 전체 프로젝트 대시보드(개요 KPI + 차트 + 표) + 신규 생성 -->
 <section id="homeView" class="container home-view">
   <div class="home-head">
     <h1>프로젝트</h1>
     <button id="btnNewProject" class="btn btn-primary">+ 새 프로젝트</button>
   </div>
-  <div id="projectCards" class="project-cards">
-    <div class="empty-row">불러오는 중…</div>
+
+  <div id="homeEmpty" class="home-empty" hidden>
+    <p>등록된 프로젝트가 없습니다.</p>
+    <button type="button" id="btnNewProjectEmpty" class="btn btn-primary">+ 새 프로젝트 만들기</button>
+  </div>
+
+  <div id="homeDashboard" hidden>
+    <div class="kpi-grid home-kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-num" id="homeKpiProjects">–</div>
+        <div class="kpi-label">프로젝트</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num" id="homeKpiDefects">–</div>
+        <div class="kpi-label">전체 결함</div>
+      </div>
+      <div class="kpi-card kpi-accent-warn">
+        <div class="kpi-num" id="homeKpiNew">–</div>
+        <div class="kpi-label">신규 결함</div>
+      </div>
+      <div class="kpi-card kpi-accent-good">
+        <div class="kpi-num" id="homeKpiPass">–</div>
+        <div class="kpi-label">전체 Pass</div>
+      </div>
+      <div class="kpi-card kpi-accent-bad">
+        <div class="kpi-num" id="homeKpiFail">–</div>
+        <div class="kpi-label">전체 Fail</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num" id="homeKpiExecRate">–</div>
+        <div class="kpi-label">평균 수행율</div>
+      </div>
+    </div>
+
+    <div class="home-charts-grid">
+      <div class="panel">
+        <div class="panel-head"><h2>프로젝트별 Pass / Fail</h2></div>
+        <div id="chartPassFail" class="chart-bars"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>결함 상태 분포 (전체)</h2></div>
+        <div id="chartDefectStatus"></div>
+      </div>
+    </div>
+
+    <div class="panel panel-full">
+      <div class="panel-head"><h2>프로젝트 요약</h2></div>
+      <div class="table-wrap">
+        <table id="homeTable">
+          <thead>
+            <tr>
+              <th>프로젝트</th>
+              <th style="width:11%">전체 결함</th>
+              <th style="width:9%">신규</th>
+              <th style="width:8%">Pass</th>
+              <th style="width:8%">Fail</th>
+              <th style="width:11%">수행율</th>
+              <th style="width:14%">최근 실행일</th>
+            </tr>
+          </thead>
+          <tbody id="homeTableBody"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </section>
 
