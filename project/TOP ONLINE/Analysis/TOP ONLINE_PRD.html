@@ -1,0 +1,200 @@
+<title>MD's PICK 관찰 리포트</title>
+<style>
+  :root{
+    --paper:#f4f3ef; --panel:#ffffff; --ink:#1c1f24; --muted:#6b6f76; --line:#dcd9d0;
+    --accent:#2b4570; --accent-soft:#e4e9f2; --flag:#b3261e; --flag-soft:#fbe9e7;
+    --good:#1e6b45; --good-soft:#e6f2ea; --mono-bg:#eeece4;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#14171b; --panel:#1b1f24; --ink:#e9e7e0; --muted:#9096a0; --line:#2c3036;
+      --accent:#8fa8d6; --accent-soft:#232c3c; --flag:#e5766a; --flag-soft:#3a2220;
+      --good:#7fc9a0; --good-soft:#1c2e24; --mono-bg:#20242a;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#14171b; --panel:#1b1f24; --ink:#e9e7e0; --muted:#9096a0; --line:#2c3036;
+    --accent:#8fa8d6; --accent-soft:#232c3c; --flag:#e5766a; --flag-soft:#3a2220;
+    --good:#7fc9a0; --good-soft:#1c2e24; --mono-bg:#20242a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"IBM Plex Sans KR","Pretendard",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .doc{max-width:760px;margin:0 auto;padding:0 24px 80px;}
+  .masthead{
+    padding:56px 0 28px; border-bottom:1px solid var(--line); margin-bottom:36px;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px; font-family:"IBM Plex Mono",monospace;
+    font-size:11.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent);
+    background:var(--accent-soft); padding:4px 10px; border-radius:4px; margin-bottom:18px;
+  }
+  h1{font-family:"Fraunces","IBM Plex Sans KR",serif; font-size:clamp(28px,4vw,38px); line-height:1.2; margin:0 0 12px; text-wrap:balance; font-weight:600;}
+  .lede{font-size:15.5px; color:var(--muted); line-height:1.7; max-width:56ch; margin:0 0 20px;}
+  .meta-row{display:flex; flex-wrap:wrap; gap:18px; font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--muted);}
+  .meta-row b{color:var(--ink); font-weight:600;}
+  .notice{
+    background:var(--accent-soft); border:1px solid var(--line); border-radius:8px;
+    padding:14px 16px; font-size:13px; line-height:1.7; color:var(--ink); margin-top:22px;
+  }
+
+  h2{font-family:"Fraunces","IBM Plex Sans KR",serif; font-size:21px; font-weight:600; margin:52px 0 6px; text-wrap:balance;}
+  h2 .num{font-family:"IBM Plex Mono",monospace; font-size:13px; color:var(--muted); font-weight:500; margin-right:10px;}
+  .section-sub{color:var(--muted); font-size:13.5px; margin:0 0 18px; line-height:1.65;}
+  p{font-size:14.5px; line-height:1.8; margin:0 0 14px;}
+  ul,ol{font-size:14.5px; line-height:1.8; padding-left:22px; margin:0 0 16px;}
+  li{margin-bottom:4px;}
+  code{font-family:"IBM Plex Mono",monospace; font-size:0.92em; background:var(--mono-bg); padding:1px 5px; border-radius:3px;}
+
+  .card-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:18px 0 24px;}
+  @media (max-width:640px){ .card-grid{grid-template-columns:1fr;} }
+  .card{border:1px solid var(--line); border-radius:10px; padding:14px 15px; background:var(--panel);}
+  .card .no{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--muted);}
+  .card .name{font-weight:600; font-size:14px; margin:4px 0 8px; line-height:1.4;}
+  .card .price-row{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; font-size:13px;}
+  .card .price-row .sale{font-weight:700;}
+  .card .price-row .base{color:var(--muted); text-decoration:line-through; margin-left:6px;}
+  .card .rate{display:inline-block; margin-left:6px; font-size:11.5px; color:var(--flag); font-weight:600;}
+  .card .code{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--muted); margin-top:8px;}
+
+  table{width:100%; border-collapse:collapse; font-size:13px; margin:18px 0 22px;}
+  th,td{padding:9px 10px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:0.04em; text-transform:uppercase; color:var(--muted); font-weight:600;}
+  td.num{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; white-space:nowrap;}
+  tr.flag td{background:var(--flag-soft);}
+  tr.good td{background:var(--good-soft);}
+  .tag{display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:10.5px; padding:2px 7px; border-radius:4px; font-weight:600;}
+  .tag.flag{background:var(--flag-soft); color:var(--flag);}
+  .tag.good{background:var(--good-soft); color:var(--good);}
+  .tag.p1{background:var(--flag-soft); color:var(--flag);}
+
+  .finding{border-left:3px solid var(--flag); background:var(--flag-soft); border-radius:0 8px 8px 0; padding:14px 16px; margin:16px 0;}
+  .finding .ftitle{font-weight:700; font-size:13.5px; margin-bottom:6px; color:var(--flag);}
+  .finding p{margin-bottom:6px; font-size:13.5px;}
+
+  .open-item{border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 8px 8px 0; padding:14px 16px; margin:14px 0;}
+  .open-item .otitle{font-weight:700; font-size:13.5px; margin-bottom:6px;}
+  .open-item p{margin-bottom:0; font-size:13.5px;}
+
+  .kpi-row{display:flex; gap:10px; flex-wrap:wrap; margin:18px 0 24px;}
+  .kpi{flex:1; min-width:100px; border:1px solid var(--line); border-radius:8px; padding:12px 14px; background:var(--panel);}
+  .kpi .n{font-family:"IBM Plex Mono",monospace; font-size:22px; font-weight:700; font-variant-numeric:tabular-nums;}
+  .kpi .l{font-size:11px; color:var(--muted); margin-top:2px;}
+
+  .footline{margin-top:64px; padding-top:20px; border-top:1px solid var(--line); font-size:12px; color:var(--muted); line-height:1.8;}
+  a{color:var(--accent);}
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<div class="doc">
+
+  <div class="masthead">
+    <div class="eyebrow">⚠ 공식 문서 아님 · Playwright 관찰 기반 요약</div>
+    <h1>MD's PICK 전시 페이지 관찰 리포트</h1>
+    <p class="lede">TOP ONLINE 프로젝트 — 정책서·화면설계서 없이 실제 서비스 URL을 코드기반(Playwright)으로 직접 관찰해 작성했습니다. 이 문서에 담긴 모든 수치와 서술은 실측 근거를 가지며, 추정이 섞인 항목은 별도로 표시합니다 (AGENTS.md 7항).</p>
+    <div class="meta-row">
+      <span><b>대상 URL</b> <code>/display/mds-pick</code></span>
+      <span><b>관찰일</b> 2026-08-25</span>
+      <span><b>근거 유형</b> 코드기반</span>
+      <span><b>연계 TC</b> TC_DSP_001~035 (35건)</span>
+    </div>
+    <div class="notice">이 사이트는 기존 "데모사이트" 프로젝트와 동일한 서비스(3TOP)입니다. 다만 프로젝트 격리 원칙(AGENTS.md 16항)에 따라 데모사이트의 기존 TC·결함 기록은 참조하지 않고, 이 페이지만 독립적으로 새로 관찰했습니다.</div>
+  </div>
+
+  <h2><span class="num">01</span>페이지 개요</h2>
+  <p><code>/display/mds-pick</code>는 MD가 큐레이션한 상품 3건을 세로로 나열하는 단일 전시 페이지입니다. 각 카드는 순번(01/02/03), 상품명, 가격(정가·판매가·할인율 또는 단일가), "RECOMMENDATION" 배지, 상품 설명, "자세히 보기" 링크, "위시리스트 추가" 버튼으로 구성됩니다. 장바구니 담기 도선은 이 페이지 어디에도 없습니다.</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="no">CARD 01</div>
+      <div class="name">그린 체크 코튼 셔츠</div>
+      <div class="price-row"><span class="sale">₩110,000</span><span class="base">₩129,000</span><span class="rate">7%</span></div>
+      <div class="code">PD0000038 · /products/98</div>
+    </div>
+    <div class="card">
+      <div class="no">CARD 02</div>
+      <div class="name">오벌 시그니처 블랙</div>
+      <div class="price-row"><span class="sale">₩200,000</span><span class="base">₩249,000</span><span class="rate">20%</span></div>
+      <div class="code">PD0000004 · /products/63</div>
+    </div>
+    <div class="card">
+      <div class="no">CARD 03</div>
+      <div class="name">카키 헤비 플리스 떡볶이 후드 코트</div>
+      <div class="price-row"><span class="sale">₩229,000</span></div>
+      <div class="code">PD0000043 · /products/103</div>
+    </div>
+  </div>
+
+  <h2><span class="num">02</span>데이터 정합성 — 판매가 표시 불일치</h2>
+  <p class="section-sub">MD's PICK 표시 판매가를 각 카드의 상품상세 판매가와 대조한 결과, 할인 중인 카드 2건 모두에서 불일치가 확인되었습니다. 비할인 카드(03)는 정상 일치했습니다.</p>
+
+  <table>
+    <thead><tr><th>카드</th><th>MD's PICK 판매가</th><th>상품상세 판매가</th><th>결과</th></tr></thead>
+    <tbody>
+      <tr class="flag"><td>01 · 그린 체크 코튼 셔츠</td><td class="num">₩110,000</td><td class="num">₩120,000</td><td><span class="tag flag">불일치 · −₩10,000</span></td></tr>
+      <tr class="flag"><td>02 · 오벌 시그니처 블랙</td><td class="num">₩200,000</td><td class="num">₩199,000</td><td><span class="tag flag">불일치 · +₩1,000</span></td></tr>
+      <tr class="good"><td>03 · 카키 헤비 플리스 떡볶이 후드 코트</td><td class="num">₩229,000</td><td class="num">₩229,000</td><td><span class="tag good">일치</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="finding">
+    <div class="ftitle">🚩 DEF_TOP ONLINE_001 — 할인 카드 판매가 표시 불일치</div>
+    <p>할인 중인 카드에서만 재현되고(2/2) 비할인 카드는 정상(1/1)이라는 점에서, 특정 상품 데이터의 오류가 아니라 <b>전시 컴포넌트가 판매가를 스냅샷하는 과정의 계통적 결함</b>으로 추정됩니다. 카드1의 경우 MD's PICK에 표시된 할인율 배지(7%)조차 자체 표시 판매가(₩110,000) 기준 계산값(≈14.7%)과 어긋나는 반면, 상품상세의 정가·판매가·할인율(₩129,000 / ₩120,000 / 7%)은 내부적으로 정합합니다 — 즉 MD's PICK 쪽의 판매가 값 자체가 원본과 어긋나 있다는 뜻입니다.</p>
+    <p>TC_DSP_006/007/009 참조 · P1</p>
+  </div>
+
+  <h2><span class="num">03</span>안정성 — 간헐적 500 에러</h2>
+  <p class="section-sub">로그인(<code>/login</code>)과 상품상세(<code>/products/98</code>) 양쪽에서 동일한 시그니처의 서버 오류가 간헐적으로 재현되었습니다.</p>
+
+  <div class="finding">
+    <div class="ftitle">🚩 DEF_TOP ONLINE_002 — Next.js Server Components 간헐적 500</div>
+    <p><code>/login</code>: 6회 시도 중 1회 500 에러 페이지, 1회 무응답(에러 표시 없이 로그인 페이지에 머무름), 4회 정상 — 약 33% 간헐적 실패율.</p>
+    <p><code>/products/98</code>: 최초 관찰 5회 중 1회 재현(Error Digest: <code>795149636</code>). 이후 재검증 32회 중 0회 재현 — 재현율이 낮고 매우 간헐적임을 시사합니다.</p>
+    <p>재시도 시 대부분 성공하지만, 실패 시 사용자에게 어떠한 안내도 제공되지 않습니다. TC_DSP_034 참조 · P1</p>
+  </div>
+
+  <h2><span class="num">04</span>양호 사례</h2>
+  <p>로그인 상태에서 동일 위시리스트 버튼을 거의 동시에 2회 연속 클릭했을 때, 중복 항목 생성 없이 최종 상태가 일관되게 처리됨을 확인했습니다(레이스 컨디션 없음). TC_DSP_035로 회귀 검증에 포함했습니다.</p>
+
+  <h2><span class="num">05</span>미확정 사항 — [확인필요]</h2>
+  <p class="section-sub">근거문서 없이 일반적인 이커머스 관행을 기준으로 삼은 항목입니다. 이 사이트 자체의 정책/기획 확인 없이는 결함인지 의도된 설계인지 판단할 수 없어 <code>[확인필요]</code>로 표기했습니다 (AGENTS.md 7항 4번).</p>
+
+  <div class="open-item">
+    <div class="otitle">SEO — 페이지 고유 타이틀 부재</div>
+    <p><code>&lt;title&gt;</code>이 "Top online store" 고정값이며 <code>og:title</code>도 없습니다. 페이지별 고유 타이틀이 SEO 관행상 일반적이나, 이 사이트의 다른 전시 페이지(SALE 등)와 비교 관찰하지 않아 전시 페이지군 전체의 의도된 정책인지 불확실합니다. TC_DSP_028</p>
+  </div>
+  <div class="open-item">
+    <div class="otitle">장바구니 담기 버튼 부재</div>
+    <p>카드 영역은 물론 페이지 전체에 "장바구니 담기" 버튼이 없습니다(상품상세에는 존재). 즉시 구매 도선 없이 "자세히 보기"/"위시리스트"만 제공하는 것이 이 페이지군의 의도된 설계인지, 아니면 관행상 응당 있어야 할 도선이 누락된 것인지 정책 근거가 없습니다. TC_DSP_033</p>
+  </div>
+  <div class="open-item">
+    <div class="otitle">Empty State 미관찰</div>
+    <p>현재 3건이 편성되어 있어 "0건 편성" 상태를 재현할 수 없었습니다. Empty State 문구/레이아웃이 정의된 근거문서도 없습니다. BO 접근권한 확보 후 재검토가 필요합니다. TC_DSP_032</p>
+  </div>
+
+  <h2><span class="num">06</span>TC 커버리지</h2>
+  <div class="kpi-row">
+    <div class="kpi"><div class="n">35</div><div class="l">전체 TC</div></div>
+    <div class="kpi"><div class="n">8</div><div class="l">P1</div></div>
+    <div class="kpi"><div class="n">20</div><div class="l">P2</div></div>
+    <div class="kpi"><div class="n">7</div><div class="l">P3</div></div>
+  </div>
+  <p>헤더/레이아웃 2 · 상품카드표시 3 · 가격표시·데이터정합성 8 · 네비게이션 3 · 위시리스트 9 · 품질·비기능 3 · SEO·성능·접근성 4 · 예외 3건으로 구성했습니다. 입력 폼이 없는 단순 전시 화면 특성상 경계값/조합 기법을 적용할 여지가 원천적으로 적어, 관행 추측 없이 실제 관찰로 확장 가능한 범위(35건)까지 도출했습니다.</p>
+
+  <h2><span class="num">07</span>근거 자료</h2>
+  <ul>
+    <li>Playwright 관찰 스크립트/결과: <code>_scratch/TOP ONLINE/*.js</code>, <code>*-observation.json</code> (Git 비대상)</li>
+    <li>결함 스크린샷/콘솔로그: <code>project/TOP ONLINE/TC/defects/DEF_TOP ONLINE_001.png</code>, <code>DEF_TOP ONLINE_002.console.json</code></li>
+    <li>테스트 계정: <code>project/TOP ONLINE/TC/testAccounts.json</code> (Git 비대상)</li>
+  </ul>
+
+  <div class="footline">
+    이 리포트는 Phase 1~3(분석 · 범위 산정 · 시나리오 산출) 관찰 결과를 정리한 산출물이며, 정책서/화면설계서를 대체하지 않습니다. 관찰 이후 사이트가 변경되면(편성 교체, 가격 수정 등) 내용이 최신 상태와 달라질 수 있습니다 — 재관찰 시 이 문서와 TC 목록을 함께 갱신합니다.
+  </div>
+
+</div>
