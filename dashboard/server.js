@@ -47,7 +47,16 @@ app.use(express.json());
 // 비밀번호를 아는 팀원만 접근/조작할 수 있도록 최소한의 세션 인증을 둡니다.
 const PUBLIC_PATHS = new Set(['/login', '/login.html', '/api/login', '/styles.css']);
 
-app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
+app.get('/login', (req, res) => {
+  // 이미 로그인된 세션이 /login을 다시 열면(예: 뒤로가기로 이 URL을 다시 밟는 경우) 로그인
+  // 화면 대신 바로 앱으로 돌려보냅니다 — 그대로 두면 유효한 세션인데도 로그인 폼이 다시 뜹니다.
+  const token = auth.getCookie(req.headers.cookie, SESSION_COOKIE);
+  if (auth.isValidSession(token)) {
+    const next = typeof req.query.next === 'string' && req.query.next.startsWith('/') ? req.query.next : '/';
+    return res.redirect(next);
+  }
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
 
 app.post('/api/login', (req, res) => {
   const { password } = req.body || {};

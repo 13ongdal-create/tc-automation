@@ -67,20 +67,41 @@ async function loadAll() {
 }
 
 // ── 🏠 홈 (프로젝트 카드) ↔ 📁 프로젝트 상세 화면 전환 ─────────────────────
-function showHome() {
+// 브라우저 History API로 실제 내비게이션 상태를 관리합니다. 이게 없으면 화면 전환이
+// 전부 순수 JS 토글이라 브라우저 기록에 남는 건 로그인 리다이렉트뿐이라, 프로젝트 상세에서
+// 뒤로가기를 누르면 로그인 화면으로 튀어버렸습니다(2026-08-26 사용자 리포트) — render*View는
+// 화면만 그리고(기록 변경 없음), show*는 그리기 + pushState, popstate 핸들러는 그리기만 호출.
+function renderHomeView() {
   el.projectSelect.value = '';
   el.projectView.style.display = 'none';
   el.homeView.style.display = 'block';
   renderHomeDashboard();
 }
 
-function showProject(project) {
-  if (!project) return showHome();
+function renderProjectView(project) {
+  if (!project) return renderHomeView();
   el.projectSelect.value = project;
   el.homeView.style.display = 'none';
   el.projectView.style.display = 'block';
   loadAll();
 }
+
+function showHome() {
+  renderHomeView();
+  history.pushState({ view: 'home' }, '', '/');
+}
+
+function showProject(project) {
+  if (!project) return showHome();
+  renderProjectView(project);
+  history.pushState({ view: 'project', project }, '', '/');
+}
+
+window.addEventListener('popstate', (e) => {
+  const state = e.state;
+  if (state && state.view === 'project' && state.project) renderProjectView(state.project);
+  else renderHomeView();
+});
 
 // 우선순위(AGENTS.md 4항: P1=Critical, P2=Major, P3=Minor) 색상 — TC 우선순위/결함 심각도 공용
 // (같은 P1/P2/P3 정의를 공유하므로 결함테이블 sev-badge와 동일 팔레트를 그대로 재사용)
@@ -496,6 +517,13 @@ el.newProjectForm.addEventListener('submit', async (e) => {
   showProject(data.project);
 });
 
+function siteLinkCard(href, accentClass, icon, label, title) {
+  return `<a href="${href}" target="_blank" rel="noopener" class="site-link-card ${accentClass}"${title ? ` title="${esc(title)}"` : ''}>
+    <span class="site-link-icon">${icon}</span>
+    <span class="site-link-label">${label}</span>
+  </a>`;
+}
+
 /** 🔎 사이트 분석 — project.json(Phase 0) 메타 + PRD/테스트사이트/TC 뷰어 바로가기 */
 function renderSiteAnalysis(project, meta, viewerFile) {
   if (!meta || (!meta.url && !meta.testType && !meta.analysisBasis)) {
@@ -510,14 +538,14 @@ function renderSiteAnalysis(project, meta, viewerFile) {
   const metaHtml = `<table class="site-meta-table">${rows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${v}</td></tr>`).join('')}</table>`;
 
   const links = [];
-  if (meta.url) links.push(`<a href="${esc(meta.url)}" target="_blank" rel="noopener" class="btn btn-outline btn-sm">🔗 테스트사이트 바로가기</a>`);
+  if (meta.url) links.push(siteLinkCard(esc(meta.url), 'site-link-primary', '🔗', '테스트사이트 바로가기'));
   if (meta.hasPrd) {
     const prdUrl = `/analysis/${encodeURIComponent(project)}/${encodeURIComponent(meta.prdFile)}`;
-    links.push(`<a href="${prdUrl}" target="_blank" rel="noopener" class="btn btn-outline btn-sm">📄 PRD (사이트분석 &amp; TC계획)</a>`);
+    links.push(siteLinkCard(prdUrl, 'site-link-teal', '📄', 'PRD (사이트분석 &amp; TC계획)'));
   }
   if (viewerFile) {
     const viewerUrl = `/files/${encodeURIComponent(project)}/${encodeURIComponent(viewerFile)}`;
-    links.push(`<a href="${viewerUrl}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" title="TC 뷰어 헤더의 해당 버튼에서 확인할 수 있습니다">🗂 테스트 계정 매트릭스 · User Flow Map</a>`);
+    links.push(siteLinkCard(viewerUrl, 'site-link-indigo', '🗂', '테스트 계정 매트릭스 · User Flow Map', 'TC 뷰어 헤더의 해당 버튼에서 확인할 수 있습니다'));
   }
   const linksHtml = links.length ? `<div class="site-links-row">${links.join('')}</div>` : '';
 
@@ -754,5 +782,6 @@ el.projectSelect.addEventListener('change', () => showProject(el.projectSelect.v
 (async function init() {
   await loadProjects();
   connectWs();
-  showHome(); // 최초 진입 화면은 항상 홈(프로젝트 카드)
+  renderHomeView(); // 최초 진입 화면은 항상 홈(프로젝트 카드)
+  history.replaceState({ view: 'home' }, '', '/'); // pushState가 아닌 replaceState — 새 기록을 쌓지 않고 현재 항목에 상태만 붙임
 })();
