@@ -82,18 +82,6 @@ function showProject(project) {
   loadAll();
 }
 
-// 실행결과 값(AGENTS.md 20-7항) 색상
-const EXEC_ORDER = ['pass', 'fail', 'blocked', 'na', 'nt', 'none'];
-const EXEC_LABELS = { pass: 'Pass', fail: 'Fail', blocked: 'Blocked', na: 'N/A', nt: 'N/T', none: '미실행' };
-const EXEC_COLORS = {
-  pass: 'var(--good)',
-  fail: 'var(--bad)',
-  blocked: 'var(--warn)',
-  na: 'var(--text-secondary)',
-  nt: 'var(--accent2)',
-  none: 'var(--divider)',
-};
-
 // 우선순위(AGENTS.md 4항: P1=Critical, P2=Major, P3=Minor) 색상 — TC 우선순위/결함 심각도 공용
 // (같은 P1/P2/P3 정의를 공유하므로 결함테이블 sev-badge와 동일 팔레트를 그대로 재사용)
 const SEVERITY_ORDER = ['P1', 'P2', 'P3'];
@@ -146,17 +134,47 @@ function donutChart(segments, centerHtml, emptyLabel) {
   return `<div class="donut-wrap"><div class="donut" style="background:conic-gradient(${stops})"></div><div class="donut-center">${centerHtml}</div></div>`;
 }
 
-/** 수행현황 ① — Full TC(모듈 전체 합산) 기준 실행결과 도넛, 가운데엔 프로젝트 전체 수행율만 표시 */
-function renderExecDonut(kpi) {
+/**
+ * 수행현황 ① — "전체 TC 수행률 현황" 카드 (Pass/Fail만 도넛에 색칠하고 나머지는 빈 구간으로 표시,
+ * 헤더에 완료율(Pass+Fail÷전체) 배지, 도넛 아래 범례+진행바+Pass/Fail/미실행 요약을 붙인 형태로
+ * 전체 카드를 통째로 구성한다 — 2026-08-26 사용자가 제시한 참고 디자인을 반영).
+ */
+function renderExecCompletionCard(kpi) {
   const r = kpi ? kpi.results : null;
-  if (!r || !r.total) return donutChart([], '', '실행 이력 없음');
-  const segments = EXEC_ORDER.map((k) => ({ n: r[k] || 0, color: EXEC_COLORS[k] }));
-  // 수행율이 가장 높은 개별 모듈명을 노출하던 이전 방식은, 특히 수행율 100%(모든 모듈 완료)일 때
-  // 임의의 모듈 하나만 부각되어 오해를 줬음(2026-08-26 사용자 피드백) — 항상 프로젝트 전체
-  // 수행율(모듈 합산)만 표시하도록 단순화.
-  const execRate = Math.round((r.executed / r.total) * 100);
-  const centerHtml = `<span class="donut-total">${execRate}%</span><span class="donut-total-label">전체 수행건</span>`;
-  return donutChart(segments, centerHtml, '실행 이력 없음');
+  if (!r || !r.total) {
+    return `
+      <div class="pb-chart-head"><span class="pb-chart-title">전체 TC 수행률 현황</span></div>
+      <div class="pb-chart-body">${donutChart([], '', '실행 이력 없음')}</div>`;
+  }
+  const completeRate = Math.round(((r.pass + r.fail) / r.total) * 100);
+  const other = r.total - r.pass - r.fail; // Blocked/N/A/N/T/미실행 합계 — 도넛의 빈 구간
+  const segments = [
+    { n: r.pass, color: 'var(--good)' },
+    { n: r.fail, color: 'var(--bad)' },
+    { n: other, color: 'var(--divider)' },
+  ];
+  const passPct = (r.pass / r.total) * 100;
+  const failPct = (r.fail / r.total) * 100;
+  return `
+    <div class="pb-chart-head">
+      <span class="pb-chart-title">전체 TC 수행률 현황</span>
+      <span class="exec-complete-badge">${completeRate}% 완료</span>
+    </div>
+    <div class="pb-chart-body">${donutChart(segments, '', '실행 이력 없음')}</div>
+    <div class="exec-legend-row">
+      <span class="exec-legend-item"><span class="legend-swatch" style="background:var(--good)"></span>Pass</span>
+      <span class="exec-legend-item"><span class="legend-swatch" style="background:var(--bad)"></span>Fail</span>
+      <span class="exec-legend-item"><span class="legend-swatch" style="background:var(--divider)"></span>미실행</span>
+    </div>
+    <div class="exec-progress-track">
+      <div class="exec-progress-fill" style="width:${passPct}%"></div>
+      <div class="exec-progress-fill exec-progress-fail" style="width:${failPct}%"></div>
+    </div>
+    <div class="exec-stat-row">
+      <span>Pass: <b class="c-good">${r.pass}</b></span>
+      <span>Fail: <b class="c-bad">${r.fail}</b></span>
+      <span>미실행: <b>${r.none}</b></span>
+    </div>`;
 }
 
 /** 수행현황 ② — 전체 TC를 우선순위(P1/P2/P3)별로 집계한 도넛 */
@@ -363,7 +381,6 @@ function renderProjectBlocks(rows) {
     .map(({ project, kpi, snapshots }) => {
       const r = kpi ? kpi.results : null;
       const d = kpi ? kpi.defects : null;
-      const execCounts = r ? { pass: r.pass, fail: r.fail, blocked: r.blocked, na: r.na, nt: r.nt, none: r.none } : {};
       const priorityCounts = r ? { P1: r.p1 || 0, P2: r.p2 || 0, P3: r.p3 || 0 } : {};
       const severityCounts = d ? d.severityCounts || {} : {};
       const statusLabels = Object.fromEntries(STATUS_ORDER.map((s) => [s, s]));
@@ -379,9 +396,7 @@ function renderProjectBlocks(rows) {
         <div class="pb-section-title">수행현황</div>
         <div class="pb-grid-3">
           <div class="pb-chart-card">
-            <div class="pb-chart-head"><span class="pb-chart-title">Full TC 수행현황</span></div>
-            <div class="pb-chart-body">${renderExecDonut(kpi)}</div>
-            ${donutSummaryTable(EXEC_ORDER, EXEC_LABELS, EXEC_COLORS, execCounts)}
+            ${renderExecCompletionCard(kpi)}
           </div>
           <div class="pb-chart-card">
             <div class="pb-chart-head"><span class="pb-chart-title">우선순위별 TC 분포</span></div>

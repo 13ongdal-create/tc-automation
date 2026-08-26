@@ -242,6 +242,18 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 }
 .donut-empty-label{font-size:11px;color:var(--text-secondary);}
 
+/* 전체 TC 수행률 현황 카드 (완료율 배지 + 범례 + 진행바 + Pass/Fail/미실행 요약) */
+.exec-complete-badge{color:var(--primary);font-weight:800;font-size:13px;}
+.exec-legend-row{display:flex;justify-content:center;gap:16px;margin-top:8px;font-size:11.5px;color:var(--text-secondary);}
+.exec-legend-item{display:inline-flex;align-items:center;gap:5px;}
+.exec-progress-track{display:flex;height:8px;border-radius:5px;overflow:hidden;background:var(--divider);margin-top:14px;}
+.exec-progress-fill{height:100%;background:var(--good);}
+.exec-progress-fill.exec-progress-fail{background:var(--bad);}
+.exec-stat-row{display:flex;justify-content:space-between;margin-top:10px;font-size:12px;color:var(--text-secondary);}
+.exec-stat-row b{font-size:14px;color:var(--text-dark);}
+.exec-stat-row b.c-good{color:var(--good);}
+.exec-stat-row b.c-bad{color:var(--bad);}
+
 /* 도넛 아래 요약 표 (색상 범례 + 정확한 건수/비율) */
 .donut-summary-table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:12px;}
 .donut-summary-table td{padding:3px 0;}
