@@ -63,15 +63,20 @@ function listSnapshots(project) {
   return entries;
 }
 
-/** 모듈별 최신 스냅샷만 골라 합산 (과거 스냅샷 중복 집계 방지) */
-function latestSummary(project) {
+/** 모듈별 최신 스냅샷 1개씩만 골라 배열로 반환 (과거 스냅샷 중복 집계 방지) */
+function latestByModule(project) {
   const entries = listSnapshots(project);
-  const latestByModule = {};
+  const map = {};
   entries.forEach((e) => {
-    const cur = latestByModule[e.moduleCode];
-    if (!cur || e.dateStr > cur.dateStr) latestByModule[e.moduleCode] = e;
+    const cur = map[e.moduleCode];
+    if (!cur || e.dateStr > cur.dateStr) map[e.moduleCode] = e;
   });
-  const latest = Object.values(latestByModule);
+  return Object.values(map);
+}
+
+/** 모듈별 최신 스냅샷을 프로젝트 전체(Full TC) 기준으로 합산 */
+function latestSummary(project) {
+  const latest = latestByModule(project);
   const grand = latest.reduce(
     (acc, e) => {
       acc.total += e.total;
@@ -89,4 +94,38 @@ function latestSummary(project) {
   return { latestDate: latest.length ? latest.reduce((a, e) => (e.dateStr > a ? e.dateStr : a), '00000000') : null, ...grand };
 }
 
-module.exports = { listSnapshots, latestSummary, resultsDir };
+/**
+ * 날짜별 진척율(수행율) 추이 — 모듈마다 실행일이 다를 수 있으므로, 각 날짜 시점에
+ * "그때까지 알려진 모듈별 최신 상태"를 이어붙여(carry-forward) 프로젝트 전체 수행율을 계산합니다.
+ * 예: PD가 8/20에, CRT가 8/22에 실행됐다면 8/22 시점 수행율에는 PD(8/20 결과)+CRT(8/22 결과)가 모두 반영됩니다.
+ */
+function progressOverTime(project) {
+  const entries = listSnapshots(project);
+  if (!entries.length) return [];
+  const byModDate = new Map();
+  const modules = new Set();
+  entries.forEach((e) => {
+    byModDate.set(`${e.moduleCode}|${e.dateStr}`, e);
+    modules.add(e.moduleCode);
+  });
+  const allDates = [...new Set(entries.map((e) => e.dateStr))].sort();
+  const state = {};
+  return allDates.map((dateStr) => {
+    modules.forEach((mod) => {
+      const rec = byModDate.get(`${mod}|${dateStr}`);
+      if (rec) state[mod] = rec;
+    });
+    const vals = Object.values(state);
+    const total = vals.reduce((s, v) => s + v.total, 0);
+    const executed = vals.reduce((s, v) => s + v.executed, 0);
+    return {
+      dateStr,
+      dateFmt: `${dateStr.slice(4, 6)}/${dateStr.slice(6, 8)}`,
+      total,
+      executed,
+      execRate: total ? Math.round((executed / total) * 100) : 0,
+    };
+  });
+}
+
+module.exports = { listSnapshots, latestByModule, latestSummary, progressOverTime, resultsDir };

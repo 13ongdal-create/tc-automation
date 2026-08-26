@@ -95,8 +95,10 @@ app.get('/api/:project/results', (req, res) => {
 app.get('/api/:project/kpi', (req, res) => {
   const { project } = req.params;
   const defectSummary = defectStore.summary(project);
-  const resultSummary = resultsStore.latestSummary(project);
   if (defectSummary === null) return res.status(404).json({ error: '프로젝트를 찾을 수 없습니다.' });
+  const resultSummary = resultsStore.latestSummary(project);
+  resultSummary.byModule = resultsStore.latestByModule(project);
+  resultSummary.timeline = resultsStore.progressOverTime(project);
   res.json({ defects: defectSummary, results: resultSummary });
 });
 

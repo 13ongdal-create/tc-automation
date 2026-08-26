@@ -16,8 +16,6 @@ const el = {
   homeKpiFail: document.getElementById('homeKpiFail'),
   homeKpiExecRate: document.getElementById('homeKpiExecRate'),
   projectBlocks: document.getElementById('projectBlocks'),
-  execLegend: document.getElementById('execLegend'),
-  defectLegend: document.getElementById('defectLegend'),
   btnNewProject: document.getElementById('btnNewProject'),
   btnNewProjectEmpty: document.getElementById('btnNewProjectEmpty'),
   newProjectModal: document.getElementById('newProjectModal'),
@@ -79,16 +77,7 @@ function showProject(project) {
   loadAll();
 }
 
-const STATUS_COLORS = {
-  '신규': 'var(--warn)',
-  '처리중': 'var(--primary)',
-  '재검증대기': 'var(--accent2)',
-  '완료': 'var(--good)',
-  '보류': 'var(--text-secondary)',
-  '재발생': 'var(--bad)',
-};
-
-// 실행결과 값(AGENTS.md 20-7항) 색상 — 결함현황(STATUS_COLORS)과 구분되는 팔레트
+// 실행결과 값(AGENTS.md 20-7항) 색상
 const EXEC_ORDER = ['pass', 'fail', 'blocked', 'na', 'nt', 'none'];
 const EXEC_LABELS = { pass: 'Pass', fail: 'Fail', blocked: 'Blocked', na: 'N/A', nt: 'N/T', none: '미실행' };
 const EXEC_COLORS = {
@@ -100,15 +89,134 @@ const EXEC_COLORS = {
   none: 'var(--divider)',
 };
 
-function renderLegend(el, order, labels, colors) {
-  el.innerHTML = order
+// 결함 우선순위(AGENTS.md 4항: P1=Critical, P2=Major, P3=Minor) 색상 — 기존 결함테이블 sev-badge와 동일 팔레트
+const SEVERITY_ORDER = ['P1', 'P2', 'P3'];
+const SEVERITY_LABELS = { P1: 'Critical (P1)', P2: 'Major (P2)', P3: 'Minor (P3)' };
+const SEVERITY_COLORS = { P1: 'var(--bad)', P2: 'var(--warn)', P3: 'var(--primary)' };
+
+function renderLegend(order, labels, colors) {
+  return order
+    .map((k) => `<span class="legend-item"><span class="legend-swatch" style="background:${colors[k]}"></span>${esc(labels[k])}</span>`)
+    .join('');
+}
+
+/** mask 기반 누적 도넛 차트 — centerHtml을 가운데에 겹쳐 표시 */
+function donutChart(segments, centerHtml, emptyLabel) {
+  const total = segments.reduce((s, seg) => s + seg.n, 0);
+  if (!total) {
+    return `<div class="donut-wrap"><div class="donut donut-empty"></div><div class="donut-center"><span class="donut-empty-label">${esc(emptyLabel)}</span></div></div>`;
+  }
+  let cursor = 0;
+  const stops = segments
+    .filter((s) => s.n > 0)
+    .map((s) => {
+      const from = cursor;
+      cursor += (s.n / total) * 100;
+      return `${s.color} ${from}% ${cursor}%`;
+    })
+    .join(', ');
+  return `<div class="donut-wrap"><div class="donut" style="background:conic-gradient(${stops})"></div><div class="donut-center">${centerHtml}</div></div>`;
+}
+
+/** 수행현황 ① — Full TC(모듈 전체 합산) 기준 실행결과 도넛, 가운데엔 수행율이 가장 높은 모듈명+수행율 */
+function renderExecDonut(kpi) {
+  const r = kpi ? kpi.results : null;
+  if (!r || !r.total) return donutChart([], '', '실행 이력 없음');
+  const segments = EXEC_ORDER.map((k) => ({ n: r[k] || 0, color: EXEC_COLORS[k] }));
+  const byModule = r.byModule || [];
+  const top = byModule.reduce((best, m) => (!best || m.execRate > best.execRate ? m : best), null);
+  const centerHtml = top
+    ? `<span class="donut-total">${top.execRate}%</span><span class="donut-total-label" title="${esc(top.moduleName)}">${esc(top.moduleName)}</span>`
+    : `<span class="donut-total">${Math.round((r.executed / r.total) * 100)}%</span><span class="donut-total-label">전체</span>`;
+  return donutChart(segments, centerHtml, '실행 이력 없음');
+}
+
+/** 수행현황 ② — 날짜별 진척율(수행율) 추이를 선/영역 그래프로 표시 (순수 SVG, 라이브러리 없음) */
+function renderTrendChart(timeline) {
+  if (!timeline || !timeline.length) return '<div class="trend-empty">실행 이력이 없습니다</div>';
+  const W = 280, H = 100, PAD = 10;
+  const n = timeline.length;
+  const points = timeline.map((t, i) => ({
+    x: n === 1 ? W / 2 : PAD + (i / (n - 1)) * (W - PAD * 2),
+    y: PAD + (1 - t.execRate / 100) * (H - PAD * 2),
+    ...t,
+  }));
+  const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+  const last = points[points.length - 1];
+  const areaD = `${pathD} L ${last.x.toFixed(1)} ${H - PAD} L ${points[0].x.toFixed(1)} ${H - PAD} Z`;
+  const dots = points
+    .map((p) => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2.2" class="trend-dot"><title>${esc(p.dateFmt)} · ${p.execRate}%</title></circle>`)
+    .join('');
+  return `
+    <svg viewBox="0 0 ${W} ${H}" class="trend-svg" preserveAspectRatio="none">
+      <line x1="${PAD}" y1="${PAD}" x2="${W - PAD}" y2="${PAD}" class="trend-grid"></line>
+      <line x1="${PAD}" y1="${H / 2}" x2="${W - PAD}" y2="${H / 2}" class="trend-grid"></line>
+      <line x1="${PAD}" y1="${H - PAD}" x2="${W - PAD}" y2="${H - PAD}" class="trend-grid"></line>
+      <path d="${areaD}" class="trend-area"></path>
+      <path d="${pathD}" class="trend-line"></path>
+      ${dots}
+    </svg>
+    <div class="trend-labels"><span>${esc(points[0].dateFmt)}</span><span>${esc(last.dateFmt)} · ${last.execRate}%</span></div>`;
+}
+
+/** 수행현황 ③ — 모듈별 TC 실행결과 상세 표 */
+function renderModuleExecTable(byModule) {
+  if (!byModule || !byModule.length) return '<div class="empty-row">실행 이력이 없습니다</div>';
+  const sorted = byModule.slice().sort((a, b) => a.moduleCode.localeCompare(b.moduleCode));
+  const rowsHtml = sorted
     .map(
-      (k) => `
-    <span class="legend-item">
-      <span class="legend-swatch" style="background:${colors[k]}"></span>${esc(labels[k])}
-    </span>`
+      (m) => `
+    <tr>
+      <td class="pb-module-name">${esc(m.moduleName)}</td>
+      <td>${m.total}</td>
+      <td>${m.pass}</td>
+      <td>${m.fail}</td>
+      <td>${m.blocked}</td>
+      <td>${m.na}</td>
+      <td>${m.nt}</td>
+      <td>${m.execRate}%</td>
+    </tr>`
     )
     .join('');
+  return `
+    <table class="pb-module-table">
+      <thead><tr><th>모듈</th><th>전체</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>N/T</th><th>수행율</th></tr></thead>
+      <tbody>${rowsHtml}</tbody>
+    </table>`;
+}
+
+/** 결함현황 ① — 전체 결함을 우선순위(P1/P2/P3)별로 집계한 도넛 */
+function renderSeverityDonut(kpi) {
+  const d = kpi ? kpi.defects : null;
+  if (!d || !d.total) return donutChart([], '', '등록된 결함 없음');
+  const segments = SEVERITY_ORDER.map((s) => ({ n: (d.severityCounts && d.severityCounts[s]) || 0, color: SEVERITY_COLORS[s] }));
+  const centerHtml = `<span class="donut-total">${d.total}</span><span class="donut-total-label">전체 결함</span>`;
+  return donutChart(segments, centerHtml, '등록된 결함 없음');
+}
+
+/** 결함현황 ② — 모듈별 결함 상세 현황 표 */
+function renderModuleDefectTable(byModule) {
+  if (!byModule || !byModule.length) return '<div class="empty-row">등록된 결함이 없습니다</div>';
+  const rowsHtml = byModule
+    .map(
+      (m) => `
+    <tr>
+      <td class="pb-module-name">${esc(m.module)}</td>
+      <td>${m.total}</td>
+      <td>${m.P1}</td>
+      <td>${m.P2}</td>
+      <td>${m.P3}</td>
+      <td>${m.신규}</td>
+      <td>${m.처리중}</td>
+      <td>${m.완료}</td>
+    </tr>`
+    )
+    .join('');
+  return `
+    <table class="pb-module-table">
+      <thead><tr><th>모듈</th><th>전체</th><th>P1</th><th>P2</th><th>P3</th><th>신규</th><th>처리중</th><th>완료</th></tr></thead>
+      <tbody>${rowsHtml}</tbody>
+    </table>`;
 }
 
 async function renderHomeDashboard() {
@@ -147,72 +255,55 @@ async function renderHomeDashboard() {
   el.homeKpiFail.textContent = totalFail;
   el.homeKpiExecRate.textContent = totalTcs ? Math.round((totalExecuted / totalTcs) * 100) + '%' : '–';
 
-  renderLegend(el.execLegend, EXEC_ORDER, EXEC_LABELS, EXEC_COLORS);
-  renderLegend(el.defectLegend, STATUS_ORDER, Object.fromEntries(STATUS_ORDER.map((s) => [s, s])), STATUS_COLORS);
   renderProjectBlocks(rows);
 }
 
-function stackTrack(segments) {
-  const html = segments
-    .filter((s) => s.n > 0)
-    .map((s) => `<div class="stack-seg" style="width:${(s.n / s.total) * 100}%;background:${s.color}" title="${esc(s.label)} ${s.n}건"></div>`)
-    .join('');
-  return html ? `<div class="stack-track">${html}</div>` : '<div class="stack-track stack-track-empty"></div>';
-}
-
-/** 프로젝트 하나당 블록 1개 — 그 안에 수행현황 차트 / 결함현황 차트 / 요약을 나란히 표시 */
+/** 프로젝트 하나당 블록 1개 — 수행현황(도넛+추이) 2개, 결함현황(도넛+표) 2개를 섹션으로 나눠 표시 */
 function renderProjectBlocks(rows) {
   el.projectBlocks.innerHTML = rows
-    .map(({ project, kpi }) => {
-      const d = kpi ? kpi.defects : { total: 0, counts: {} };
-      const r = kpi ? kpi.results : { pass: 0, fail: 0, total: 0, executed: 0, latestDate: null };
-      const execRate = r.total ? Math.round((r.executed / r.total) * 100) : null;
-      const lastRun =
-        r.latestDate && r.latestDate !== '00000000'
-          ? `${r.latestDate.slice(0, 4)}-${r.latestDate.slice(4, 6)}-${r.latestDate.slice(6, 8)}`
-          : '–';
-
-      const execTrack = r.total
-        ? stackTrack(EXEC_ORDER.map((k) => ({ n: r[k] || 0, total: r.total, color: EXEC_COLORS[k], label: EXEC_LABELS[k] })))
-        : stackTrack([]);
-      const execCaption = r.total ? `${r.total}건 · 수행율 ${execRate}%` : '실행 이력 없음';
-
-      const defectTrack = d.total
-        ? stackTrack(STATUS_ORDER.map((s) => ({ n: d.counts[s] || 0, total: d.total, color: STATUS_COLORS[s], label: s })))
-        : stackTrack([]);
-      const defectCaption = d.total ? `결함 ${d.total}건 · 신규 ${d.counts['신규'] || 0}건` : '등록된 결함 없음';
-
-      return `
+    .map(
+      ({ project, kpi }) => `
       <div class="panel project-block" data-project="${esc(project)}">
         <div class="panel-head">
           <h2>${esc(project)}</h2>
           <span class="panel-sub project-block-link">상세보기 →</span>
         </div>
-        <div class="project-block-body">
-          <div class="pb-col">
-            <div class="pb-col-title">수행현황</div>
-            ${execTrack}
-            <div class="pb-caption">${execCaption}</div>
+
+        <div class="pb-section-title">수행현황</div>
+        <div class="pb-grid-2">
+          <div class="pb-chart-card">
+            <div class="pb-chart-head">
+              <span class="pb-chart-title">Full TC 수행현황</span>
+              <span class="chart-legend-inline">${renderLegend(EXEC_ORDER, EXEC_LABELS, EXEC_COLORS)}</span>
+            </div>
+            <div class="pb-chart-body">${renderExecDonut(kpi)}</div>
           </div>
-          <div class="pb-col">
-            <div class="pb-col-title">결함현황</div>
-            ${defectTrack}
-            <div class="pb-caption">${defectCaption}</div>
-          </div>
-          <div class="pb-col pb-col-summary">
-            <div class="pb-col-title">요약</div>
-            <table class="pb-summary-table">
-              <tr><th>전체 결함</th><td>${d.total}</td></tr>
-              <tr><th>신규</th><td>${d.counts['신규'] || 0}</td></tr>
-              <tr><th>Pass</th><td>${r.pass}</td></tr>
-              <tr><th>Fail</th><td>${r.fail}</td></tr>
-              <tr><th>수행율</th><td>${execRate === null ? '–' : execRate + '%'}</td></tr>
-              <tr><th>최근 실행일</th><td>${lastRun}</td></tr>
-            </table>
+          <div class="pb-chart-card">
+            <div class="pb-chart-head"><span class="pb-chart-title">날짜별 진척율</span></div>
+            <div class="pb-chart-body pb-chart-body-trend">${renderTrendChart(kpi ? kpi.results.timeline : [])}</div>
           </div>
         </div>
-      </div>`;
-    })
+        <div class="pb-chart-card pb-chart-card-wide pb-table-row">
+          <div class="pb-chart-head"><span class="pb-chart-title">모듈별 TC 현황</span></div>
+          <div class="table-wrap">${renderModuleExecTable(kpi ? kpi.results.byModule : [])}</div>
+        </div>
+
+        <div class="pb-section-title">결함현황</div>
+        <div class="pb-grid-2">
+          <div class="pb-chart-card">
+            <div class="pb-chart-head">
+              <span class="pb-chart-title">우선순위별 결함</span>
+              <span class="chart-legend-inline">${renderLegend(SEVERITY_ORDER, SEVERITY_LABELS, SEVERITY_COLORS)}</span>
+            </div>
+            <div class="pb-chart-body">${renderSeverityDonut(kpi)}</div>
+          </div>
+          <div class="pb-chart-card pb-chart-card-wide">
+            <div class="pb-chart-head"><span class="pb-chart-title">모듈별 결함 상세</span></div>
+            <div class="table-wrap">${renderModuleDefectTable(kpi ? kpi.defects.byModule : [])}</div>
+          </div>
+        </div>
+      </div>`
+    )
     .join('');
 }
 

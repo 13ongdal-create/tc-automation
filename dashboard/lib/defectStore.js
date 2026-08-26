@@ -7,6 +7,7 @@ const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || 'D:/tc-automation';
 // 프로젝트 폴더는 저장소 루트가 아니라 project/ 하위에 있음 (2026-08-25 디렉토리 구조 개편)
 const PROJECTS_ROOT = path.join(TC_AUTOMATION_ROOT, 'project');
 const STATUS_ORDER = ['신규', '처리중', '재검증대기', '완료', '보류', '재발생'];
+const SEVERITY_ORDER = ['P1', 'P2', 'P3'];
 
 function defectsPath(project) {
   return path.join(PROJECTS_ROOT, project, 'TC', 'defects.json');
@@ -31,12 +32,27 @@ function save(project, defects) {
   fs.renameSync(tmp, target);
 }
 
+/** 상태별/우선순위별/모듈별 집계. byModule은 "모듈별 결함 상세 현황" 표용 (대시보드 홈) */
 function summary(project) {
   const defects = load(project);
   if (defects === null) return null;
   const counts = Object.fromEntries(STATUS_ORDER.map((s) => [s, 0]));
-  for (const d of defects) counts[d.status] = (counts[d.status] || 0) + 1;
-  return { total: defects.length, counts };
+  const severityCounts = Object.fromEntries(SEVERITY_ORDER.map((s) => [s, 0]));
+  const byModuleMap = {};
+  for (const d of defects) {
+    counts[d.status] = (counts[d.status] || 0) + 1;
+    if (d.severity) severityCounts[d.severity] = (severityCounts[d.severity] || 0) + 1;
+
+    const mod = d.module || '(미지정)';
+    if (!byModuleMap[mod]) {
+      byModuleMap[mod] = { module: mod, total: 0, P1: 0, P2: 0, P3: 0, 신규: 0, 처리중: 0, 완료: 0 };
+    }
+    byModuleMap[mod].total += 1;
+    if (d.severity && byModuleMap[mod][d.severity] !== undefined) byModuleMap[mod][d.severity] += 1;
+    if (d.status === '신규' || d.status === '처리중' || d.status === '완료') byModuleMap[mod][d.status] += 1;
+  }
+  const byModule = Object.values(byModuleMap).sort((a, b) => b.total - a.total);
+  return { total: defects.length, counts, severityCounts, byModule };
 }
 
 /** DEF_xxx 담당자/상태/이슈링크 등 단일 필드를 직접 수정. 성공 시 갱신된 레코드, 실패 시 null 반환 */
@@ -61,4 +77,4 @@ function updateField(project, defectId, field, value) {
   return target;
 }
 
-module.exports = { load, save, summary, updateField, STATUS_ORDER, TC_AUTOMATION_ROOT, PROJECTS_ROOT };
+module.exports = { load, save, summary, updateField, STATUS_ORDER, SEVERITY_ORDER, TC_AUTOMATION_ROOT, PROJECTS_ROOT };
