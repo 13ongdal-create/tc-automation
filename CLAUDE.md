@@ -73,11 +73,32 @@ PW_RUN_ID={프로젝트명} npx playwright test --config="D:/tc-automation/playw
 collide. Results land in `_scratch/playwright-report/{PW_RUN_ID}/results.json` (gitignored — parse it,
 then hand-copy screenshots/console logs into `project/{프로젝트명}/TC/defects/` for anything kept permanently).
 
-**Dashboard** (local web UI at `http://localhost:4000`):
-
+<!-- [수정 전 2026-08-26] "**Dashboard** (local web UI at `http://localhost:4000`):
 ```bash
 cd dashboard && npm install && npm start   # or: npm run dev (auto-restart)
-```
+```"
+아래로 교체 — 이후 로그인/HTTPS/사내망 공유/상시구동(Windows Scheduled Task) 추가되어
+단순 `npm start` 안내만으로는 실제 운영 방식과 맞지 않게 됨. -->
+**Dashboard** ("QA Automation" — Express 웹 UI, port 4000, `dashboard/certs/{key,cert}.pem`이 있으면
+HTTPS로 자동 구동):
+
+- **Windows Scheduled Task(`qa-automation-dashboard`)로 상시 구동됩니다** — 사용자 `3top` 로그온 시
+  자동 시작, 크래시 시 자동 재시작(최대 999회, 1분 간격). 평소엔 직접 실행할 필요 없음. 확인/제어는
+  PowerShell `Get-ScheduledTask -TaskName qa-automation-dashboard` / `Start-ScheduledTask` /
+  `Stop-ScheduledTask`로 — `npm start`를 직접 실행하면 같은 포트(4000)에서 충돌합니다.
+- 접속: 로컬 `https://localhost:4000`, 같은 네트워크의 다른 사람은 `https://{LAN IP}:4000`
+  (`Get-NetIPAddress`로 확인 가능). 자체서명 인증서라 브라우저 첫 접속 시 보안 경고가 뜹니다 —
+  "고급" → "계속 진행"으로 넘어가면 됩니다.
+- **로그인 필수**: 채팅 패널이 헤드리스로 `claude` CLI를 실행해 파일 쓰기/커밋까지 하므로, 공유
+  비밀번호(세션 쿠키 + WebSocket 동일 검증) 없이는 아무 라우트도 접근할 수 없습니다. 비밀번호는
+  최초 실행 시 `dashboard/.dashboard-password`(git 비대상)에 자동 생성되거나, `DASHBOARD_PASSWORD`
+  환경변수로 직접 지정 가능합니다.
+- HTTPS 인증서 재발급(예: LAN IP 변경 시)은 `bash dashboard/scripts/gen-cert.sh`. 인증서가 없으면
+  서버가 자동으로 평문 HTTP로 폴백합니다.
+- 수동/개발 실행(스케줄 작업이 중지되어 있을 때만, 로컬 수정 테스트 등):
+  ```bash
+  cd dashboard && npm install && npm start   # or: npm run dev (auto-restart)
+  ```
 
 <!-- [수정 전 2026-08-25] "slack-bridge (inactive, kept for reference — do not start unless the user
 explicitly asks to resume Slack usage): `cd slack-bridge && npm start`. Needs `.env` (see
@@ -126,3 +147,12 @@ dependency) — do not conflate this with "resuming the Slack bot." Check/modify
 - Don't hardcode specific product IDs, exact catalog counts, or prices in automation against a live URL —
   the catalog changes underneath you. Navigate to "the first available item in category X" and assert
   structure/format instead (AGENTS.md §20-8).
+<!-- [추가 2026-08-26] 대시보드 상시구동(Windows Scheduled Task) 구성 중 실측으로 발견한 항목. -->
+- **Windows: a `claude` CLI subprocess can take the whole dashboard server down with it.** `dashboard/lib/claudeRunner.js`
+  spawns `claude` (a `.cmd` shim → Node internally routes it through `cmd.exe`) for the chat panel. On this
+  machine, when that subprocess finished, it emitted a console-wide Ctrl+C that killed every process sharing
+  the console — including the parent Express server — even though they're unrelated processes. Symptom: the
+  dashboard vanishes (port 4000 stops listening) right after a chat response completes, with a bare `^C` as
+  the last line in `dashboard/logs/out.log`, no stack trace. Fixed in `server.js` by having the server ignore
+  `SIGINT`/`SIGBREAK` on `win32` (it should only ever be stopped via `taskkill`/`Stop-ScheduledTask`) — don't
+  remove that handler when touching `server.js`.
