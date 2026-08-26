@@ -232,6 +232,9 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 .trend-dot{fill:var(--primary);}
 .trend-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text-secondary);margin-top:4px;}
 .trend-empty{display:flex;align-items:center;justify-content:center;min-height:110px;color:var(--text-secondary);font-size:12.5px;}
+.trend-single{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:110px;}
+.trend-single-dot{width:10px;height:10px;border-radius:50%;background:var(--primary);}
+.trend-single-label{font-size:12.5px;color:var(--text-secondary);font-variant-numeric:tabular-nums;}
 
 /* 모듈별 결함 상세 표 */
 .pb-module-table{width:100%;border-collapse:collapse;font-size:12px;}

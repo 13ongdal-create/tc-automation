@@ -134,10 +134,16 @@ function renderExecDonut(kpi) {
 /** 수행현황 ② — 날짜별 진척율(수행율) 추이를 선/영역 그래프로 표시 (순수 SVG, 라이브러리 없음) */
 function renderTrendChart(timeline) {
   if (!timeline || !timeline.length) return '<div class="trend-empty">실행 이력이 없습니다</div>';
-  const W = 280, H = 100, PAD = 10;
   const n = timeline.length;
+  if (n === 1) {
+    // 점 1개짜리 "추이"는 좌우 라벨(space-between)로 표시하면 가운데 찍힌 점과 위치가
+    // 어긋나 보이므로, 점과 라벨을 함께 가운데 정렬한 전용 레이아웃으로 표시합니다.
+    const t = timeline[0];
+    return `<div class="trend-single"><span class="trend-single-dot"></span><span class="trend-single-label">${esc(t.dateFmt)} · ${t.execRate}%</span></div>`;
+  }
+  const W = 280, H = 100, PAD = 10;
   const points = timeline.map((t, i) => ({
-    x: n === 1 ? W / 2 : PAD + (i / (n - 1)) * (W - PAD * 2),
+    x: PAD + (i / (n - 1)) * (W - PAD * 2),
     y: PAD + (1 - t.execRate / 100) * (H - PAD * 2),
     ...t,
   }));
