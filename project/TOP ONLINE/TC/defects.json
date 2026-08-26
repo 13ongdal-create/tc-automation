@@ -29,16 +29,17 @@
     "summary": "Front > 로그인·상품상세 등 다수 라우트에서 Next.js Server Components 간헐적 500 에러",
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
     "testSteps": "1) /login 페이지에서 로그인 시도를 반복 수행(6회) 2) /products/98(상품상세) 접속을 반복 수행(5회)",
-    "actualResult": "/login: 6회 중 1회 \"시스템 오류가 발생했습니다 / An error occurred in the Server Components render... Error Digest: 795149636\" 500 에러 페이지(HTTP 200으로 렌더링됨) 발생, 1회는 에러 메시지 없이 로그인 페이지에 그대로 머무는 무응답 실패, 나머지 4회는 정상 성공. /products/98: 최초 관찰 5회 중 1회 동일 시그니처의 500 에러 페이지 재현(이후 이 세션에서 재현 시도 32회 중 0회 재현되어 재현율이 낮고 매우 간헐적임을 확인). 재시도 시 대부분 성공하나 사용자에게는 실패 시 아무 안내도 없음.",
+    "actualResult": "/login: 6회 중 1회 \"시스템 오류가 발생했습니다 / An error occurred in the Server Components render... Error Digest: 795149636\" 500 에러 페이지 발생, 1회는 에러 메시지 없이 로그인 페이지에 그대로 머무는 무응답 실패, 나머지 4회는 정상 성공. /products/98: 최초 관찰 5회 중 1회 동일 시그니처의 500 에러 페이지 재현. 이후 순차 접속 방식으로는 재시도 32회 중 0회로 재현율이 낮았으나, 2026-08-26 여러 브라우저 컨텍스트로 5개 라우트(/login, /products/98, /products/63, /products/103, /display/mds-pick)에 동시 다발 요청을 보내는 방식으로는 /products/63에서 재현에 성공했고 이때는 응답 자체가 HTTP 500이었음(순차 접속 시엔 200으로 렌더링되는 경우가 많았던 것과 대비) — 부하/커넥션 경합 시 재현 확률이 높아지는 것으로 추정되나 재확인 시도(동시 다발 6라운드, 48회)에서 다시 재현되지 않아 확정할 수는 없음. 재시도 시 대부분 성공하나 사용자에게는 실패 시 아무 안내도 없음.",
     "expectedResult": "페이지 접속/로그인 시도 시 500 에러 없이 항상 정상 렌더링/처리되어야 한다. 서버 측 일시 오류가 불가피하더라도 사용자에게 재시도 안내 등 최소한의 피드백이 있어야 한다.",
     "detectedAt": "2026-08-25",
     "source": "observation",
-    "screenshot": "",
+    "screenshot": "TC/defects/DEF_TOP ONLINE_002.png",
     "consoleLog": "TC/defects/DEF_TOP ONLINE_002.console.json",
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-25", "status": "신규", "note": "Phase 1 관찰(/login) 및 Phase 3 재관찰(/products/98) 중 동일 시그니처로 발견. 스크린샷은 최초 재현 시점에 확보하지 못했고 이후 재시도(32회)에서도 재현되지 않아 화면 텍스트 캡처로 대체(TC/defects/DEF_TOP ONLINE_002.console.json 참조)" }
+      { "at": "2026-08-25", "status": "신규", "note": "Phase 1 관찰(/login) 및 Phase 3 재관찰(/products/98) 중 동일 시그니처로 발견. 스크린샷은 최초 재현 시점에 확보하지 못했고 이후 재시도(32회)에서도 재현되지 않아 화면 텍스트 캡처로 대체(TC/defects/DEF_TOP ONLINE_002.console.json 참조)" },
+      { "at": "2026-08-26", "status": "신규", "note": "사용자 지적으로 스크린샷 미확보 상태를 재점검 — 동시 다발 요청 방식으로 재시도해 /products/63에서 재현 성공, 스크린샷(TC/defects/DEF_TOP ONLINE_002.png) 확보. 이때 응답이 실제 HTTP 500이었음을 확인해 재현 조건에 대한 근거를 보강함(consoleLog의 reproductionHistory 참조)" }
     ]
   }
 ]
