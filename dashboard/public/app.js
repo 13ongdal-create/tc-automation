@@ -169,18 +169,20 @@ function renderModuleExecTable(byModule) {
     <tr>
       <td class="pb-module-name">${esc(m.moduleName)}</td>
       <td>${m.total}</td>
+      <td>${m.executed}</td>
+      <td>${m.execRate}%</td>
       <td>${m.pass}</td>
       <td>${m.fail}</td>
-      <td>${m.blocked}</td>
       <td>${m.na}</td>
       <td>${m.nt}</td>
-      <td>${m.execRate}%</td>
+      <td>${m.passRate}%</td>
+      <td>${m.failRate}%</td>
     </tr>`
     )
     .join('');
   return `
     <table class="pb-module-table">
-      <thead><tr><th>모듈</th><th>전체</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>N/T</th><th>수행율</th></tr></thead>
+      <thead><tr><th>모듈</th><th>전체</th><th>수행</th><th>수행율</th><th>Pass</th><th>Fail</th><th>N/A</th><th>N/T</th><th>Pass율</th><th>Fail율</th></tr></thead>
       <tbody>${rowsHtml}</tbody>
     </table>`;
 }
