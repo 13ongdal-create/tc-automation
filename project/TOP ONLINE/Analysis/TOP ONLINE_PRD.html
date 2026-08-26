@@ -149,12 +149,13 @@
   </div>
 
   <h2><span class="num">03</span>안정성 — 간헐적 500 에러</h2>
-  <p class="section-sub">로그인(<code>/login</code>)과 상품상세(<code>/products/98</code>) 양쪽에서 동일한 시그니처의 서버 오류가 간헐적으로 재현되었습니다.</p>
+  <p class="section-sub">로그인(<code>/login</code>)과 상품상세(<code>/products/98</code>, <code>/products/63</code>) 등 여러 라우트에서 동일한 시그니처의 서버 오류가 간헐적으로 재현되었습니다.</p>
 
   <div class="finding">
     <div class="ftitle">🚩 DEF_TOP ONLINE_002 — Next.js Server Components 간헐적 500</div>
     <p><code>/login</code>: 6회 시도 중 1회 500 에러 페이지, 1회 무응답(에러 표시 없이 로그인 페이지에 머무름), 4회 정상 — 약 33% 간헐적 실패율.</p>
-    <p><code>/products/98</code>: 최초 관찰 5회 중 1회 재현(Error Digest: <code>795149636</code>). 이후 재검증 32회 중 0회 재현 — 재현율이 낮고 매우 간헐적임을 시사합니다.</p>
+    <p><code>/products/98</code>: 최초 관찰 5회 중 1회 재현(Error Digest: <code>795149636</code>). 이후 순차 접속 재시도 32회 중 0회 재현.</p>
+    <p><b>2026-08-26 재검증</b>: 순차 접속 대신 여러 브라우저 컨텍스트로 5개 라우트에 동시 다발 요청을 보내는 방식으로는 <code>/products/63</code>에서 재현에 성공했고, 이때는 응답 자체가 실제 HTTP 500이었습니다(순차 접속 시 200으로 렌더링되던 것과 대비) — 스크린샷 확보. 다만 동일 방식으로 재확인(6라운드, 48회)했을 때는 다시 재현되지 않아, 부하/커넥션 경합이 재현 확률을 높이는 것으로 추정될 뿐 확정할 수는 없습니다.</p>
     <p>재시도 시 대부분 성공하지만, 실패 시 사용자에게 어떠한 안내도 제공되지 않습니다. TC_DSP_034 참조 · P1</p>
   </div>
 
