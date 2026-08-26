@@ -92,15 +92,23 @@
       <p class="placeholder-text">모듈 선택 → 순차 실행 → 실시간 로그 스트리밍이 이 자리에 들어갑니다.</p>
     </div>
 
-    <div class="panel panel-placeholder">
-      <div class="panel-head">
-        <h2>💬 사이트분석 · TC 생성</h2>
-        <span class="panel-sub badge-soon">다음 배치 예정</span>
-      </div>
-      <p class="placeholder-text">Claude 세션과 대화하며 Phase별로 진행하는 채팅형 패널이 이 자리에 들어갑니다.</p>
-    </div>
-
   </section>
+
+  <section class="panel panel-full panel-chat">
+    <div class="panel-head">
+      <h2>💬 사이트분석 · TC 생성</h2>
+      <span class="panel-sub" id="chatStatus">연결 중…</span>
+      <button id="btnChatReset" class="btn btn-outline btn-sm" title="이 프로젝트 대화를 새로 시작합니다">새 대화</button>
+    </div>
+    <div id="chatMessages" class="chat-messages">
+      <div class="chat-hint">프로젝트를 선택하고 메시지를 입력해 시작하세요. (예: "메인 페이지 URL은 http://... 입니다. TC 생성해줘")</div>
+    </div>
+    <form id="chatForm" class="chat-input-row">
+      <textarea id="chatInput" placeholder="메시지를 입력하세요 (Shift+Enter로 줄바꿈)" rows="2"></textarea>
+      <button type="submit" id="btnChatSend" class="btn btn-primary">보내기</button>
+    </form>
+  </section>
+
 </main>
 
 <script src="/app.js"></script>
