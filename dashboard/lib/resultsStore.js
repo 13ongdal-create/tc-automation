@@ -37,6 +37,9 @@ function listSnapshots(project) {
       const nt = items.filter((i) => i.result === 'N/T').length;
       const none = items.filter((i) => !i.result).length;
       const executed = total - none;
+      const p1 = items.filter((i) => i.priority === 'P1').length;
+      const p2 = items.filter((i) => i.priority === 'P2').length;
+      const p3 = items.filter((i) => i.priority === 'P3').length;
       return {
         project: proj,
         moduleCode,
@@ -51,6 +54,9 @@ function listSnapshots(project) {
         nt,
         none,
         executed,
+        p1,
+        p2,
+        p3,
         execRate: total ? Math.round((executed / total) * 100) : 0,
         passRate: executed ? Math.round((pass / executed) * 100) : 0,
         failRate: executed ? Math.round((fail / executed) * 100) : 0,
@@ -86,9 +92,12 @@ function latestSummary(project) {
       acc.na += e.na;
       acc.nt += e.nt;
       acc.executed += e.executed;
+      acc.p1 += e.p1;
+      acc.p2 += e.p2;
+      acc.p3 += e.p3;
       return acc;
     },
-    { total: 0, pass: 0, fail: 0, blocked: 0, na: 0, nt: 0, executed: 0 }
+    { total: 0, pass: 0, fail: 0, blocked: 0, na: 0, nt: 0, executed: 0, p1: 0, p2: 0, p3: 0 }
   );
   grand.none = grand.total - grand.executed; // 미실행
   return { latestDate: latest.length ? latest.reduce((a, e) => (e.dateStr > a ? e.dateStr : a), '00000000') : null, ...grand };

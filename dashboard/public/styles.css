@@ -188,9 +188,6 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 
 .home-kpi-grid{grid-template-columns:repeat(6,1fr);}
 
-/* 차트 범례 — 각 차트 카드 헤더 안에 인라인으로 표시 */
-.chart-legend-inline{display:flex;flex-wrap:wrap;gap:4px 10px;}
-.legend-item{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;color:var(--text-secondary);white-space:nowrap;}
 .legend-swatch{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
 
 /* 🏠 프로젝트 블록 — 프로젝트 하나당 [수행현황: 도넛+추이] [결함현황: 도넛+표] 섹션 */
@@ -200,10 +197,29 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 .pb-section-title{font-size:12.5px;font-weight:700;color:var(--text-dark);margin:18px 0 10px;}
 .pb-section-title:first-of-type{margin-top:4px;}
 .pb-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.pb-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
 .pb-table-row{margin-top:16px;}
 .pb-chart-card{background:var(--bg-light);border-radius:8px;padding:14px 16px;}
 .pb-chart-card-wide{display:flex;flex-direction:column;}
 .pb-chart-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 10px;margin-bottom:10px;}
+
+/* 접기/펼치기 가능한 표 (실행 이력/모듈별 TC/모듈별 결함 상세) */
+.pb-collapsible{padding:0;overflow:hidden;}
+.pb-collapsible > summary{
+  list-style:none;cursor:pointer;user-select:none;
+  padding:14px 16px;margin-bottom:0;
+  justify-content:flex-start !important;
+}
+.pb-collapsible > summary:hover{background:rgba(0,0,0,0.03);}
+.pb-collapsible > summary::-webkit-details-marker{display:none;}
+.pb-collapsible > summary::before{
+  content:'';display:inline-block;margin-right:8px;flex-shrink:0;
+  border-style:solid;border-width:5px 4px 0 4px;
+  border-color:var(--text-secondary) transparent transparent transparent;
+  transition:transform .15s ease;
+}
+.pb-collapsible:not([open]) > summary::before{transform:rotate(-90deg);}
+.pb-collapsible > .table-wrap{padding:0 16px 14px;}
 .pb-chart-title{font-size:11.5px;font-weight:700;color:var(--text-secondary);}
 .pb-chart-body{display:flex;justify-content:center;align-items:center;min-height:150px;}
 .pb-chart-body-trend{flex-direction:column;align-items:stretch;min-height:auto;}
@@ -223,6 +239,13 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .donut-empty-label{font-size:11px;color:var(--text-secondary);}
+
+/* 도넛 아래 요약 표 (색상 범례 + 정확한 건수/비율) */
+.donut-summary-table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:12px;}
+.donut-summary-table td{padding:3px 0;}
+.donut-summary-table .ds-label{display:flex;align-items:center;gap:6px;color:var(--text-primary);}
+.donut-summary-table .ds-count{text-align:right;font-weight:700;color:var(--text-dark);font-variant-numeric:tabular-nums;width:15%;}
+.donut-summary-table .ds-pct{text-align:right;color:var(--text-secondary);font-variant-numeric:tabular-nums;width:18%;}
 
 /* 날짜별 진척율 추이 (순수 SVG 라인/영역 차트) */
 .trend-svg{width:100%;height:110px;display:block;}
@@ -270,6 +293,10 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 .modal-error{color:var(--bad);font-size:12.5px;min-height:1.2em;margin-top:6px;}
 .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:6px;}
 
+@media (max-width: 1200px){
+  .pb-grid-3{grid-template-columns:1fr 1fr;}
+}
+
 @media (max-width: 900px){
   .kpi-grid{grid-template-columns:repeat(2,1fr);}
   .home-kpi-grid{grid-template-columns:repeat(3,1fr);}
@@ -277,4 +304,5 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
   .panel-wide{grid-column:1;}
   .chat-msg{max-width:92%;}
   .pb-grid-2{grid-template-columns:1fr;}
+  .pb-grid-3{grid-template-columns:1fr;}
 }

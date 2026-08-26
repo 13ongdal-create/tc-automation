@@ -94,15 +94,38 @@ const EXEC_COLORS = {
   none: 'var(--divider)',
 };
 
-// 결함 우선순위(AGENTS.md 4항: P1=Critical, P2=Major, P3=Minor) 색상 — 기존 결함테이블 sev-badge와 동일 팔레트
+// 우선순위(AGENTS.md 4항: P1=Critical, P2=Major, P3=Minor) 색상 — TC 우선순위/결함 심각도 공용
+// (같은 P1/P2/P3 정의를 공유하므로 결함테이블 sev-badge와 동일 팔레트를 그대로 재사용)
 const SEVERITY_ORDER = ['P1', 'P2', 'P3'];
 const SEVERITY_LABELS = { P1: 'Critical (P1)', P2: 'Major (P2)', P3: 'Minor (P3)' };
 const SEVERITY_COLORS = { P1: 'var(--bad)', P2: 'var(--warn)', P3: 'var(--primary)' };
 
-function renderLegend(order, labels, colors) {
-  return order
-    .map((k) => `<span class="legend-item"><span class="legend-swatch" style="background:${colors[k]}"></span>${esc(labels[k])}</span>`)
+// 결함 상태(AGENTS.md 20-2항) 색상
+const STATUS_COLORS = {
+  '신규': 'var(--warn)',
+  '처리중': 'var(--primary)',
+  '재검증대기': 'var(--accent2)',
+  '완료': 'var(--good)',
+  '보류': 'var(--text-secondary)',
+  '재발생': 'var(--bad)',
+};
+
+/** 도넛 아래에 붙는 요약 표 — 색상 범례 + 정확한 건수/비율을 함께 보여줌 */
+function donutSummaryTable(order, labels, colors, counts) {
+  const total = order.reduce((s, k) => s + (counts[k] || 0), 0);
+  const rows = order
+    .map((k) => {
+      const n = counts[k] || 0;
+      const pct = total ? Math.round((n / total) * 100) : 0;
+      return `
+      <tr>
+        <td class="ds-label"><span class="legend-swatch" style="background:${colors[k]}"></span>${esc(labels[k])}</td>
+        <td class="ds-count">${n}</td>
+        <td class="ds-pct">${pct}%</td>
+      </tr>`;
+    })
     .join('');
+  return `<table class="donut-summary-table"><tbody>${rows}</tbody></table>`;
 }
 
 /** mask 기반 누적 도넛 차트 — centerHtml을 가운데에 겹쳐 표시 */
@@ -123,20 +146,29 @@ function donutChart(segments, centerHtml, emptyLabel) {
   return `<div class="donut-wrap"><div class="donut" style="background:conic-gradient(${stops})"></div><div class="donut-center">${centerHtml}</div></div>`;
 }
 
-/** 수행현황 ① — Full TC(모듈 전체 합산) 기준 실행결과 도넛, 가운데엔 수행율이 가장 높은 모듈명+수행율 */
+/** 수행현황 ① — Full TC(모듈 전체 합산) 기준 실행결과 도넛, 가운데엔 프로젝트 전체 수행율만 표시 */
 function renderExecDonut(kpi) {
   const r = kpi ? kpi.results : null;
   if (!r || !r.total) return donutChart([], '', '실행 이력 없음');
   const segments = EXEC_ORDER.map((k) => ({ n: r[k] || 0, color: EXEC_COLORS[k] }));
-  const byModule = r.byModule || [];
-  const top = byModule.reduce((best, m) => (!best || m.execRate > best.execRate ? m : best), null);
-  const centerHtml = top
-    ? `<span class="donut-total">${top.execRate}%</span><span class="donut-total-label" title="${esc(top.moduleName)}">${esc(top.moduleName)}</span>`
-    : `<span class="donut-total">${Math.round((r.executed / r.total) * 100)}%</span><span class="donut-total-label">전체</span>`;
+  // 수행율이 가장 높은 개별 모듈명을 노출하던 이전 방식은, 특히 수행율 100%(모든 모듈 완료)일 때
+  // 임의의 모듈 하나만 부각되어 오해를 줬음(2026-08-26 사용자 피드백) — 항상 프로젝트 전체
+  // 수행율(모듈 합산)만 표시하도록 단순화.
+  const execRate = Math.round((r.executed / r.total) * 100);
+  const centerHtml = `<span class="donut-total">${execRate}%</span><span class="donut-total-label">전체 수행건</span>`;
   return donutChart(segments, centerHtml, '실행 이력 없음');
 }
 
-/** 수행현황 ② — 날짜별 진척율(수행율) 추이를 선/영역 그래프로 표시 (순수 SVG, 라이브러리 없음) */
+/** 수행현황 ② — 전체 TC를 우선순위(P1/P2/P3)별로 집계한 도넛 */
+function renderPriorityDonut(kpi) {
+  const r = kpi ? kpi.results : null;
+  if (!r || !r.total) return donutChart([], '', '실행 이력 없음');
+  const segments = SEVERITY_ORDER.map((k) => ({ n: r[k.toLowerCase()] || 0, color: SEVERITY_COLORS[k] }));
+  const centerHtml = `<span class="donut-total">${r.total}</span><span class="donut-total-label">전체 TC</span>`;
+  return donutChart(segments, centerHtml, '실행 이력 없음');
+}
+
+/** 수행현황 ③ — 날짜별 진척율(수행율) 추이를 선/영역 그래프로 표시 (순수 SVG, 라이브러리 없음) */
 function renderTrendChart(timeline) {
   if (!timeline || !timeline.length) return '<div class="trend-empty">실행 이력이 없습니다</div>';
   const n = timeline.length;
@@ -170,7 +202,41 @@ function renderTrendChart(timeline) {
     <div class="trend-labels"><span>${esc(points[0].dateFmt)}</span><span>${esc(last.dateFmt)} · ${last.execRate}%</span></div>`;
 }
 
-/** 수행현황 ③ — 모듈별 TC 실행결과 상세 표 */
+/**
+ * 날짜별 진척율 차트 아래에 붙는 실행 이력 표 — AGENTS.md 5-1항 results/index.html과 동일한
+ * 컬럼 구성(실행일/모듈/전체/수행/Pass/Fail/Blocked/N/A/N/T/미실행/수행율/Pass율/실패율/보기)
+ */
+function renderSnapshotTable(project, snapshots) {
+  if (!snapshots || !snapshots.length) return '<div class="empty-row">실행 이력이 없습니다</div>';
+  const rowsHtml = snapshots
+    .map(
+      (s) => `
+    <tr>
+      <td>${esc(s.dateFmt)}</td>
+      <td class="pb-module-name">${esc(s.moduleName)}</td>
+      <td>${s.total}</td>
+      <td>${s.executed}</td>
+      <td>${s.pass}</td>
+      <td>${s.fail}</td>
+      <td>${s.blocked}</td>
+      <td>${s.na}</td>
+      <td>${s.nt}</td>
+      <td>${s.none}</td>
+      <td>${s.execRate}%</td>
+      <td>${s.passRate}%</td>
+      <td>${s.failRate}%</td>
+      <td><a href="/files/${encodeURIComponent(project)}/results/${encodeURIComponent(s.htmlFile)}" target="_blank" rel="noopener">열기 →</a></td>
+    </tr>`
+    )
+    .join('');
+  return `
+    <table class="pb-module-table">
+      <thead><tr><th>실행일</th><th>모듈</th><th>전체</th><th>수행</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>N/T</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>실패율</th><th>보기</th></tr></thead>
+      <tbody>${rowsHtml}</tbody>
+    </table>`;
+}
+
+/** 수행현황 ④ — 모듈별 TC 실행결과 상세 표 */
 function renderModuleExecTable(byModule) {
   if (!byModule || !byModule.length) return '<div class="empty-row">실행 이력이 없습니다</div>';
   const sorted = byModule.slice().sort((a, b) => a.moduleCode.localeCompare(b.moduleCode));
@@ -207,7 +273,16 @@ function renderSeverityDonut(kpi) {
   return donutChart(segments, centerHtml, '등록된 결함 없음');
 }
 
-/** 결함현황 ② — 모듈별 결함 상세 현황 표 */
+/** 결함현황 ② — 전체 결함을 상태(신규/처리중/재검증대기/완료/보류/재발생)별로 집계한 도넛 */
+function renderDefectStatusDonut(kpi) {
+  const d = kpi ? kpi.defects : null;
+  if (!d || !d.total) return donutChart([], '', '등록된 결함 없음');
+  const segments = STATUS_ORDER.map((s) => ({ n: (d.counts && d.counts[s]) || 0, color: STATUS_COLORS[s] }));
+  const centerHtml = `<span class="donut-total">${d.total}</span><span class="donut-total-label">전체 결함</span>`;
+  return donutChart(segments, centerHtml, '등록된 결함 없음');
+}
+
+/** 결함현황 ③ — 모듈별 결함 상세 현황 표 */
 function renderModuleDefectTable(byModule) {
   if (!byModule || !byModule.length) return '<div class="empty-row">등록된 결함이 없습니다</div>';
   const rowsHtml = byModule
@@ -241,14 +316,24 @@ async function renderHomeDashboard() {
   el.homeEmpty.hidden = true;
   el.homeDashboard.hidden = false;
 
-  const kpis = await Promise.all(
-    allProjects.map((p) =>
-      fetch(`/api/${encodeURIComponent(p)}/kpi`)
-        .then((r) => (r.ok ? r.json() : null))
-        .catch(() => null)
-    )
-  );
-  const rows = allProjects.map((p, i) => ({ project: p, kpi: kpis[i] }));
+  const [kpis, snapshotLists] = await Promise.all([
+    Promise.all(
+      allProjects.map((p) =>
+        fetch(`/api/${encodeURIComponent(p)}/kpi`)
+          .then((r) => (r.ok ? r.json() : null))
+          .catch(() => null)
+      )
+    ),
+    Promise.all(
+      allProjects.map((p) =>
+        fetch(`/api/${encodeURIComponent(p)}/results`)
+          .then((r) => (r.ok ? r.json() : { snapshots: [] }))
+          .then((d) => d.snapshots || [])
+          .catch(() => [])
+      )
+    ),
+  ]);
+  const rows = allProjects.map((p, i) => ({ project: p, kpi: kpis[i], snapshots: snapshotLists[i] }));
 
   let totalDefects = 0, totalNew = 0, totalPass = 0, totalFail = 0, totalExecuted = 0, totalTcs = 0;
   rows.forEach(({ kpi }) => {
@@ -271,11 +356,20 @@ async function renderHomeDashboard() {
   renderProjectBlocks(rows);
 }
 
-/** 프로젝트 하나당 블록 1개 — 수행현황(도넛+추이) 2개, 결함현황(도넛+표) 2개를 섹션으로 나눠 표시 */
+/** 프로젝트 하나당 블록 1개 — 수행현황(도넛 2개+추이+표), 결함현황(도넛 2개+표)을 섹션으로 나눠 표시.
+ * 각 도넛 아래에는 정확한 건수/비율을 보여주는 요약 표를 함께 붙인다. */
 function renderProjectBlocks(rows) {
   el.projectBlocks.innerHTML = rows
-    .map(
-      ({ project, kpi }) => `
+    .map(({ project, kpi, snapshots }) => {
+      const r = kpi ? kpi.results : null;
+      const d = kpi ? kpi.defects : null;
+      const execCounts = r ? { pass: r.pass, fail: r.fail, blocked: r.blocked, na: r.na, nt: r.nt, none: r.none } : {};
+      const priorityCounts = r ? { P1: r.p1 || 0, P2: r.p2 || 0, P3: r.p3 || 0 } : {};
+      const severityCounts = d ? d.severityCounts || {} : {};
+      const statusLabels = Object.fromEntries(STATUS_ORDER.map((s) => [s, s]));
+      const statusCounts = d ? d.counts || {} : {};
+
+      return `
       <div class="panel project-block" data-project="${esc(project)}">
         <div class="panel-head">
           <h2>${esc(project)}</h2>
@@ -283,44 +377,56 @@ function renderProjectBlocks(rows) {
         </div>
 
         <div class="pb-section-title">수행현황</div>
-        <div class="pb-grid-2">
+        <div class="pb-grid-3">
           <div class="pb-chart-card">
-            <div class="pb-chart-head">
-              <span class="pb-chart-title">Full TC 수행현황</span>
-              <span class="chart-legend-inline">${renderLegend(EXEC_ORDER, EXEC_LABELS, EXEC_COLORS)}</span>
-            </div>
+            <div class="pb-chart-head"><span class="pb-chart-title">Full TC 수행현황</span></div>
             <div class="pb-chart-body">${renderExecDonut(kpi)}</div>
+            ${donutSummaryTable(EXEC_ORDER, EXEC_LABELS, EXEC_COLORS, execCounts)}
+          </div>
+          <div class="pb-chart-card">
+            <div class="pb-chart-head"><span class="pb-chart-title">우선순위별 TC 분포</span></div>
+            <div class="pb-chart-body">${renderPriorityDonut(kpi)}</div>
+            ${donutSummaryTable(SEVERITY_ORDER, SEVERITY_LABELS, SEVERITY_COLORS, priorityCounts)}
           </div>
           <div class="pb-chart-card">
             <div class="pb-chart-head"><span class="pb-chart-title">날짜별 진척율</span></div>
-            <div class="pb-chart-body pb-chart-body-trend">${renderTrendChart(kpi ? kpi.results.timeline : [])}</div>
+            <div class="pb-chart-body pb-chart-body-trend">${renderTrendChart(r ? r.timeline : [])}</div>
           </div>
         </div>
-        <div class="pb-chart-card pb-chart-card-wide pb-table-row">
-          <div class="pb-chart-head"><span class="pb-chart-title">모듈별 TC 현황</span></div>
-          <div class="table-wrap">${renderModuleExecTable(kpi ? kpi.results.byModule : [])}</div>
-        </div>
+        <details class="pb-chart-card pb-chart-card-wide pb-table-row pb-collapsible" open>
+          <summary class="pb-chart-head"><span class="pb-chart-title">실행 이력</span></summary>
+          <div class="table-wrap">${renderSnapshotTable(project, snapshots)}</div>
+        </details>
+        <details class="pb-chart-card pb-chart-card-wide pb-table-row pb-collapsible" open>
+          <summary class="pb-chart-head"><span class="pb-chart-title">모듈별 TC 현황</span></summary>
+          <div class="table-wrap">${renderModuleExecTable(r ? r.byModule : [])}</div>
+        </details>
 
         <div class="pb-section-title">결함현황</div>
         <div class="pb-grid-2">
           <div class="pb-chart-card">
-            <div class="pb-chart-head">
-              <span class="pb-chart-title">우선순위별 결함</span>
-              <span class="chart-legend-inline">${renderLegend(SEVERITY_ORDER, SEVERITY_LABELS, SEVERITY_COLORS)}</span>
-            </div>
+            <div class="pb-chart-head"><span class="pb-chart-title">우선순위별 결함</span></div>
             <div class="pb-chart-body">${renderSeverityDonut(kpi)}</div>
+            ${donutSummaryTable(SEVERITY_ORDER, SEVERITY_LABELS, SEVERITY_COLORS, severityCounts)}
           </div>
-          <div class="pb-chart-card pb-chart-card-wide">
-            <div class="pb-chart-head"><span class="pb-chart-title">모듈별 결함 상세</span></div>
-            <div class="table-wrap">${renderModuleDefectTable(kpi ? kpi.defects.byModule : [])}</div>
+          <div class="pb-chart-card">
+            <div class="pb-chart-head"><span class="pb-chart-title">상태별 결함</span></div>
+            <div class="pb-chart-body">${renderDefectStatusDonut(kpi)}</div>
+            ${donutSummaryTable(STATUS_ORDER, statusLabels, STATUS_COLORS, statusCounts)}
           </div>
         </div>
-      </div>`
-    )
+        <details class="pb-chart-card pb-chart-card-wide pb-table-row pb-collapsible" open>
+          <summary class="pb-chart-head"><span class="pb-chart-title">모듈별 결함 상세</span></summary>
+          <div class="table-wrap">${renderModuleDefectTable(d ? d.byModule : [])}</div>
+        </details>
+      </div>`;
+    })
     .join('');
 }
 
 el.projectBlocks.addEventListener('click', (e) => {
+  // 표 안의 링크(열기 →)나 접기/펼치기(<summary>) 클릭은 프로젝트 상세 이동으로 이어지지 않게 제외
+  if (e.target.closest('a, summary, button, input, select')) return;
   const block = e.target.closest('.project-block');
   if (block) showProject(block.dataset.project);
 });
