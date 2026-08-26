@@ -54,4 +54,22 @@ function createProject(name) {
   return trimmed;
 }
 
-module.exports = { listProjects, createProject, validateProjectName };
+/**
+ * project.json(AGENTS.md 13항 Phase 0 산출물) + Analysis/PRD 존재 여부를 읽습니다.
+ * Phase 0가 아직 안 끝난(방금 생성된) 프로젝트는 project.json이 없을 수 있으므로 null 필드로 채웁니다.
+ */
+function loadMeta(project) {
+  const projectDir = path.join(PROJECTS_ROOT, project);
+  let meta = { url: null, testType: null, analysisBasis: null, createdAt: null };
+  try {
+    const raw = JSON.parse(fs.readFileSync(path.join(projectDir, 'project.json'), 'utf8'));
+    meta = { url: raw.url ?? null, testType: raw.testType ?? null, analysisBasis: raw.analysisBasis ?? null, createdAt: raw.createdAt ?? null };
+  } catch {
+    // project.json 없음 — Phase 0 진행 전인 신규 프로젝트
+  }
+  const prdFile = `${project}_PRD.html`;
+  const hasPrd = fs.existsSync(path.join(projectDir, 'Analysis', prdFile));
+  return { ...meta, hasPrd, prdFile };
+}
+
+module.exports = { listProjects, createProject, validateProjectName, loadMeta };

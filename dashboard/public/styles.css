@@ -241,6 +241,17 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 .pb-module-table th,.pb-module-table td{padding:6px 8px;border-bottom:1px solid var(--divider);text-align:right;}
 .pb-module-table th{color:var(--text-secondary);font-weight:500;font-size:10.5px;}
 .pb-module-table th:first-child,.pb-module-table td:first-child{text-align:left;}
+
+/* 🔎 사이트 분석 패널 */
+.site-meta-table{border-collapse:collapse;font-size:13px;max-width:560px;}
+.site-meta-table th{
+  text-align:left;font-weight:500;color:var(--text-secondary);padding:5px 16px 5px 0;
+  white-space:nowrap;vertical-align:top;
+}
+.site-meta-table td{text-align:left;font-weight:600;color:var(--text-dark);padding:5px 0;word-break:break-all;}
+.site-meta-table a{color:var(--primary);text-decoration:none;}
+.site-meta-table a:hover{text-decoration:underline;}
+.site-links-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
 .pb-module-name{font-weight:700;color:var(--text-dark);}
 
 /* 모달 (새 프로젝트 등) */

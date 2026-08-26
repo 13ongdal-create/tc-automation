@@ -28,6 +28,10 @@ const el = {
   kpiPass: document.getElementById('kpiPass'),
   kpiFail: document.getElementById('kpiFail'),
   kpiExecRate: document.getElementById('kpiExecRate'),
+  siteAnalysisBody: document.getElementById('siteAnalysisBody'),
+  detailModuleExecTable: document.getElementById('detailModuleExecTable'),
+  tcManageBody: document.getElementById('tcManageBody'),
+  defectDetailLink: document.getElementById('defectDetailLink'),
   defectTableBody: document.getElementById('defectTableBody'),
   resultsList: document.getElementById('resultsList'),
   chatStatus: document.getElementById('chatStatus'),
@@ -370,15 +374,60 @@ el.newProjectForm.addEventListener('submit', async (e) => {
   showProject(data.project);
 });
 
+/** 🔎 사이트 분석 — project.json(Phase 0) 메타 + PRD/테스트사이트/TC 뷰어 바로가기 */
+function renderSiteAnalysis(project, meta, viewerFile) {
+  if (!meta || (!meta.url && !meta.testType && !meta.analysisBasis)) {
+    return '<span class="placeholder-text">아직 프로젝트 정보(Phase 0)가 설정되지 않았습니다 — 채팅에서 사이트 URL 등을 알려주시면 채워집니다.</span>';
+  }
+  const rows = [
+    ['테스트 URL', meta.url ? `<a href="${esc(meta.url)}" target="_blank" rel="noopener">${esc(meta.url)}</a>` : '-'],
+    ['테스트 유형', esc(meta.testType || '-')],
+    ['근거 확보 방식', esc(meta.analysisBasis || '-')],
+    ['등록일', esc(meta.createdAt || '-')],
+  ];
+  const metaHtml = `<table class="site-meta-table">${rows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${v}</td></tr>`).join('')}</table>`;
+
+  const links = [];
+  if (meta.url) links.push(`<a href="${esc(meta.url)}" target="_blank" rel="noopener" class="btn btn-outline btn-sm">🔗 테스트사이트 바로가기</a>`);
+  if (meta.hasPrd) {
+    const prdUrl = `/analysis/${encodeURIComponent(project)}/${encodeURIComponent(meta.prdFile)}`;
+    links.push(`<a href="${prdUrl}" target="_blank" rel="noopener" class="btn btn-outline btn-sm">📄 PRD (사이트분석 &amp; TC계획)</a>`);
+  }
+  if (viewerFile) {
+    const viewerUrl = `/files/${encodeURIComponent(project)}/${encodeURIComponent(viewerFile)}`;
+    links.push(`<a href="${viewerUrl}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" title="TC 뷰어 헤더의 해당 버튼에서 확인할 수 있습니다">🗂 테스트 계정 매트릭스 · User Flow Map</a>`);
+  }
+  const linksHtml = links.length ? `<div class="site-links-row">${links.join('')}</div>` : '';
+
+  return metaHtml + linksHtml;
+}
+
 async function loadKpi(project) {
-  const res = await fetch(`/api/${encodeURIComponent(project)}/kpi`);
-  if (!res.ok) return;
-  const { defects, results } = await res.json();
+  const [kpiRes, metaRes] = await Promise.all([
+    fetch(`/api/${encodeURIComponent(project)}/kpi`),
+    fetch(`/api/${encodeURIComponent(project)}/meta`),
+  ]);
+  if (!kpiRes.ok) return;
+  const { defects, results, viewerFile } = await kpiRes.json();
+  const meta = metaRes.ok ? await metaRes.json() : null;
   el.kpiTotalDefects.textContent = defects.total;
   el.kpiNewDefects.textContent = defects.counts['신규'] || 0;
   el.kpiPass.textContent = results.pass;
   el.kpiFail.textContent = results.fail;
   el.kpiExecRate.textContent = results.total ? Math.round((results.executed / results.total) * 100) + '%' : '–';
+
+  el.siteAnalysisBody.innerHTML = renderSiteAnalysis(project, meta, viewerFile);
+  el.detailModuleExecTable.innerHTML = renderModuleExecTable(results.byModule);
+
+  if (viewerFile) {
+    const url = `/files/${encodeURIComponent(project)}/${encodeURIComponent(viewerFile)}`;
+    el.tcManageBody.innerHTML = `<a href="${url}" target="_blank" rel="noopener" class="project-block-link">Full TC 상세 보기 →</a>`;
+    el.defectDetailLink.href = url;
+    el.defectDetailLink.hidden = false;
+  } else {
+    el.tcManageBody.innerHTML = '<span class="placeholder-text">아직 생성된 TC 뷰어가 없습니다</span>';
+    el.defectDetailLink.hidden = true;
+  }
 }
 
 async function loadDefects(project) {

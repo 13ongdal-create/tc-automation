@@ -93,12 +93,28 @@
     </div>
   </section>
 
+  <section class="panel panel-full">
+    <div class="panel-head"><h2>🔎 사이트 분석</h2></div>
+    <div id="siteAnalysisBody"><span class="placeholder-text">프로젝트를 선택하세요</span></div>
+  </section>
+
+  <section class="panel panel-full">
+    <div class="panel-head"><h2>📊 모듈별 TC 수행현황</h2></div>
+    <div class="table-wrap" id="detailModuleExecTable"><span class="placeholder-text">프로젝트를 선택하세요</span></div>
+  </section>
+
+  <section class="panel panel-full">
+    <div class="panel-head"><h2>📋 TC 관리</h2></div>
+    <div id="tcManageBody"><span class="placeholder-text">프로젝트를 선택하세요</span></div>
+  </section>
+
   <section class="panel-grid">
 
     <div class="panel panel-wide">
       <div class="panel-head">
         <h2>🐞 결함 관리</h2>
         <span class="panel-sub">상태·담당자 편집 시 즉시 defects.json에 저장됩니다 (Claude 미사용)</span>
+        <a id="defectDetailLink" class="project-block-link" href="#" target="_blank" rel="noopener" hidden>결함목록 상세 보기 →</a>
       </div>
       <div class="table-wrap">
         <table id="defectTable">

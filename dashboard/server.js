@@ -8,6 +8,7 @@ const { WebSocketServer } = require('ws');
 const defectStore = require('./lib/defectStore');
 const resultsStore = require('./lib/resultsStore');
 const projectStore = require('./lib/projectStore');
+const tcStore = require('./lib/tcStore');
 const claudeRunner = require('./lib/claudeRunner');
 const chatSessions = require('./lib/chatSessions');
 const auth = require('./lib/auth');
@@ -77,6 +78,15 @@ app.use('/files/:project', (req, res, next) => {
   express.static(path.join(defectStore.PROJECTS_ROOT, req.params.project, 'TC'))(req, res, next);
 });
 
+// Analysis 폴더(PRD 등 관찰 기반 산출물, AGENTS.md 16항) 정적 서빙
+app.use('/analysis/:project', (req, res, next) => {
+  express.static(path.join(defectStore.PROJECTS_ROOT, req.params.project, 'Analysis'))(req, res, next);
+});
+
+app.get('/api/:project/meta', (req, res) => {
+  res.json(projectStore.loadMeta(req.params.project));
+});
+
 app.get('/api/projects', (req, res) => {
   res.json({ projects: projectStore.listProjects() });
 });
@@ -124,7 +134,7 @@ app.get('/api/:project/kpi', (req, res) => {
   const resultSummary = resultsStore.latestSummary(project);
   resultSummary.byModule = resultsStore.latestByModule(project);
   resultSummary.timeline = resultsStore.progressOverTime(project);
-  res.json({ defects: defectSummary, results: resultSummary });
+  res.json({ defects: defectSummary, results: resultSummary, viewerFile: tcStore.findFullViewer(project) });
 });
 
 // ── 💬 사이트분석 · TC 생성 채팅 패널 (WebSocket) ──────────────────────────
@@ -132,6 +142,21 @@ app.get('/api/:project/kpi', (req, res) => {
 // 겹쳐 실행되지 않도록). 진행 중인 claude 프로세스 핸들을 프로젝트명으로 보관해두면
 // 취소(cancel) 요청 시 바로 찾아 종료할 수 있습니다.
 const activeRuns = new Map(); // project -> claudeRunner handle
+
+// headless(`claude -p`)로 실행되면 승인 프롬프트를 띄울 터미널이 없어, 사전 허용되지 않은
+// Write/Edit/Bash 호출은 응답 없는 stdin을 기다리며 무한정 멈춥니다(2026-08-26 실측). 저장소
+// 루트 .claude/settings.json에 전역으로 허용해두면 터미널/IDE의 대화형 세션에서도 승인
+// 프롬프트가 안 뜨게 되므로, 이 대시보드 spawn 호출에만 --allowedTools로 범위를 한정합니다.
+// AGENTS.md 16항(프로젝트 격리) 그대로 Write/Edit는 project/** 로만 한정하고, Bash는 실제로
+// 필요한 것만(커밋, 테스트 실행) 콕 집어 허용 — 다중 사용자(공유 비밀번호)로 열려있어 임의
+// 명령 실행(`Bash(node *)` 등 광범위한 규칙)은 의도적으로 제외했습니다.
+const CHAT_ALLOWED_TOOLS = [
+  'Write(project/**)',
+  'Edit(project/**)',
+  'Bash(git add project/*)',
+  'Bash(git commit *)',
+  'Bash(npx playwright test *)',
+];
 
 function wsSend(ws, payload) {
   if (ws.readyState === ws.OPEN) ws.send(JSON.stringify(payload));
@@ -181,6 +206,7 @@ wss.on('connection', (ws) => {
       onProcess: (handle) => activeRuns.set(project, handle),
       onStatus: (statusText) => wsSend(ws, { type: 'status', project, text: statusText }),
       onIssue: (issueText) => wsSend(ws, { type: 'issue', project, text: issueText }),
+      allowedTools: CHAT_ALLOWED_TOOLS,
     };
 
     try {
