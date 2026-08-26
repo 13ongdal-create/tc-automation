@@ -26,3 +26,9 @@ playwright-report/
 
 # 대시보드 공유 비밀번호 (2026-08-26 네트워크 공유 인증 추가, 서버가 최초 실행 시 자동 생성)
 /dashboard/.dashboard-password
+
+# 대시보드 HTTPS 자체서명 인증서/개인키 (2026-08-26 추가 — 개인키는 절대 커밋 금지, 로컬에서 생성)
+/dashboard/certs/
+
+# 대시보드 상시구동(Windows Scheduled Task) 콘솔 로그 (2026-08-26 추가)
+/dashboard/logs/

@@ -1,4 +1,6 @@
 const http = require('http');
+const https = require('https');
+const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const express = require('express');
@@ -10,10 +12,33 @@ const claudeRunner = require('./lib/claudeRunner');
 const chatSessions = require('./lib/chatSessions');
 const auth = require('./lib/auth');
 
+// 채팅 패널이 spawn하는 claude CLI(Windows에서 .cmd shim → 내부적으로 cmd.exe 경유)가 종료될 때
+// 같은 콘솔 세션 전체(그룹 0)로 Ctrl+C를 보내는 사례가 실측 확인됨 — 이 서버 프로세스까지 함께
+// 죽어 상시구동(Windows Scheduled Task)이 무력화되는 문제가 있었음(2026-08-26). 이 서버는
+// taskkill/Stop-ScheduledTask로만 종료되어야 하므로, 다른 프로세스발 SIGINT/SIGBREAK는 무시합니다.
+if (process.platform === 'win32') {
+  process.on('SIGINT', () => {});
+  process.on('SIGBREAK', () => {});
+}
+
 const PORT = process.env.PORT || 4000;
 const SESSION_COOKIE = 'qa_session';
 const app = express();
-const httpServer = http.createServer(app);
+
+// 네트워크(사내망)로 열린 상태로 로그인 비밀번호가 평문으로 오가지 않도록 HTTPS를 우선 사용합니다.
+// dashboard/certs/{key,cert}.pem(자체서명, .gitignore 대상 — 팀원 각자 로컬에서 생성)이 있으면 HTTPS로,
+// 없으면 로컬 개발 편의를 위해 HTTP로 자동 폴백합니다.
+const CERT_DIR = path.join(__dirname, 'certs');
+let httpServer;
+let usesHttps = false;
+try {
+  const key = fs.readFileSync(path.join(CERT_DIR, 'key.pem'));
+  const cert = fs.readFileSync(path.join(CERT_DIR, 'cert.pem'));
+  httpServer = https.createServer({ key, cert }, app);
+  usesHttps = true;
+} catch {
+  httpServer = http.createServer(app);
+}
 app.use(express.json());
 
 // ── 로그인 (공유 비밀번호) ────────────────────────────────────────────────
@@ -201,11 +226,18 @@ function lanAddresses() {
 // 0.0.0.0으로 열어 같은 네트워크(사내망)의 다른 사람도 접속해 함께 쓸 수 있게 합니다 (2026-08-26).
 // 공유 비밀번호(위 로그인 라우트)가 없으면 아무도 조회/조작할 수 없으므로 안전합니다.
 httpServer.listen(PORT, '0.0.0.0', () => {
-  console.log(`QA Automation 대시보드: http://localhost:${PORT} (TC_AUTOMATION_ROOT=${defectStore.TC_AUTOMATION_ROOT})`);
+  const proto = usesHttps ? 'https' : 'http';
+  console.log(`QA Automation 대시보드: ${proto}://localhost:${PORT} (TC_AUTOMATION_ROOT=${defectStore.TC_AUTOMATION_ROOT})`);
+  if (!usesHttps) {
+    console.log(`  ⚠ dashboard/certs/{key,cert}.pem이 없어 HTTP로 실행 중입니다 (평문 통신) — HTTPS로 실행하려면 'bash dashboard/scripts/gen-cert.sh'를 실행하세요.`);
+  }
   const lan = lanAddresses();
   if (lan.length) {
     console.log(`같은 네트워크의 다른 사람은 아래 주소로 접속할 수 있습니다:`);
-    lan.forEach((ip) => console.log(`  http://${ip}:${PORT}`));
+    lan.forEach((ip) => console.log(`  ${proto}://${ip}:${PORT}`));
+  }
+  if (usesHttps) {
+    console.log(`  (자체서명 인증서라 브라우저에 보안 경고가 뜹니다 — "고급" → "계속 진행"을 눌러 접속하면 됩니다)`);
   }
   console.log(`공유 비밀번호: ${auth.PASSWORD}  (dashboard/.dashboard-password에 저장됨, .env로 DASHBOARD_PASSWORD 지정 시 그 값 사용)`);
 });
