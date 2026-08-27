@@ -1,7 +1,7 @@
 {
   "project": "TOP ONLINE",
   "url": "http://192.168.10.116:30180/display/mds-pick",
-  "testType": "단위",
+  "testType": "통합",
   "analysisBasis": "코드기반",
   "createdAt": "2026-08-25",
   "hasTestAccounts": true
