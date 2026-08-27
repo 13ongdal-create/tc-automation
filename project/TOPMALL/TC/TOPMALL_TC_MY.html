@@ -9,7 +9,7 @@
     --bg:#f6f8fa; --panel:#ffffff; --text:#1f2328; --muted:#656d76;
     --border:#d0d7de; --accent:#0969da; --accent2:#0550ae;
     --p1:#cf222e; --p2:#9a6700; --p3:#0969da;
-    --pass:#1a7f37; --fail:#cf222e; --blocked:#9a6700; --na:#8c959f; --none:#d0d7de;
+    --pass:#1a7f37; --fail:#cf222e; --na:#8c959f; --none:#d0d7de;
     --headbg:#f6f8fa;
   }
   html[data-theme="dark"]{
@@ -76,7 +76,6 @@
   select.result-select{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
   select.result-select[data-val="Pass"]{color:var(--pass);font-weight:600;}
   select.result-select[data-val="Fail"]{color:var(--fail);font-weight:600;}
-  select.result-select[data-val="Blocked"]{color:var(--blocked);font-weight:600;}
   input.free-input{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
 
   .col-no{width:2.5%} .col-id{width:5.5%} .col-system{width:2.5%} .col-cat{width:3%} .col-mod{width:3.5%} .col-sub{width:3.5%}
@@ -145,7 +144,7 @@
     <div style="overflow-x:auto;display:none;" id="statsTableWrap">
     <table class="stats" id="statsTable">
       <thead>
-        <tr><th>소분류</th><th>전체</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>N/T</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>Fail율</th></tr>
+        <tr><th>소분류</th><th>전체</th><th>Pass</th><th>Fail</th><th>N/A</th><th>N/T</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>Fail율</th></tr>
       </thead>
       <tbody id="statsBody"></tbody>
     </table>
@@ -366,7 +365,6 @@ function render() {
     const total = items.length;
     const pass = items.filter(t => t.result === 'Pass').length;
     const fail = items.filter(t => t.result === 'Fail').length;
-    const blocked = items.filter(t => t.result === 'Blocked').length;
     const na = items.filter(t => t.result === 'N/A').length;
     const nt = items.filter(t => t.result === 'N/T').length;
     const none = items.filter(t => !t.result).length;
@@ -374,12 +372,11 @@ function render() {
     const rate = total ? ((executed/total)*100).toFixed(0) : 0;
     const passRate = executed ? ((pass/executed)*100).toFixed(0) : 0;
     const failRate = executed ? ((fail/executed)*100).toFixed(0) : 0;
-    return `<tr><td class="modname">${m}</td><td>${total}</td><td>${pass}</td><td>${fail}</td><td>${blocked}</td><td>${na}</td><td>${nt}</td><td>${none}</td><td>${rate}%</td><td>${passRate}%</td><td>${failRate}%</td></tr>`;
+    return `<tr><td class="modname">${m}</td><td>${total}</td><td>${pass}</td><td>${fail}</td><td>${na}</td><td>${nt}</td><td>${none}</td><td>${rate}%</td><td>${passRate}%</td><td>${failRate}%</td></tr>`;
   }).join('') + (() => {
     const total = TC_DATA.length;
     const pass = TC_DATA.filter(t => t.result === 'Pass').length;
     const fail = TC_DATA.filter(t => t.result === 'Fail').length;
-    const blocked = TC_DATA.filter(t => t.result === 'Blocked').length;
     const na = TC_DATA.filter(t => t.result === 'N/A').length;
     const nt = TC_DATA.filter(t => t.result === 'N/T').length;
     const none = TC_DATA.filter(t => !t.result).length;
@@ -387,7 +384,7 @@ function render() {
     const rate = total ? ((executed/total)*100).toFixed(0) : 0;
     const passRate = executed ? ((pass/executed)*100).toFixed(0) : 0;
     const failRate = executed ? ((fail/executed)*100).toFixed(0) : 0;
-    return `<tr class="stats-total"><td class="modname">합계</td><td>${total}</td><td>${pass}</td><td>${fail}</td><td>${blocked}</td><td>${na}</td><td>${nt}</td><td>${none}</td><td>${rate}%</td><td>${passRate}%</td><td>${failRate}%</td></tr>`;
+    return `<tr class="stats-total"><td class="modname">합계</td><td>${total}</td><td>${pass}</td><td>${fail}</td><td>${na}</td><td>${nt}</td><td>${none}</td><td>${rate}%</td><td>${passRate}%</td><td>${failRate}%</td></tr>`;
   })();
 
   const tbody = document.getElementById('tcBody');
@@ -432,7 +429,7 @@ function render() {
 }
 
 function resultSelect(t) {
-  const opts = ['', 'Pass', 'Fail', 'Blocked', 'N/A', 'N/T'];
+  const opts = ['', 'Pass', 'Fail', 'N/A', 'N/T'];
   return `<select class="result-select" data-val="${t.result||''}">${opts.map(o => `<option value="${o}" ${t.result===o?'selected':''}>${o||'미실행'}</option>`).join('')}</select>`;
 }
 
@@ -564,13 +561,12 @@ function buildSummaryRows() {
     const total = items.length;
     const pass = items.filter(t => t.result === 'Pass').length;
     const fail = items.filter(t => t.result === 'Fail').length;
-    const blocked = items.filter(t => t.result === 'Blocked').length;
     const na = items.filter(t => t.result === 'N/A').length;
     const nt = items.filter(t => t.result === 'N/T').length;
     const none = items.filter(t => !t.result).length;
     const executed = total - none;
     return {
-      '소분류': m, '전체': total, 'Pass': pass, 'Fail': fail, 'Blocked': blocked, 'N/A': na, 'N/T': nt, '미실행': none,
+      '소분류': m, '전체': total, 'Pass': pass, 'Fail': fail, 'N/A': na, 'N/T': nt, '미실행': none,
       '수행율': total ? Math.round((executed/total)*100)+'%' : '0%',
       'Pass율': executed ? Math.round((pass/executed)*100)+'%' : '0%',
       'Fail율': executed ? Math.round((fail/executed)*100)+'%' : '0%',

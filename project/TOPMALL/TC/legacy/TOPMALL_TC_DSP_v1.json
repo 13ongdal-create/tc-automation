@@ -3,17 +3,12 @@
     "project": "TOPMALL",
     "module": "DSP",
     "moduleName": "전시",
-    "version": 2,
+    "version": 1,
     "changeHistory": [
       {
         "version": 1,
         "date": "2026-08-26",
         "summary": "캐노니컬 JSON 최초 생성 — 레거시 파일 TOPMALL_TC_DSP_SYS.html(2026-08-20 작성, DSP_ITEMS)에서 이전 (10건, AGENTS.md 10-1항)"
-      },
-      {
-        "version": 2,
-        "date": "2026-08-27",
-        "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
       }
     ]
   },

@@ -3,7 +3,7 @@
     "project": "TOPMALL",
     "module": "PR",
     "moduleName": "프로모션/쿠폰",
-    "version": 3,
+    "version": 2,
     "changeHistory": [
       {
         "version": 1,
@@ -14,11 +14,6 @@
         "version": 2,
         "date": "2026-08-26",
         "summary": "정책서 재대조 — 쿠폰/포인트/프로모션 정책을 다루는 시트가 이 정책서(9개 시트: 개요/회원·인증/주문·결제/취소·환불·반품/리뷰/장바구니·배송지/상품·전시/미결 정책/코드값 정의)에 전혀 존재하지 않아 reference로 인용할 근거를 찾지 못함 — 전 항목 reference \"-\" 유지(정책서 부재 확인이지, 근거 미확보가 아님). 기존 12건은 URL 관찰 기반 근거 그대로 유지, 스키마만 마이그레이션"
-      },
-      {
-        "version": 3,
-        "date": "2026-08-27",
-        "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
       }
     ]
   },

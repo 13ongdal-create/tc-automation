@@ -3,7 +3,7 @@
     "project": "TOPMALL",
     "module": "MY",
     "moduleName": "마이페이지",
-    "version": 3,
+    "version": 2,
     "changeHistory": [
       {
         "version": 1,
@@ -14,11 +14,6 @@
         "version": 2,
         "date": "2026-08-26",
         "summary": "정책서 재대조 — 마이페이지 전용 시트는 없으나 배송지·구매확정 관련 5건은 다른 시트(장바구니·배송지, 주문·결제)에서 근거 확인해 reference 보강. TC_MY_008은 \"기본 배송지 삭제 불가\" 정책(#9)과 배치 소지가 있어 [확인필요] 표기, TC_MY_009(쿠폰함)는 쿠폰 정책 시트 부재로 정책서 대조 불가 표기. 나머지는 URL 관찰 기반 유지, 스키마만 마이그레이션"
-      },
-      {
-        "version": 3,
-        "date": "2026-08-27",
-        "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
       }
     ]
   },

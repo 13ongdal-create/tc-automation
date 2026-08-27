@@ -3,7 +3,7 @@
     "project": "TOPMALL",
     "module": "ORD",
     "moduleName": "주문/결제",
-    "version": 3,
+    "version": 2,
     "changeHistory": [
       {
         "version": 1,
@@ -14,11 +14,6 @@
         "version": 2,
         "date": "2026-08-26",
         "summary": "정책서(주문·결제 + 장바구니·배송지 시트) 재대조 — 근거 확인된 7건에 reference 보강. 나머지 17건은 URL 관찰 기반 근거 유지, 스키마만 현행 표준으로 마이그레이션"
-      },
-      {
-        "version": 3,
-        "date": "2026-08-27",
-        "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
       }
     ]
   },

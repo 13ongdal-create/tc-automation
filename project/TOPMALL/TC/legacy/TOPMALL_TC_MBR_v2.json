@@ -3,7 +3,7 @@
     "project": "TOPMALL",
     "module": "MBR",
     "moduleName": "회원가입/로그인",
-    "version": 3,
+    "version": 2,
     "changeHistory": [
       {
         "version": 1,
@@ -14,11 +14,6 @@
         "version": 2,
         "date": "2026-08-26",
         "summary": "정책서(회원·인증 시트) 재대조 — 근거 확인된 5건에 reference 보강. TC_MBR_002는 정책서 상 비밀번호 규칙(영문+숫자)과 TC 내용(특수문자 포함)이 불일치함을 발견해 [확인필요] 표기, TC_MBR_007(쿠폰)·TC_MBR_011(계정 잠금)·TC_MBR_015(자동로그인 저장방식)는 정책서 근거 없음을 확인해 [확인필요]/verifyNote 표기. 나머지는 URL 관찰 기반 유지, 스키마만 마이그레이션"
-      },
-      {
-        "version": 3,
-        "date": "2026-08-27",
-        "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
       }
     ]
   },
