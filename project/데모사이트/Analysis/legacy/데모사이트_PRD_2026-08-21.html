@@ -56,94 +56,12 @@
 <header style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
   <div>
     <h1>📄 데모사이트 PRD (관찰 기반 요약)</h1>
-    <div class="sub">공식 문서 아님 — 정책서/화면설계서 부재로 Front(192.168.10.116:30180) + Admin/BO(192.168.10.116:30280) 전체화면 Playwright 재관찰 결과를 근거로 작성 · Phase 1~3 산출물 최초 작성 2026-08-21 · <b>진행 현황 섹션 갱신 2026-08-27</b></div>
+    <div class="sub">공식 문서 아님 — 정책서/화면설계서 부재로 Front(192.168.10.116:30180) + Admin/BO(192.168.10.116:30280) 전체화면 Playwright 재관찰 결과를 근거로 작성 · Phase 1~3 산출물 · 2026-08-21</div>
   </div>
   <a href="../TC/데모사이트_TC_전체.html" target="_blank" rel="noopener" style="text-decoration:none;"><button type="button" style="cursor:pointer;border:1px solid var(--border);background:var(--accent);color:#fff;border-radius:20px;padding:9px 16px;font-size:13px;font-weight:600;">🗂️ Full TC 통합 뷰어 열기 (283건)</button></a>
 </header>
 
 <div class="container">
-
-  <section>
-    <h2>📈 진행 현황 (Progress Status) — 2026-08-27 기준</h2>
-    <div class="desc">Phase 4(TC 작성) 7개 모듈 전량 완료 + Phase 5(자동화 실행) 전 TC 최소 1회 이상 실행 완료 시점의 스냅샷입니다. TC 데이터·결함 대장(<code>defects.json</code>)을 직접 집계한 수치이며, 값이 바뀌면 이 섹션만 갱신하면 됩니다(Phase 1~3 관찰 내용 자체는 아래 섹션에 그대로 보존).</div>
-
-    <table style="margin-bottom:14px;">
-      <thead><tr><th>모듈</th><th>버전</th><th>건수</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>N/T</th><th>Pass율</th><th>Fail율</th></tr></thead>
-      <tbody>
-        <tr><td class="code-cell">PD</td><td>v15</td><td>113</td><td>53</td><td>11</td><td>0</td><td>4</td><td>45</td><td>46.9%</td><td>9.7%</td></tr>
-        <tr><td class="code-cell">MB</td><td>v11</td><td>53</td><td>13</td><td>0</td><td>0</td><td>3</td><td>37</td><td>24.5%</td><td>0%</td></tr>
-        <tr><td class="code-cell">OP</td><td>v10</td><td>22</td><td>5</td><td>0</td><td>0</td><td>1</td><td>16</td><td>22.7%</td><td>0%</td></tr>
-        <tr><td class="code-cell">CO</td><td>v6</td><td>50</td><td>3</td><td>7</td><td>0</td><td>0</td><td>40</td><td>6.0%</td><td>14.0%</td></tr>
-        <tr><td class="code-cell">MY</td><td>v6</td><td>26</td><td>0</td><td>1</td><td>0</td><td>0</td><td>25</td><td>0%</td><td>3.8%</td></tr>
-        <tr><td class="code-cell">CS</td><td>v6</td><td>9</td><td>4</td><td>2</td><td>0</td><td>0</td><td>3</td><td>44.4%</td><td>22.2%</td></tr>
-        <tr><td class="code-cell">PR</td><td>v7</td><td>10</td><td>0</td><td>3</td><td>0</td><td>0</td><td>7</td><td>0%</td><td>30.0%</td></tr>
-        <tr style="font-weight:700;background:var(--headbg);"><td>합계</td><td>-</td><td>283</td><td>78</td><td>24</td><td>0</td><td>8</td><td>173</td><td>27.6%</td><td>8.5%</td></tr>
-      </tbody>
-    </table>
-    <div class="footnote">수행율(수행÷전체) 100% — 미실행 0건. 다만 N/T 173건(전체의 61%)은 "이 TC 자체가 실패"가 아니라 아래 구조적 결함들에 막혀 정상 판정이 불가능했던 것(20-7항) — 결함 해결 후 재실행해야 실제 Pass/Fail이 확정됩니다. Fail 24건은 대부분 "결함 확인용 TC"(그 결함이 실제로 재현되는지 검증하는 것이 목적인 TC, 20-7항 예외)로 의도된 Fail입니다.</div>
-
-    <h3 style="font-size:13px;margin-top:16px;">🐞 결함 현황 (defects.json, 총 23건, 2026-08-27 갱신)</h3>
-    <table style="margin-bottom:6px;">
-      <thead><tr><th>상태</th><th>P1</th><th>P2</th><th>P3</th><th>합계</th></tr></thead>
-      <tbody>
-        <tr><td>신규</td><td>3</td><td>10</td><td>6</td><td><b>19</b></td></tr>
-        <tr><td>완료</td><td>3</td><td>1</td><td>0</td><td><b>4</b></td></tr>
-        <tr style="font-weight:700;"><td>합계</td><td>6</td><td>11</td><td>6</td><td>23</td></tr>
-      </tbody>
-    </table>
-    <div class="footnote">완료 4건 중 DEF_008/009는 조사 오류로 판명된 오탐 종결, DEF_011/019는 2026-08-27 재확인 결과 3회 연속 미재현되어 완료 처리(비고: "미재현 (2026-08-27 재확인)") — 관련 N/T TC 재실행으로 실제 Pass/Fail 재확정이 아직 남아있습니다. 나머지 19건은 신규(미해결) 상태입니다.</div>
-
-    <h3 style="font-size:13px;margin-top:16px;">🚧 사이트 전역 영향 구조적 결함 (다수 TC를 N/T로 묶는 핵심 원인)</h3>
-    <table>
-      <thead><tr><th>결함ID</th><th>심각도</th><th>상태</th><th>내용</th><th>영향 범위</th></tr></thead>
-      <tbody>
-        <tr><td class="code-cell">DEF_011</td><td>P1</td><td><span class="pill new">완료</span></td><td>Admin 로그인 API가 브라우저 언어 ko-KR일 때 500 에러 — 2026-08-27 재확인 3회 연속 미재현되어 완료 처리</td><td>CO(BO) 30건, PD/MB/OP/PR의 Admin 연동 TC 다수 — 재실행 필요</td></tr>
-        <tr><td class="code-cell">DEF_007</td><td>P2</td><td>신규</td><td>메인배너·링크의 프로토콜 누락(www.naver.com 등)이 내부 경로로 오인되어 다수 화면에서 404</td><td>메인(`/`)을 거치는 사실상 모든 Front TC</td></tr>
-        <tr><td class="code-cell">DEF_005 / DEF_006</td><td>P1</td><td>신규</td><td>/policy, /service 접근 시 404 (프리페치로도 다수 화면에서 유발)</td><td>고객센터 화면 + 여러 화면의 프리페치 경유</td></tr>
-        <tr><td class="code-cell">DEF_018</td><td>P2</td><td>신규</td><td>/forgot-password 프리페치 404</td><td>로그인·회원가입·마이페이지 등 다수 화면</td></tr>
-        <tr><td class="code-cell">DEF_019</td><td>P2</td><td><span class="pill new">완료</span></td><td>/register 방문 시 /privacy 프리페치 404 — 2026-08-27 재확인 3회 연속 미재현되어 완료 처리</td><td>회원가입(register) 화면 경유 TC — 재실행 필요</td></tr>
-      </tbody>
-    </table>
-    <div class="footnote">DEF_007/005/006/018(4건)은 여전히 열려있어, 이에 막혀 N/T로 처리된 TC들은 계속 재검증이 불가능합니다. DEF_011/019(2건)는 완료 처리되었으므로 관련 N/T TC를 재실행해 실제 Pass/Fail로 확정하는 작업이 남아있습니다.</div>
-
-    <h3 style="font-size:13px;margin-top:16px;">🔁 2026-08-27 재현 여부 재확인 결과 → 사용자 확인 후 2건 완료 처리</h3>
-    <div class="desc" style="margin-bottom:8px;">TC/자동화 코드 변경 없이 각 결함을 3회(또는 1~3회) 재접속해 현재 시점 재현 여부만 가볍게 확인한 결과입니다. 결과는 <code>defects.json</code>의 각 레코드 <code>history</code>에도 기록했습니다. DEF_011/019는 사용자 확인을 받아 <b>완료 처리</b>했습니다(비고: "미재현 (2026-08-27 재확인)").</div>
-    <table>
-      <thead><tr><th>결함ID</th><th>재확인 결과</th><th>처리</th></tr></thead>
-      <tbody>
-        <tr><td class="code-cell">DEF_011</td><td class="warn-row"><b>미재현 (3/3)</b></td><td><span class="pill new">완료 처리</span> — Admin ko-KR 로그인 3회 연속 정상(200) 성공</td></tr>
-        <tr><td class="code-cell">DEF_019</td><td class="warn-row"><b>미재현 (3/3)</b></td><td><span class="pill new">완료 처리</span> — /register 방문 3회 연속 /privacy 404 없음</td></tr>
-        <tr><td class="code-cell">DEF_005</td><td>재현됨</td><td>변화 없음 (신규 유지)</td></tr>
-        <tr><td class="code-cell">DEF_006</td><td>재현됨</td><td>변화 없음 (신규 유지)</td></tr>
-        <tr><td class="code-cell">DEF_007</td><td>재현됨</td><td>변화 없음 (신규 유지)</td></tr>
-        <tr><td class="code-cell">DEF_018</td><td>재현됨</td><td>변화 없음 (신규 유지, 같은 확인에서 /policy, /service 404도 동시 관측)</td></tr>
-      </tbody>
-    </table>
-    <div class="footnote">DEF_011/019가 완료 처리됨에 따라, 이 결함에 막혀 N/T였던 CO(BO) 30건을 포함한 다수 TC를 재실행해 실제 Pass/Fail로 확정하는 작업이 남아있습니다 — 아직 재실행 전(Phase 5는 별도 요청 시에만 시작).</div>
-
-    <h3 style="font-size:13px;margin-top:16px;">✅ 자동화(Phase 5) 커버리지</h3>
-    <div class="desc" style="margin-bottom:8px;">2026-08-24~25 자동화 백필(TC/automation/BACKFILL_ISSUES.md) 완료로 <b>7개 모듈 전량에 Playwright 스펙 파일 존재, 전체 283건이 최소 1회 이상 실행된 상태</b>(미실행 0건)입니다. 이전에는 캐노니컬 JSON에는 있으나 자동화 코드가 없어 한 번도 실행되지 못한 TC가 PD 45건/MB 38건/CO 20건/OP 13건/PR 1건(총 117건) 존재했으나 이번 백필로 해소되었습니다.</div>
-    <table>
-      <thead><tr><th>모듈</th><th>spec.js</th><th>최신 결과 스냅샷</th></tr></thead>
-      <tbody>
-        <tr><td class="code-cell">PD</td><td>✅</td><td>2026-08-24</td></tr>
-        <tr><td class="code-cell">MB</td><td>✅</td><td>2026-08-24</td></tr>
-        <tr><td class="code-cell">OP</td><td>✅</td><td>2026-08-24</td></tr>
-        <tr><td class="code-cell">CO</td><td>✅</td><td>2026-08-24</td></tr>
-        <tr><td class="code-cell">MY</td><td>✅</td><td>2026-08-21 (백필 대상 아님, 기존 커버리지 유지)</td></tr>
-        <tr><td class="code-cell">CS</td><td>✅</td><td>2026-08-21 (백필 대상 아님, 기존 커버리지 유지)</td></tr>
-        <tr><td class="code-cell">PR</td><td>✅</td><td>2026-08-25</td></tr>
-      </tbody>
-    </table>
-
-    <h3 style="font-size:13px;margin-top:16px;">➡️ 다음 단계 제안 (2026-08-27 갱신)</h3>
-    <div class="footnote" style="font-size:12.5px;">
-      1) <s>DEF_011(Admin 로그인 ko-KR 500)</s> — 2026-08-27 재확인 결과 미재현, 완료 처리 완료. <b>→ 남은 작업: CO(BO) 30건을 포함한 관련 N/T TC 재실행</b>(사용자 요청 시 진행).<br>
-      2) DEF_005/006/007/018(4건, 여전히 신규)을 해결하면 사이트 전반 N/T의 상당 비중이 추가로 해소됨. <s>DEF_019</s>는 완료 처리됨.<br>
-      3) 완료 처리된 DEF_011/019 관련 N/T TC들을 재실행하여 실제 Pass/Fail로 갱신(AGENTS.md 20-7항 — 자동 전환 금지, 재실행 후 실결과 반영) — 사용자가 "테스트 실행해줘"로 명시 요청하면 진행.<br>
-      4) [확인필요] 항목(아래 섹션, 19건) 중 #3(가입 시 쿠폰 자동발급 정책)/#11(Admin↔Front 쿠폰함 미연동 사유)은 사용자 확인 결과 "모름"으로 [확인필요] 태그 유지.
-    </div>
-  </section>
 
   <section>
     <h2>🖥️ [Phase 1] Front 사이트 구조</h2>
