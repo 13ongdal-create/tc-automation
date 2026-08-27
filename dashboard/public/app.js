@@ -7,6 +7,7 @@ const el = {
   btnHome: document.getElementById('btnHome'),
   homeView: document.getElementById('homeView'),
   projectView: document.getElementById('projectView'),
+  projectDetailTitle: document.getElementById('projectDetailTitle'),
   homeEmpty: document.getElementById('homeEmpty'),
   homeDashboard: document.getElementById('homeDashboard'),
   homeKpiProjects: document.getElementById('homeKpiProjects'),
@@ -81,6 +82,7 @@ function renderHomeView() {
 function renderProjectView(project) {
   if (!project) return renderHomeView();
   el.projectSelect.value = project;
+  el.projectDetailTitle.textContent = project; // 데이터 로딩 전에 즉시 표시 — 우측 select만으로는 어느 프로젝트인지 헷갈리기 쉬움
   el.homeView.style.display = 'none';
   el.projectView.style.display = 'block';
   loadAll();
