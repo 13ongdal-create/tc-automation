@@ -188,11 +188,16 @@
   - 고객센터, 기프트카드, 매출정산, 상품, 시스템, 입점, 전시, 주문배송, 클레임, 프로모션, 회원
 -->
 
-프로젝트는 `tc-automation\project\{프로젝트명}\`에 하나씩 생성되며, 각 프로젝트는 `Policy`/`SB`/`Requirements`/`TC` 4개 표준 서브폴더를 가집니다 (AGENTS.md 16~17항 참조). 신규 프로젝트는 **반드시 `_template\`을 복사해서만** 온보딩하며, 다른 프로젝트(과거에 존재했던 프로젝트 포함)의 실제 내용을 예시나 근거로 가져오지 않습니다 (AGENTS.md 16항 "프로젝트 간 내용 격리 원칙" 참조).
+<!-- [수정 전 2026-08-27] "각 프로젝트는 `Policy`/`SB`/`Requirements`/`TC` 4개 표준 서브폴더를 가집니다"
+— Analysis 폴더가 2026-08-21 AGENTS.md/SKILL.md에 5번째 표준 서브폴더로 추가됐는데 이 문서에는
+반영되지 않고 있던 드리프트. 아래 목록에 정책서/화면설계서/요구사항/기존TC만 있고 어시스턴트 산출물
+(Analysis) 위치가 누락돼 있던 것도 같은 원인. -->
+프로젝트는 `tc-automation\project\{프로젝트명}\`에 하나씩 생성되며, 각 프로젝트는 `Policy`/`SB`/`Requirements`/`Analysis`/`TC` 5개 표준 서브폴더를 가집니다 (AGENTS.md 16~17항 참조). 신규 프로젝트는 **반드시 `_template\`을 복사해서만** 온보딩하며, 다른 프로젝트(과거에 존재했던 프로젝트 포함)의 실제 내용을 예시나 근거로 가져오지 않습니다 (AGENTS.md 16항 "프로젝트 간 내용 격리 원칙" 참조).
 
 - **정책서 위치**: `tc-automation\project\{프로젝트명}\Policy\`
 - **화면설계서 위치**: `tc-automation\project\{프로젝트명}\SB\`
 - **요구사항 위치**: `tc-automation\project\{프로젝트명}\Requirements\`
+- **어시스턴트 관찰 기반 산출물 위치**: `tc-automation\project\{프로젝트명}\Analysis\` (고객 제공 문서가 아니라 Phase 1~3에서 직접 관찰·정리한 PRD 등)
 - **기존 TC 위치**: `tc-automation\project\{프로젝트명}\TC\legacy\`
 
 현재 어떤 프로젝트들이 존재하는지는 `tc-automation\` 폴더를 직접 조회해서 확인합니다 (이 문서에 특정 프로젝트를 고정 기재하지 않습니다 — 프로젝트는 생성/삭제될 수 있으므로).

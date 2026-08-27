@@ -82,10 +82,26 @@ cd dashboard && npm install && npm start   # or: npm run dev (auto-restart)
 **Dashboard** ("QA Automation" — Express 웹 UI, port 4000, `dashboard/certs/{key,cert}.pem`이 있으면
 HTTPS로 자동 구동):
 
-- **Windows Scheduled Task(`qa-automation-dashboard`)로 상시 구동됩니다** — 사용자 `3top` 로그온 시
-  자동 시작, 크래시 시 자동 재시작(최대 999회, 1분 간격). 평소엔 직접 실행할 필요 없음. 확인/제어는
-  PowerShell `Get-ScheduledTask -TaskName qa-automation-dashboard` / `Start-ScheduledTask` /
-  `Stop-ScheduledTask`로 — `npm start`를 직접 실행하면 같은 포트(4000)에서 충돌합니다.
+<!-- [수정 전 2026-08-27] "Windows Scheduled Task(`qa-automation-dashboard`)로 상시 구동됩니다 — 사용자
+`3top` 로그온 시 자동 시작, 크래시 시 자동 재시작(최대 999회, 1분 간격). 평소엔 직접 실행할 필요 없음.
+확인/제어는 PowerShell `Get-ScheduledTask -TaskName qa-automation-dashboard` / `Start-ScheduledTask` /
+`Stop-ScheduledTask`로 — `npm start`를 직접 실행하면 같은 포트(4000)에서 충돌합니다." LogonType이
+Interactive였던 시절 안내. 로그온 세션에 프로세스가 붙어있어, 터미널/IDE 세션에서 다른 명령을 실행할
+때마다 콘솔 종료 신호가 전파되어 대시보드가 함께 죽는 문제(cmd 창이 매번 깜빡이는 증상 포함)가
+반복 발생 — 2026-08-27 사용자 요청으로 LogonType을 S4U(로그온 여부 무관 실행)로 변경해 근본 해결. -->
+- **Windows Scheduled Task(`qa-automation-dashboard`)로 상시 구동됩니다** — LogonType **S4U**(로그온
+  여부와 관계없이 실행, 2026-08-27부터), Windows 부팅 시 자동 시작, 크래시 시 자동 재시작(최대 999회,
+  1분 간격). 평소엔 직접 실행할 필요 없음. `npm start`를 직접 실행하면 같은 포트(4000)에서 충돌합니다.
+  - **재시작 시 주의**: S4U로 바뀐 뒤로는 `taskkill`/`Stop-ScheduledTask`/CIM `Terminate` 전부 비관리자
+    세션에서 Access Denied가 나며 안 먹힙니다(세션 0으로 격리되어 있어 일반 사용자 권한으로는 종료 불가).
+    `schtasks /End /TN qa-automation-dashboard`도 "SUCCESS"라고만 뜨고 실제로는 프로세스를 못 죽이는
+    경우가 있습니다(Task Scheduler의 실행 기록과 실제 orphan 프로세스가 어긋난 것으로 추정) — 이 경우
+    **작업 관리자에서 해당 PID의 `node.exe`를 직접 "작업 끝내기"**해야 합니다. 확인은
+    `Get-NetTCPConnection -LocalPort 4000 -State Listen`으로 PID를 알아낸 뒤 진행하고, 종료 후
+    `schtasks /Run /TN qa-automation-dashboard`로 재기동합니다. `dashboard/public/*`(정적 파일: HTML/CSS/
+    프론트 JS)만 수정한 경우는 애초에 재시작이 필요 없습니다 — Express가 요청마다 디스크에서 새로
+    읽으므로 저장 즉시 반영됩니다. 재시작이 필요한 건 `dashboard/server.js`·`dashboard/lib/*.js`(백엔드,
+    require 시점에 캐시됨)를 고친 경우뿐입니다.
 - 접속: 로컬 `https://localhost:4000`, 같은 네트워크의 다른 사람은 `https://{LAN IP}:4000`
   (`Get-NetIPAddress`로 확인 가능). 자체서명 인증서라 브라우저 첫 접속 시 보안 경고가 뜹니다 —
   "고급" → "계속 진행"으로 넘어가면 됩니다.
