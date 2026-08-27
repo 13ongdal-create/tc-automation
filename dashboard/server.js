@@ -143,7 +143,12 @@ app.get('/api/:project/kpi', (req, res) => {
   const resultSummary = resultsStore.latestSummary(project);
   resultSummary.byModule = resultsStore.latestByModule(project);
   resultSummary.timeline = resultsStore.progressOverTime(project);
-  res.json({ defects: defectSummary, results: resultSummary, viewerFile: tcStore.findFullViewer(project) });
+  res.json({
+    defects: defectSummary,
+    results: resultSummary,
+    viewerFile: tcStore.findFullViewer(project),
+    tcChangeHistory: tcStore.getChangeHistory(project),
+  });
 });
 
 // ── 💬 사이트분석 · TC 생성 채팅 패널 (WebSocket) ──────────────────────────

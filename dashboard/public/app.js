@@ -32,6 +32,8 @@ const el = {
   siteAnalysisBody: document.getElementById('siteAnalysisBody'),
   detailModuleExecTable: document.getElementById('detailModuleExecTable'),
   tcManageBody: document.getElementById('tcManageBody'),
+  tcDetailLink: document.getElementById('tcDetailLink'),
+  tcChangeHistoryBody: document.getElementById('tcChangeHistoryBody'),
   defectDetailLink: document.getElementById('defectDetailLink'),
   defectTableBody: document.getElementById('defectTableBody'),
   resultsList: document.getElementById('resultsList'),
@@ -554,13 +556,34 @@ function renderSiteAnalysis(project, meta, viewerFile) {
   return metaHtml + linksHtml;
 }
 
+/** 📋 TC 관리 하단 — 모든 모듈 캐노니컬 파일의 meta.changeHistory를 모아 최신순으로 표시 (AGENTS.md 10항) */
+function renderTcChangeHistory(history) {
+  if (!history || !history.length) return '<div class="empty-row">변경 이력이 없습니다</div>';
+  const rowsHtml = history
+    .map(
+      (h) => `
+    <tr>
+      <td>${esc(h.date || '')}</td>
+      <td class="pb-module-name" style="text-align:left">${esc(h.moduleName)}</td>
+      <td class="center">v${h.version}</td>
+      <td style="text-align:left">${esc(h.summary || '')}</td>
+    </tr>`
+    )
+    .join('');
+  return `
+    <table class="pb-module-table">
+      <thead><tr><th style="width:11%">날짜</th><th style="width:14%">모듈</th><th style="width:7%">버전</th><th>변경 요약</th></tr></thead>
+      <tbody>${rowsHtml}</tbody>
+    </table>`;
+}
+
 async function loadKpi(project) {
   const [kpiRes, metaRes] = await Promise.all([
     fetch(`/api/${encodeURIComponent(project)}/kpi`),
     fetch(`/api/${encodeURIComponent(project)}/meta`),
   ]);
   if (!kpiRes.ok) return;
-  const { defects, results, viewerFile } = await kpiRes.json();
+  const { defects, results, viewerFile, tcChangeHistory } = await kpiRes.json();
   const meta = metaRes.ok ? await metaRes.json() : null;
   el.kpiTotalDefects.textContent = defects.total;
   el.kpiNewDefects.textContent = defects.counts['신규'] || 0;
@@ -570,14 +593,18 @@ async function loadKpi(project) {
 
   el.siteAnalysisBody.innerHTML = renderSiteAnalysis(project, meta, viewerFile);
   el.detailModuleExecTable.innerHTML = renderModuleExecTable(results.byModule);
+  el.tcChangeHistoryBody.innerHTML = renderTcChangeHistory(tcChangeHistory);
 
   if (viewerFile) {
     const url = `/files/${encodeURIComponent(project)}/${encodeURIComponent(viewerFile)}`;
-    el.tcManageBody.innerHTML = `<a href="${url}" target="_blank" rel="noopener" class="project-block-link">Full TC 상세 보기 →</a>`;
+    el.tcManageBody.innerHTML = `<span class="placeholder-text">TC 뷰어: ${esc(viewerFile)}</span>`;
+    el.tcDetailLink.href = url;
+    el.tcDetailLink.hidden = false;
     el.defectDetailLink.href = url;
     el.defectDetailLink.hidden = false;
   } else {
     el.tcManageBody.innerHTML = '<span class="placeholder-text">아직 생성된 TC 뷰어가 없습니다</span>';
+    el.tcDetailLink.hidden = true;
     el.defectDetailLink.hidden = true;
   }
 }

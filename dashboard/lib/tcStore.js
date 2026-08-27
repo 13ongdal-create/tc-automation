@@ -29,4 +29,44 @@ function findFullViewer(project) {
   return files.length === 1 ? files[0] : null;
 }
 
-module.exports = { findFullViewer };
+/** 정규식에 넣을 프로젝트명 이스케이프 (프로젝트명에 특수문자가 있을 수 있음) */
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * 모든 모듈 캐노니컬 TC 파일(*_TC_전체.json 제외)의 meta.changeHistory를 모아
+ * 날짜(최신순) 기준으로 합친 변경 이력을 반환합니다 (AGENTS.md 10항 "세 겹 이력 관리" 중
+ * meta.changeHistory를 대시보드에 노출).
+ */
+function getChangeHistory(project) {
+  const dir = tcDir(project);
+  const re = new RegExp(`^${escapeRegex(project)}_TC_([A-Z]+)\\.json$`);
+  let files;
+  try {
+    files = fs.readdirSync(dir).filter((f) => re.test(f));
+  } catch {
+    return [];
+  }
+
+  const entries = [];
+  for (const file of files) {
+    const m = file.match(re);
+    const moduleCode = m[1];
+    let data;
+    try {
+      data = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
+    } catch {
+      continue;
+    }
+    const moduleName = data.meta?.moduleName || moduleCode;
+    for (const h of data.meta?.changeHistory || []) {
+      entries.push({ moduleCode, moduleName, version: h.version, date: h.date, summary: h.summary });
+    }
+  }
+
+  entries.sort((a, b) => (b.date || '').localeCompare(a.date || '') || b.version - a.version);
+  return entries;
+}
+
+module.exports = { findFullViewer, getChangeHistory };
