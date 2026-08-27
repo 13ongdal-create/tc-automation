@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "MY",
     "moduleName": "마이페이지",
-    "version": 7,
+    "version": 6,
     "changeHistory": [
       {
         "version": 1,
@@ -34,11 +34,6 @@
         "version": 6,
         "date": "2026-08-21",
         "summary": "Phase 5 재실행 결과 반영(배치7): TC_MY_005는 DEF_004 확인용으로 Fail 유지, 나머지 전 항목은 로그인 플로우의 기존 결함(DEF_001/002, TC_MY_013은 DEF_007도 해당)에 막혀 N/T 처리."
-      },
-      {
-        "version": 7,
-        "date": "2026-08-27",
-        "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
       }
     ]
   },

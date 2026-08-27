@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PD",
     "moduleName": "상품전시(+전시)",
-    "version": 16,
+    "version": 15,
     "changeHistory": [
       {
         "version": 1,
@@ -79,11 +79,6 @@
         "version": 15,
         "date": "2026-08-24",
         "summary": "Phase 5 자동화 백필: 캐노니컬 파일에는 있었으나 automation/tests/PD.spec.js에 test()가 없어 한 번도 실행되지 못했던 45건에 신규 Playwright 코드 작성 및 실행. Pass 10건, N/A(스킵) 3건, 신규 결함 4건 등록(DEF_014~017, Fail 유지), 기존 결함(DEF_001/005/006/007/011)에 막힌 27건 N/T 처리."
-      },
-      {
-        "version": 16,
-        "date": "2026-08-27",
-        "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
       }
     ]
   },

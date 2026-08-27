@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "MB",
     "moduleName": "회원",
-    "version": 12,
+    "version": 11,
     "changeHistory": [
       {
         "version": 1,
@@ -59,11 +59,6 @@
         "version": 11,
         "date": "2026-08-24",
         "summary": "자동화 코드 백필: 미커버 38건(TC_MB_001~035, 048, 049, 053)에 test() 신규 작성 및 실행. Pass 13 / N/T 37 / N/A 3(기존 39건 결과도 함께 재반영). 신규 결함 2건 등록(DEF_018 /forgot-password 404, DEF_019 /privacy 404). 기존 결함(DEF_005/006/007) 영향범위 확대 확인. jspark81 계정 데이터 드리프트(이메일/전화번호) 반영해 TC_MB_040/041/048 기대값 갱신. 테스트 코드 버그 4건 수정(TC_MB_004/012/023/040)."
-      },
-      {
-        "version": 12,
-        "date": "2026-08-27",
-        "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
       }
     ]
   },

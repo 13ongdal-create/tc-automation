@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PR",
     "moduleName": "이벤트/기획전/쿠폰행사",
-    "version": 8,
+    "version": 7,
     "changeHistory": [
       {
         "version": 1,
@@ -39,11 +39,6 @@
         "version": 7,
         "date": "2026-08-25",
         "summary": "자동화 코드 백필: 미커버 1건(TC_PR_010, Admin 가격할인관리)에 test() 신규 작성 및 실행. Admin 로그인이 기존 DEF_011(ko-KR 500)로 실패해 N/T 처리. 검증 범위는 개별 상품 할인가 대조가 아니라 활성 가격할인 소행사 행사 존재 여부로 좁힘(마스터 그리드가 상품코드/할인율을 직접 노출하지 않음) — 원 TC의 [확인필요] 태그 유지."
-      },
-      {
-        "version": 8,
-        "date": "2026-08-27",
-        "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
       }
     ]
   },
