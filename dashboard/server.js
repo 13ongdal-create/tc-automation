@@ -133,7 +133,7 @@ app.get('/api/:project/defects', (req, res) => {
   res.json({ defects });
 });
 
-app.patch('/api/:project/defects/:defectId', (req, res) => {
+app.patch('/api/:project/defects/:defectId', async (req, res) => {
   const { field, value } = req.body || {};
   const ALLOWED_FIELDS = ['assignee', 'status', 'issueLink'];
   if (!ALLOWED_FIELDS.includes(field)) {
@@ -142,7 +142,7 @@ app.patch('/api/:project/defects/:defectId', (req, res) => {
   if (field === 'status' && !defectStore.STATUS_ORDER.includes(value)) {
     return res.status(400).json({ error: `status는 ${defectStore.STATUS_ORDER.join('/')} 중 하나여야 합니다.` });
   }
-  const updated = defectStore.updateField(req.params.project, req.params.defectId, field, value);
+  const updated = await defectStore.updateField(req.params.project, req.params.defectId, field, value);
   if (!updated) return res.status(404).json({ error: '해당 결함을 찾을 수 없습니다.' });
   res.json({ defect: updated });
 });
