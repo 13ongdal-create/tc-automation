@@ -28,15 +28,17 @@ const PATTERNS = [
 ];
 
 /**
- * @returns {{ handled: true, text: string } | null} 매칭되면 즉시 응답할 텍스트, 안 되면 null (Claude로 폴백)
+ * [수정 2026-08-27] defectStore.updateField()가 동시쓰기 방지를 위해 비동기 함수로 바뀌면서
+ * 이 함수도 async로 전환 — 호출부(index.js)에서 await 필요.
+ * @returns {Promise<{ handled: true, text: string } | null>} 매칭되면 즉시 응답할 텍스트, 안 되면 null (Claude로 폴백)
  */
-function tryHandle(project, text) {
+async function tryHandle(project, text) {
   const trimmed = (text || '').trim();
   for (const { re, apply } of PATTERNS) {
     const m = trimmed.match(re);
     if (!m) continue;
     const { defectId, field, value } = apply(m);
-    const updated = defectStore.updateField(project, defectId, field, value);
+    const updated = await defectStore.updateField(project, defectId, field, value);
     if (!updated) {
       return { handled: true, text: `:warning: \`${defectId}\`를 "${project}" 프로젝트 결함 대장에서 찾을 수 없습니다.` };
     }

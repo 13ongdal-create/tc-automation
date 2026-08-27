@@ -377,7 +377,7 @@ app.event('message', async ({ event, client }) => {
 
   if (session.kind === 'tc-defects') {
     // 담당자 지정/상태 변경처럼 정형화된 결함 관리 요청은 Claude 없이 코드로 바로 처리합니다 (토큰 미사용).
-    const fast = defectFastPath.tryHandle(session.project, trimmed);
+    const fast = await defectFastPath.tryHandle(session.project, trimmed);
     if (fast) {
       await client.chat.postMessage({ channel: event.channel, thread_ts: event.thread_ts, text: fast.text });
       return;
