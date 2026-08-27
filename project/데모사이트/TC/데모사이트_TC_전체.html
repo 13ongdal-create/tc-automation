@@ -297,6 +297,11 @@ const DEFECT_DATA = [{"defectId":"DEF_데모사이트_001","tcId":"TC_PD_084","m
 const DEFECT_TAB = '🐞 결함현황';
 const MODULE_ORDER = ["PD","PR","MB","OP","CO","MY","CS"];
 let currentTab = '전체';
+// URL 해시(#결함현황)로 결함현황 탭을 바로 열 수 있게 함 — 대시보드의 "결함목록 상세보기"
+// 링크가 이 해시를 붙여서 연결 (2026-08-27 추가)
+if (decodeURIComponent(location.hash || '').replace(/^#/, '').includes('결함현황')) {
+  currentTab = DEFECT_TAB;
+}
 let filterState = { keyword: '', system: '', priority: '', type: '', origin: '' };
 let defectFilterStatus = '전체';
 
