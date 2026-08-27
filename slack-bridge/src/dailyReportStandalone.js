@@ -11,7 +11,10 @@
 require('dotenv').config();
 const { runDailyReport } = require('./dailyReport');
 
-runDailyReport().then(() => {
+// [수정 2026-08-27] runDailyReport()가 실패해도 항상 process.exit(0)으로 끝나, Windows 작업
+// 스케줄러(tc-automation-daily-report)가 실패한 실행도 "마지막 실행 결과: 성공(0x0)"으로 기록하던
+// 버그 수정 — 이제 runDailyReport()가 반환하는 { ok } 값을 실제 종료 코드에 반영한다.
+runDailyReport().then((result) => {
   console.log('[dailyReportStandalone] 실행 종료');
-  process.exit(0);
+  process.exit(result && result.ok ? 0 : 1);
 });

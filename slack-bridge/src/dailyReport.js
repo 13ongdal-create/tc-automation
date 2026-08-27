@@ -27,21 +27,32 @@ function saveState(state) {
   fs.writeFileSync(STATE_PATH, JSON.stringify(state, null, 2), 'utf8');
 }
 
-/** 사용자가 남긴 특별 요청사항을 한 번 읽고 파일을 비웁니다 (다음 실행에 중복 반영 방지). */
-function takePendingNotes() {
+// [수정 2026-08-27] 기존에는 프롬프트를 만드는 시점(runDailyReport 실행 성공 여부를 알기 전)에
+// 바로 파일을 비웠음 — Claude 세션이 실패하면 pending 내용이 Notion에 반영되지도 못한 채
+// 이미 파일에서 지워져 유실되는 버그가 있었음. 이제 "읽기"와 "비우기"를 분리해, 비우기는
+// runDailyReport()가 성공을 확인한 뒤에만 호출한다(clearPendingNotes).
+/** 사용자가 남긴 특별 요청사항을 읽습니다 (파일은 비우지 않음). */
+function peekPendingNotes() {
   try {
-    const text = fs.readFileSync(PENDING_PATH, 'utf8').trim();
-    if (text) fs.writeFileSync(PENDING_PATH, '', 'utf8');
-    return text;
+    return fs.readFileSync(PENDING_PATH, 'utf8').trim();
   } catch {
     return '';
+  }
+}
+
+/** pending 파일을 비웁니다 — 그 내용이 실제로 이번 보고에 반영된 것이 확인된 뒤에만 호출합니다. */
+function clearPendingNotes() {
+  try {
+    fs.writeFileSync(PENDING_PATH, '', 'utf8');
+  } catch {
+    // 파일이 애초에 없었으면 비울 것도 없음
   }
 }
 
 function buildDailyReportPrompt() {
   const state = loadState();
   const since = state.lastRunAt || new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-  const pending = takePendingNotes();
+  const pending = peekPendingNotes();
   const today = new Date().toISOString().slice(0, 10);
 
   return [
@@ -59,7 +70,13 @@ function buildDailyReportPrompt() {
     .join('\n\n');
 }
 
+// [수정 2026-08-27] 기존에는 예외를 내부에서만 잡고 항상 정상 반환해, 호출부(dailyReportStandalone.js)가
+// 실패 여부와 무관하게 항상 process.exit(0)으로 끝나 Windows 작업 스케줄러가 실패한 실행도 "성공"으로
+// 기록하는 문제가 있었음. 이제 { ok, error } 형태로 결과를 반환해 호출부가 종료 코드를 실제 성공/실패에
+// 맞게 정할 수 있게 함 — cron.schedule 쪽(장기 상주 프로세스, 현재 비활성)은 반환값을 쓰지 않으므로
+// 여기서 예외를 다시 던지지 않아도(swallow) 그 경로에는 영향 없음.
 async function runDailyReport() {
+  const pendingBefore = peekPendingNotes();
   const prompt = buildDailyReportPrompt();
   const startedAt = new Date().toISOString();
   try {
@@ -68,8 +85,11 @@ async function runDailyReport() {
     });
     saveState({ lastRunAt: startedAt, lastResultOk: !result.isError });
     console.log(`[dailyReport] ${startedAt} 완료 (isError=${result.isError})`);
+    if (pendingBefore) clearPendingNotes(); // 반영이 실제로 완료된 뒤에만 비움 — 실패 시엔 다음 실행에 재시도
+    return { ok: !result.isError };
   } catch (err) {
     console.error(`[dailyReport] ${startedAt} 실패:`, err.message);
+    return { ok: false, error: err.message };
   }
 }
 
