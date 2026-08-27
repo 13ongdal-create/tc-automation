@@ -72,7 +72,15 @@ app.post('/api/login', (req, res) => {
   }
   auth.recordLoginSuccess(ip);
   const token = auth.createSession();
-  res.cookie(SESSION_COOKIE, token, { httpOnly: true, sameSite: 'lax', maxAge: 7 * 24 * 60 * 60 * 1000 });
+  // [수정 2026-08-27] secure 옵션이 없어 HTTPS로 구동 중일 때도 세션 쿠키가 우연히 평문 HTTP
+  // 경로로 전송될 수 있었음 — usesHttps일 때만 secure를 켜서(HTTP 폴백 시엔 어차피 쿠키 자체가
+  // 평문 전송되므로 secure를 켜도 의미가 없어 조건부로 적용) 실제 위험을 줄임.
+  res.cookie(SESSION_COOKIE, token, {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: usesHttps,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
   res.json({ ok: true });
 });
 
@@ -207,7 +215,15 @@ const wss = new WebSocketServer({
     cb(false, 401, 'Unauthorized');
   },
 });
-wss.on('connection', (ws) => {
+// [수정 2026-08-27] activeRuns/chatSessions 키를 project 단독에서 project+userKey(로그인 세션
+// 토큰)로 바꿔, 같은 프로젝트를 동시에 보는 서로 다른 로그인 세션끼리 Claude 대화와 "진행 중" 잠금을
+// 공유하지 않도록 분리 (dashboard/lib/chatSessions.js 주석 참조).
+function runKey(project, userKey) {
+  return `${project}::${userKey || 'anonymous'}`;
+}
+
+wss.on('connection', (ws, req) => {
+  ws.userKey = auth.getCookie(req.headers.cookie, SESSION_COOKIE);
   ws.on('message', async (raw) => {
     let msg;
     try {
@@ -216,8 +232,10 @@ wss.on('connection', (ws) => {
       return wsSend(ws, { type: 'error', error: '잘못된 메시지 형식입니다.' });
     }
 
+    const userKey = ws.userKey;
+
     if (msg.type === 'cancel') {
-      const handle = activeRuns.get(msg.project);
+      const handle = activeRuns.get(runKey(msg.project, userKey));
       if (handle) handle.cancel();
       return;
     }
@@ -227,19 +245,20 @@ wss.on('connection', (ws) => {
     }
     const { project } = msg;
     const text = msg.text.trim();
+    const rk = runKey(project, userKey);
 
-    if (activeRuns.has(project)) {
+    if (activeRuns.has(rk)) {
       return wsSend(ws, { type: 'error', project, error: '이 프로젝트에서 이미 진행 중인 요청이 있습니다. 완료 후 다시 시도해주세요.' });
     }
 
-    const session = chatSessions.ensure(project);
+    const session = chatSessions.ensure(project, userKey);
     const isFirst = !session.sessionId;
-    chatSessions.appendMessage(project, 'user', text);
+    chatSessions.appendMessage(project, userKey, 'user', text);
     wsSend(ws, { type: 'ack', project, text });
 
     const prompt = chatSessions.buildPrompt(project, text, isFirst);
     const callbacks = {
-      onProcess: (handle) => activeRuns.set(project, handle),
+      onProcess: (handle) => activeRuns.set(rk, handle),
       onStatus: (statusText) => wsSend(ws, { type: 'status', project, text: statusText }),
       onIssue: (issueText) => wsSend(ws, { type: 'issue', project, text: issueText }),
       allowedTools: CHAT_ALLOWED_TOOLS,
@@ -249,8 +268,8 @@ wss.on('connection', (ws) => {
       const result = isFirst
         ? await claudeRunner.startSession(prompt, callbacks)
         : await claudeRunner.resumeSession(session.sessionId, prompt, callbacks);
-      if (result.sessionId) chatSessions.setSessionId(project, result.sessionId);
-      chatSessions.appendMessage(project, 'assistant', result.resultText);
+      if (result.sessionId) chatSessions.setSessionId(project, userKey, result.sessionId);
+      chatSessions.appendMessage(project, userKey, 'assistant', result.resultText);
       wsSend(ws, { type: 'result', project, text: result.resultText, isError: result.isError });
     } catch (err) {
       wsSend(ws, {
@@ -259,18 +278,20 @@ wss.on('connection', (ws) => {
         error: err.cancelled ? '중단되었습니다.' : `실행 오류: ${err.message}`,
       });
     } finally {
-      activeRuns.delete(project);
+      activeRuns.delete(rk);
     }
   });
 });
 
 app.get('/api/:project/chat/history', (req, res) => {
-  const session = chatSessions.get(req.params.project);
+  const token = auth.getCookie(req.headers.cookie, SESSION_COOKIE);
+  const session = chatSessions.get(req.params.project, token);
   res.json({ messages: session ? session.messages : [] });
 });
 
 app.post('/api/:project/chat/reset', (req, res) => {
-  chatSessions.reset(req.params.project);
+  const token = auth.getCookie(req.headers.cookie, SESSION_COOKIE);
+  chatSessions.reset(req.params.project, token);
   res.json({ ok: true });
 });
 
@@ -301,5 +322,9 @@ httpServer.listen(PORT, '0.0.0.0', () => {
   if (usesHttps) {
     console.log(`  (자체서명 인증서라 브라우저에 보안 경고가 뜹니다 — "고급" → "계속 진행"을 눌러 접속하면 됩니다)`);
   }
-  console.log(`공유 비밀번호: ${auth.PASSWORD}  (dashboard/.dashboard-password에 저장됨, .env로 DASHBOARD_PASSWORD 지정 시 그 값 사용)`);
+  // [수정 2026-08-27] 비밀번호를 평문으로 콘솔에 출력하지 않음 — Windows 작업 스케줄러(S4U)로
+  // 상시 구동될 때 이 로그가 dashboard/logs/out.log에 그대로 누적되어, 로그 파일에 접근 가능한
+  // 누구나 공유 비밀번호를 그대로 읽을 수 있었음. 파일 경로만 안내하고 실제 값은 그 파일을 직접
+  // 열어 확인하도록 함(dashboard/.dashboard-password는 .gitignore 대상이라 파일 자체는 안전).
+  console.log(`공유 비밀번호: dashboard/.dashboard-password 파일에서 확인하세요 (.env로 DASHBOARD_PASSWORD 지정 시 그 값 사용).`);
 });

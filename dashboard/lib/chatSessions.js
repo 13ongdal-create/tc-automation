@@ -2,31 +2,42 @@
 // 서버 재시작 시 초기화됩니다 — 로컬 1인 대시보드 특성상 영속화는 하지 않습니다(§ zero-token 편집과
 // 달리 이건 Claude 세션 자체가 상태를 들고 있으므로, 서버가 죽으면 어차피 --resume으로 이어갈 대상도
 // 함께 사라진 것으로 취급).
-const sessions = new Map(); // project -> { sessionId, messages: [{role, text, at}] }
+//
+// [수정 2026-08-27] 키를 project 단독에서 `${project}::${userKey}`로 변경 — 공유 비밀번호로 여러
+// 사람이 동시에 같은 대시보드에 접속할 수 있게 된 뒤(외부망 접근 검토 과정에서 지적됨), project만으로
+// 키를 잡으면 같은 프로젝트를 보는 서로 다른 로그인 세션이 동일한 Claude 대화(--resume 대상)와
+// 메시지 이력을 공유해버리는 문제가 있었음. userKey는 로그인 세션 토큰(auth.js의 qa_session 쿠키
+// 값)을 그대로 사용 — 이미 로그인마다 고유하게 발급되므로 별도 사용자 식별 체계를 새로 만들 필요가 없음.
+const sessions = new Map(); // "project::userKey" -> { sessionId, messages: [{role, text, at}] }
 
-function get(project) {
-  return sessions.get(project) || null;
+function key(project, userKey) {
+  return `${project}::${userKey || 'anonymous'}`;
 }
 
-function ensure(project) {
-  if (!sessions.has(project)) {
-    sessions.set(project, { sessionId: null, messages: [] });
+function get(project, userKey) {
+  return sessions.get(key(project, userKey)) || null;
+}
+
+function ensure(project, userKey) {
+  const k = key(project, userKey);
+  if (!sessions.has(k)) {
+    sessions.set(k, { sessionId: null, messages: [] });
   }
-  return sessions.get(project);
+  return sessions.get(k);
 }
 
-function reset(project) {
-  sessions.delete(project);
+function reset(project, userKey) {
+  sessions.delete(key(project, userKey));
 }
 
-function appendMessage(project, role, text) {
-  const s = ensure(project);
+function appendMessage(project, userKey, role, text) {
+  const s = ensure(project, userKey);
   s.messages.push({ role, text, at: new Date().toISOString() });
   return s;
 }
 
-function setSessionId(project, sessionId) {
-  const s = ensure(project);
+function setSessionId(project, userKey, sessionId) {
+  const s = ensure(project, userKey);
   s.sessionId = sessionId;
 }
 
