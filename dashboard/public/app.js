@@ -268,7 +268,7 @@ function renderSnapshotTable(project, snapshots) {
       <td>${s.execRate}%</td>
       <td>${s.passRate}%</td>
       <td>${s.failRate}%</td>
-      <td><a href="/files/${encodeURIComponent(project)}/results/${encodeURIComponent(s.htmlFile)}" target="_blank" rel="noopener">열기 →</a></td>
+      <td><a href="/project-files/${encodeURIComponent(project)}/TC/results/${encodeURIComponent(s.htmlFile)}" target="_blank" rel="noopener">열기 →</a></td>
     </tr>`
     )
     .join('');
@@ -544,11 +544,11 @@ function renderSiteAnalysis(project, meta, viewerFile) {
   const links = [];
   if (meta.url) links.push(siteLinkCard(esc(meta.url), 'site-link-primary', '🔗', '테스트사이트 바로가기'));
   if (meta.hasPrd) {
-    const prdUrl = `/analysis/${encodeURIComponent(project)}/${encodeURIComponent(meta.prdFile)}`;
+    const prdUrl = `/project-files/${encodeURIComponent(project)}/Analysis/${encodeURIComponent(meta.prdFile)}`;
     links.push(siteLinkCard(prdUrl, 'site-link-teal', '📄', 'PRD (사이트분석 &amp; TC계획)'));
   }
   if (viewerFile) {
-    const viewerUrl = `/files/${encodeURIComponent(project)}/${encodeURIComponent(viewerFile)}`;
+    const viewerUrl = `/project-files/${encodeURIComponent(project)}/TC/${encodeURIComponent(viewerFile)}`;
     links.push(siteLinkCard(viewerUrl, 'site-link-indigo', '🗂', '테스트 계정 매트릭스 · User Flow Map', 'TC 뷰어 헤더의 해당 버튼에서 확인할 수 있습니다'));
   }
   const linksHtml = links.length ? `<div class="site-links-row">${links.join('')}</div>` : '';
@@ -596,11 +596,13 @@ async function loadKpi(project) {
   el.tcChangeHistoryBody.innerHTML = renderTcChangeHistory(tcChangeHistory);
 
   if (viewerFile) {
-    const url = `/files/${encodeURIComponent(project)}/${encodeURIComponent(viewerFile)}`;
+    const url = `/project-files/${encodeURIComponent(project)}/TC/${encodeURIComponent(viewerFile)}`;
     el.tcManageBody.innerHTML = `<span class="placeholder-text">TC 뷰어: ${esc(viewerFile)}</span>`;
     el.tcDetailLink.href = url;
     el.tcDetailLink.hidden = false;
-    el.defectDetailLink.href = url;
+    // 결함목록은 같은 뷰어의 "🐞 결함현황" 탭이므로, 해시로 그 탭이 자동 선택되게 함
+    // (뷰어 쪽에 탭 자동 선택 스크립트가 있어야 동작 — AGENTS.md 20-6항, 2026-08-27 추가)
+    el.defectDetailLink.href = `${url}#결함현황`;
     el.defectDetailLink.hidden = false;
   } else {
     el.tcManageBody.innerHTML = '<span class="placeholder-text">아직 생성된 TC 뷰어가 없습니다</span>';
@@ -656,7 +658,7 @@ async function loadResults(project) {
         <span class="r-date">${esc(s.dateFmt)}</span>
         <span class="r-stats">전체 ${s.total} · 수행 ${s.executed} · Pass ${s.pass} · Fail ${s.fail} · 수행율 ${s.execRate}%</span>
       </div>
-      <a href="/files/${encodeURIComponent(s.project)}/results/${encodeURIComponent(s.htmlFile)}" target="_blank" rel="noopener">열기 →</a>
+      <a href="/project-files/${encodeURIComponent(s.project)}/TC/results/${encodeURIComponent(s.htmlFile)}" target="_blank" rel="noopener">열기 →</a>
     </div>`
     )
     .join('');
