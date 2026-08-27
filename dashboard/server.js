@@ -153,6 +153,7 @@ app.get('/api/:project/kpi', (req, res) => {
     results: resultSummary,
     viewerFile: tcStore.findFullViewer(project),
     tcChangeHistory: tcStore.getChangeHistory(project),
+    tcPriorityByModule: tcStore.getPriorityByModule(project),
   });
 });
 

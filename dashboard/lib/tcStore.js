@@ -34,12 +34,8 @@ function escapeRegex(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-/**
- * 모든 모듈 캐노니컬 TC 파일(*_TC_전체.json 제외)의 meta.changeHistory를 모아
- * 날짜(최신순) 기준으로 합친 변경 이력을 반환합니다 (AGENTS.md 10항 "세 겹 이력 관리" 중
- * meta.changeHistory를 대시보드에 노출).
- */
-function getChangeHistory(project) {
+/** 프로젝트의 모듈별 캐노니컬 TC 파일({project}_TC_{모듈코드}.json, _전체 제외) 목록을 읽어 반환 */
+function readModuleFiles(project) {
   const dir = tcDir(project);
   const re = new RegExp(`^${escapeRegex(project)}_TC_([A-Z]+)\\.json$`);
   let files;
@@ -48,25 +44,48 @@ function getChangeHistory(project) {
   } catch {
     return [];
   }
-
-  const entries = [];
+  const out = [];
   for (const file of files) {
-    const m = file.match(re);
-    const moduleCode = m[1];
+    const moduleCode = file.match(re)[1];
     let data;
     try {
       data = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
     } catch {
       continue;
     }
-    const moduleName = data.meta?.moduleName || moduleCode;
+    out.push({ moduleCode, moduleName: data.meta?.moduleName || moduleCode, data });
+  }
+  return out;
+}
+
+/**
+ * 모든 모듈 캐노니컬 TC 파일의 meta.changeHistory를 모아 날짜(최신순) 기준으로 합친
+ * 변경 이력을 반환합니다 (AGENTS.md 10항 "세 겹 이력 관리" 중 meta.changeHistory를 대시보드에 노출).
+ */
+function getChangeHistory(project) {
+  const entries = [];
+  for (const { moduleCode, moduleName, data } of readModuleFiles(project)) {
     for (const h of data.meta?.changeHistory || []) {
       entries.push({ moduleCode, moduleName, version: h.version, date: h.date, summary: h.summary });
     }
   }
-
   entries.sort((a, b) => (b.date || '').localeCompare(a.date || '') || b.version - a.version);
   return entries;
 }
 
-module.exports = { findFullViewer, getChangeHistory };
+/** 모듈별 TC 우선순위(P1/P2/P3) 분포 — 결함이 아니라 TC 항목 자체의 priority 필드 기준 */
+function getPriorityByModule(project) {
+  const result = [];
+  for (const { moduleCode, moduleName, data } of readModuleFiles(project)) {
+    const items = data.items || [];
+    const counts = { P1: 0, P2: 0, P3: 0 };
+    for (const item of items) {
+      if (counts[item.priority] !== undefined) counts[item.priority] += 1;
+    }
+    result.push({ moduleCode, moduleName, total: items.length, ...counts });
+  }
+  result.sort((a, b) => a.moduleCode.localeCompare(b.moduleCode));
+  return result;
+}
+
+module.exports = { findFullViewer, getChangeHistory, getPriorityByModule };

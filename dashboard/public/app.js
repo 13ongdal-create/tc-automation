@@ -33,9 +33,10 @@ const el = {
   detailModuleExecTable: document.getElementById('detailModuleExecTable'),
   tcManageBody: document.getElementById('tcManageBody'),
   tcDetailLink: document.getElementById('tcDetailLink'),
-  tcChangeHistoryBody: document.getElementById('tcChangeHistoryBody'),
+  tcPriorityBody: document.getElementById('tcPriorityBody'),
   defectDetailLink: document.getElementById('defectDetailLink'),
   defectTableBody: document.getElementById('defectTableBody'),
+  defectListMore: document.getElementById('defectListMore'),
   resultsList: document.getElementById('resultsList'),
   chatStatus: document.getElementById('chatStatus'),
   chatMessages: document.getElementById('chatMessages'),
@@ -51,6 +52,45 @@ let allProjects = [];
 function esc(s) {
   return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+
+// ── 프로젝트 상세 화면의 리스트 페이지네이션 — 기본 10개, [더보기] 클릭 시 10개씩 추가 노출 ──
+// (2026-08-27 사용자 요청: 프로젝트 상세의 모든 리스트에 공통 적용)
+const PAGE_SIZE = 10;
+const listRegistry = {}; // key -> { items, buildRowsHtml, rowsEl, moreEl }
+const listShown = {}; // key -> 현재 노출 개수
+
+/** rowsEl과 moreEl이 같으면 표/더보기 버튼을 한 innerHTML로, 다르면(예: <tbody>) 따로 렌더링 */
+function registerPaginatedList(key, items, buildRowsHtml, rowsEl, moreEl) {
+  listRegistry[key] = { items, buildRowsHtml, rowsEl, moreEl: moreEl || rowsEl };
+  listShown[key] = PAGE_SIZE; // loadAll 때마다 다시 등록되므로 프로젝트를 바꾸면 항상 처음 10개로 리셋
+  renderPaginatedList(key);
+}
+
+function renderPaginatedList(key) {
+  const entry = listRegistry[key];
+  if (!entry) return;
+  const shown = Math.min(listShown[key], entry.items.length);
+  const visible = entry.items.slice(0, shown);
+  const remaining = entry.items.length - shown;
+  const moreHtml =
+    remaining > 0
+      ? `<div class="list-more-row"><button type="button" class="btn btn-outline btn-sm list-more-btn" data-key="${esc(key)}">더보기 (${remaining}건 더)</button></div>`
+      : '';
+  if (entry.rowsEl === entry.moreEl) {
+    entry.rowsEl.innerHTML = entry.buildRowsHtml(visible) + moreHtml;
+  } else {
+    entry.rowsEl.innerHTML = entry.buildRowsHtml(visible);
+    entry.moreEl.innerHTML = moreHtml;
+  }
+}
+
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.list-more-btn');
+  if (!btn) return;
+  const key = btn.dataset.key;
+  listShown[key] = (listShown[key] || PAGE_SIZE) + PAGE_SIZE;
+  renderPaginatedList(key);
+});
 
 async function loadProjects() {
   const res = await fetch('/api/projects');
@@ -556,24 +596,24 @@ function renderSiteAnalysis(project, meta, viewerFile) {
   return metaHtml + linksHtml;
 }
 
-/** 📋 TC 관리 하단 — 모든 모듈 캐노니컬 파일의 meta.changeHistory를 모아 최신순으로 표시 (AGENTS.md 10항) */
-function renderTcChangeHistory(history) {
-  if (!history || !history.length) return '<div class="empty-row">변경 이력이 없습니다</div>';
-  const rowsHtml = history
-    .map(
-      (h) => `
+function priorityRowHtml(m) {
+  return `
     <tr>
-      <td>${esc(h.date || '')}</td>
-      <td class="pb-module-name" style="text-align:left">${esc(h.moduleName)}</td>
-      <td class="center">v${h.version}</td>
-      <td style="text-align:left">${esc(h.summary || '')}</td>
-    </tr>`
-    )
-    .join('');
+      <td class="pb-module-name">${esc(m.moduleName)}</td>
+      <td>${m.total}</td>
+      <td>${m.P1}</td>
+      <td>${m.P2}</td>
+      <td>${m.P3}</td>
+    </tr>`;
+}
+
+/** 📋 TC 관리 하단 — 모듈별 TC 우선순위(P1/P2/P3) 분포 (변경 이력은 별도 페이지로 분리) */
+function renderTcPriorityTable(byModule) {
+  if (!byModule || !byModule.length) return '<div class="empty-row">등록된 TC가 없습니다</div>';
   return `
     <table class="pb-module-table">
-      <thead><tr><th style="width:11%">날짜</th><th style="width:14%">모듈</th><th style="width:7%">버전</th><th>변경 요약</th></tr></thead>
-      <tbody>${rowsHtml}</tbody>
+      <thead><tr><th>모듈</th><th>전체</th><th>P1</th><th>P2</th><th>P3</th></tr></thead>
+      <tbody>${byModule.map(priorityRowHtml).join('')}</tbody>
     </table>`;
 }
 
@@ -583,7 +623,7 @@ async function loadKpi(project) {
     fetch(`/api/${encodeURIComponent(project)}/meta`),
   ]);
   if (!kpiRes.ok) return;
-  const { defects, results, viewerFile, tcChangeHistory } = await kpiRes.json();
+  const { defects, results, viewerFile, tcPriorityByModule } = await kpiRes.json();
   const meta = metaRes.ok ? await metaRes.json() : null;
   el.kpiTotalDefects.textContent = defects.total;
   el.kpiNewDefects.textContent = defects.counts['신규'] || 0;
@@ -592,12 +632,13 @@ async function loadKpi(project) {
   el.kpiExecRate.textContent = results.total ? Math.round((results.executed / results.total) * 100) + '%' : '–';
 
   el.siteAnalysisBody.innerHTML = renderSiteAnalysis(project, meta, viewerFile);
-  el.detailModuleExecTable.innerHTML = renderModuleExecTable(results.byModule);
-  el.tcChangeHistoryBody.innerHTML = renderTcChangeHistory(tcChangeHistory);
+  registerPaginatedList('moduleExec', results.byModule || [], (items) => renderModuleExecTable(items), el.detailModuleExecTable);
+  registerPaginatedList('tcPriority', tcPriorityByModule || [], (items) => renderTcPriorityTable(items), el.tcPriorityBody);
 
   if (viewerFile) {
     const url = `/project-files/${encodeURIComponent(project)}/TC/${encodeURIComponent(viewerFile)}`;
-    el.tcManageBody.innerHTML = `<span class="placeholder-text">TC 뷰어: ${esc(viewerFile)}</span>`;
+    const historyUrl = `/tc-history.html?project=${encodeURIComponent(project)}`;
+    el.tcManageBody.innerHTML = `<a href="${historyUrl}" class="project-block-link">Full TC 변경 이력 상세 →</a>`;
     el.tcDetailLink.href = url;
     el.tcDetailLink.hidden = false;
     // 결함목록은 같은 뷰어의 "🐞 결함현황" 탭이므로, 해시로 그 탭이 자동 선택되게 함
@@ -611,20 +652,8 @@ async function loadKpi(project) {
   }
 }
 
-async function loadDefects(project) {
-  const res = await fetch(`/api/${encodeURIComponent(project)}/defects`);
-  if (!res.ok) {
-    el.defectTableBody.innerHTML = '<tr><td colspan="7" class="empty-row">결함 데이터가 없습니다</td></tr>';
-    return;
-  }
-  const { defects } = await res.json();
-  if (!defects.length) {
-    el.defectTableBody.innerHTML = '<tr><td colspan="7" class="empty-row">등록된 결함이 없습니다</td></tr>';
-    return;
-  }
-  el.defectTableBody.innerHTML = defects
-    .map(
-      (d) => `
+function defectRowHtml(d) {
+  return `
     <tr data-id="${esc(d.defectId)}">
       <td>${esc(d.defectId)}</td>
       <td>${esc(d.module)}</td>
@@ -637,9 +666,44 @@ async function loadDefects(project) {
       <td><input class="assignee-input" data-field="assignee" value="${esc(d.assignee || '')}" placeholder="미지정"></td>
       <td>${esc(d.summary)}</td>
       <td>${esc(d.detectedAt || '')}</td>
-    </tr>`
-    )
-    .join('');
+    </tr>`;
+}
+
+async function loadDefects(project) {
+  const res = await fetch(`/api/${encodeURIComponent(project)}/defects`);
+  if (!res.ok) {
+    el.defectTableBody.innerHTML = '<tr><td colspan="7" class="empty-row">결함 데이터가 없습니다</td></tr>';
+    el.defectListMore.innerHTML = '';
+    return;
+  }
+  const { defects } = await res.json();
+  if (!defects.length) {
+    el.defectTableBody.innerHTML = '<tr><td colspan="7" class="empty-row">등록된 결함이 없습니다</td></tr>';
+    el.defectListMore.innerHTML = '';
+    return;
+  }
+  // 최신순(발견일 내림차순) 정렬 후 페이지네이션 — <tbody> 안에는 <tr>만 들어갈 수 있어
+  // "더보기" 버튼은 테이블 밖 별도 컨테이너(defectListMore)에 렌더링
+  const sorted = defects.slice().sort((a, b) => (b.detectedAt || '').localeCompare(a.detectedAt || ''));
+  registerPaginatedList(
+    'defects',
+    sorted,
+    (items) => items.map(defectRowHtml).join(''),
+    el.defectTableBody,
+    el.defectListMore
+  );
+}
+
+function resultItemHtml(s) {
+  return `
+    <div class="result-item">
+      <div class="r-main">
+        <span class="r-mod">${esc(s.moduleName)} (${esc(s.moduleCode)})</span>
+        <span class="r-date">${esc(s.dateFmt)}</span>
+        <span class="r-stats">전체 ${s.total} · 수행 ${s.executed} · Pass ${s.pass} · Fail ${s.fail} · 수행율 ${s.execRate}%</span>
+      </div>
+      <a href="/project-files/${encodeURIComponent(s.project)}/TC/results/${encodeURIComponent(s.htmlFile)}" target="_blank" rel="noopener">열기 →</a>
+    </div>`;
 }
 
 async function loadResults(project) {
@@ -649,19 +713,8 @@ async function loadResults(project) {
     el.resultsList.innerHTML = '<div class="empty-row">저장된 실행 이력이 없습니다</div>';
     return;
   }
-  el.resultsList.innerHTML = snapshots
-    .map(
-      (s) => `
-    <div class="result-item">
-      <div class="r-main">
-        <span class="r-mod">${esc(s.moduleName)} (${esc(s.moduleCode)})</span>
-        <span class="r-date">${esc(s.dateFmt)}</span>
-        <span class="r-stats">전체 ${s.total} · 수행 ${s.executed} · Pass ${s.pass} · Fail ${s.fail} · 수행율 ${s.execRate}%</span>
-      </div>
-      <a href="/project-files/${encodeURIComponent(s.project)}/TC/results/${encodeURIComponent(s.htmlFile)}" target="_blank" rel="noopener">열기 →</a>
-    </div>`
-    )
-    .join('');
+  // resultsStore가 이미 날짜 내림차순(최신순)으로 정렬해서 내려줌
+  registerPaginatedList('results', snapshots, (items) => items.map(resultItemHtml).join(''), el.resultsList);
 }
 
 async function saveDefectField(defectId, field, value, inputEl) {

@@ -103,9 +103,9 @@ select{
 .kpi-accent-bad{border-top-color:var(--bad);}
 .kpi-accent-bad .kpi-num{color:var(--bad);}
 
-/* 패널 그리드 */
+/* 패널 그리드 — 다른 .panel-full 섹션들과 동일한 위 여백(18px)으로 통일(2026-08-27) */
 .panel-grid{
-  display:grid;grid-template-columns:1.6fr 1fr;gap:18px;
+  display:grid;grid-template-columns:1.6fr 1fr;gap:18px;margin-top:18px;
 }
 .panel{
   background:#fff;border:1px solid var(--divider);border-radius:var(--radius);
@@ -312,6 +312,9 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 .site-link-teal .site-link-icon{background:var(--accent2);}
 .site-link-indigo .site-link-icon{background:var(--accent3);}
 .pb-module-name{font-weight:700;color:var(--text-dark);}
+
+/* 프로젝트 상세 리스트 페이지네이션 [더보기] 버튼 */
+.list-more-row{display:flex;justify-content:center;padding:12px 0 2px;}
 
 /* 모달 (새 프로젝트 등) */
 .modal-overlay{
