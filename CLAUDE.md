@@ -124,8 +124,13 @@ dependency) — do not conflate this with "resuming the Slack bot." Check/modify
 ## Key conventions (detail in AGENTS.md)
 
 - TC IDs: `TC_{모듈코드}_{3자리숫자}` (module codes: PD, MB, CO, PR, OP, CS, MY, etc. — AGENTS.md/SKILL.md §5).
-- Result values: `Pass / Fail / Blocked / N/A / N/T` — `N/T` means blocked by an already-known defect, not
-  a failure of the TC itself (AGENTS.md §20-7).
+<!-- [수정 전 2026-08-27] "Result values: `Pass / Fail / Blocked / N/A / N/T` — `N/T` means blocked by an
+already-known defect, not a failure of the TC itself (AGENTS.md §20-7)." Blocked retired 2026-08-27 —
+its definition overlapped with N/A closely enough to cause confusion, so it was folded into N/A
+(AGENTS.md §10 "실행결과 값 정의" table has full definitions). No project data ever used "Blocked",
+so no data migration was needed. -->
+- Result values: `Pass / Fail / N/A / N/T` — full definitions in AGENTS.md §10 ("실행결과 값 정의"); `N/T`
+  means blocked by an already-known defect, not a failure of the TC itself (AGENTS.md §20-7).
 - Every canonical TC/JSON file bump: copy the pre-edit version to `legacy/` first, then increment
   `meta.version` and append to `meta.changeHistory` — never overwrite history in place.
 - `git add` must be scoped to one project/tool path at a time (`git add "project/데모사이트"`, `git add dashboard`,
