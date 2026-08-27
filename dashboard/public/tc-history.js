@@ -25,9 +25,9 @@ function renderRows() {
       (h) => `
     <tr>
       <td>${esc(h.date || '')}</td>
-      <td class="pb-module-name" style="text-align:left">${esc(h.moduleName)}</td>
-      <td class="center">v${h.version}</td>
-      <td style="text-align:left">${esc(h.summary || '')}</td>
+      <td class="pb-module-name">${esc(h.moduleName)}</td>
+      <td>v${h.version}</td>
+      <td>${esc(h.summary || '')}</td>
     </tr>`
     )
     .join('');

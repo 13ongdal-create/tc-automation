@@ -134,6 +134,12 @@ th,td{padding:9px 8px;border-bottom:1px solid var(--divider);text-align:left;ver
 th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:uppercase;letter-spacing:0.02em;}
 .empty-row{padding:24px;text-align:center;color:var(--text-secondary);}
 
+/* [추가 2026-08-27] 사이트 전체 리스트형 표 정렬 공통 규칙(위 .pb-module-table 참조)을
+   결함 테이블에도 동일 적용: 헤더=가운데, 모듈=왼쪽, 그 외 데이터=가운데(%열 없음) */
+#defectTable th{text-align:center;}
+#defectTable td{text-align:center;}
+#defectTable td.pb-module-name{text-align:left;}
+
 .sev-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;}
 .sev-P1{background:var(--bad-bg);color:var(--bad);}
 .sev-P2{background:var(--warn-bg);color:var(--warn);}
@@ -210,6 +216,10 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 .pb-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
 .pb-table-row{margin-top:16px;}
 .pb-chart-card{background:var(--bg-light);border-radius:8px;padding:14px 16px;}
+
+/* 📋 TC 관리 — 모듈별 우선순위 표 왼쪽 도넛 + 표, 하단 우측 변경이력 링크 (2026-08-27 추가) */
+.tc-priority-layout{display:grid;grid-template-columns:minmax(220px,300px) 1fr;gap:16px;align-items:start;}
+.tc-history-link-row{display:flex;justify-content:flex-end;margin-top:14px;}
 .pb-chart-card-wide{display:flex;flex-direction:column;}
 .pb-chart-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 10px;margin-bottom:10px;}
 
@@ -262,12 +272,15 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 .exec-stat-row b.c-good{color:var(--good);}
 .exec-stat-row b.c-bad{color:var(--bad);}
 
-/* 도넛 아래 요약 표 (색상 범례 + 정확한 건수/비율) */
+/* 도넛 아래 요약 표 (색상 범례 + 정확한 건수/비율)
+   [추가 2026-08-27] 사이트 전체 리스트형 표 정렬 공통 규칙: 모듈/행 라벨=왼쪽, 헤더=가운데,
+   %수치=왼쪽, 그 외 데이터=가운데. 이 표는 헤더가 없고 라벨(ds-label) 열이 행을 식별하는
+   역할이라 왼쪽 정렬 유지, 건수(ds-count)는 "그 외 데이터"로 가운데, 비율(ds-pct)은 왼쪽. */
 .donut-summary-table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:12px;}
 .donut-summary-table td{padding:3px 0;}
 .donut-summary-table .ds-label{display:flex;align-items:center;gap:6px;color:var(--text-primary);}
-.donut-summary-table .ds-count{text-align:right;font-weight:700;color:var(--text-dark);font-variant-numeric:tabular-nums;width:15%;}
-.donut-summary-table .ds-pct{text-align:right;color:var(--text-secondary);font-variant-numeric:tabular-nums;width:18%;}
+.donut-summary-table .ds-count{text-align:center;font-weight:700;color:var(--text-dark);font-variant-numeric:tabular-nums;width:15%;}
+.donut-summary-table .ds-pct{text-align:left;color:var(--text-secondary);font-variant-numeric:tabular-nums;width:18%;}
 
 /* 날짜별 진척율 추이 (순수 SVG 라인/영역 차트) */
 .trend-svg{width:100%;height:110px;display:block;}
@@ -281,11 +294,15 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 .trend-single-dot{width:10px;height:10px;border-radius:50%;background:var(--primary);}
 .trend-single-label{font-size:12.5px;color:var(--text-secondary);font-variant-numeric:tabular-nums;}
 
-/* 모듈별 결함 상세 표 */
+/* 모듈별 결함 상세 표
+   [추가 2026-08-27] 사이트 전체 리스트형 표 정렬 공통 규칙: 모듈정보=왼쪽, 헤더=가운데,
+   %수치=왼쪽, 그 외 데이터=가운데. 열 위치(:first-child)가 아니라 의미(class)로 판정한다 —
+   실행 이력 표처럼 1열이 날짜이고 모듈이 2열인 경우도 정확히 맞아야 하기 때문. */
 .pb-module-table{width:100%;border-collapse:collapse;font-size:12px;}
-.pb-module-table th,.pb-module-table td{padding:6px 8px;border-bottom:1px solid var(--divider);text-align:right;}
+.pb-module-table th,.pb-module-table td{padding:6px 8px;border-bottom:1px solid var(--divider);text-align:center;}
 .pb-module-table th{color:var(--text-secondary);font-weight:500;font-size:10.5px;}
-.pb-module-table th:first-child,.pb-module-table td:first-child{text-align:left;}
+.pb-module-table td.pb-module-name{text-align:left;}
+.pb-module-table td.pb-pct{text-align:left;}
 
 /* 🔎 사이트 분석 패널 */
 .site-meta-table{border-collapse:collapse;font-size:13px;max-width:560px;}
@@ -344,4 +361,5 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
   .chat-msg{max-width:92%;}
   .pb-grid-2{grid-template-columns:1fr;}
   .pb-grid-3{grid-template-columns:1fr;}
+  .tc-priority-layout{grid-template-columns:1fr;}
 }

@@ -31,9 +31,10 @@ const el = {
   kpiExecRate: document.getElementById('kpiExecRate'),
   siteAnalysisBody: document.getElementById('siteAnalysisBody'),
   detailModuleExecTable: document.getElementById('detailModuleExecTable'),
-  tcManageBody: document.getElementById('tcManageBody'),
   tcDetailLink: document.getElementById('tcDetailLink'),
+  tcPriorityChart: document.getElementById('tcPriorityChart'),
   tcPriorityBody: document.getElementById('tcPriorityBody'),
+  tcHistoryLink: document.getElementById('tcHistoryLink'),
   defectDetailLink: document.getElementById('defectDetailLink'),
   defectTableBody: document.getElementById('defectTableBody'),
   defectListMore: document.getElementById('defectListMore'),
@@ -305,9 +306,9 @@ function renderSnapshotTable(project, snapshots) {
       <td>${s.na}</td>
       <td>${s.nt}</td>
       <td>${s.none}</td>
-      <td>${s.execRate}%</td>
-      <td>${s.passRate}%</td>
-      <td>${s.failRate}%</td>
+      <td class="pb-pct">${s.execRate}%</td>
+      <td class="pb-pct">${s.passRate}%</td>
+      <td class="pb-pct">${s.failRate}%</td>
       <td><a href="/project-files/${encodeURIComponent(project)}/TC/results/${encodeURIComponent(s.htmlFile)}" target="_blank" rel="noopener">열기 →</a></td>
     </tr>`
     )
@@ -330,13 +331,13 @@ function renderModuleExecTable(byModule) {
       <td class="pb-module-name">${esc(m.moduleName)}</td>
       <td>${m.total}</td>
       <td>${m.executed}</td>
-      <td>${m.execRate}%</td>
+      <td class="pb-pct">${m.execRate}%</td>
       <td>${m.pass}</td>
       <td>${m.fail}</td>
       <td>${m.na}</td>
       <td>${m.nt}</td>
-      <td>${m.passRate}%</td>
-      <td>${m.failRate}%</td>
+      <td class="pb-pct">${m.passRate}%</td>
+      <td class="pb-pct">${m.failRate}%</td>
     </tr>`
     )
     .join('');
@@ -607,6 +608,24 @@ function priorityRowHtml(m) {
     </tr>`;
 }
 
+/** 📋 TC 관리 — 모듈별 우선순위 표 왼쪽에 붙는 Full TC 전체 우선순위(P1/P2/P3) 분포 도넛
+ * (2026-08-27 추가) */
+function renderTcPriorityDonut(byModule) {
+  const totals = { P1: 0, P2: 0, P3: 0 };
+  (byModule || []).forEach((m) => {
+    totals.P1 += m.P1 || 0;
+    totals.P2 += m.P2 || 0;
+    totals.P3 += m.P3 || 0;
+  });
+  const total = totals.P1 + totals.P2 + totals.P3;
+  const segments = SEVERITY_ORDER.map((k) => ({ n: totals[k] || 0, color: SEVERITY_COLORS[k] }));
+  const centerHtml = `<span class="donut-total">${total}</span><span class="donut-total-label">전체 TC</span>`;
+  return `
+    <div class="pb-chart-head"><span class="pb-chart-title">Full TC 우선순위 분포</span></div>
+    <div class="pb-chart-body">${donutChart(segments, centerHtml, '등록된 TC 없음')}</div>
+    ${donutSummaryTable(SEVERITY_ORDER, SEVERITY_LABELS, SEVERITY_COLORS, totals)}`;
+}
+
 /** 📋 TC 관리 하단 — 모듈별 TC 우선순위(P1/P2/P3) 분포 (변경 이력은 별도 페이지로 분리) */
 function renderTcPriorityTable(byModule) {
   if (!byModule || !byModule.length) return '<div class="empty-row">등록된 TC가 없습니다</div>';
@@ -633,21 +652,23 @@ async function loadKpi(project) {
 
   el.siteAnalysisBody.innerHTML = renderSiteAnalysis(project, meta, viewerFile);
   registerPaginatedList('moduleExec', results.byModule || [], (items) => renderModuleExecTable(items), el.detailModuleExecTable);
+  el.tcPriorityChart.innerHTML = renderTcPriorityDonut(tcPriorityByModule);
   registerPaginatedList('tcPriority', tcPriorityByModule || [], (items) => renderTcPriorityTable(items), el.tcPriorityBody);
 
   if (viewerFile) {
     const url = `/project-files/${encodeURIComponent(project)}/TC/${encodeURIComponent(viewerFile)}`;
     const historyUrl = `/tc-history.html?project=${encodeURIComponent(project)}`;
-    el.tcManageBody.innerHTML = `<a href="${historyUrl}" class="project-block-link">Full TC 변경 이력 상세 →</a>`;
     el.tcDetailLink.href = url;
     el.tcDetailLink.hidden = false;
+    el.tcHistoryLink.href = historyUrl;
+    el.tcHistoryLink.hidden = false;
     // 결함목록은 같은 뷰어의 "🐞 결함현황" 탭이므로, 해시로 그 탭이 자동 선택되게 함
     // (뷰어 쪽에 탭 자동 선택 스크립트가 있어야 동작 — AGENTS.md 20-6항, 2026-08-27 추가)
     el.defectDetailLink.href = `${url}#결함현황`;
     el.defectDetailLink.hidden = false;
   } else {
-    el.tcManageBody.innerHTML = '<span class="placeholder-text">아직 생성된 TC 뷰어가 없습니다</span>';
     el.tcDetailLink.hidden = true;
+    el.tcHistoryLink.hidden = true;
     el.defectDetailLink.hidden = true;
   }
 }
@@ -656,7 +677,7 @@ function defectRowHtml(d) {
   return `
     <tr data-id="${esc(d.defectId)}">
       <td>${esc(d.defectId)}</td>
-      <td>${esc(d.module)}</td>
+      <td class="pb-module-name">${esc(d.module)}</td>
       <td><span class="sev-badge sev-${esc(d.severity)}">${esc(d.severity)}</span></td>
       <td>
         <select class="status-select" data-field="status">
