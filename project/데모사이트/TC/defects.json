@@ -518,7 +518,7 @@
     "tcId": "TC_MB_002",
     "module": "회원",
     "severity": "P2",
-    "status": "완료",
+    "status": "재발생",
     "summary": "회원 > 회원가입(/register) 화면 진입 시 /privacy 경로 프리페치 404 발생",
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
     "testSteps": "1) /register 진입 2) 개발자도구 Network 탭에서 프리페치 요청 확인",
@@ -529,7 +529,7 @@
     "screenshot": "TC/defects/DEF_데모사이트_019.png",
     "consoleLog": "TC/defects/DEF_데모사이트_019.console.json",
     "assignee": "",
-    "issueLink": "미재현 (2026-08-27 재확인)",
+    "issueLink": "간헐적 재현 확인 — 2026-08-27 수동 재확인 3회는 성공(미재현)했으나, 같은 날 MB 모듈 자동화 재실행(register 관련 19건)에서는 19/19 전부 /privacy 404 재현. 완료 처리 취소.",
     "history": [
       {
         "at": "2026-08-24",
@@ -545,6 +545,11 @@
         "at": "2026-08-27",
         "status": "완료",
         "note": "2026-08-27 재확인에서 3회 연속 미재현되어 완료 처리. 관련 N/T TC 재실행 시 실제 Pass/Fail 재확정 필요(20-7항)."
+      },
+      {
+        "at": "2026-08-27",
+        "status": "재발생",
+        "note": "MB 모듈 N/T TC 19건(TC_MB_002~026 회원가입 플로우) 재실행 결과 /privacy?_rsc=... 404가 19/19 전부 재현. 같은 날 앞선 수동 재확인(headed, 3회 연속 미재현)과 정반대 — 완료 처리를 재발생으로 되돌림. DEF_011과 마찬가지로 간헐적(intermittent) 결함으로 재확인, 근본 원인 미해결 상태로 판단. 단일 페이지 재접속(수동 확인)과 전체 스위트 순차 실행(자동화) 간 재현율 차이 원인은 불명 — 후속 조사 필요."
       }
     ]
   },

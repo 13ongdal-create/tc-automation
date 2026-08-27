@@ -87,39 +87,37 @@
       <thead><tr><th>상태</th><th>P1</th><th>P2</th><th>P3</th><th>합계</th></tr></thead>
       <tbody>
         <tr><td>신규</td><td>3</td><td>10</td><td>6</td><td><b>19</b></td></tr>
-        <tr><td>완료</td><td>3</td><td>1</td><td>0</td><td><b>4</b></td></tr>
+        <tr><td>완료(오탐 종결)</td><td>2</td><td>0</td><td>0</td><td><b>2</b></td></tr>
+        <tr><td class="warn-row">재발생</td><td>1</td><td>1</td><td>0</td><td class="warn-row"><b>2</b></td></tr>
         <tr style="font-weight:700;"><td>합계</td><td>6</td><td>11</td><td>6</td><td>23</td></tr>
       </tbody>
     </table>
-    <div class="footnote">완료 4건 중 DEF_008/009는 조사 오류로 판명된 오탐 종결, DEF_011/019는 2026-08-27 재확인 결과 3회 연속 미재현되어 완료 처리(비고: "미재현 (2026-08-27 재확인)") — 관련 N/T TC 재실행으로 실제 Pass/Fail 재확정이 아직 남아있습니다. 나머지 19건은 신규(미해결) 상태입니다.</div>
+    <div class="footnote">완료 2건(DEF_008/009)은 조사 오류로 판명된 오탐 종결. 재발생 2건(DEF_011/019)은 아래 "재현 여부 재확인" 항목 참조 — 한때 완료 처리했으나 자동화 재실행에서 다시 재현되어 되돌린 상태입니다. 나머지 19건은 신규(미해결).</div>
 
     <h3 style="font-size:13px;margin-top:16px;">🚧 사이트 전역 영향 구조적 결함 (다수 TC를 N/T로 묶는 핵심 원인)</h3>
     <table>
       <thead><tr><th>결함ID</th><th>심각도</th><th>상태</th><th>내용</th><th>영향 범위</th></tr></thead>
       <tbody>
-        <tr><td class="code-cell">DEF_011</td><td>P1</td><td><span class="pill new">완료</span></td><td>Admin 로그인 API가 브라우저 언어 ko-KR일 때 500 에러 — 2026-08-27 재확인 3회 연속 미재현되어 완료 처리</td><td>CO(BO) 30건, PD/MB/OP/PR의 Admin 연동 TC 다수 — 재실행 필요</td></tr>
+        <tr><td class="code-cell">DEF_011</td><td>P1</td><td class="warn-row"><b>재발생</b></td><td>Admin 로그인 API가 브라우저 언어 ko-KR일 때 500 에러 — 간헐적으로 재현 (아래 참조)</td><td>CO(BO) 30건, PD/MB/OP/PR의 Admin 연동 TC 다수</td></tr>
         <tr><td class="code-cell">DEF_007</td><td>P2</td><td>신규</td><td>메인배너·링크의 프로토콜 누락(www.naver.com 등)이 내부 경로로 오인되어 다수 화면에서 404</td><td>메인(`/`)을 거치는 사실상 모든 Front TC</td></tr>
         <tr><td class="code-cell">DEF_005 / DEF_006</td><td>P1</td><td>신규</td><td>/policy, /service 접근 시 404 (프리페치로도 다수 화면에서 유발)</td><td>고객센터 화면 + 여러 화면의 프리페치 경유</td></tr>
         <tr><td class="code-cell">DEF_018</td><td>P2</td><td>신규</td><td>/forgot-password 프리페치 404</td><td>로그인·회원가입·마이페이지 등 다수 화면</td></tr>
-        <tr><td class="code-cell">DEF_019</td><td>P2</td><td><span class="pill new">완료</span></td><td>/register 방문 시 /privacy 프리페치 404 — 2026-08-27 재확인 3회 연속 미재현되어 완료 처리</td><td>회원가입(register) 화면 경유 TC — 재실행 필요</td></tr>
+        <tr><td class="code-cell">DEF_019</td><td>P2</td><td class="warn-row"><b>재발생</b></td><td>/register 방문 시 /privacy 프리페치 404 — 간헐적으로 재현 (아래 참조)</td><td>회원가입(register) 화면 경유 TC</td></tr>
       </tbody>
     </table>
-    <div class="footnote">DEF_007/005/006/018(4건)은 여전히 열려있어, 이에 막혀 N/T로 처리된 TC들은 계속 재검증이 불가능합니다. DEF_011/019(2건)는 완료 처리되었으므로 관련 N/T TC를 재실행해 실제 Pass/Fail로 확정하는 작업이 남아있습니다.</div>
+    <div class="footnote">6개 결함 전부 현재 시점 기준 열려 있는 상태(신규 4 + 재발생 2)입니다. 이에 막혀 N/T로 처리된 TC들은 여전히 재검증이 불가능합니다.</div>
 
-    <h3 style="font-size:13px;margin-top:16px;">🔁 2026-08-27 재현 여부 재확인 결과 → 사용자 확인 후 2건 완료 처리</h3>
-    <div class="desc" style="margin-bottom:8px;">TC/자동화 코드 변경 없이 각 결함을 3회(또는 1~3회) 재접속해 현재 시점 재현 여부만 가볍게 확인한 결과입니다. 결과는 <code>defects.json</code>의 각 레코드 <code>history</code>에도 기록했습니다. DEF_011/019는 사용자 확인을 받아 <b>완료 처리</b>했습니다(비고: "미재현 (2026-08-27 재확인)").</div>
+    <h3 style="font-size:13px;margin-top:16px;">🔁 2026-08-27 재현 여부 재확인 결과 → 완료 처리했다가 재발생으로 정정</h3>
+    <div class="desc" style="margin-bottom:8px;">경위: ① 각 결함을 1~3회 가볍게 재접속해보니 DEF_011/019가 미재현되어 사용자 확인 후 <b>완료 처리</b> → ② 관련 N/T TC 88건(PD 13/MB 29/OP 7/CO 30/CS 3/PR 6)을 실제 자동화 스위트로 재실행하니 <b>DEF_011은 13/13(PD) + 7/7(OP) + 30/30(CO) + 3/3(CS) + 6/6(PR)=59/59, DEF_019는 19/19(MB)</b> 전부 다시 재현 → <b>완료 처리를 재발생으로 정정</b>했습니다. 두 결함 모두 단발성 접속에서는 우연히 피해가지만 실제 테스트 스위트 조건에서는 안정적으로 재현되는, 진짜 간헐적(intermittent) 서버 결함으로 재확인되었습니다.</div>
     <table>
-      <thead><tr><th>결함ID</th><th>재확인 결과</th><th>처리</th></tr></thead>
+      <thead><tr><th>결함ID</th><th>1차: 수동 재확인(1~3회)</th><th>2차: 자동화 88건 재실행</th><th>최종 처리</th></tr></thead>
       <tbody>
-        <tr><td class="code-cell">DEF_011</td><td class="warn-row"><b>미재현 (3/3)</b></td><td><span class="pill new">완료 처리</span> — Admin ko-KR 로그인 3회 연속 정상(200) 성공</td></tr>
-        <tr><td class="code-cell">DEF_019</td><td class="warn-row"><b>미재현 (3/3)</b></td><td><span class="pill new">완료 처리</span> — /register 방문 3회 연속 /privacy 404 없음</td></tr>
-        <tr><td class="code-cell">DEF_005</td><td>재현됨</td><td>변화 없음 (신규 유지)</td></tr>
-        <tr><td class="code-cell">DEF_006</td><td>재현됨</td><td>변화 없음 (신규 유지)</td></tr>
-        <tr><td class="code-cell">DEF_007</td><td>재현됨</td><td>변화 없음 (신규 유지)</td></tr>
-        <tr><td class="code-cell">DEF_018</td><td>재현됨</td><td>변화 없음 (신규 유지, 같은 확인에서 /policy, /service 404도 동시 관측)</td></tr>
+        <tr><td class="code-cell">DEF_011</td><td>미재현 (3/3)</td><td class="warn-row"><b>재현 (59/59 timeout)</b></td><td class="warn-row"><b>재발생으로 정정</b></td></tr>
+        <tr><td class="code-cell">DEF_019</td><td>미재현 (3/3)</td><td class="warn-row"><b>재현 (19/19)</b></td><td class="warn-row"><b>재발생으로 정정</b></td></tr>
+        <tr><td class="code-cell">DEF_005 / DEF_006 / DEF_007 / DEF_018</td><td>재현됨</td><td>-</td><td>변화 없음 (신규 유지)</td></tr>
       </tbody>
     </table>
-    <div class="footnote">DEF_011/019가 완료 처리됨에 따라, 이 결함에 막혀 N/T였던 CO(BO) 30건을 포함한 다수 TC를 재실행해 실제 Pass/Fail로 확정하는 작업이 남아있습니다 — 아직 재실행 전(Phase 5는 별도 요청 시에만 시작).</div>
+    <div class="footnote">재실행 대상 88건은 원래도 N/T였고 지금도 N/T이므로(20-7항, 아직 해결 안 된 결함에 막힌 상태) TC 캐노니컬 파일의 실행결과 값 자체는 변경하지 않았습니다 — 이번 재실행으로 바뀐 것은 defects.json의 두 결함 상태(완료→재발생)뿐입니다. <b>교훈</b>: 단발성 수동 확인만으로 결함 완료 처리를 결정하면 오판 위험이 있음 — 가능하면 실제 자동화 스위트 재실행으로 확정하는 것이 안전합니다.</div>
 
     <h3 style="font-size:13px;margin-top:16px;">✅ 자동화(Phase 5) 커버리지</h3>
     <div class="desc" style="margin-bottom:8px;">2026-08-24~25 자동화 백필(TC/automation/BACKFILL_ISSUES.md) 완료로 <b>7개 모듈 전량에 Playwright 스펙 파일 존재, 전체 283건이 최소 1회 이상 실행된 상태</b>(미실행 0건)입니다. 이전에는 캐노니컬 JSON에는 있으나 자동화 코드가 없어 한 번도 실행되지 못한 TC가 PD 45건/MB 38건/CO 20건/OP 13건/PR 1건(총 117건) 존재했으나 이번 백필로 해소되었습니다.</div>
@@ -136,12 +134,13 @@
       </tbody>
     </table>
 
-    <h3 style="font-size:13px;margin-top:16px;">➡️ 다음 단계 제안 (2026-08-27 갱신)</h3>
+    <h3 style="font-size:13px;margin-top:16px;">➡️ 다음 단계 제안 (2026-08-27 최종 갱신)</h3>
     <div class="footnote" style="font-size:12.5px;">
-      1) <s>DEF_011(Admin 로그인 ko-KR 500)</s> — 2026-08-27 재확인 결과 미재현, 완료 처리 완료. <b>→ 남은 작업: CO(BO) 30건을 포함한 관련 N/T TC 재실행</b>(사용자 요청 시 진행).<br>
-      2) DEF_005/006/007/018(4건, 여전히 신규)을 해결하면 사이트 전반 N/T의 상당 비중이 추가로 해소됨. <s>DEF_019</s>는 완료 처리됨.<br>
-      3) 완료 처리된 DEF_011/019 관련 N/T TC들을 재실행하여 실제 Pass/Fail로 갱신(AGENTS.md 20-7항 — 자동 전환 금지, 재실행 후 실결과 반영) — 사용자가 "테스트 실행해줘"로 명시 요청하면 진행.<br>
-      4) [확인필요] 항목(아래 섹션, 19건) 중 #3(가입 시 쿠폰 자동발급 정책)/#11(Admin↔Front 쿠폰함 미연동 사유)은 사용자 확인 결과 "모름"으로 [확인필요] 태그 유지.
+      1) DEF_011(Admin 로그인 ko-KR 500) — 자동화 88건 재실행에서 59/59 재현 확인, <b>재발생 상태로 여전히 해결 필요</b>. Admin 연동 TC 전량(CO(BO) 30건 포함)이 계속 이 결함에 막혀 있음.<br>
+      2) DEF_019(/register /privacy 프리페치 404) — MB 19/19 재현 확인, <b>재발생 상태로 여전히 해결 필요</b>.<br>
+      3) DEF_005/006/007/018(4건, 신규) — 이번 재확인 대상은 아니었으나 여전히 열려있는 상태로 파악됨.<br>
+      4) 총 6개 구조적 결함이 모두 열려 있어, 이번 재실행 대상이었던 88건을 포함해 N/T 173건 전체가 여전히 실제 Pass/Fail 미확정 상태 — 결함이 실제로 해결된 뒤에야 재실행 의미가 있음(이번 재실행처럼 결함이 안 고쳐진 채로는 재확인해도 결과가 바뀌지 않음).<br>
+      5) [확인필요] 항목(아래 섹션, 19건) 중 #3(가입 시 쿠폰 자동발급 정책)/#11(Admin↔Front 쿠폰함 미연동 사유)은 사용자 확인 결과 "모름"으로 [확인필요] 태그 유지.
     </div>
   </section>
 
