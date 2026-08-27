@@ -221,12 +221,12 @@ function renderExecCompletionCard(kpi) {
   ];
   const passPct = (r.pass / r.total) * 100;
   const failPct = (r.fail / r.total) * 100;
+  const centerHtml = `<span class="donut-total">${completeRate}%</span><span class="donut-total-label">완료</span>`;
   return `
     <div class="pb-chart-head">
       <span class="pb-chart-title">전체 TC 수행률 현황</span>
-      <span class="exec-complete-badge">${completeRate}% 완료</span>
     </div>
-    <div class="pb-chart-body">${donutChart(segments, '', '실행 이력 없음')}</div>
+    <div class="pb-chart-body">${donutChart(segments, centerHtml, '실행 이력 없음')}</div>
     <div class="exec-legend-row">
       <span class="exec-legend-item"><span class="legend-swatch" style="background:var(--good)"></span>Pass</span>
       <span class="exec-legend-item"><span class="legend-swatch" style="background:var(--bad)"></span>Fail</span>
