@@ -676,7 +676,7 @@ function applyLoadedTcItems(items) {
 }
 
 document.getElementById('btnJsonSave').onclick = async () => {
-  const out = { meta: { project: 'TOP ONLINE', module: 'DSP', moduleName: "전시(MD's PICK)", version: 1 }, items: TC_DATA };
+  const out = { meta: { project: 'TOP ONLINE', module: 'DSP', moduleName: '전시', version: 1 }, items: TC_DATA };
   const content = JSON.stringify(out, null, 2);
   if (tcFileHandle) {
     try { await writeToHandle(tcFileHandle, content); alert('저장 완료: ' + tcFileHandle.name); return; }
