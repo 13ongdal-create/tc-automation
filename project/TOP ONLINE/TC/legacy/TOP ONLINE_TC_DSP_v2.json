@@ -3,7 +3,7 @@
     "project": "TOP ONLINE",
     "module": "DSP",
     "moduleName": "전시",
-    "version": 3,
+    "version": 2,
     "changeHistory": [
       {
         "version": 1,
@@ -14,11 +14,6 @@
         "version": 2,
         "date": "2026-08-26",
         "summary": "module/화면명 필드 분리 정책 반영: meta.moduleName을 \"전시(MD's PICK)\"에서 \"전시\"로 정정, 전 항목에 screenName=\"MD's PICK\" 추가"
-      },
-      {
-        "version": 3,
-        "date": "2026-08-27",
-        "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
       }
     ]
   },
