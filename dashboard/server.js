@@ -59,8 +59,18 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/api/login', (req, res) => {
+  const ip = req.ip;
+  const limit = auth.checkLoginRateLimit(ip);
+  if (!limit.allowed) {
+    const retryMin = Math.ceil(limit.retryAfterMs / 60000);
+    return res.status(429).json({ error: `로그인 시도가 너무 많습니다. ${retryMin}분 후 다시 시도해주세요.` });
+  }
   const { password } = req.body || {};
-  if (!auth.verifyPassword(password)) return res.status(401).json({ error: '비밀번호가 올바르지 않습니다.' });
+  if (!auth.verifyPassword(password)) {
+    auth.recordLoginFailure(ip);
+    return res.status(401).json({ error: '비밀번호가 올바르지 않습니다.' });
+  }
+  auth.recordLoginSuccess(ip);
   const token = auth.createSession();
   res.cookie(SESSION_COOKIE, token, { httpOnly: true, sameSite: 'lax', maxAge: 7 * 24 * 60 * 60 * 1000 });
   res.json({ ok: true });

@@ -26,6 +26,40 @@ function verifyPassword(pw) {
   return typeof pw === 'string' && pw.length > 0 && pw === PASSWORD;
 }
 
+// 로그인 시도 제한(무차별 대입 방지) — 대시보드를 사내망 밖(재택/협력사, Tailscale 등)까지 열기로
+// 하면서 공유 비밀번호 1개만으로는 불충분해 최소한의 방어선으로 추가 (2026-08-27).
+const LOGIN_MAX_ATTEMPTS = 5;
+const LOGIN_WINDOW_MS = 15 * 60 * 1000; // 15분 안에
+const LOGIN_LOCKOUT_MS = 15 * 60 * 1000; // 15분 잠금
+const loginAttempts = new Map(); // ip -> { count, windowStart, lockedUntil }
+
+function checkLoginRateLimit(ip) {
+  const rec = loginAttempts.get(ip);
+  if (!rec) return { allowed: true };
+  const now = Date.now();
+  if (rec.lockedUntil && now < rec.lockedUntil) {
+    return { allowed: false, retryAfterMs: rec.lockedUntil - now };
+  }
+  return { allowed: true };
+}
+
+function recordLoginFailure(ip) {
+  const now = Date.now();
+  let rec = loginAttempts.get(ip);
+  if (!rec || now - rec.windowStart > LOGIN_WINDOW_MS) {
+    rec = { count: 0, windowStart: now, lockedUntil: 0 };
+  }
+  rec.count += 1;
+  if (rec.count >= LOGIN_MAX_ATTEMPTS) {
+    rec.lockedUntil = now + LOGIN_LOCKOUT_MS;
+  }
+  loginAttempts.set(ip, rec);
+}
+
+function recordLoginSuccess(ip) {
+  loginAttempts.delete(ip);
+}
+
 function createSession() {
   const token = crypto.randomBytes(24).toString('hex');
   sessions.set(token, Date.now() + SESSION_TTL_MS);
@@ -53,4 +87,7 @@ function getCookie(header, name) {
   return found ? decodeURIComponent(found.slice(name.length + 1)) : null;
 }
 
-module.exports = { PASSWORD, verifyPassword, createSession, isValidSession, destroySession, getCookie };
+module.exports = {
+  PASSWORD, verifyPassword, createSession, isValidSession, destroySession, getCookie,
+  checkLoginRateLimit, recordLoginFailure, recordLoginSuccess,
+};

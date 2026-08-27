@@ -84,14 +84,27 @@ claude --resume       # 여러 대화 중 고를 때
 
 ## 4. 다른 Claude 계정으로 작업 이관하기
 
-| 구성요소 | 계정에 종속? | 이관 방법 |
+**먼저 어떤 상황인지부터 구분하세요 — 결과가 완전히 다릅니다.**
+
+- **① 같은 PC에서 Claude Code 로그인 계정만 바꾸는 경우**: 아무것도 안 바뀝니다. 대시보드
+  (`qa-automation-dashboard`)와 일일 Notion 보고(`tc-automation-daily-report`)는 이 PC의 Windows
+  작업 스케줄러에 등록되어 있고 이 PC에 설치된 `claude` CLI를 그대로 실행하므로, 대화형 세션에
+  어떤 Claude 계정으로 로그인하는지와 무관하게 계속 똑같이 동작합니다.
+- **② 이 온보딩 문서만 들고 진짜 다른 환경(다른 PC 등)에서 새로 시작하는 경우**: 아래 표의
+  "예" 항목들은 자동으로 따라오지 않습니다 — 특히 **Windows 작업 스케줄러 등록 자체와 Notion
+  MCP 커넥터 인증**은 git으로 옮겨지지 않는 이 PC/이 계정 고유 상태라서, 대시보드 상시구동과
+  일일 보고를 그대로 재현하려면 아래 표의 방법대로 새 환경에서 직접 설정해야 합니다.
+
+| 구성요소 | 계정/PC에 종속? | 이관 방법 |
 |---|---|---|
 | AGENTS.md/SKILL.md, TC 데이터, 뷰어, 대시보드 코드 | 아니오 (git) | GitHub 저장소 `tc-automation`에 새 계정을 협업자로 추가 → `git clone` 후 그 폴더에서 Claude Code 실행 |
 | 대시보드 공유 비밀번호(`dashboard/.dashboard-password`) | 예 (이 PC 로컬, git 비대상) | 새 환경에서는 최초 실행 시 자동 재생성되거나, `DASHBOARD_PASSWORD` 환경변수로 직접 지정 |
 | 테스트 계정 정보(`project\{프로젝트명}\TC\testAccounts.json`) | 예 (git 비대상, 자격증명이라 의도적 제외) | 별도로 안전하게 전달 필요 — git에는 없음 |
 | 이 세션에서 쌓인 자동 메모리(피드백/선호도, `~/.claude/projects/.../memory/`) | 예 (이 PC·이 계정 로컬) | git에는 없음. **이 온보딩 문서 + AGENTS.md/SKILL.md가 그 역할을 대신합니다** — 중요한 결정/정책은 항상 이 문서들에 반영하고, 개인 메모리에만 남기지 않는 것이 원칙 |
 | 대화 이력 자체 | 예 (이 PC/이 계정 로컬) | 다른 계정에서 그대로 열 수 없음 — 다만 git + 이 문서만 있으면 이어가는 데 문제 없음 |
-| 노션 접근 권한 | 예 | 새 계정을 해당 노션 워크스페이스에 멤버로 초대 필요 (6번 참조) |
+| **Windows 작업 스케줄러 등록**(`qa-automation-dashboard`, `tc-automation-daily-report`) | **예 (이 PC의 OS 상태, git과 무관)** | git clone만으로는 안 따라옴 — 새 PC에서 `schtasks /create`로 직접 재등록 필요(대시보드는 3번, 일일 보고는 8번 참조) |
+| **일일 Notion 보고가 쓰는 `claude` CLI의 Notion MCP 커넥터 인증** | **예 (그 컴퓨터에 설치된 claude CLI 자체의 연동 설정, 파일/토큰 형태 아님)** | 새 계정이 (a) 대상 Notion 워크스페이스에 멤버로 초대되고 (b) 자기 Claude 설정에서 Notion 커넥터를 직접 연결해야 동일하게 동작(6번 참조) |
+| 노션 접근 권한(사람 대 노션 워크스페이스) | 예 | 새 계정을 해당 노션 워크스페이스에 멤버로 초대 필요 (6번 참조) |
 | 발행된 뷰어 Artifact 링크 | 예 (기본 비공개) | 공유 메뉴로 공개 전환, 또는 새 세션에서 로컬 HTML을 다시 발행(파일은 git에 있어 재발행 가능) |
 
 **핵심**: GitHub 저장소 접근 권한만 주면, AGENTS.md/SKILL.md가 규칙을 그대로 재현해주기 때문에 새
@@ -146,6 +159,17 @@ Slack 봇 자체(`@큐돌이` 대화형 응답)는 완전히 종료했습니다.
 `slack-bridge/src/dailyReportStandalone.js`가 Windows Scheduled Task(`tc-automation-daily-report`)로
 독립 실행됩니다** (Slack 의존성 없이 같은 Notion 동기화 로직만 재사용 — `@slack/bolt`/`app.start()` 관여
 없음). 이 스케줄 작업은 `Get-ScheduledTask -TaskName tc-automation-daily-report`로 확인/제어합니다.
+
+**이 스케줄 작업은 git으로 옮겨지지 않습니다** — 이 PC의 Windows 작업 스케줄러에만 등록된 OS 상태라서,
+저장소를 새 PC에 clone해도 자동으로 따라오지 않습니다(4번 표 참조). 새 환경에서 똑같이 매일 아침
+보고를 받으려면 그 PC의 작업 스케줄러(`taskschd.msc`)에서 직접 재등록해야 합니다:
+- **동작**: `node.exe` 실행, 인수 `src\dailyReportStandalone.js`, 시작 위치는 그 PC의 `slack-bridge\` 경로
+- **트리거**: 매주 반복, 월~금, 오전 10:00
+- **보안 옵션**: "사용자가 로그온했는지 여부에 관계없이 실행"(S4U) + "암호를 저장하지 않습니다" 체크
+  (대시보드와 동일한 이유 — 3번 참조)
+- 그리고 그 PC에 설치된 `claude` CLI가 대상 Notion 워크스페이스에 접근 가능해야 합니다(4번 표의
+  "Notion MCP 커넥터 인증" 참조) — 이게 안 되어 있으면 스케줄은 정상 실행되어도 Notion 갱신 단계에서
+  실패합니다.
 
 그 외 대화형 봇 인프라(`slack-bridge/src/index.js` 등)는 코드/자동시작 스크립트를 삭제하지 않고
 보존만 하고 있으며, 재사용하려면 `agents-config\AGENTS.md`의 과거 버전이나 git 이력을 참고하세요.
