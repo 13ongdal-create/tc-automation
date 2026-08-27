@@ -5,7 +5,9 @@ const fs = require('fs');
 const path = require('path');
 const claudeRunner = require('./claudeRunner');
 
-const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || 'D:/tc-automation';
+// [수정 2026-08-27] 하드코딩된 'D:/tc-automation' 대신 이 파일 위치(slack-bridge/src/) 기준
+// 상대 경로로 계산 — dashboard/lib의 동일 수정과 같은 이유(포터빌리티).
+const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || path.resolve(__dirname, '..', '..');
 const STATE_PATH = path.join(__dirname, '..', 'data', 'dailyReportState.json');
 const PENDING_PATH = path.join(__dirname, '..', 'data', 'dailyReportPending.txt');
 

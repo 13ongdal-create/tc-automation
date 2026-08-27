@@ -3,7 +3,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || 'D:/tc-automation';
+// [수정 2026-08-27] 기본값을 하드코딩된 'D:/tc-automation' 대신 이 파일 위치(dashboard/lib/)
+// 기준 상대 경로로 계산 — 저장소가 다른 드라이브/경로에 clone돼도(다른 PC, 다른 사용자 등)
+// TC_AUTOMATION_ROOT 환경변수 없이 자동으로 올바른 루트를 찾도록 개선(포터빌리티).
+const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || path.resolve(__dirname, '..', '..');
 // 프로젝트 폴더는 저장소 루트가 아니라 project/ 하위에 있음 (2026-08-25 디렉토리 구조 개편)
 const PROJECTS_ROOT = path.join(TC_AUTOMATION_ROOT, 'project');
 const STATUS_ORDER = ['신규', '처리중', '재검증대기', '완료', '보류', '재발생'];

@@ -1,9 +1,12 @@
 // claude CLI를 headless로 spawn해 stream-json 출력을 실시간 파싱하는 순수 로직.
 // slack-bridge/src/claudeRunner.js를 기반으로 대시보드용으로 이식 (2026-08-26, 큐돌이 사이트분석·TC생성 채팅 패널)
 const { spawn } = require('child_process');
+const path = require('path');
 
 const CLAUDE_BIN = process.env.CLAUDE_BIN || 'claude';
-const CLAUDE_WORKDIR = process.env.CLAUDE_WORKDIR || process.env.TC_AUTOMATION_ROOT || 'D:/tc-automation';
+// [수정 2026-08-27] 하드코딩된 'D:/tc-automation' 대신 이 파일 위치(dashboard/lib/) 기준 상대
+// 경로로 계산 — defectStore.js와 동일한 이유(포터빌리티).
+const CLAUDE_WORKDIR = process.env.CLAUDE_WORKDIR || process.env.TC_AUTOMATION_ROOT || path.resolve(__dirname, '..', '..');
 // Phase 1~4 전체를 한 번에 돌 수도 있어 시간이 오래 걸릴 수 있음 (기본 15분)
 const TIMEOUT_MS = Number(process.env.CLAUDE_TIMEOUT_MS || 15 * 60 * 1000);
 

@@ -2,7 +2,9 @@
 const fs = require('fs');
 const path = require('path');
 
-const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || 'D:/tc-automation';
+// [수정 2026-08-27] 하드코딩된 'D:/tc-automation' 대신 이 파일 위치(slack-bridge/src/) 기준
+// 상대 경로로 계산 — dashboard/lib/defectStore.js의 동일 수정과 같은 이유(포터빌리티).
+const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || path.resolve(__dirname, '..', '..');
 // 프로젝트 폴더는 저장소 루트가 아니라 project/ 하위에 있음 (2026-08-25 디렉토리 구조 개편)
 const PROJECTS_ROOT = path.join(TC_AUTOMATION_ROOT, 'project');
 const STATUS_ORDER = ['신규', '처리중', '재검증대기', '완료', '보류', '재발생'];
