@@ -17,7 +17,13 @@ function load(project) {
   try {
     return JSON.parse(fs.readFileSync(defectsPath(project), 'utf8'));
   } catch {
-    return null; // 파일이 없으면 프로젝트 자체가 없거나 아직 결함 이력이 없는 것
+    // [수정 2026-08-27] defects.json이 없는 경우를 "프로젝트 자체가 없음"과 뭉뚱그려 항상 null을
+    // 반환하던 버그 — TOPMALL처럼 Phase 5(테스트 실행)를 아예 진행하지 않아 defects.json이 한
+    // 번도 생성된 적 없는 정상 프로젝트에서도 /api/:project/kpi가 404를 반환해 대시보드에 그
+    // 프로젝트가 통째로 표시되지 않는 문제로 실측 발견. projectStore.listProjects()와 동일하게
+    // "TC/ 폴더 존재 여부"를 프로젝트 실존의 기준으로 삼아, 프로젝트는 있는데 결함 이력만 없는
+    // 경우는 빈 배열로 반환(진짜 없는 프로젝트만 null).
+    return fs.existsSync(path.join(PROJECTS_ROOT, project, 'TC')) ? [] : null;
   }
 }
 
