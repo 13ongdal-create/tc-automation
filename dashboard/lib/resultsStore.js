@@ -32,8 +32,9 @@ function listSnapshots(project) {
       const total = items.length;
       const pass = items.filter((i) => i.result === 'Pass').length;
       const fail = items.filter((i) => i.result === 'Fail').length;
-      const blocked = items.filter((i) => i.result === 'Blocked').length;
-      const na = items.filter((i) => i.result === 'N/A').length;
+      // Blocked는 2026-08-27부로 N/A에 통합(정책 변경) — 과거 데이터에 남아있을 수 있는
+      // "Blocked" 값도 계속 N/A로 집계되도록 방어적으로 함께 매칭
+      const na = items.filter((i) => i.result === 'N/A' || i.result === 'Blocked').length;
       const nt = items.filter((i) => i.result === 'N/T').length;
       const none = items.filter((i) => !i.result).length;
       const executed = total - none;
@@ -49,7 +50,6 @@ function listSnapshots(project) {
         total,
         pass,
         fail,
-        blocked,
         na,
         nt,
         none,
@@ -88,7 +88,6 @@ function latestSummary(project) {
       acc.total += e.total;
       acc.pass += e.pass;
       acc.fail += e.fail;
-      acc.blocked += e.blocked;
       acc.na += e.na;
       acc.nt += e.nt;
       acc.executed += e.executed;
@@ -97,7 +96,7 @@ function latestSummary(project) {
       acc.p3 += e.p3;
       return acc;
     },
-    { total: 0, pass: 0, fail: 0, blocked: 0, na: 0, nt: 0, executed: 0, p1: 0, p2: 0, p3: 0 }
+    { total: 0, pass: 0, fail: 0, na: 0, nt: 0, executed: 0, p1: 0, p2: 0, p3: 0 }
   );
   grand.none = grand.total - grand.executed; // 미실행
   return { latestDate: latest.length ? latest.reduce((a, e) => (e.dateStr > a ? e.dateStr : a), '00000000') : null, ...grand };

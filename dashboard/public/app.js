@@ -154,6 +154,28 @@ const SEVERITY_ORDER = ['P1', 'P2', 'P3'];
 const SEVERITY_LABELS = { P1: 'Critical (P1)', P2: 'Major (P2)', P3: 'Minor (P3)' };
 const SEVERITY_COLORS = { P1: 'var(--bad)', P2: 'var(--warn)', P3: 'var(--primary)' };
 
+// TC 실행결과(AGENTS.md 20-7항: Pass/Fail/N/A/N/T — Blocked는 2026-08-27부로 N/A에 통합) 색상.
+// "수행율"은 (전체-미실행)/전체 기준이며(실행이력 표와 동일 정의), Pass+Fail만이 아니라
+// N/A/N/T도 "수행됨"에 포함된다 (이전에는 Pass+Fail만 반영해 N/T가 많은 프로젝트에서 수행율이
+// 왜곡 표시됨 — 2026-08-27 수정).
+const RESULT_ORDER = ['pass', 'fail', 'na', 'nt', 'none'];
+const RESULT_LABELS = { pass: 'Pass', fail: 'Fail', na: 'N/A', nt: 'N/T', none: '미실행' };
+const RESULT_COLORS = {
+  pass: 'var(--good)', fail: 'var(--bad)',
+  na: 'var(--accent3)', nt: 'var(--accent2)', none: 'var(--divider)',
+};
+// 실행결과 값 정의 — 도넛 카드의 ⓘ 정보 아이콘에 그대로 노출 (AGENTS.md 10/20-7항과 동일 문구)
+const RESULT_DEFINITIONS = [
+  ['Pass', '절차대로 수행한 결과가 기대결과와 일치함'],
+  ['Fail', '절차대로 수행한 결과가 기대결과와 다름(결함으로 이어짐). 단, 이미 등록된 결함 자체를 재현/확인하는 것이 목적인 TC는 결함이 해결되기 전까지 의도된 Fail을 유지'],
+  ['N/A', '① 현재 조건에서 이 TC가 적용 대상이 아니거나 검증하려는 상태를 재현할 수 없어 판정이 무의미한 경우, ② 선행 조건·환경이 준비되지 않아 TC를 아예 수행할 수 없는 경우(과거 Blocked) — 2026-08-27부로 통합'],
+  ['N/T', 'TC 자체는 수행 가능하지만 이미 등록된 다른 결함 때문에 깨끗한 Pass/Fail 판정이 불가능한 경우(AGENTS.md 20-7항) — 그 결함이 해결되면 재실행해 실제 Pass/Fail로 갱신'],
+  ['미실행', '아직 한 번도 실행되지 않음(드롭다운에 값이 입력되지 않은 상태)'],
+];
+function resultDefinitionsTooltip() {
+  return RESULT_DEFINITIONS.map(([k, v]) => `${k}: ${v}`).join('\n');
+}
+
 // 결함 상태(AGENTS.md 20-2항) 색상
 const STATUS_COLORS = {
   '신규': 'var(--warn)',
@@ -201,9 +223,10 @@ function donutChart(segments, centerHtml, emptyLabel) {
 }
 
 /**
- * 수행현황 ① — "전체 TC 수행률 현황" 카드 (Pass/Fail만 도넛에 색칠하고 나머지는 빈 구간으로 표시,
- * 헤더에 완료율(Pass+Fail÷전체) 배지, 도넛 아래 범례+진행바+Pass/Fail/미실행 요약을 붙인 형태로
- * 전체 카드를 통째로 구성한다 — 2026-08-26 사용자가 제시한 참고 디자인을 반영).
+ * 수행현황 ① — "전체 TC 수행률 현황" 카드. 실행이력 표(모듈별 TC 수행현황/results 스냅샷)와
+ * 동일하게 수행율=(전체-미실행)/전체로 정의하고, Pass/Fail뿐 아니라 Blocked/N/A/N/T도 도넛에
+ * 실제 비중대로 표시한다 (2026-08-27 수정 — 이전에는 Pass+Fail만 반영해 N/T 비중이 큰
+ * 프로젝트에서 수행율이 100%인데도 완료율이 낮게 표시되는 오해를 유발했음).
  */
 function renderExecCompletionCard(kpi) {
   const r = kpi ? kpi.results : null;
@@ -212,35 +235,17 @@ function renderExecCompletionCard(kpi) {
       <div class="pb-chart-head"><span class="pb-chart-title">전체 TC 수행률 현황</span></div>
       <div class="pb-chart-body">${donutChart([], '', '실행 이력 없음')}</div>`;
   }
-  const completeRate = Math.round(((r.pass + r.fail) / r.total) * 100);
-  const other = r.total - r.pass - r.fail; // Blocked/N/A/N/T/미실행 합계 — 도넛의 빈 구간
-  const segments = [
-    { n: r.pass, color: 'var(--good)' },
-    { n: r.fail, color: 'var(--bad)' },
-    { n: other, color: 'var(--divider)' },
-  ];
-  const passPct = (r.pass / r.total) * 100;
-  const failPct = (r.fail / r.total) * 100;
-  const centerHtml = `<span class="donut-total">${completeRate}%</span><span class="donut-total-label">완료</span>`;
+  const execRate = Math.round(((r.total - r.none) / r.total) * 100);
+  const counts = { pass: r.pass, fail: r.fail, na: r.na, nt: r.nt, none: r.none };
+  const segments = RESULT_ORDER.map((k) => ({ n: counts[k] || 0, color: RESULT_COLORS[k] }));
+  const centerHtml = `<span class="donut-total">${execRate}%</span><span class="donut-total-label">수행율</span>`;
   return `
     <div class="pb-chart-head">
       <span class="pb-chart-title">전체 TC 수행률 현황</span>
+      <span class="result-def-info" tabindex="0" title="${esc(resultDefinitionsTooltip())}">ⓘ</span>
     </div>
     <div class="pb-chart-body">${donutChart(segments, centerHtml, '실행 이력 없음')}</div>
-    <div class="exec-legend-row">
-      <span class="exec-legend-item"><span class="legend-swatch" style="background:var(--good)"></span>Pass</span>
-      <span class="exec-legend-item"><span class="legend-swatch" style="background:var(--bad)"></span>Fail</span>
-      <span class="exec-legend-item"><span class="legend-swatch" style="background:var(--divider)"></span>미실행</span>
-    </div>
-    <div class="exec-progress-track">
-      <div class="exec-progress-fill" style="width:${passPct}%"></div>
-      <div class="exec-progress-fill exec-progress-fail" style="width:${failPct}%"></div>
-    </div>
-    <div class="exec-stat-row">
-      <span>Pass: <b class="c-good">${r.pass}</b></span>
-      <span>Fail: <b class="c-bad">${r.fail}</b></span>
-      <span>미실행: <b>${r.none}</b></span>
-    </div>`;
+    ${donutSummaryTable(RESULT_ORDER, RESULT_LABELS, RESULT_COLORS, counts)}`;
 }
 
 /** 수행현황 ② — 전체 TC를 우선순위(P1/P2/P3)별로 집계한 도넛 */
@@ -288,7 +293,8 @@ function renderTrendChart(timeline) {
 
 /**
  * 날짜별 진척율 차트 아래에 붙는 실행 이력 표 — AGENTS.md 5-1항 results/index.html과 동일한
- * 컬럼 구성(실행일/모듈/전체/수행/Pass/Fail/Blocked/N/A/N/T/미실행/수행율/Pass율/실패율/보기)
+ * 컬럼 구성(실행일/모듈/전체/수행/Pass/Fail/N/A/N/T/미실행/수행율/Pass율/실패율/보기) —
+ * Blocked는 2026-08-27부로 N/A에 통합되어 별도 컬럼 없음
  */
 function renderSnapshotTable(project, snapshots) {
   if (!snapshots || !snapshots.length) return '<div class="empty-row">실행 이력이 없습니다</div>';
@@ -302,7 +308,6 @@ function renderSnapshotTable(project, snapshots) {
       <td>${s.executed}</td>
       <td>${s.pass}</td>
       <td>${s.fail}</td>
-      <td>${s.blocked}</td>
       <td>${s.na}</td>
       <td>${s.nt}</td>
       <td>${s.none}</td>
@@ -315,7 +320,7 @@ function renderSnapshotTable(project, snapshots) {
     .join('');
   return `
     <table class="pb-module-table">
-      <thead><tr><th>실행일</th><th>모듈</th><th>전체</th><th>수행</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>N/A</th><th>N/T</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>실패율</th><th>보기</th></tr></thead>
+      <thead><tr><th>실행일</th><th>모듈</th><th>전체</th><th>수행</th><th>Pass</th><th>Fail</th><th>N/A</th><th>N/T</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>실패율</th><th>보기</th></tr></thead>
       <tbody>${rowsHtml}</tbody>
     </table>`;
 }
