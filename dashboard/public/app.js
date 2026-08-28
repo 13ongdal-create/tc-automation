@@ -24,6 +24,20 @@ const el = {
   newProjectName: document.getElementById('newProjectName'),
   newProjectError: document.getElementById('newProjectError'),
   btnCancelNewProject: document.getElementById('btnCancelNewProject'),
+  manageProjectModal: document.getElementById('manageProjectModal'),
+  manageProjectName: document.getElementById('manageProjectName'),
+  manageProjectForm: document.getElementById('manageProjectForm'),
+  manageProjectError: document.getElementById('manageProjectError'),
+  btnCancelManageProject: document.getElementById('btnCancelManageProject'),
+  mpUrl: document.getElementById('mpUrl'),
+  mpAdminUrl: document.getElementById('mpAdminUrl'),
+  mpTestType: document.getElementById('mpTestType'),
+  mpAnalysisBasis: document.getElementById('mpAnalysisBasis'),
+  mpHasTestAccounts: document.getElementById('mpHasTestAccounts'),
+  mpDeleteConfirmName: document.getElementById('mpDeleteConfirmName'),
+  mpDeleteConfirm: document.getElementById('mpDeleteConfirm'),
+  mpDeleteError: document.getElementById('mpDeleteError'),
+  btnDeleteProject: document.getElementById('btnDeleteProject'),
   kpiTotalDefects: document.getElementById('kpiTotalDefects'),
   kpiNewDefects: document.getElementById('kpiNewDefects'),
   kpiPass: document.getElementById('kpiPass'),
@@ -461,7 +475,10 @@ function renderProjectBlocks(rows) {
       <div class="panel project-block" data-project="${esc(project)}">
         <div class="panel-head">
           <h2>${esc(project)}</h2>
-          <span class="panel-sub project-block-link">상세보기 →</span>
+          <div class="panel-head-actions">
+            <button type="button" class="btn btn-outline btn-manage-project" data-project="${esc(project)}">⚙ 관리</button>
+            <span class="panel-sub project-block-link">상세보기 →</span>
+          </div>
         </div>
 
         <div class="pb-section-title">수행현황</div>
@@ -565,6 +582,108 @@ el.newProjectForm.addEventListener('submit', async (e) => {
   closeNewProjectModal();
   await loadProjects();
   showProject(data.project);
+});
+
+// ── ⚙ 프로젝트 관리(수정/삭제) ──────────────────────────────────────────────
+let manageProjectTarget = null;
+
+async function openManageProjectModal(project) {
+  manageProjectTarget = project;
+  el.manageProjectName.textContent = project;
+  el.manageProjectError.textContent = '';
+  el.mpDeleteError.textContent = '';
+  el.mpDeleteConfirmName.textContent = project;
+  el.mpDeleteConfirm.value = '';
+  el.btnDeleteProject.disabled = true;
+  // 폼을 비운 채로 먼저 열고, project.json을 읽어와 채웁니다 (project.json이 아직 없는
+  // 프로젝트는 loadMeta가 null 필드로 응답 — 그대로 빈 값으로 둡니다).
+  el.mpUrl.value = '';
+  el.mpAdminUrl.value = '';
+  el.mpTestType.value = '';
+  el.mpAnalysisBasis.value = '';
+  el.mpHasTestAccounts.checked = false;
+  el.manageProjectModal.hidden = false;
+  try {
+    const res = await fetch(`/api/${encodeURIComponent(project)}/meta`);
+    if (res.ok) {
+      const meta = await res.json();
+      el.mpUrl.value = meta.url || '';
+      el.mpAdminUrl.value = meta.adminUrl || '';
+      el.mpTestType.value = meta.testType || '';
+      el.mpAnalysisBasis.value = meta.analysisBasis || '';
+      el.mpHasTestAccounts.checked = !!meta.hasTestAccounts;
+    }
+  } catch {
+    // 조회 실패 시 빈 폼 그대로 유지 — 저장 시 다시 실패하면 그때 에러를 보여줌
+  }
+}
+
+function closeManageProjectModal() {
+  el.manageProjectModal.hidden = true;
+  manageProjectTarget = null;
+}
+
+el.projectBlocks.addEventListener('click', (e) => {
+  const btn = e.target.closest('.btn-manage-project');
+  if (!btn) return;
+  openManageProjectModal(btn.dataset.project);
+});
+
+el.btnCancelManageProject.addEventListener('click', closeManageProjectModal);
+el.manageProjectModal.addEventListener('click', (e) => {
+  if (e.target === el.manageProjectModal) closeManageProjectModal();
+});
+
+el.manageProjectForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!manageProjectTarget) return;
+  el.manageProjectError.textContent = '';
+  const res = await fetch(`/api/projects/${encodeURIComponent(manageProjectTarget)}/meta`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      url: el.mpUrl.value,
+      adminUrl: el.mpAdminUrl.value,
+      testType: el.mpTestType.value,
+      analysisBasis: el.mpAnalysisBasis.value,
+      hasTestAccounts: el.mpHasTestAccounts.checked,
+    }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    el.manageProjectError.textContent = data.error || '저장에 실패했습니다.';
+    return;
+  }
+  closeManageProjectModal();
+  if (el.projectView.style.display !== 'none' && el.projectSelect.value === manageProjectTarget) {
+    loadAll();
+  } else {
+    renderHomeDashboard();
+  }
+});
+
+el.mpDeleteConfirm.addEventListener('input', () => {
+  el.btnDeleteProject.disabled = el.mpDeleteConfirm.value !== manageProjectTarget;
+});
+
+el.btnDeleteProject.addEventListener('click', async () => {
+  if (!manageProjectTarget) return;
+  el.mpDeleteError.textContent = '';
+  const res = await fetch(`/api/projects/${encodeURIComponent(manageProjectTarget)}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ confirmName: el.mpDeleteConfirm.value }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    el.mpDeleteError.textContent = data.error || '삭제에 실패했습니다.';
+    return;
+  }
+  const wasCurrent = el.projectSelect.value === manageProjectTarget;
+  closeManageProjectModal();
+  await loadProjects();
+  if (wasCurrent) showHome();
+  else renderHomeDashboard();
 });
 
 function siteLinkCard(href, accentClass, icon, label, title) {

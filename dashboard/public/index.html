@@ -208,6 +208,51 @@
   </div>
 </div>
 
+<!-- ⚙ 프로젝트 관리 모달 (project.json 수정 + 삭제) -->
+<div id="manageProjectModal" class="modal-overlay" hidden>
+  <div class="modal-box modal-box-lg">
+    <h2>프로젝트 관리 — <span id="manageProjectName"></span></h2>
+    <form id="manageProjectForm">
+      <label class="field-label" for="mpUrl">사이트 URL</label>
+      <input type="text" id="mpUrl" autocomplete="off">
+      <label class="field-label" for="mpAdminUrl">관리자(Admin) URL</label>
+      <input type="text" id="mpAdminUrl" autocomplete="off">
+      <label class="field-label" for="mpTestType">단위/통합</label>
+      <select id="mpTestType">
+        <option value="">(미지정)</option>
+        <option value="단위">단위</option>
+        <option value="통합">통합</option>
+      </select>
+      <label class="field-label" for="mpAnalysisBasis">근거 확보 방식</label>
+      <select id="mpAnalysisBasis">
+        <option value="">(미지정)</option>
+        <option value="코드기반">코드기반</option>
+        <option value="정책기반">정책기반</option>
+        <option value="둘다">둘다</option>
+      </select>
+      <label class="mp-checkbox-row"><input type="checkbox" id="mpHasTestAccounts"> 테스트 계정 보유 (testAccounts.json)</label>
+      <div class="modal-error" id="manageProjectError"></div>
+      <div class="modal-actions">
+        <button type="button" id="btnCancelManageProject" class="btn btn-outline">닫기</button>
+        <button type="submit" class="btn btn-primary">저장</button>
+      </div>
+    </form>
+
+    <hr class="mp-divider">
+
+    <div class="mp-danger-zone">
+      <div class="mp-danger-title">⚠️ 프로젝트 삭제</div>
+      <p class="placeholder-text">삭제 전 <code>backup\deleted-projects\</code>에 전체 사본이 자동 보관되지만, 되돌리려면 수동 복구가 필요합니다 — 테스트/오등록 프로젝트 정리 용도로만 사용하세요. 삭제 후 git 커밋·push는 별도로 진행해야 합니다.</p>
+      <label class="field-label" for="mpDeleteConfirm">확인을 위해 프로젝트명(<b id="mpDeleteConfirmName"></b>)을 정확히 입력하세요</label>
+      <input type="text" id="mpDeleteConfirm" autocomplete="off">
+      <div class="modal-error" id="mpDeleteError"></div>
+      <div class="modal-actions">
+        <button type="button" id="btnDeleteProject" class="btn btn-danger" disabled>이 프로젝트 영구 삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="/app.js"></script>
 </body>
 </html>

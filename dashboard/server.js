@@ -135,6 +135,30 @@ app.post('/api/projects', (req, res) => {
   }
 });
 
+// project.json 일부 필드(url/adminUrl/testType/analysisBasis/hasTestAccounts/phase5Scope) 수정.
+// 프로젝트명·생성일은 폴더/파일명에 이미 박혀있어 여기서 바꾸지 않습니다 (projectStore.updateProjectMeta 참조).
+app.patch('/api/projects/:project/meta', (req, res) => {
+  try {
+    const meta = projectStore.updateProjectMeta(req.params.project, req.body || {});
+    res.json({ meta });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// 프로젝트 폴더 전체 삭제(테스트/오등록 프로젝트 정리용). body.confirmName이 프로젝트명과 정확히
+// 일치해야만 진행되며, 삭제 전 backup\deleted-projects\ 에 전체 사본을 남깁니다. git 커밋/push는
+// 이 라우트가 하지 않습니다 — 별도로 진행해야 합니다.
+app.delete('/api/projects/:project', (req, res) => {
+  const { confirmName } = req.body || {};
+  try {
+    const result = projectStore.deleteProject(req.params.project, confirmName);
+    res.json({ ok: true, ...result });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 app.get('/api/:project/defects', (req, res) => {
   const defects = defectStore.load(req.params.project);
   if (defects === null) return res.status(404).json({ error: '프로젝트를 찾을 수 없거나 defects.json이 없습니다.' });

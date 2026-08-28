@@ -73,6 +73,11 @@ select{
   background:var(--primary);color:#fff;
 }
 .btn-primary:hover{background:var(--primary-dark);}
+.btn-danger{
+  background:var(--bad);color:#fff;
+}
+.btn-danger:hover{filter:brightness(0.92);}
+.btn-danger:disabled{background:var(--divider);color:var(--text-secondary);cursor:not-allowed;}
 
 /* 메인 컨테이너 */
 .container{max-width:1280px;margin:0 auto;padding:24px;}
@@ -120,6 +125,8 @@ select{
   margin-bottom:14px;border-bottom:1px solid var(--divider);padding-bottom:10px;
 }
 .panel-head h2{font-size:16px;margin:0;color:var(--text-dark);letter-spacing:-0.3px;}
+.panel-head-actions{display:flex;align-items:center;gap:12px;}
+.panel-head-actions .btn{padding:4px 10px;font-size:12.5px;}
 .panel-sub{font-size:12px;color:var(--text-secondary);}
 .badge-soon{
   background:var(--bg-light);border:1px solid var(--border);border-radius:12px;
@@ -348,6 +355,18 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 .modal-box input[type=text]:focus{outline:2px solid var(--primary-light);outline-offset:1px;}
 .modal-error{color:var(--bad);font-size:12.5px;min-height:1.2em;margin-top:6px;}
 .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:6px;}
+.modal-box-lg{max-width:480px;max-height:88vh;overflow-y:auto;}
+.modal-box select{
+  width:100%;font-family:inherit;font-size:14px;padding:10px 12px;margin-top:6px;
+  border:1px solid var(--border);border-radius:6px;background:#fff;
+}
+.field-label{display:block;font-size:12.5px;font-weight:600;color:var(--text-secondary);margin:14px 0 0;}
+.field-label + input[type=text],.field-label + select{margin-top:6px;}
+.mp-checkbox-row{display:flex;align-items:center;gap:8px;margin-top:16px;font-size:13.5px;color:var(--text-primary);}
+.mp-divider{border:none;border-top:1px solid var(--divider);margin:22px 0 16px;}
+.mp-danger-zone{border:1px solid var(--bad);border-radius:8px;padding:14px 16px;}
+.mp-danger-title{font-weight:700;color:var(--bad);margin-bottom:6px;}
+.mp-danger-zone .modal-actions{justify-content:flex-start;}
 
 @media (max-width: 1200px){
   .pb-grid-3{grid-template-columns:1fr 1fr;}
