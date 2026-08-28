@@ -195,7 +195,7 @@
 — Analysis 폴더가 2026-08-21 AGENTS.md/SKILL.md에 5번째 표준 서브폴더로 추가됐는데 이 문서에는
 반영되지 않고 있던 드리프트. 아래 목록에 정책서/화면설계서/요구사항/기존TC만 있고 어시스턴트 산출물
 (Analysis) 위치가 누락돼 있던 것도 같은 원인. -->
-프로젝트는 `tc-automation\project\{프로젝트명}\`에 하나씩 생성되며, 각 프로젝트는 `Policy`/`SB`/`Requirements`/`Analysis`/`TC` 5개 표준 서브폴더를 가집니다 (AGENTS.md 16~17항 참조). 신규 프로젝트는 **반드시 `_template\`을 복사해서만** 온보딩하며, 다른 프로젝트(과거에 존재했던 프로젝트 포함)의 실제 내용을 예시나 근거로 가져오지 않습니다 (AGENTS.md 16항 "프로젝트 간 내용 격리 원칙" 참조).
+프로젝트는 `tc-automation\project\{프로젝트명}\`에 하나씩 생성되며, 각 프로젝트는 `Policy`/`SB`/`Requirements`/`Analysis`/`TC` 5개 표준 서브폴더를 가집니다 (AGENTS.md 16항, 온보딩 절차는 `project-onboarding` 스킬 참조). 신규 프로젝트는 **반드시 `_template\`을 복사해서만** 온보딩하며, 다른 프로젝트(과거에 존재했던 프로젝트 포함)의 실제 내용을 예시나 근거로 가져오지 않습니다 (AGENTS.md 16항 "프로젝트 간 내용 격리 원칙" 참조).
 
 - **정책서 위치**: `tc-automation\project\{프로젝트명}\Policy\`
 - **화면설계서 위치**: `tc-automation\project\{프로젝트명}\SB\`

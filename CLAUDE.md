@@ -22,6 +22,12 @@ The actual behavioral rules for generating/reviewing TCs, running automation, an
 Everything below is orientation for the code/tooling in this repo; AGENTS.md/SKILL.md govern QA content
 and process (TC schema, Phase 0-8 workflow, defect lifecycle, Notion sync, etc.) and take precedence.
 
+<!-- [added 2026-08-28] Noting the 2026-08-28 skill split so a human reading this file (not just Claude,
+which auto-discovers .claude/skills/*/SKILL.md regardless) knows where the detail moved. -->
+Three task-specific procedures that used to be always-loaded sections inside AGENTS.md (17/19/20) were
+split out to skills that load only when needed: `.claude/skills/project-onboarding/`,
+`.claude/skills/playwright-automation/`, `.claude/skills/defect-management/`.
+
 ## Repository layout
 
 ```
