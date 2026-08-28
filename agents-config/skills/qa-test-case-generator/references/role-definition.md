@@ -168,7 +168,10 @@
 - **스킬 원본**: [TC_Skill_v0.5.md](file:///d:/E-Commerce%20Service%20Planning%20Academy/tc-automation/_reference/TC_Skill_v0.5.md)
 -->
 <!-- [수정 전 2026-08-19] tc-automation 경로 이동 전 (구 d:/E-Commerce Service Planning Academy/tc-automation/) -->
+<!-- [수정 전 2026-08-28] 로컬 작업 폴더가 D:\tc-automation\ 이었던 시절 링크. 사용자 요청으로 D:\QA\tc-automation\ 으로 이동.
 - **버튼 세트 참조**: [mediheal_pdp_qa_tc_viewer.html](file:///d:/tc-automation/_reference/mediheal_pdp_qa_tc_viewer.html)
+-->
+- **버튼 세트 참조**: [mediheal_pdp_qa_tc_viewer.html](file:///d:/QA/tc-automation/_reference/mediheal_pdp_qa_tc_viewer.html)
 - 뷰어 표준 스타일(색상/테마/버튼셋)은 위 "HTML 뷰어 표준" 절에 명문화된 값을 기준으로 하며, 별도 외부 템플릿 파일을 조건으로 참조하지 않습니다.
 
 ---

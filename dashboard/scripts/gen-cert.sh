@@ -7,7 +7,7 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/certs"
 mkdir -p "$DIR"
 # [수정 2026-08-27] 네이티브 Windows openssl.exe에 넘길 -keyout/-out 경로는 Git Bash 스타일
-# (/d/tc-automation/...)이 아니라 Windows 스타일(D:/tc-automation/...)이어야 함 — 아래 openssl
+# (/d/QA/tc-automation/...)이 아니라 Windows 스타일(D:/QA/tc-automation/...)이어야 함 — 아래 openssl
 # 호출에 MSYS_NO_PATHCONV=1(‑subj/‑addext의 "/CN=..." 값이 경로로 오인돼 깨지는 것을 막기 위해
 # 필요)을 켜두면 MSYS가 인자 경로 변환을 아예 안 하므로, /d/... 형태 그대로는 파일을 못 엶
 # ("Can't open ... No such file or directory"). 이 PC에서 실제로 이 버그 때문에 인증서가 단

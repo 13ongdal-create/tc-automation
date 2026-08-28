@@ -1,9 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Read(//d/tc-automation/**)",
-      "Write(//d/tc-automation/**)",
-      "Edit(//d/tc-automation/**)",
+      "Read(//d/QA/tc-automation/**)",
+      "Write(//d/QA/tc-automation/**)",
+      "Edit(//d/QA/tc-automation/**)",
       "Bash(git status*)",
       "Bash(git log*)",
       "Bash(git add *)",
@@ -18,8 +18,8 @@
       "Bash(unzip *)",
       "Bash(npx playwright test*)",
       "Bash(PW_RUN_ID=* npx playwright test*)",
-      "Bash(D:/tc-automation/node_modules/.bin/playwright.cmd test*)",
-      "Bash(PW_RUN_ID=* D:/tc-automation/node_modules/.bin/playwright.cmd test*)"
+      "Bash(D:/QA/tc-automation/node_modules/.bin/playwright.cmd test*)",
+      "Bash(PW_RUN_ID=* D:/QA/tc-automation/node_modules/.bin/playwright.cmd test*)"
     ]
   }
 }

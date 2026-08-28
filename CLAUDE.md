@@ -64,7 +64,7 @@ Projects are isolated by design — never pull policy/TC content from one projec
 absolute path rather than `cd`-ing first):
 
 ```bash
-PW_RUN_ID={프로젝트명} npx playwright test --config="D:/tc-automation/playwright.config.js" project/{프로젝트명}/TC/automation/tests/{모듈}.spec.js
+PW_RUN_ID={프로젝트명} npx playwright test --config="D:/QA/tc-automation/playwright.config.js" project/{프로젝트명}/TC/automation/tests/{모듈}.spec.js
 # single test or feature within a module:
 ... {모듈}.spec.js --grep "TC_PD_058|기능명"
 ```

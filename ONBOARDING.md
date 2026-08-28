@@ -13,7 +13,7 @@ Claude Code를 처음 열거나, 다른 사람(다른 Claude 계정 포함)이 �
 ## 1. 프로젝트 구조 한눈에 보기
 
 ```
-D:\tc-automation\                 <- 이 프로젝트 전체의 루트이자 유일한 git 저장소
+D:\QA\tc-automation\                 <- 이 프로젝트 전체의 루트이자 유일한 git 저장소
 ├── agents-config\                <- 규칙/스킬 원본 (AGENTS.md, SKILL.md, role-definition.md)
 ├── dashboard\                    <- 로컬 웹 대시보드 (Express, 상시 구동, 아래 3번 참조)
 ├── slack-bridge\                 <- Slack 연동 서버 — 2026-08-24부로 미사용 (일일 Notion 보고만 예외적으로 유지, 8번 참조)
@@ -41,13 +41,13 @@ D:\tc-automation\                 <- 이 프로젝트 전체의 루트이자 유
 
 ### 방법 A — 이전 대화를 그대로 이어가기
 ```powershell
-cd D:\tc-automation
+cd D:\QA\tc-automation
 claude --continue     # 가장 최근 대화를 이어감
 claude --resume       # 여러 대화 중 고를 때
 ```
 
 ### 방법 B — 새 대화로 시작 (그래도 규칙은 동일하게 적용됨)
-같은 폴더(`D:\tc-automation`)에서 `claude`만 실행해도 `CLAUDE.md`가 AGENTS.md/SKILL.md를 자동으로
+같은 폴더(`D:\QA\tc-automation`)에서 `claude`만 실행해도 `CLAUDE.md`가 AGENTS.md/SKILL.md를 자동으로
 불러와 동일한 규칙으로 동작합니다. 예전 대화 맥락이 필요하면 "데모사이트 프로젝트 이어서 진행해줘"처럼
 프로젝트명을 알려주면 됩니다 — 실제 데이터는 `project\데모사이트\TC\` 등에 그대로 있습니다.
 

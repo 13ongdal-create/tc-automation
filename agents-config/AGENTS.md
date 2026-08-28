@@ -716,8 +716,39 @@ D:\tc-automation\                     <- 이 프로젝트 관련 모든 것의 �
         └── automation\tests\  <- URL 기반 Playwright 자동화 테스트 (19항)
 ```
 -->
+<!-- [수정 전 2026-08-28] 로컬 작업 폴더가 D:\tc-automation\ 이었던 시절 구조. 사용자 요청으로 D:\QA\tc-automation\
+으로 이동(경로 중간에 QA\ 계층 추가) — 이 이동 작업 중 Windows 예약 작업(qa-automation-dashboard,
+tc-automation-daily-report)이 구 경로를 그대로 참조하고 있어 일시적으로 대시보드/일일 Notion 보고가
+중단되는 부수 문제가 발견되어 함께 정리함.
 ```
 D:\tc-automation\                     <- 이 프로젝트 관련 모든 것의 루트이자 유일한 Git 저장소 루트
+                                          (github.com/13ongdal-create/tc-automation, 2026-08-24부터 통합)
+├── agents-config\                    <- 규칙/스킬 (git subtree로 병합, 자체 이력 보존됨)
+│   ├── AGENTS.md                    <- 이 파일 (행동 규칙)
+│   └── skills\qa-test-case-generator\
+│       ├── SKILL.md                 <- TC 생성 스킬 상세 명세
+│       └── references\role-definition.md
+├── slack-bridge\                     <- Slack 연동 서버 (git subtree로 병합, 자체 이력 보존됨) — **2026-08-24부로 미사용** (Slack bot 사용 종료, 코드/자동시작 스크립트는 삭제하지 않고 보존)
+│   └── src\index.js 등
+├── dashboard\                        <- 큐돌이 로컬 웹 대시보드 (2026-08-24 추가, TC 생성/테스트 수행/결함관리 통합 UI)
+├── backup\                           <- 로컬 전용 백업(git 비대상, .gitignore 처리) — 저장소 손상 대비용
+├── _reference\        <- 프로젝트 공통 참조 템플릿 (표준 뷰어, 스킬 원본 등) — 특정 프로젝트 내용 아님
+├── _template\         <- 신규 프로젝트 온보딩용 빈 스캐폴드 (Policy/SB/Requirements/Analysis/TC) — 모든 프로젝트는 반드시 이 스캐폴드에서 시작
+└── {프로젝트명}\       <- _template\을 복사해 온보딩 (17항 참조). 프로젝트마다 독립적으로 존재하며 서로의 내용을 참조/재사용하지 않음
+    ├── project.json   <- 프로젝트 메타데이터 (URL, 단위/통합 구분, 코드/정책기반 — Phase 0에서 생성, 13항)
+    ├── Policy\
+    ├── SB\
+    ├── Requirements\
+    ├── Analysis\      <- 어시스턴트가 생성한 관찰 기반 분석/PRD 산출물 (`{프로젝트명}_PRD.html`, 2026-08-21 추가)
+    └── TC\
+        ├── {모듈코드}.json / .html  <- 모듈별 누적 TC 파일 (버전/변경이력 포함, 10항)
+        ├── patterns.md  <- 재사용 가능한 TC 패턴 라이브러리 (11-1항)
+        ├── legacy\    <- 고객 제공 기존 TC 파일이 있는 경우만
+        └── automation\tests\  <- URL 기반 Playwright 자동화 테스트 (19항)
+```
+-->
+```
+D:\QA\tc-automation\                     <- 이 프로젝트 관련 모든 것의 루트이자 유일한 Git 저장소 루트
                                           (github.com/13ongdal-create/tc-automation, 2026-08-24부터 통합)
 ├── agents-config\                    <- 규칙/스킬 (git subtree로 병합, 자체 이력 보존됨)
 │   ├── AGENTS.md                    <- 이 파일 (행동 규칙)
@@ -844,7 +875,7 @@ _reference\대시보드_팀_공유_셋업가이드.md에서 제안된 브랜치 
 -->
 2. **TC 문서 생성(Phase 3~4)**: 관찰된 요소를 근거로 기존 컬럼 스키마(SKILL.md 3항)에 맞춰 TC를 작성합니다. **기준문서 컬럼은 정책서/화면설계서 등 실제 문서가 존재하는 경우에만 그 문서명을 기재하고, 그 외(Playwright 관측만으로 작성한 경우)에는 `-`로 둡니다.** Playwright 관측 근거(URL/날짜)는 `tc-automation\_scratch\{프로젝트명}\`의 관찰 결과 파일로 이미 추적되므로 TC 행에 중복 기재하지 않습니다.
 3. **자동화 테스트 코드 생성(Phase 4)**: 각 TC의 수행절차/기대결과를 Playwright 테스트로 변환해 `project\{프로젝트명}\TC\automation\tests\{모듈}.spec.js`에 저장합니다 (1 TC ≈ 1 `test(...)` 블록 원칙). **테스트 제목에 TC ID와 기능명(소분류)을 모두 포함**합니다: `test('[TC_CRT_012][쿠폰적용] 쿠폰 코드 입력 시 즉시 할인 적용 검증', ...)` — 이 형식이어야 특정 TC 하나 또는 특정 기능만 골라 재실행(`--grep`)할 수 있습니다 (19-1항). **반드시 `@playwright/test`가 아니라 `tc-automation\_shared\testFixtures.js`에서 `test`/`expect`를 가져옵니다** (경로는 항상 고정: `require('../../../../../_shared/testFixtures')` — project\ 하위로 한 단계 더 들어가 있으므로 5단계 up). 이 공통 fixture가 모든 테스트에 브라우저 콘솔 에러(JS 예외)·실패한 API 요청(4xx/5xx) 자동 감지 + 실패 시 스크린샷 캡처를 적용해줍니다 — 어서션이 통과해도 콘솔/네트워크 에러가 있으면 해당 TC는 자동으로 실패 처리됩니다. **이 시점에는 코드만 생성하고 실행하지 않습니다** — Phase 4 산출물(TC 문서 + 테스트 코드)에 대한 승인까지만 받습니다.
-4. **실행(Phase 5 — 별도 요청 시에만)**: 사용자가 "테스트 실행해줘"/"테스트 수행해줘" 등으로 **명시적으로 요청한 경우에만** **`PW_RUN_ID={프로젝트명}`을 지정해** `npx playwright test --config="{tc-automation 저장소 절대경로}/playwright.config.js" project/{프로젝트명}/TC/automation/tests/{모듈}.spec.js` 실행 (예: `PW_RUN_ID=ABC마트 npx playwright test --config="D:/tc-automation/playwright.config.js" project/ABC마트/TC/automation/tests/CRT.spec.js`).
+4. **실행(Phase 5 — 별도 요청 시에만)**: 사용자가 "테스트 실행해줘"/"테스트 수행해줘" 등으로 **명시적으로 요청한 경우에만** **`PW_RUN_ID={프로젝트명}`을 지정해** `npx playwright test --config="{tc-automation 저장소 절대경로}/playwright.config.js" project/{프로젝트명}/TC/automation/tests/{모듈}.spec.js` 실행 (예: `PW_RUN_ID=ABC마트 npx playwright test --config="D:/QA/tc-automation/playwright.config.js" project/ABC마트/TC/automation/tests/CRT.spec.js`).
    <!-- [수정 전 2026-08-20] "저장소 루트(tc-automation\)에서" 실행하도록(cd 후 실행) 지시하던 버전.
    현재 작업 디렉터리가 agents-config라 저장소 루트로 매번 cd해야 했는데, Slack 헤드리스 세션에서
    "cd ... && npx playwright test..." 형태의 복합 명령이 .claude/settings.json 허용 패턴과 정확히

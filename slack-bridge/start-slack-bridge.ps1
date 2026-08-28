@@ -1,7 +1,7 @@
 # tc-automation Slack Bridge 시작 스크립트
 # 이미 실행 중이면 중복 시작하지 않고 안내만 하고 종료합니다.
 
-$bridgeDir = "D:\tc-automation\slack-bridge"
+$bridgeDir = "D:\QA\tc-automation\slack-bridge"
 Set-Location $bridgeDir
 
 $pidFile = Join-Path $bridgeDir "slack-bridge.pid"

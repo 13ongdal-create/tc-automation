@@ -2,7 +2,7 @@
 # start-slack-bridge.ps1이 남겨둔 PID 파일을 읽어, 그 프로세스만 정확히 종료합니다
 # (다른 node.exe 프로세스에는 영향 없음).
 
-$bridgeDir = "D:\tc-automation\slack-bridge"
+$bridgeDir = "D:\QA\tc-automation\slack-bridge"
 $pidFile = Join-Path $bridgeDir "slack-bridge.pid"
 
 if (-not (Test-Path $pidFile)) {

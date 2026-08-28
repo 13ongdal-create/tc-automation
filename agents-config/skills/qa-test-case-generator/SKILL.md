@@ -608,8 +608,30 @@ D:\tc-automation\
         └── defects\            <- 결함 스크린샷 보관
 ```
 -->
+<!-- [수정 전 2026-08-28] 로컬 작업 폴더가 D:\tc-automation\ 이었던 시절 경로. 사용자 요청으로
+D:\QA\tc-automation\ 으로 이동(경로 중간에 QA\ 계층 추가).
 ```
 D:\tc-automation\
+├── _reference\                              <- 프로젝트 공통 참조 (모든 프로젝트가 공유, 특정 프로젝트 내용 아님)
+│   ├── mediheal_pdp_qa_tc_viewer.html       <- 버튼 세트 참조 (JSON 저장/불러오기)
+│   └── 이커머스_공통정책_유형정의.md          <- 유형별 정의 참고 용어집 (강제 조건 아님, AGENTS.md 7-1항)
+├── _template\                                <- 신규 프로젝트 온보딩용 빈 스캐폴드 — 모든 프로젝트는 반드시 여기서만 시작
+└── project\                                  <- 프로젝트별 산출물 전용 폴더 (2026-08-25 추가)
+    └── {프로젝트명}\                          <- _template\ 복사로 생성. 프로젝트마다 독립적, 서로 내용 참조/재사용 없음
+        ├── Policy\
+        ├── SB\
+        ├── Requirements\
+        └── TC\
+            ├── {모듈코드}.json / .html  <- 모듈별 누적 TC 파일 (버전/변경이력 포함, AGENTS.md 10항)
+            ├── patterns.md         <- 재사용 가능한 TC 패턴 라이브러리 (AGENTS.md 11-1항)
+            ├── legacy\             <- 고객 제공 기존 TC 파일이 있는 경우만
+            ├── automation\tests\   <- URL 기반 Playwright 자동화 테스트 (AGENTS.md 19항)
+            ├── defects.json        <- 결함 대장 (AGENTS.md 20항)
+            └── defects\            <- 결함 스크린샷 보관
+```
+-->
+```
+D:\QA\tc-automation\
 ├── _reference\                              <- 프로젝트 공통 참조 (모든 프로젝트가 공유, 특정 프로젝트 내용 아님)
 │   ├── mediheal_pdp_qa_tc_viewer.html       <- 버튼 세트 참조 (JSON 저장/불러오기)
 │   └── 이커머스_공통정책_유형정의.md          <- 유형별 정의 참고 용어집 (강제 조건 아님, AGENTS.md 7-1항)
