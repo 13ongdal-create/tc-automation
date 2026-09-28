@@ -1,8 +1,9 @@
 {
   "project": "TOP ONLINE",
-  "url": "http://192.168.10.116:30180/display/mds-pick",
+  "url": "http://192.168.10.116:30180/",
   "testType": "통합",
-  "analysisBasis": "코드기반",
+  "analysisBasis": "둘다",
   "createdAt": "2026-08-25",
-  "hasTestAccounts": true
+  "hasTestAccounts": true,
+  "adminUrl": "http://192.168.10.116:30280/"
 }
