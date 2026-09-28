@@ -340,7 +340,7 @@ function lanAddresses() {
 // 공유 비밀번호(위 로그인 라우트)가 없으면 아무도 조회/조작할 수 없으므로 안전합니다.
 httpServer.listen(PORT, '0.0.0.0', () => {
   const proto = usesHttps ? 'https' : 'http';
-  console.log(`QA Automation 대시보드: ${proto}://localhost:${PORT} (TC_AUTOMATION_ROOT=${defectStore.TC_AUTOMATION_ROOT})`);
+  console.log(`TC Automation 대시보드: ${proto}://localhost:${PORT} (TC_AUTOMATION_ROOT=${defectStore.TC_AUTOMATION_ROOT})`);
   if (!usesHttps) {
     console.log(`  ⚠ dashboard/certs/{key,cert}.pem이 없어 HTTP로 실행 중입니다 (평문 통신) — HTTPS로 실행하려면 'bash dashboard/scripts/gen-cert.sh'를 실행하세요.`);
   }

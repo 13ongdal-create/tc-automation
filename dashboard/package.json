@@ -2,7 +2,7 @@
   "name": "qdori-dashboard",
   "version": "0.1.0",
   "private": true,
-  "description": "QA Automation 대시보드 (사이트분석/TC생성/테스트수행/결함관리)",
+  "description": "TC Automation 대시보드 (사이트분석/TC생성/테스트수행/결함관리)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
