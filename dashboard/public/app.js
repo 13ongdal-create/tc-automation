@@ -27,6 +27,7 @@ const el = {
   manageProjectModal: document.getElementById('manageProjectModal'),
   manageProjectName: document.getElementById('manageProjectName'),
   manageProjectForm: document.getElementById('manageProjectForm'),
+  btnManageProjectDetail: document.getElementById('btnManageProjectDetail'),
   manageProjectError: document.getElementById('manageProjectError'),
   btnCancelManageProject: document.getElementById('btnCancelManageProject'),
   mpUrl: document.getElementById('mpUrl'),
@@ -629,6 +630,14 @@ el.projectBlocks.addEventListener('click', (e) => {
   openManageProjectModal(btn.dataset.project);
 });
 
+// 프로젝트 상세 페이지 "🔎 사이트 분석" 패널의 ⚙ 관리 버튼 — 홈 화면의 프로젝트 블록과 달리
+// 이쪽은 el.projectBlocks 델리게이션 밖에 있는 고정 버튼이라 별도로 연결 (2026-09-28 추가,
+// "상세 페이지에서는 사이트 정보를 수정할 방법이 없다"는 사용자 피드백 반영).
+el.btnManageProjectDetail.addEventListener('click', () => {
+  const project = el.projectSelect.value;
+  if (project) openManageProjectModal(project);
+});
+
 el.btnCancelManageProject.addEventListener('click', closeManageProjectModal);
 el.manageProjectModal.addEventListener('click', (e) => {
   if (e.target === el.manageProjectModal) closeManageProjectModal();
@@ -654,8 +663,13 @@ el.manageProjectForm.addEventListener('submit', async (e) => {
     el.manageProjectError.textContent = data.error || '저장에 실패했습니다.';
     return;
   }
+  // [수정 2026-09-28] closeManageProjectModal()이 manageProjectTarget을 null로 지우는데, 그 뒤에
+  // 이 변수로 "지금 보고 있는 프로젝트인가"를 판단하고 있어 이 조건이 항상 false가 되고 있었습니다
+  // (프로젝트 상세 화면에서 저장해도 사이트 분석 패널이 갱신되지 않던 버그의 원인, 사용자 리포트로 발견) —
+  // 지우기 전에 값을 먼저 붙잡아둡니다.
+  const savedProject = manageProjectTarget;
   closeManageProjectModal();
-  if (el.projectView.style.display !== 'none' && el.projectSelect.value === manageProjectTarget) {
+  if (el.projectView.style.display !== 'none' && el.projectSelect.value === savedProject) {
     loadAll();
   } else {
     renderHomeDashboard();
@@ -698,8 +712,12 @@ function renderSiteAnalysis(project, meta, viewerFile) {
   if (!meta || (!meta.url && !meta.testType && !meta.analysisBasis)) {
     return '<span class="placeholder-text">아직 프로젝트 정보(Phase 0)가 설정되지 않았습니다 — 채팅에서 사이트 URL 등을 알려주시면 채워집니다.</span>';
   }
+  // [수정 2026-09-28] "테스트 URL" 한 줄에 Front URL만 보여주고 관리자(Admin) URL은 관리
+  // 모달에만 있고 이 읽기전용 화면에는 전혀 노출되지 않아, 사이트 분석만 보고는 Admin URL이
+  // 등록돼 있는지조차 알 수 없었습니다(사용자 요청으로 Front/Admin 구분 표시 추가).
   const rows = [
-    ['테스트 URL', meta.url ? `<a href="${esc(meta.url)}" target="_blank" rel="noopener">${esc(meta.url)}</a>` : '-'],
+    ['사용자(Front) URL', meta.url ? `<a href="${esc(meta.url)}" target="_blank" rel="noopener">${esc(meta.url)}</a>` : '-'],
+    ['관리자(Admin) URL', meta.adminUrl ? `<a href="${esc(meta.adminUrl)}" target="_blank" rel="noopener">${esc(meta.adminUrl)}</a>` : '-'],
     ['테스트 유형', esc(meta.testType || '-')],
     ['근거 확보 방식', esc(meta.analysisBasis || '-')],
     ['등록일', esc(meta.createdAt || '-')],
@@ -707,7 +725,8 @@ function renderSiteAnalysis(project, meta, viewerFile) {
   const metaHtml = `<table class="site-meta-table">${rows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${v}</td></tr>`).join('')}</table>`;
 
   const links = [];
-  if (meta.url) links.push(siteLinkCard(esc(meta.url), 'site-link-primary', '🔗', '테스트사이트 바로가기'));
+  if (meta.url) links.push(siteLinkCard(esc(meta.url), 'site-link-primary', '🔗', '사용자(Front) 사이트 바로가기'));
+  if (meta.adminUrl) links.push(siteLinkCard(esc(meta.adminUrl), 'site-link-primary', '🔐', '관리자(Admin) 사이트 바로가기'));
   if (meta.hasPrd) {
     const prdUrl = `/project-files/${encodeURIComponent(project)}/Analysis/${encodeURIComponent(meta.prdFile)}`;
     links.push(siteLinkCard(prdUrl, 'site-link-teal', '📄', 'PRD (사이트분석 &amp; TC계획)'));
@@ -895,6 +914,7 @@ el.defectTableBody.addEventListener('change', (e) => {
 let ws = null;
 let wsBusy = false; // 현재 프로젝트에서 응답 대기 중인지 (연타 방지)
 let statusMsgEl = null; // "지금 하는 중..." 한 줄은 새로 올 때마다 이전 것을 갱신(누적 X)
+let chatPollTimer = null; // 새로고침 직후 이전 요청이 아직 진행 중일 때 완료를 감지하는 타이머
 
 function setChatStatus(text, cls) {
   el.chatStatus.textContent = text;
@@ -925,16 +945,52 @@ function setChatBusy(busy) {
   setChatStatus(busy ? '큐돌이가 작업 중입니다…' : '연결됨', busy ? 'ws-busy' : 'ws-connected');
 }
 
-async function loadChatHistory(project) {
-  el.chatMessages.innerHTML = '';
-  statusMsgEl = null;
+async function fetchChatHistory(project) {
   const res = await fetch(`/api/${encodeURIComponent(project)}/chat/history`);
-  const { messages } = await res.json();
+  return res.json();
+}
+
+function renderChatMessages(messages) {
+  el.chatMessages.innerHTML = '';
   if (!messages || !messages.length) {
     el.chatMessages.innerHTML = '<div class="chat-hint">프로젝트를 선택하고 메시지를 입력해 시작하세요. (예: "메인 페이지 URL은 http://... 입니다. TC 생성해줘")</div>';
     return;
   }
   messages.forEach((m) => appendChatBubble(m.role, m.text));
+}
+
+// 화면 새로고침으로 WebSocket이 끊겼다 재연결됐을 때, 새로고침 전에 보낸 요청이 서버에서
+// 아직 진행 중일 수 있습니다(activeRuns는 완료 전까지 유지) — 이 경우 완료될 때까지 주기적으로
+// 다시 조회해 결과가 도착하면 자동으로 반영합니다 (2026-09-28 추가, "새로고침하면 멈춘 것처럼
+// 보이고 다시 보내도 반응이 없다"는 사용자 리포트 대응).
+function scheduleChatPoll(project) {
+  if (chatPollTimer) clearTimeout(chatPollTimer);
+  chatPollTimer = setTimeout(async () => {
+    chatPollTimer = null;
+    if (el.projectSelect.value !== project) return; // 그 사이 다른 프로젝트로 전환됨 — 중단
+    const { messages, busy } = await fetchChatHistory(project);
+    if (busy) {
+      scheduleChatPoll(project);
+      return;
+    }
+    statusMsgEl = null;
+    renderChatMessages(messages);
+    setChatBusy(false);
+  }, 4000);
+}
+
+async function loadChatHistory(project) {
+  if (chatPollTimer) { clearTimeout(chatPollTimer); chatPollTimer = null; }
+  statusMsgEl = null;
+  const { messages, busy } = await fetchChatHistory(project);
+  renderChatMessages(messages);
+  if (busy) {
+    statusMsgEl = appendChatBubble('status', '새로고침 전 보낸 요청이 아직 진행 중입니다 — 완료되면 자동으로 표시됩니다…');
+    setChatBusy(true);
+    scheduleChatPoll(project);
+  } else {
+    setChatBusy(false);
+  }
 }
 
 function connectWs() {
@@ -1011,6 +1067,16 @@ el.projectSelect.addEventListener('change', () => showProject(el.projectSelect.v
 (async function init() {
   await loadProjects();
   connectWs();
-  renderHomeView(); // 최초 진입 화면은 항상 홈(프로젝트 카드)
-  history.replaceState({ view: 'home' }, '', '/'); // pushState가 아닌 replaceState — 새 기록을 쌓지 않고 현재 항목에 상태만 붙임
+  // [수정 2026-09-28] 항상 홈으로 그리던 버전 — 프로젝트 상세(채팅 포함)에서 화면을 새로고침하면
+  // 매번 홈으로 튕겨나가 진행 중이던 대화 흐름이 끊긴 것처럼 보였습니다(사용자 리포트). F5로
+  // 실제 페이지가 새로 로드돼도 같은 히스토리 항목의 history.state는 브라우저가 보존하므로, 그
+  // state를 읽어 새로고침 직전 보던 프로젝트 화면을 그대로 복원합니다.
+  const state = history.state;
+  if (state && state.view === 'project' && state.project && allProjects.includes(state.project)) {
+    renderProjectView(state.project);
+    history.replaceState({ view: 'project', project: state.project }, '', '/');
+  } else {
+    renderHomeView(); // 최초 진입 화면(또는 복원할 상태가 없으면)은 홈(프로젝트 카드)
+    history.replaceState({ view: 'home' }, '', '/'); // pushState가 아닌 replaceState — 새 기록을 쌓지 않고 현재 항목에 상태만 붙임
+  }
 })();

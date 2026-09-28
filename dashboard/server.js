@@ -307,10 +307,16 @@ wss.on('connection', (ws, req) => {
   });
 });
 
+// [수정 2026-09-28] busy 플래그 추가 — 화면 새로고침으로 WebSocket 연결이 끊겼다 재연결되면
+// 프런트는 진행 중이던 요청을 전혀 모른 채 "유휴" 상태로 그려졌음. 그 사이 서버의 activeRuns에는
+// 이전 연결이 등록해둔 실행이 여전히 잠겨있어(완료 전까지는 정상), 사용자가 새로고침 후 다시
+// 보내기를 눌러도 "이미 진행 중" 에러만 조용히 오갈 뿐 화면상 아무 변화가 없어 보이는 문제로
+// 이어짐(사용자 리포트). 이 플래그로 프런트가 재연결 시 busy 상태를 복원하고 완료를 폴링하게 함.
 app.get('/api/:project/chat/history', (req, res) => {
   const token = auth.getCookie(req.headers.cookie, SESSION_COOKIE);
   const session = chatSessions.get(req.params.project, token);
-  res.json({ messages: session ? session.messages : [] });
+  const busy = activeRuns.has(runKey(req.params.project, token));
+  res.json({ messages: session ? session.messages : [], busy });
 });
 
 app.post('/api/:project/chat/reset', (req, res) => {
