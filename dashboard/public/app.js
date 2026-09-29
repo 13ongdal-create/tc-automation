@@ -1062,11 +1062,39 @@ function tqPillValue(groupEl) {
 function tqWirePillGroup(groupEl) {
   groupEl.addEventListener('click', (e) => {
     const btn = e.target.closest('.tq-pill-btn');
-    if (!btn || tqRunning) return;
+    if (!btn || btn.disabled || tqRunning) return;
     groupEl.querySelectorAll('.tq-pill-btn').forEach((b) => b.classList.remove('active'));
     btn.classList.add('active');
     refreshTqPreview();
   });
+}
+
+/**
+ * 현재 선택 조합 기준으로 "이 값을 고르면 몇 건인지"(facets)를 반영해, 골라도 0건인 선택지는
+ * 비활성화합니다 — 선택 후에야 "대상 없음"을 알게 하지 않고, 고를 수 있는 값만 활성화된 상태로
+ * 보여달라는 사용자 요청 (2026-09-29). "전체"(빈 값)는 필터를 넓히는 선택지라 항상 활성화 유지.
+ */
+function applyTqFacets(facets) {
+  if (!facets) return;
+  Array.from(el.tqModule.options).forEach((opt) => {
+    if (!opt.value) return;
+    const f = facets.modules.find((m) => m.value === opt.value);
+    opt.disabled = !!f && f.count === 0;
+  });
+  Array.from(el.tqSystem.options).forEach((opt) => {
+    if (!opt.value) return;
+    const f = facets.systems.find((s) => s.value === opt.value);
+    opt.disabled = !!f && f.count === 0;
+  });
+  const applyPills = (groupEl, list) => {
+    groupEl.querySelectorAll('.tq-pill-btn').forEach((btn) => {
+      if (!btn.dataset.value) return;
+      const f = list.find((x) => x.value === btn.dataset.value);
+      btn.disabled = !!f && f.count === 0;
+    });
+  };
+  applyPills(el.tqPriorityPills, facets.priorities);
+  applyPills(el.tqStatusPills, facets.statuses);
 }
 tqWirePillGroup(el.tqPriorityPills);
 tqWirePillGroup(el.tqStatusPills);
@@ -1123,6 +1151,7 @@ async function refreshTqPreview() {
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.error || '실행 대상을 조회하지 못했습니다.');
     el.tqPreview.classList.remove('tq-preview-error');
+    applyTqFacets(data.facets);
     if (!data.targetCount) {
       el.tqPreview.textContent = '이 조건에 실행 대상 TC가 없습니다.';
       el.btnTqStart.disabled = true;

@@ -134,6 +134,46 @@ function resolvePlan(project, scope, opts = {}) {
   return plan;
 }
 
+/** 프로젝트 전체에서 "실제로 자동화된"(spec 파일에 테스트가 있는) TC 항목만 모듈코드와 함께 평탄화합니다. */
+function automatedItems(project) {
+  const modules = listRunnableModules(project);
+  const canonical = new Map(tcStore.readModuleFiles(project).map((m) => [m.moduleCode, m]));
+  const out = [];
+  for (const m of modules) {
+    const mod = canonical.get(m.moduleCode);
+    const automatedIds = extractTcIdsFromSpec(path.join(TC_AUTOMATION_ROOT, m.specFile));
+    for (const item of mod.data.items || []) {
+      if (automatedIds.has(item.tcId)) out.push({ ...item, moduleCode: m.moduleCode });
+    }
+  }
+  return out;
+}
+
+/**
+ * 현재 선택된 필터(opts) 기준으로, 모듈/시스템/우선순위/수행상태 각 축에서 "다른 값을 골랐을 때"
+ * (나머지 축은 그대로 유지) 실행 대상이 몇 건이 되는지 계산합니다. 프런트가 0건인 선택지를
+ * 비활성화해, 선택해도 결과가 없는 조합을 애초에 고를 수 없게 하는 데 사용합니다(사용자 요청,
+ * 2026-09-29 — "케이스 유무에 따라 선택 가능한 값만 활성화되어야"). 자동화 안 된 TC는 애초에
+ * 실행 불가능하므로 집계에서 제외합니다.
+ */
+function facets(project, opts = {}) {
+  const items = automatedItems(project);
+  const count = (filters) => {
+    const moduleCodes = Array.isArray(filters.moduleCodes) && filters.moduleCodes.length ? new Set(filters.moduleCodes) : null;
+    const matches = itemMatcher(filters);
+    return items.filter((i) => (!moduleCodes || moduleCodes.has(i.moduleCode)) && matches(i)).length;
+  };
+  const base = { moduleCodes: opts.moduleCodes, priority: opts.priority, system: opts.system, status: opts.status };
+  const modules = listRunnableModules(project);
+
+  return {
+    modules: modules.map((m) => ({ value: m.moduleCode, label: m.moduleName, count: count({ ...base, moduleCodes: [m.moduleCode] }) })),
+    systems: SYSTEMS.map((s) => ({ value: s, count: count({ ...base, system: s }) })),
+    priorities: PRIORITIES.map((p) => ({ value: p, count: count({ ...base, priority: p }) })),
+    statuses: STATUSES.map((s) => ({ value: s, count: count({ ...base, status: s }) })),
+  };
+}
+
 /** 실행 전 미리보기 — 몇 건이 실제 실행 대상인지, 자동화 코드가 없어 제외되는 건 몇 건인지. */
 function preview(project, scope, opts = {}) {
   const plan = resolvePlan(project, scope, opts);
@@ -160,7 +200,8 @@ function preview(project, scope, opts = {}) {
     modules: plan.map((p) => ({ moduleCode: p.moduleCode, count: countOf(p) })),
     targetCount,
     excludedNoAutomation,
+    facets: scope === 'filter' ? facets(project, opts) : undefined,
   };
 }
 
-module.exports = { SCOPES, PRIORITIES, SYSTEMS, STATUSES, listRunnableModules, resolvePlan, preview };
+module.exports = { SCOPES, PRIORITIES, SYSTEMS, STATUSES, listRunnableModules, resolvePlan, preview, facets };
