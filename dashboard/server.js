@@ -292,7 +292,7 @@ wss.on('connection', (ws, req) => {
     }
 
     if (msg.type === 'runTests') {
-      const { project, scope, moduleCodes, headed } = msg;
+      const { project, scope, moduleCodes, tcIds, headed } = msg;
       if (!project || !scope) {
         return wsSend(ws, { type: 'queueError', project, error: 'project와 scope가 필요합니다.' });
       }
@@ -305,7 +305,7 @@ wss.on('connection', (ws, req) => {
 
       let plan;
       try {
-        plan = testQueue.resolvePlan(project, scope, { moduleCodes });
+        plan = testQueue.resolvePlan(project, scope, { moduleCodes, tcIds });
       } catch (err) {
         return wsSend(ws, { type: 'queueError', project, error: err.message });
       }
@@ -439,10 +439,11 @@ app.get('/api/:project/test-queue/modules', (req, res) => {
 });
 
 app.get('/api/:project/test-queue/preview', (req, res) => {
-  const { scope, moduleCodes } = req.query;
+  const { scope, moduleCodes, tcIds } = req.query;
   try {
     const codes = typeof moduleCodes === 'string' ? moduleCodes.split(',').filter(Boolean) : [];
-    res.json(testQueue.preview(req.params.project, scope, { moduleCodes: codes }));
+    const ids = typeof tcIds === 'string' ? tcIds.split(',').filter(Boolean) : [];
+    res.json(testQueue.preview(req.params.project, scope, { moduleCodes: codes, tcIds: ids }));
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

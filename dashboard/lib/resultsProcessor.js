@@ -76,8 +76,16 @@ function buildActualResult(flat, consoleData) {
   return parts.join('\n') || '(오류 메시지를 확인하지 못했습니다 — trace.zip 참조)';
 }
 
+/** "콘솔 에러:"/"실패 요청:" 같은 라벨 줄은 건너뛰고, 실제 내용이 담긴 첫 줄을 고릅니다
+ * (라벨 줄만 뽑히면 "상품상세 > 콘솔 에러:"처럼 정보가 없는 요약이 되는 문제 방지 — 실측 발견). */
+function firstMeaningfulLine(actualResult) {
+  const lines = actualResult.split('\n').map((l) => l.trim()).filter(Boolean);
+  const line = lines.find((l) => !l.endsWith(':')) || lines[0] || '';
+  return line.slice(0, 70);
+}
+
 function buildSummaryText(screenName, actualResult) {
-  const oneLine = actualResult.split('\n')[0].slice(0, 70);
+  const oneLine = firstMeaningfulLine(actualResult);
   return screenName ? `${screenName} > ${oneLine}` : oneLine;
 }
 

@@ -6,7 +6,7 @@ const path = require('path');
 const { PROJECTS_ROOT, TC_AUTOMATION_ROOT } = require('./defectStore');
 const tcStore = require('./tcStore');
 
-const SCOPES = ['all', 'module', 'defect-retest', 'pending', 'p1'];
+const SCOPES = ['all', 'module', 'defect-retest', 'pending', 'p1', 'custom'];
 
 function automationDir(project) {
   return path.join(PROJECTS_ROOT, project, 'TC', 'automation', 'tests');
@@ -81,6 +81,23 @@ function resolvePlan(project, scope, opts = {}) {
   if (scope === 'all') {
     return modules.map((m) => ({ moduleCode: m.moduleCode, specFile: m.specFile, tcIds: null }));
   }
+  if (scope === 'custom') {
+    // TC 뷰어(HTML)에서 체크박스로 직접 고른 tcId 목록 — 여러 모듈에 걸쳐 있을 수 있어 각 tcId가
+    // 실제로 속한 모듈을 찾아 그 모듈의 --grep 대상으로 묶습니다. 존재하지 않거나(오타 등) 자동화가
+    // 안 된 tcId는 조용히 제외합니다 (preview()의 excludedNoAutomation으로 건수만 알림).
+    const requested = [...new Set(Array.isArray(opts.tcIds) ? opts.tcIds : [])];
+    if (!requested.length) throw new Error('실행할 TC를 선택해주세요.');
+    const canonical = new Map(tcStore.readModuleFiles(project).map((m) => [m.moduleCode, m]));
+    const plan = [];
+    for (const m of modules) {
+      const mod = canonical.get(m.moduleCode);
+      const moduleTcIds = new Set((mod.data.items || []).map((i) => i.tcId));
+      const automatedIds = extractTcIdsFromSpec(path.join(TC_AUTOMATION_ROOT, m.specFile));
+      const tcIds = requested.filter((id) => moduleTcIds.has(id) && automatedIds.has(id));
+      if (tcIds.length) plan.push({ moduleCode: m.moduleCode, specFile: m.specFile, tcIds });
+    }
+    return plan;
+  }
 
   // defect-retest / pending / p1 — 모듈 전체가 아니라 조건에 맞고 실제로 자동화된 TC만 --grep으로 선별
   const matches = matcherFor(scope);
@@ -105,7 +122,10 @@ function preview(project, scope, opts = {}) {
   const targetCount = plan.reduce((sum, p) => sum + countOf(p), 0);
 
   let excludedNoAutomation = 0;
-  if (scope !== 'module') {
+  if (scope === 'custom') {
+    const requestedUnique = new Set(Array.isArray(opts.tcIds) ? opts.tcIds : []).size;
+    excludedNoAutomation = Math.max(0, requestedUnique - targetCount);
+  } else if (scope !== 'module') {
     const matches = matcherFor(scope);
     let totalMatching = 0;
     for (const m of tcStore.readModuleFiles(project)) {
