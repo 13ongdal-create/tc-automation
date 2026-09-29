@@ -483,6 +483,22 @@ TC 수행에 필요한 구체적 입력값을 별도 컬럼으로 분리하여 �
 - **자유입력**: 담당자/이슈내용/이슈링크 (텍스트 인풋)
 - **모달 2종**: 테스트 계정 매트릭스, User Flow Map (표 형식)
 - **테이블**: `table-layout:fixed` + 컬럼별 % 폭 고정 (가로 스크롤 금지)
+<!-- [추가 2026-09-29] 대시보드에 "테스트 실행 큐"(zero-token, dashboard/lib/testQueue.js·testRunner.js·
+resultsProcessor.js) 기능이 추가되면서, TC 뷰어에서도 체크한 TC를 그 자리에서 바로 실행할 수 있게
+해달라는 사용자 요청으로 추가. 대시보드와 다른 서버가 아니라 같은 오리진(`/project-files/` 경로로
+서빙)이라 로그인 세션 쿠키를 그대로 공유하므로, 뷰어 HTML이 대시보드의 `/ws/chat` WebSocket에
+`{type:'runTests', project, scope:'custom', tcIds:[...]}`을 직접 보내 재사용합니다(서버 쪽 `custom`
+스코프는 여러 모듈에 걸친 tcId를 각자의 소속 모듈로 묶어 --grep 실행). -->
+- **TC 테이블 첫 컬럼에 체크박스 추가** + 툴바에 `▶ 선택 TC 테스트 실행` 버튼(선택 0건이면 비활성화,
+  선택 시 버튼 라벨에 건수 표시), 테이블 위/아래 중 한 곳에 실시간 로그 패널(`#runPanel`, 다크 배경
+  모노스페이스, 완료 전까지 숨김) — 버튼 클릭 시 위 WebSocket 프로토콜로 실행을 시작하고 `queueAck`/
+  `queueModuleStart`/`queueLog`/`queueModuleDone`/`queueDone`/`queueError` 메시지를 그대로 로그 패널에
+  스트리밍합니다. `queueDone` 도착 시 "TC/defects.json은 갱신됐지만 이 HTML(생성 시점 스냅샷)은
+  자동 반영되지 않으니 채팅에 '뷰어 갱신해줘'로 재생성을 요청하라"는 안내 문구를 반드시 덧붙입니다
+  (HTML 뷰어 자체는 이 기능으로 재생성하지 않음 — resultsProcessor.js가 의도적으로 남겨둔 범위).
+  선택 상태는 탭/필터를 바꿔도 유지합니다(전역 `Set`에 tcId를 보관하고 매 `render()`마다 체크 상태를
+  복원). 통합(전체) 뷰어처럼 여러 모듈이 한 파일에 있으면 체크박스가 모듈 경계 없이 섞여도 되며,
+  서버의 `custom` 스코프가 알아서 모듈별로 묶어 실행합니다.
 
 ### JSON 저장/불러오기 스펙
 <!-- [수정 전 2026-08-20] 파일명을 `{프로젝트명}_tc_{YYYY-MM-DD}.json`(소문자, 날짜 기반)로 명시하고
