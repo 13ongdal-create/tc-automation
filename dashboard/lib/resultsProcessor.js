@@ -2,11 +2,13 @@
 // (Claude 미사용, 토큰 소모 없음). defect-management 스킬(20-2/20-3항)의 레코드 스키마·중복판정
 // 규칙을 코드로 그대로 옮긴 것입니다.
 //
-// ⚠️ 의도적으로 하지 않는 것: TC 모듈 HTML 뷰어(결함현황 탭 포함)와 results/{...}_Result_{날짜}.html
-// 스냅샷 뷰어는 재생성하지 않습니다 — 둘 다 AGENTS.md 14항 스펙(다크테마·모달·CSV/JSON 내보내기 등)을
-// 매번 새로 충족해야 하는 생성형 산출물이라, 여기서 고정 템플릿으로 흉내 내면 기존 뷰어와 품질이
-// 어긋날 위험이 큽니다. 이 파일은 JSON 데이터(소스 오브 트루스)와, 데이터만으로 충분히 만들 수 있는
-// results/index.html(단순 표)까지만 갱신합니다. 나머지 HTML 뷰어 재생성은 채팅(큐돌이)에 요청하세요.
+// ⚠️ 의도적으로 하지 않는 것: TC 모듈 HTML 뷰어(다크테마·모달·CSV/JSON 내보내기·결함현황 탭을 갖춘
+// AGENTS.md 14항 스펙의 편집 가능한 뷰어)는 재생성하지 않습니다 — 매번 새로 충족해야 하는 생성형
+// 산출물이라 고정 템플릿으로 흉내 내면 기존 뷰어와 품질이 어긋날 위험이 큽니다. 대신 이 파일은 JSON
+// 데이터(소스 오브 트루스)와, 데이터만으로 충분히 만들 수 있는 단순 읽기 전용 표 2종
+// (results/index.html, results/{...}_Result_{날짜}.html)까지 갱신합니다 — 후자가 없으면 대시보드
+// "실행 이력" 목록의 "열기" 링크가 404가 되는 문제가 실사용 중 발견되어 추가(2026-09-29). 최신
+// 데이터를 반영한 "편집 가능한" 뷰어 재생성은 여전히 채팅(큐돌이)에 요청해야 합니다.
 const fs = require('fs');
 const path = require('path');
 const { PROJECTS_ROOT } = require('./defectStore');
@@ -226,8 +228,84 @@ function applyModuleResults(project, moduleCode, flatResults, opts = {}) {
     JSON.stringify(canonical, null, 2) + '\n',
     'utf8'
   );
+  // 대시보드 "실행 이력" 목록이 항상 같은 이름의 .html로 "열기" 링크를 거는데(resultsStore.js의
+  // htmlFile 규칙), 이 zero-token 경로는 그 .html을 만들지 않아 링크가 404로 죽는 문제가 실사용
+  // 중 발견됨(2026-09-29) — 다크테마·모달 등을 갖춘 완전한 TC 뷰어까지는 아니어도, 최소한 그 날짜
+  // 스냅샷을 읽을 수 있는 단순 표 페이지는 함께 생성합니다.
+  fs.writeFileSync(
+    path.join(resultsDir, `${project}_TC_${moduleCode}_Result_${dateStr}.html`),
+    renderSnapshotHtml(project, moduleCode, canonical, dateStr),
+    'utf8'
+  );
 
   return summary;
+}
+
+/** results/index.html의 "열기" 링크가 가리키는, 그 날짜 스냅샷의 단순 읽기 전용 표 페이지. */
+function renderSnapshotHtml(project, moduleCode, canonical, dateStr) {
+  const items = canonical.items || [];
+  const dateFmt = `${dateStr.slice(0, 4)}-${dateStr.slice(4, 6)}-${dateStr.slice(6, 8)}`;
+  const counts = { Pass: 0, Fail: 0, 'N/A': 0, 'N/T': 0, none: 0 };
+  items.forEach((i) => { counts[i.result || 'none'] = (counts[i.result || 'none'] || 0) + 1; });
+
+  const rows = items
+    .map(
+      (t) => `<tr>
+<td>${t.displayNo}</td><td>${escHtml(t.tcId)}</td><td>${escHtml(t.majorCategory)}</td><td>${escHtml(t.midCategory)}</td>
+<td>${escHtml(t.screenName || '')}</td><td><span class="badge ${escHtml(t.priority)}">${escHtml(t.priority)}</span></td>
+<td>${escHtml(t.item)}</td><td class="res-${escHtml(t.result || 'none')}">${escHtml(t.result || '미실행')}</td>
+<td>${escHtml(t.issueSummary || '')}</td><td>${escHtml(t.remark || '')}</td>
+</tr>`
+    )
+    .join('\n');
+
+  return `<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>${escHtml(project)} ${escHtml(canonical.meta.moduleName || moduleCode)} 실행결과 스냅샷 (${dateFmt})</title>
+<style>
+  :root{ --bg:#f6f8fa; --panel:#fff; --text:#1f2328; --muted:#656d76; --border:#d0d7de; --accent:#0969da;
+    --p1:#cf222e; --p2:#9a6700; --p3:#0969da; --pass:#1a7f37; --fail:#cf222e; }
+  body{font-family:"Pretendard",sans-serif;background:var(--bg);color:var(--text);margin:0;padding:24px;}
+  h1{font-size:17px;} .sub{font-size:12.5px;color:var(--muted);margin-bottom:16px;}
+  .kpis{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap;}
+  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;min-width:80px;}
+  .kpi .num{font-size:18px;font-weight:700;} .kpi .label{font-size:11.5px;color:var(--muted);}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--panel);}
+  th,td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top;}
+  th{background:var(--bg);text-align:center;}
+  .badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;color:#fff;}
+  .badge.P1{background:var(--p1);} .badge.P2{background:var(--p2);} .badge.P3{background:var(--p3);}
+  .res-Pass{color:var(--pass);font-weight:700;} .res-Fail{color:var(--fail);font-weight:700;}
+  a{color:var(--accent);}
+  .links{margin:10px 0 18px;font-size:12.5px;}
+</style>
+</head>
+<body>
+<h1>${escHtml(project)} · ${escHtml(canonical.meta.moduleName || moduleCode)}(${escHtml(moduleCode)}) 실행결과 스냅샷</h1>
+<div class="sub">실행일 ${dateFmt} · 이 페이지는 그 시점의 읽기 전용 스냅샷입니다(수정 불가) — 최신 편집 가능한 뷰어는 아래 링크를 이용하세요.</div>
+<div class="links">
+  <a href="index.html">← 실행 이력 목록</a> ·
+  <a href="../${escHtml(project)}_TC_${escHtml(moduleCode)}.html">최신 TC 뷰어(${escHtml(moduleCode)})</a>
+</div>
+<div class="kpis">
+  <div class="kpi"><div class="num">${items.length}</div><div class="label">전체</div></div>
+  <div class="kpi"><div class="num">${counts.Pass}</div><div class="label">Pass</div></div>
+  <div class="kpi"><div class="num">${counts.Fail}</div><div class="label">Fail</div></div>
+  <div class="kpi"><div class="num">${counts['N/A']}</div><div class="label">N/A</div></div>
+  <div class="kpi"><div class="num">${counts['N/T']}</div><div class="label">N/T</div></div>
+  <div class="kpi"><div class="num">${counts.none}</div><div class="label">미실행</div></div>
+</div>
+<table>
+<thead><tr><th>No.</th><th>TC ID</th><th>대분류</th><th>중분류</th><th>화면명</th><th>우선순위</th><th>테스트항목</th><th>실행결과</th><th>이슈내용</th><th>비고</th></tr></thead>
+<tbody>
+${rows}
+</tbody>
+</table>
+</body>
+</html>
+`;
 }
 
 function escHtml(s) {
@@ -308,4 +386,4 @@ ${rows}
   fs.writeFileSync(path.join(dir, 'results', 'index.html'), html, 'utf8');
 }
 
-module.exports = { applyModuleResults, writeResultsIndex };
+module.exports = { applyModuleResults, writeResultsIndex, renderSnapshotHtml };
