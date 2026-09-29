@@ -115,7 +115,10 @@
   <section class="panel panel-full">
     <div class="panel-head">
       <h2>📋 TC 관리</h2>
-      <a id="tcDetailLink" class="project-block-link" href="#" target="_blank" rel="noopener" hidden>Full TC 상세 보기 →</a>
+      <div class="panel-head-actions">
+        <button type="button" id="btnTcUpload" class="btn btn-outline">+ TC 업로드</button>
+        <a id="tcDetailLink" class="project-block-link" href="#" target="_blank" rel="noopener" hidden>Full TC 상세 보기 →</a>
+      </div>
     </div>
     <div class="tc-priority-layout">
       <div class="pb-chart-card" id="tcPriorityChart"><span class="placeholder-text">프로젝트를 선택하세요</span></div>
@@ -207,6 +210,11 @@
         <option value="0">⚡ 백그라운드 실행 (화면 숨김 / 고속)</option>
         <option value="1">🖥 화면 표시 (headed, 느림 · 디버그용)</option>
       </select>
+      <div class="tq-preview tq-preview-error" id="tqHeadedNote" hidden>
+        ⚠ 대시보드가 지금처럼 Windows 예약 작업(S4U, 상시구동)으로 실행 중이면 세션 0 격리 때문에
+        브라우저 창이 실제로는 뜨지 않습니다(화면을 볼 수 없는 세션에서 실행됨) — 창을 직접 보려면
+        대시보드를 대화형 터미널에서 <code>npm start</code>로 수동 실행해야 합니다.
+      </div>
 
       <div class="tq-preview" id="tqPreview">프로젝트를 선택하면 실행 대상 현황이 표시됩니다.</div>
 
@@ -297,6 +305,28 @@
       <div class="modal-actions">
         <button type="button" id="btnDeleteProject" class="btn btn-danger" disabled>이 프로젝트 영구 삭제</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- + TC 업로드 모달 -->
+<div id="tcUploadModal" class="modal-overlay" hidden>
+  <div class="modal-box modal-box-lg">
+    <h2>TC 엑셀 업로드</h2>
+    <p class="placeholder-text">
+      AGENTS.md 2항 컬럼(TC ID/system/대분류/중분류/소분류/화면명/플랫폼/유형/테스트항목(시나리오)/
+      기준문서/우선순위/테스트 데이터/사전조건/테스트 수행 절차/기대결과/실행결과/담당자/이슈내용
+      요약/이슈링크/비고) 헤더를 그대로 쓴 .xlsx 파일만 지원합니다. <b>TC ID가 이미 등록된 값이면
+      수정, 비어있으면 대분류를 기준으로 신규 추가</b>됩니다 — 값이 채워진 칸만 반영되고 빈 칸은
+      기존 값을 그대로 둡니다. 여러 시트/여러 모듈이 섞여 있어도 됩니다.
+    </p>
+    <label class="field-label" for="tcUploadFile">엑셀 파일</label>
+    <input type="file" id="tcUploadFile" accept=".xlsx">
+    <div class="modal-error" id="tcUploadError"></div>
+    <div id="tcUploadResult" class="tc-upload-result" hidden></div>
+    <div class="modal-actions">
+      <button type="button" id="btnCancelTcUpload" class="btn btn-outline">닫기</button>
+      <button type="button" id="btnTcUploadSubmit" class="btn btn-primary" disabled>업로드 및 반영</button>
     </div>
   </div>
 </div>

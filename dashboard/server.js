@@ -15,6 +15,7 @@ const auth = require('./lib/auth');
 const testQueue = require('./lib/testQueue');
 const testRunner = require('./lib/testRunner');
 const resultsProcessor = require('./lib/resultsProcessor');
+const tcUpload = require('./lib/tcUpload');
 
 // 채팅 패널이 spawn하는 claude CLI(Windows에서 .cmd shim → 내부적으로 cmd.exe 경유)가 종료될 때
 // 같은 콘솔 세션 전체(그룹 0)로 Ctrl+C를 보내는 사례가 실측 확인됨 — 이 서버 프로세스까지 함께
@@ -43,7 +44,8 @@ try {
 } catch {
   httpServer = http.createServer(app);
 }
-app.use(express.json());
+// 기본 100kb 제한은 TC 엑셀 업로드(base64로 JSON body에 실어 보냄)에 부족해 넉넉히 올림.
+app.use(express.json({ limit: '20mb' }));
 
 // ── 로그인 (공유 비밀번호) ────────────────────────────────────────────────
 // 채팅 패널이 실제 claude CLI를 실행해 파일 쓰기/커밋까지 하므로, 같은 네트워크에 열어도
@@ -436,6 +438,20 @@ app.post('/api/:project/chat/reset', (req, res) => {
 // ── ▶ 테스트 실행 큐 (zero-token — claude 미사용, Playwright를 직접 spawn) ──────────────
 app.get('/api/:project/test-queue/modules', (req, res) => {
   res.json({ modules: testQueue.listRunnableModules(req.params.project) });
+});
+
+// TC 엑셀 업로드 — 이미 등록된 TC를 수정하거나 신규 TC를 추가합니다(zero-token, claude 미사용).
+// body: { fileName, dataBase64 } — 프런트에서 File을 base64로 인코딩해 JSON으로 보냄.
+app.post('/api/:project/tc-upload', async (req, res) => {
+  const { fileName, dataBase64 } = req.body || {};
+  if (!dataBase64) return res.status(400).json({ error: '업로드할 파일 데이터가 없습니다.' });
+  try {
+    const buffer = Buffer.from(dataBase64, 'base64');
+    const result = await tcUpload.applyUpload(req.params.project, buffer, fileName || 'uploaded.xlsx');
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
 app.get('/api/:project/test-queue/preview', (req, res) => {

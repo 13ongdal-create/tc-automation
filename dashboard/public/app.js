@@ -47,6 +47,13 @@ const el = {
   siteAnalysisBody: document.getElementById('siteAnalysisBody'),
   detailModuleExecTable: document.getElementById('detailModuleExecTable'),
   tcDetailLink: document.getElementById('tcDetailLink'),
+  btnTcUpload: document.getElementById('btnTcUpload'),
+  tcUploadModal: document.getElementById('tcUploadModal'),
+  tcUploadFile: document.getElementById('tcUploadFile'),
+  tcUploadError: document.getElementById('tcUploadError'),
+  tcUploadResult: document.getElementById('tcUploadResult'),
+  btnCancelTcUpload: document.getElementById('btnCancelTcUpload'),
+  btnTcUploadSubmit: document.getElementById('btnTcUploadSubmit'),
   tcPriorityChart: document.getElementById('tcPriorityChart'),
   tcPriorityBody: document.getElementById('tcPriorityBody'),
   tcHistoryLink: document.getElementById('tcHistoryLink'),
@@ -60,6 +67,7 @@ const el = {
   tqPriorityPills: document.getElementById('tqPriorityPills'),
   tqStatusPills: document.getElementById('tqStatusPills'),
   tqHeaded: document.getElementById('tqHeaded'),
+  tqHeadedNote: document.getElementById('tqHeadedNote'),
   tqPreview: document.getElementById('tqPreview'),
   btnTqStart: document.getElementById('btnTqStart'),
   btnTqCancel: document.getElementById('btnTqCancel'),
@@ -1049,6 +1057,81 @@ function connectWs() {
   };
 }
 
+// ── + TC 업로드 (zero-token — claude 미사용, 엑셀을 직접 파싱해 캐노니컬 TC json에 반영) ──────
+function openTcUploadModal() {
+  el.tcUploadFile.value = '';
+  el.tcUploadError.textContent = '';
+  el.tcUploadResult.hidden = true;
+  el.tcUploadResult.innerHTML = '';
+  el.btnTcUploadSubmit.disabled = true;
+  el.tcUploadModal.hidden = false;
+}
+function closeTcUploadModal() {
+  el.tcUploadModal.hidden = true;
+}
+el.btnTcUpload.addEventListener('click', openTcUploadModal);
+el.btnCancelTcUpload.addEventListener('click', closeTcUploadModal);
+el.tcUploadModal.addEventListener('click', (e) => { if (e.target === el.tcUploadModal) closeTcUploadModal(); });
+el.tcUploadFile.addEventListener('change', () => {
+  el.btnTcUploadSubmit.disabled = !el.tcUploadFile.files.length;
+});
+
+function arrayBufferToBase64(buf) {
+  let binary = '';
+  const bytes = new Uint8Array(buf);
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+
+function renderTcUploadResult(data) {
+  const parts = [];
+  parts.push(`<div class="tur-summary">수정 ${data.updatedTcIds.length}건 · 신규 ${data.createdTcIds.length}건 반영됨</div>`);
+  if (data.modules.length) {
+    parts.push('<ul>' + data.modules.map((m) => `<li>${esc(m.moduleName)}(${esc(m.moduleCode)}) — 수정 ${m.updated}건, 신규 ${m.created}건 (v${m.version})</li>`).join('') + '</ul>');
+  }
+  if (data.warnings.length) {
+    parts.push('<div class="tur-warn">⚠ 참고</div><ul class="tur-warn">' + data.warnings.map((w) => `<li>${esc(w)}</li>`).join('') + '</ul>');
+  }
+  if (data.skipped.length) {
+    parts.push(`<div class="tur-skip">건너뜀 ${data.skipped.length}건</div><ul class="tur-skip">` + data.skipped.map((s) => `<li>${esc(s.row)} ${esc(s.tcId)} — ${esc(s.reason)}</li>`).join('') + '</ul>');
+  }
+  if (data.updatedTcIds.length || data.createdTcIds.length) {
+    parts.push('<div class="placeholder-text">※ TC JSON은 즉시 반영됐지만, 편집 가능한 TC 뷰어(HTML)는 이 업로드로 자동 갱신되지 않습니다 — 채팅에서 "뷰어 갱신해줘"라고 요청해주세요.</div>');
+  }
+  el.tcUploadResult.innerHTML = parts.join('');
+  el.tcUploadResult.hidden = false;
+}
+
+el.btnTcUploadSubmit.addEventListener('click', async () => {
+  const project = el.projectSelect.value;
+  const file = el.tcUploadFile.files[0];
+  if (!project || !file) return;
+  el.tcUploadError.textContent = '';
+  el.btnTcUploadSubmit.disabled = true;
+  el.btnTcUploadSubmit.textContent = '반영 중…';
+  try {
+    const buf = await file.arrayBuffer();
+    const dataBase64 = arrayBufferToBase64(buf);
+    const res = await fetch(`/api/${encodeURIComponent(project)}/tc-upload`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fileName: file.name, dataBase64 }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || '업로드 처리에 실패했습니다.');
+    renderTcUploadResult(data);
+    if (data.updatedTcIds.length || data.createdTcIds.length) loadAll(); // TC 관리/KPI 패널에 즉시 반영
+  } catch (err) {
+    el.tcUploadError.textContent = err.message;
+  } finally {
+    el.btnTcUploadSubmit.disabled = !el.tcUploadFile.files.length;
+    el.btnTcUploadSubmit.textContent = '업로드 및 반영';
+  }
+});
+
 // ── ▶ 테스트 실행 큐 (zero-token — claude 미사용, Playwright 직접 실행) ──────────────────
 let tqModules = []; // 현재 프로젝트에서 실행 가능한(자동화 코드가 있는) 모듈 목록
 let tqRunning = false;
@@ -1171,6 +1254,12 @@ async function refreshTqPreview() {
 
 el.tqModule.addEventListener('change', refreshTqPreview);
 el.tqSystem.addEventListener('change', refreshTqPreview);
+// 대시보드가 Windows 예약 작업(S4U, 상시구동)으로 떠 있으면 세션 0 격리 때문에 headed 모드로
+// 실행해도 브라우저 창이 실제로는 안 보입니다(실측 확인, 2026-09-29) — 옵션 자체를 없애는 대신
+// 고른 즉시 이 제약을 알려줍니다.
+el.tqHeaded.addEventListener('change', () => {
+  el.tqHeadedNote.hidden = el.tqHeaded.value !== '1';
+});
 
 function tqSetRunning(running) {
   tqRunning = running;
