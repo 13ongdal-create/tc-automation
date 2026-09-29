@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "MB",
     "moduleName": "회원",
-    "version": 15,
+    "version": 14,
     "changeHistory": [
       {
         "version": 1,
@@ -74,11 +74,6 @@
         "version": 14,
         "date": "2026-09-29",
         "summary": "케이스 고도화 조사(모듈정의 정정 2단계): 대분류 \"예외·회귀\"를 쓰던 4건(TC_MB_011/030/032/046)을 실제 도메인 \"회원\"으로 정정(type 컬럼에 이미 \"회귀\"/\"유효성\" 등으로 표현되는 정보와 중복이었음)."
-      },
-      {
-        "version": 15,
-        "date": "2026-09-29",
-        "summary": "screenName(화면명) 컬럼 전체 백필: TC 수행절차(steps) 1단계에 명시된 진입 화면을 근거로 자동/수동 판단해 기재 (헤더/푸터 등 전역 공통 컴포넌트, Front-Admin 교차검증처럼 화면을 하나로 특정할 수 없는 TC는 AGENTS.md 2항 원칙대로 빈 값 유지)."
       }
     ]
   },
@@ -105,8 +100,7 @@
       "displayNo": 1,
       "system": "FO",
       "remark": "",
-      "verifyNote": "화면상 \"*\" 필수 표시는 있으나 HTML required 속성이 없어 실제 차단 로직(JS) 존재 여부 확인 필요",
-      "screenName": "회원가입"
+      "verifyNote": "화면상 \"*\" 필수 표시는 있으나 HTML required 속성이 없어 실제 차단 로직(JS) 존재 여부 확인 필요"
     },
     {
       "tcId": "TC_MB_002",
@@ -130,8 +124,7 @@
       "displayNo": 2,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
-      "verifyNote": "실제 안내 문구 확인 필요",
-      "screenName": "회원가입"
+      "verifyNote": "실제 안내 문구 확인 필요"
     },
     {
       "tcId": "TC_MB_003",
@@ -155,8 +148,7 @@
       "displayNo": 3,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
-      "verifyNote": "실제 안내 문구 확인 필요",
-      "screenName": "회원가입"
+      "verifyNote": "실제 안내 문구 확인 필요"
     },
     {
       "tcId": "TC_MB_004",
@@ -180,8 +172,7 @@
       "displayNo": 4,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
-      "verifyNote": "실시간 중복체크 UI(버튼/자동체크) 제공 여부 미확인",
-      "screenName": "회원가입"
+      "verifyNote": "실시간 중복체크 UI(버튼/자동체크) 제공 여부 미확인"
     },
     {
       "tcId": "TC_MB_005",
@@ -205,8 +196,7 @@
       "displayNo": 5,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
-      "verifyNote": "",
-      "screenName": "회원가입"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_006",
@@ -230,8 +220,7 @@
       "displayNo": 6,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019, DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
-      "verifyNote": "",
-      "screenName": "회원가입"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_007",
@@ -255,8 +244,7 @@
       "displayNo": 7,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
-      "verifyNote": "실제 안내 문구 확인 필요",
-      "screenName": "회원가입"
+      "verifyNote": "실제 안내 문구 확인 필요"
     },
     {
       "tcId": "TC_MB_008",
@@ -280,8 +268,7 @@
       "displayNo": 8,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019) — 참고: 휴대폰번호/생년월일 형식·범위 검증 유무를 수동으로 반복 확인했으나 시도마다 결과가 달라(성공/무응답/API 200 후 미이동 등) 결론을 내리지 못함, 별도 결함 미등록(BACKFILL_ISSUES.md 참조, 후속 조사 필요)",
-      "verifyNote": "실제 안내 문구 확인 필요",
-      "screenName": "회원가입"
+      "verifyNote": "실제 안내 문구 확인 필요"
     },
     {
       "tcId": "TC_MB_009",
@@ -305,8 +292,7 @@
       "displayNo": 9,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019) — 참고: 휴대폰번호/생년월일 형식·범위 검증 유무를 수동으로 반복 확인했으나 시도마다 결과가 달라(성공/무응답/API 200 후 미이동 등) 결론을 내리지 못함, 별도 결함 미등록(BACKFILL_ISSUES.md 참조, 후속 조사 필요)",
-      "verifyNote": "",
-      "screenName": "회원가입"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_010",
@@ -330,8 +316,7 @@
       "displayNo": 10,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "회원가입"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_011",
@@ -355,8 +340,7 @@
       "displayNo": 11,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019) — 참고: 휴대폰번호/생년월일 형식·범위 검증 유무를 수동으로 반복 확인했으나 시도마다 결과가 달라(성공/무응답/API 200 후 미이동 등) 결론을 내리지 못함, 별도 결함 미등록(BACKFILL_ISSUES.md 참조, 후속 조사 필요)",
-      "verifyNote": "실제 차단 여부 확인 필요",
-      "screenName": "회원가입"
+      "verifyNote": "실제 차단 여부 확인 필요"
     },
     {
       "tcId": "TC_MB_012",
@@ -380,8 +364,7 @@
       "displayNo": 12,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
-      "verifyNote": "연동 서비스 및 팝업 방식 미확인",
-      "screenName": "회원가입"
+      "verifyNote": "연동 서비스 및 팝업 방식 미확인"
     },
     {
       "tcId": "TC_MB_013",
@@ -405,8 +388,7 @@
       "displayNo": 13,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
-      "verifyNote": "연동 동작 미확인",
-      "screenName": "회원가입"
+      "verifyNote": "연동 동작 미확인"
     },
     {
       "tcId": "TC_MB_014",
@@ -430,8 +412,7 @@
       "displayNo": 14,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "회원가입"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_015",
@@ -455,8 +436,7 @@
       "displayNo": 15,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "회원가입"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_016",
@@ -480,8 +460,7 @@
       "displayNo": 16,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "회원가입"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_017",
@@ -505,8 +484,7 @@
       "displayNo": 17,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
-      "verifyNote": "실제 차단 여부 확인 필요",
-      "screenName": "회원가입"
+      "verifyNote": "실제 차단 여부 확인 필요"
     },
     {
       "tcId": "TC_MB_018",
@@ -530,8 +508,7 @@
       "displayNo": 18,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
-      "verifyNote": "",
-      "screenName": "회원가입"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_019",
@@ -555,8 +532,7 @@
       "displayNo": 19,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "회원가입"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_020",
@@ -580,8 +556,7 @@
       "displayNo": 20,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
-      "verifyNote": "실제 안내 문구 확인 필요",
-      "screenName": "회원가입"
+      "verifyNote": "실제 안내 문구 확인 필요"
     },
     {
       "tcId": "TC_MB_021",
@@ -605,8 +580,7 @@
       "displayNo": 21,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019) — 참고: 1회 실행에서 회원가입 아이디 중복확인(checkLoginId) API 응답이 5초 초과 지연되는 현상도 관찰되었으나 재현이 불안정해 별도 결함으로는 등록하지 않음(BACKFILL_ISSUES.md 참조)",
-      "verifyNote": "실제 제출 시 서버 처리 결과 미확인(가입 API 응답 확인 필요)",
-      "screenName": "회원가입"
+      "verifyNote": "실제 제출 시 서버 처리 결과 미확인(가입 API 응답 확인 필요)"
     },
     {
       "tcId": "TC_MB_022",
@@ -630,8 +604,7 @@
       "displayNo": 22,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019, DEF_데모사이트_018, DEF_데모사이트_006, DEF_데모사이트_005)",
-      "verifyNote": "로그인 자동 처리 여부 및 이동 경로 확인 필요",
-      "screenName": "회원가입"
+      "verifyNote": "로그인 자동 처리 여부 및 이동 경로 확인 필요"
     },
     {
       "tcId": "TC_MB_023",
@@ -655,8 +628,7 @@
       "displayNo": 23,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_018, DEF_데모사이트_005, DEF_데모사이트_006)",
-      "verifyNote": "",
-      "screenName": "회원가입"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_024",
@@ -680,8 +652,7 @@
       "displayNo": 24,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
-      "verifyNote": "관측 결과 전체 입력 필드에 maxlength 속성이 없어 클라이언트 단 길이 제한 여부 확인 필요",
-      "screenName": "회원가입"
+      "verifyNote": "관측 결과 전체 입력 필드에 maxlength 속성이 없어 클라이언트 단 길이 제한 여부 확인 필요"
     },
     {
       "tcId": "TC_MB_025",
@@ -705,8 +676,7 @@
       "displayNo": 25,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
-      "verifyNote": "",
-      "screenName": "회원가입"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_026",
@@ -730,8 +700,7 @@
       "displayNo": 26,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019, DEF_데모사이트_006, DEF_데모사이트_005, DEF_데모사이트_018)",
-      "verifyNote": "",
-      "screenName": "회원가입"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_027",
@@ -755,8 +724,7 @@
       "displayNo": 27,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_028",
@@ -780,8 +748,7 @@
       "displayNo": 28,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_018, DEF_데모사이트_005, DEF_데모사이트_006)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_029",
@@ -805,8 +772,7 @@
       "displayNo": 29,
       "system": "FO",
       "remark": "사전조건(로그인 500 에러 화면 노출)이 2026-09-29 재관찰 결과에서도 재현되지 않아 테스트 불가 — TC_MB_030/031/032와 동일 사유(2026-08-24 최초 확인 당시 이 TC만 누락되어 갱신 안 된 상태였음).",
-      "verifyNote": "",
-      "screenName": "로그인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_030",
@@ -830,8 +796,7 @@
       "displayNo": 30,
       "system": "FO",
       "remark": "사전조건(로그인 500 에러 화면 노출 등)이 2026-08-24 재관찰 결과 재현되지 않아 테스트 불가",
-      "verifyNote": "",
-      "screenName": "로그인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_031",
@@ -855,8 +820,7 @@
       "displayNo": 31,
       "system": "FO",
       "remark": "사전조건(로그인 500 에러 화면 노출 등)이 2026-08-24 재관찰 결과 재현되지 않아 테스트 불가",
-      "verifyNote": "",
-      "screenName": "로그인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_032",
@@ -880,8 +844,7 @@
       "displayNo": 32,
       "system": "FO",
       "remark": "사전조건(로그인 500 에러 화면 노출 등)이 2026-08-24 재관찰 결과 재현되지 않아 테스트 불가",
-      "verifyNote": "결함 수정 후 전체 회원 기능 재검증 필요",
-      "screenName": ""
+      "verifyNote": "결함 수정 후 전체 회원 기능 재검증 필요"
     },
     {
       "tcId": "TC_MB_033",
@@ -905,8 +868,7 @@
       "displayNo": 33,
       "system": "FO",
       "remark": "",
-      "verifyNote": "임시 저장(draft) 기능 존재 여부 확인 필요",
-      "screenName": "회원가입"
+      "verifyNote": "임시 저장(draft) 기능 존재 여부 확인 필요"
     },
     {
       "tcId": "TC_MB_034",
@@ -930,8 +892,7 @@
       "displayNo": 34,
       "system": "FO",
       "remark": "",
-      "verifyNote": "모바일 시안 기준값 없어 실측 확정 필요",
-      "screenName": ""
+      "verifyNote": "모바일 시안 기준값 없어 실측 확정 필요"
     },
     {
       "tcId": "TC_MB_035",
@@ -955,8 +916,7 @@
       "displayNo": 35,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "회원가입"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_036",
@@ -980,8 +940,7 @@
       "displayNo": 36,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_037",
@@ -1005,8 +964,7 @@
       "displayNo": 37,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_018, DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_038",
@@ -1030,8 +988,7 @@
       "displayNo": 38,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "마이페이지"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_039",
@@ -1055,8 +1012,7 @@
       "displayNo": 39,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_018, DEF_데모사이트_005, DEF_데모사이트_006)",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_040",
@@ -1080,8 +1036,7 @@
       "displayNo": 40,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_018, DEF_데모사이트_005, DEF_데모사이트_006)",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_041",
@@ -1105,8 +1060,7 @@
       "displayNo": 41,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_018, DEF_데모사이트_005, DEF_데모사이트_006)",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_042",
@@ -1130,8 +1084,7 @@
       "displayNo": 42,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "장바구니"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_MB_043",
@@ -1155,8 +1108,7 @@
       "displayNo": 43,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_018, DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "majorCategory": "회원",
@@ -1180,8 +1132,7 @@
       "displayNo": 44,
       "tcId": "TC_MB_044",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 회원관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "회원",
@@ -1205,8 +1156,7 @@
       "displayNo": 45,
       "tcId": "TC_MB_045",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 회원관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "회원",
@@ -1230,8 +1180,7 @@
       "displayNo": 46,
       "tcId": "TC_MB_046",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 회원관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "회원",
@@ -1255,8 +1204,7 @@
       "displayNo": 47,
       "tcId": "TC_MB_047",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 회원관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "회원",
@@ -1280,8 +1228,7 @@
       "remark": "2026-08-20: DEF_009 오탐 재확인 과정에서 Admin 정상 조회 확인 및 Front-Admin 필드값 일치 확인 완료 / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 48,
       "tcId": "TC_MB_048",
-      "verifyNote": "",
-      "screenName": "마이페이지 개인정보수정"
+      "verifyNote": ""
     },
     {
       "majorCategory": "회원",
@@ -1305,8 +1252,7 @@
       "remark": "DEF_009는 오탐으로 정정됨(TC_MB_046 참고) — 본 TC는 별개 항목으로 계속 [확인필요] 유지 / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 49,
       "tcId": "TC_MB_049",
-      "verifyNote": "실제 상태 변경 및 로그인 차단 동작 미실행(운영 데이터 훼손 방지를 위해 실제 계정으로는 미실행, 테스트 계정 마련 후 재검증 필요)",
-      "screenName": "Admin 회원관리"
+      "verifyNote": "실제 상태 변경 및 로그인 차단 동작 미실행(운영 데이터 훼손 방지를 위해 실제 계정으로는 미실행, 테스트 계정 마련 후 재검증 필요)"
     },
     {
       "majorCategory": "회원",
@@ -1330,8 +1276,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 50,
       "tcId": "TC_MB_050",
-      "verifyNote": "",
-      "screenName": "Admin 리뷰관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "회원",
@@ -1355,8 +1300,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 51,
       "tcId": "TC_MB_051",
-      "verifyNote": "",
-      "screenName": "Admin 라벨관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "회원",
@@ -1380,8 +1324,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 52,
       "tcId": "TC_MB_052",
-      "verifyNote": "",
-      "screenName": "Admin 라벨관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "회원",
@@ -1405,8 +1348,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 53,
       "tcId": "TC_MB_053",
-      "verifyNote": "라벨-상품 매핑 상세 미확인, Front PDP 리뷰 영역에서 라벨 뱃지 UI 자체를 관찰하지 못함",
-      "screenName": ""
+      "verifyNote": "라벨-상품 매핑 상세 미확인, Front PDP 리뷰 영역에서 라벨 뱃지 UI 자체를 관찰하지 못함"
     }
   ]
 }

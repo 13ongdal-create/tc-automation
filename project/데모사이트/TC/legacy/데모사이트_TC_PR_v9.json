@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PR",
     "moduleName": "이벤트/기획전/쿠폰행사",
-    "version": 10,
+    "version": 9,
     "changeHistory": [
       {
         "version": 1,
@@ -49,11 +49,6 @@
         "version": 9,
         "date": "2026-09-29",
         "summary": "케이스 고도화 조사(모듈정의 정정 2단계): TC_PR_005/009/010의 대분류 \"예외·회귀\"를 실제 도메인 \"구매프로세스\"(쿠폰/가격할인)로 정정. TC_PR_006~008의 대분류 \"이벤트\"는 SKILL.md 5항 매핑표상 전시(DSP) 모듈의 중분류 예시일 뿐 대분류 값이 아니므로 \"전시\"로 정정(중분류 \"메인배너\"는 유지)."
-      },
-      {
-        "version": 10,
-        "date": "2026-09-29",
-        "summary": "screenName(화면명) 컬럼 전체 백필: TC 수행절차(steps) 1단계에 명시된 진입 화면을 근거로 자동/수동 판단해 기재 (헤더/푸터 등 전역 공통 컴포넌트, Front-Admin 교차검증처럼 화면을 하나로 특정할 수 없는 TC는 AGENTS.md 2항 원칙대로 빈 값 유지)."
       }
     ]
   },
@@ -80,8 +75,7 @@
       "displayNo": 1,
       "tcId": "TC_PR_001",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 쿠폰관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -105,8 +99,7 @@
       "displayNo": 2,
       "tcId": "TC_PR_002",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 쿠폰관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -130,8 +123,7 @@
       "displayNo": 3,
       "tcId": "TC_PR_003",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 쿠폰관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -155,8 +147,7 @@
       "displayNo": 4,
       "tcId": "TC_PR_004",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 쿠폰관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -180,8 +171,7 @@
       "displayNo": 5,
       "tcId": "TC_PR_005",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
-      "verifyNote": "쿠폰 발급이 자동인지 수동 다운로드/응모(PR 모듈) 방식인지, 발급 조건 미충족인지 확인 필요",
-      "screenName": ""
+      "verifyNote": "쿠폰 발급이 자동인지 수동 다운로드/응모(PR 모듈) 방식인지, 발급 조건 미충족인지 확인 필요"
     },
     {
       "tcId": "TC_PR_006",
@@ -205,8 +195,7 @@
       "origin": "기존",
       "displayNo": 6,
       "remark": "",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PR_007",
@@ -230,8 +219,7 @@
       "origin": "기존",
       "displayNo": 7,
       "remark": "",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PR_008",
@@ -255,8 +243,7 @@
       "origin": "기존",
       "displayNo": 8,
       "remark": "",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -280,8 +267,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 9,
       "tcId": "TC_PR_009",
-      "verifyNote": "",
-      "screenName": "Admin 대행사관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -305,8 +291,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 10,
       "tcId": "TC_PR_010",
-      "verifyNote": "실제 등록 테스트 미실행 — 현재 Front에 노출 중인 할인 상품들이 이 Admin 화면을 통해 설정된 것인지 배경 확인 필요",
-      "screenName": ""
+      "verifyNote": "실제 등록 테스트 미실행 — 현재 Front에 노출 중인 할인 상품들이 이 Admin 화면을 통해 설정된 것인지 배경 확인 필요"
     }
   ]
 }

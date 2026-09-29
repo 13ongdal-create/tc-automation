@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "CS",
     "moduleName": "고객센터/정책",
-    "version": 9,
+    "version": 8,
     "changeHistory": [
       {
         "version": 1,
@@ -44,11 +44,6 @@
         "version": 8,
         "date": "2026-09-29",
         "summary": "케이스 고도화 조사(모듈정의 정정 2단계): Admin 클레임리스트 관련 TC_CS_007/008/009의 대분류가 \"구매프로세스\"로 기재돼 있었으나 SKILL.md 5항 매핑표상 취소반품/교환은 별도 대분류 \"클레임\"(CLM)이므로 \"클레임\"으로 정정 (CS 모듈 파일 내 배치 자체의 타당성은 별도 검토 필요 — 이번 작업 범위 아님)."
-      },
-      {
-        "version": 9,
-        "date": "2026-09-29",
-        "summary": "screenName(화면명) 컬럼 전체 백필: TC 수행절차(steps) 1단계에 명시된 진입 화면을 근거로 자동/수동 판단해 기재 (헤더/푸터 등 전역 공통 컴포넌트, Front-Admin 교차검증처럼 화면을 하나로 특정할 수 없는 TC는 AGENTS.md 2항 원칙대로 빈 값 유지)."
       }
     ]
   },
@@ -75,8 +70,7 @@
       "system": "FO",
       "displayNo": 1,
       "remark": "",
-      "verifyNote": "",
-      "screenName": "공지사항"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_CS_002",
@@ -100,8 +94,7 @@
       "system": "FO",
       "displayNo": 2,
       "remark": "",
-      "verifyNote": "",
-      "screenName": "공지사항"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_CS_003",
@@ -125,8 +118,7 @@
       "system": "FO",
       "displayNo": 3,
       "remark": "",
-      "verifyNote": "",
-      "screenName": "FAQ"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_CS_004",
@@ -150,8 +142,7 @@
       "system": "FO",
       "displayNo": 4,
       "remark": "",
-      "verifyNote": "",
-      "screenName": "FAQ"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_CS_005",
@@ -175,8 +166,7 @@
       "system": "FO",
       "displayNo": 5,
       "remark": "관련 결함: DEF_데모사이트_005",
-      "verifyNote": "[확인필요] 페이지 미구현 또는 라우팅 오류로 추정 — DEF 결함 등록 대상",
-      "screenName": "고객센터"
+      "verifyNote": "[확인필요] 페이지 미구현 또는 라우팅 오류로 추정 — DEF 결함 등록 대상"
     },
     {
       "tcId": "TC_CS_006",
@@ -200,8 +190,7 @@
       "system": "FO",
       "displayNo": 6,
       "remark": "관련 결함: DEF_데모사이트_006",
-      "verifyNote": "[확인필요] 페이지 미구현 또는 라우팅 오류로 추정 — DEF 결함 등록 대상",
-      "screenName": "고객센터"
+      "verifyNote": "[확인필요] 페이지 미구현 또는 라우팅 오류로 추정 — DEF 결함 등록 대상"
     },
     {
       "majorCategory": "클레임",
@@ -225,8 +214,7 @@
       "displayNo": 7,
       "tcId": "TC_CS_007",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 클레임리스트"
+      "verifyNote": ""
     },
     {
       "majorCategory": "클레임",
@@ -250,8 +238,7 @@
       "displayNo": 8,
       "tcId": "TC_CS_008",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 클레임리스트"
+      "verifyNote": ""
     },
     {
       "majorCategory": "클레임",
@@ -275,8 +262,7 @@
       "displayNo": 9,
       "tcId": "TC_CS_009",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 클레임리스트"
+      "verifyNote": ""
     }
   ]
 }

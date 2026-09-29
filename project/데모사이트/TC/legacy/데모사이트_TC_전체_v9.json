@@ -3,16 +3,16 @@
     "project": "데모사이트",
     "module": "전체",
     "moduleName": "통합(Full) 뷰어",
-    "version": 10,
+    "version": 9,
     "generatedAt": "2026-09-29",
     "sourceModules": [
-      "PD v18(113건)",
-      "PR v10(10건)",
-      "MB v15(53건)",
-      "OP v13(22건)",
-      "CO v10(50건)",
-      "MY v8(26건)",
-      "CS v9(9건)"
+      "PD v17(113건)",
+      "PR v9(10건)",
+      "MB v14(53건)",
+      "OP v12(22건)",
+      "CO v9(50건)",
+      "MY v7(26건)",
+      "CS v8(9건)"
     ],
     "note": "이 파일은 읽기 전용 스냅샷입니다. 실제 편집은 각 모듈별 개별 파일에서 이루어집니다."
   },
@@ -40,7 +40,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -67,7 +66,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -94,7 +92,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -121,7 +118,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -148,7 +144,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -175,7 +170,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -202,7 +196,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -229,7 +222,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -256,7 +248,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -283,7 +274,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -310,7 +300,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -337,7 +326,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -364,7 +352,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -391,7 +378,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -418,7 +404,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -445,7 +430,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -472,7 +456,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -499,7 +482,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -526,7 +508,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "필터·정렬 조합 처리 방식 확정 필요",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -553,7 +534,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -580,7 +560,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -607,7 +586,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -634,7 +612,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -661,7 +638,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "로그인 유도 여부 미확정",
-      "screenName": "남성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -688,7 +664,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -715,7 +690,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "액세서리 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -742,7 +716,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -769,7 +742,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -796,7 +768,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -823,7 +794,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -850,7 +820,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -877,7 +846,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -904,7 +872,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -931,7 +898,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "스펙 확정 시 재검증 필요 (현재는 제목만 노출되고 옵션 컨테이너가 비어있음이 관측됨: <div class=\"space-y-3\"></div>)",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -958,7 +924,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -985,7 +950,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1012,7 +976,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1039,7 +1002,6 @@
       "system": "FO",
       "remark": " 필터링 결과 건수가 라이브 카탈로그에 따라 변동되어 2페이지 존재를 전제하지 않도록 수정(2026-08-21)",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1066,7 +1028,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1093,7 +1054,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1120,7 +1080,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1147,7 +1106,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1174,7 +1132,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1201,7 +1158,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1228,7 +1184,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1255,7 +1210,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1282,7 +1236,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1309,7 +1262,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1336,7 +1288,6 @@
       "system": "FO",
       "remark": "2026-08-24: 자동화 코드가 오늘 관측 범위(/categories/111)에 품절 상품이 없어 test.skip()으로 건너뛴 것을 이전 배치7에서 Fail로 잘못 기록했던 데이터 오류를 N/A로 정정. 결함이 아니라 현재 라이브 카탈로그에 검증 대상(품절 상품)이 없어 판정 불가한 상태 — 품절 상품이 있는 카테고리를 찾으면 재작성 필요.",
       "verifyNote": "스펙 확정 시 재검증 필요 (오늘 관측 범위에는 품절 상품 없음)",
-      "screenName": "품절 상품이 포함된 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1363,7 +1314,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1390,7 +1340,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1417,7 +1366,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1444,7 +1392,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "리뷰 없는 상품의 기본 별점 표기 기준(별점 미노출/0점 표시 등)이 의도된 것인지 정책 확인 필요",
-      "screenName": "상품상세",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1471,7 +1418,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1498,7 +1444,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1525,7 +1470,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1552,7 +1496,6 @@
       "displayNo": 57,
       "remark": "",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1579,7 +1522,6 @@
       "displayNo": 58,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1606,7 +1548,6 @@
       "displayNo": 59,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "순환 정책 확정 필요",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1633,7 +1574,6 @@
       "displayNo": 60,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1660,7 +1600,6 @@
       "displayNo": 61,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1687,7 +1626,6 @@
       "displayNo": 62,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1714,7 +1652,6 @@
       "displayNo": 63,
       "remark": "",
       "verifyNote": "현재는 데이터가 항상 존재해 실측 불가, 관리자 데이터 제거 후 재검증 필요",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1741,7 +1678,6 @@
       "displayNo": 64,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1768,7 +1704,6 @@
       "displayNo": 65,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1795,7 +1730,6 @@
       "displayNo": 66,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1822,7 +1756,6 @@
       "displayNo": 67,
       "remark": "",
       "verifyNote": "[확인필요] 실제 소량 데이터 상태 재현 후 검증 필요",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1849,7 +1782,6 @@
       "displayNo": 68,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "정가 단독 노출 시 취소선 잔여 여백 발생 여부 재검증 필요",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1876,7 +1808,6 @@
       "displayNo": 69,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_001)",
       "verifyNote": "로그인 페이지(/login)로 유도되는지, 비로그인 위시리스트가 임시 저장되는지 스펙 확정 후 재검증. 현재 /login 자체가 500 에러 상태라 유도 시나리오 검증이 차단됨",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1903,7 +1834,6 @@
       "displayNo": 70,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1930,7 +1860,6 @@
       "displayNo": 71,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "새 탭으로 열리는지, 현재 탭 이탈 방식인지 기획 의도 확인 필요 (관측 결과 target 속성 없어 현재 탭 이동)",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1957,7 +1886,6 @@
       "displayNo": 72,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "브랜드관",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -1984,7 +1912,6 @@
       "displayNo": 73,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "브랜드관",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2011,7 +1938,6 @@
       "displayNo": 74,
       "remark": "",
       "verifyNote": "",
-      "screenName": "SALE(HotDeal)",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2038,7 +1964,6 @@
       "displayNo": 75,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "데이터 미등록(운영 이슈)인지 기능 결함인지 확인 필요",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2065,7 +1990,6 @@
       "displayNo": 76,
       "remark": "",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2092,7 +2016,6 @@
       "displayNo": 77,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2119,7 +2042,6 @@
       "displayNo": 78,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2146,7 +2068,6 @@
       "displayNo": 79,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2173,7 +2094,6 @@
       "displayNo": 80,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2200,7 +2120,6 @@
       "displayNo": 81,
       "remark": "",
       "verifyNote": "관측 결과 href=\"\", \"#\"로 설정된 placeholder 상태 — 실제 배치 콘텐츠로 교체 필요",
-      "screenName": "",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2227,7 +2146,6 @@
       "displayNo": 82,
       "remark": "",
       "verifyNote": "",
-      "screenName": "",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2254,7 +2172,6 @@
       "displayNo": 83,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "국문 서비스(3TOP)에 영문 placeholder 타이틀/설명이 그대로 노출 — 실서비스 문구로 교체 필요",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2281,7 +2198,6 @@
       "displayNo": 84,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_005)",
       "verifyNote": "실제 목적지 경로 및 콘텐츠 존재 여부 미확인",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2308,7 +2224,6 @@
       "displayNo": 85,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_006)",
       "verifyNote": "실제 목적지 경로 및 콘텐츠 존재 여부 미확인",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2335,7 +2250,6 @@
       "displayNo": 86,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "실제 목적지 경로 미확인",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2362,7 +2276,6 @@
       "displayNo": 87,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "실제 목적지 경로 미확인",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2389,7 +2302,6 @@
       "displayNo": 88,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "실서비스 문구로 교체 필요",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2416,7 +2328,6 @@
       "displayNo": 89,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2443,7 +2354,6 @@
       "displayNo": 90,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "Figma 모바일 시안 없어 실측 기준값 확정 필요",
-      "screenName": "",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2470,7 +2380,6 @@
       "displayNo": 91,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2497,7 +2406,6 @@
       "displayNo": 92,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2524,7 +2432,6 @@
       "displayNo": 93,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "실제 적용 여부 미확인",
-      "screenName": "",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2551,7 +2458,6 @@
       "displayNo": 94,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
       "verifyNote": "",
-      "screenName": "아우터 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2578,7 +2484,6 @@
       "displayNo": 95,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
       "verifyNote": "",
-      "screenName": "상의(남성) 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2605,7 +2510,6 @@
       "displayNo": 96,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
       "verifyNote": "",
-      "screenName": "드레스 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2632,7 +2536,6 @@
       "displayNo": 97,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
       "verifyNote": "점퍼는 GNB상 아우터/상의와 같은 레벨로 보이나 실제로는 아우터 하위 카테고리 — 이 3단계 구조가 의도된 설계인지 확인 필요",
-      "screenName": "점퍼 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2659,7 +2562,6 @@
       "displayNo": 98,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
       "verifyNote": "",
-      "screenName": "상의(여성) 카테고리 목록",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2686,7 +2588,6 @@
       "displayNo": 99,
       "remark": "",
       "verifyNote": "",
-      "screenName": "",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2713,7 +2614,6 @@
       "tcId": "TC_PD_132",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 상품관리",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2740,7 +2640,6 @@
       "tcId": "TC_PD_133",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 상품관리",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2767,7 +2666,6 @@
       "tcId": "TC_PD_134",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 상품관리",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2794,7 +2692,6 @@
       "tcId": "TC_PD_135",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 상품관리",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2821,7 +2718,6 @@
       "tcId": "TC_PD_136",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 전시카테고리관리",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2848,7 +2744,6 @@
       "tcId": "TC_PD_137",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 전시카테고리관리",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2875,7 +2770,6 @@
       "tcId": "TC_PD_138",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 전시코너관리",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2902,7 +2796,6 @@
       "tcId": "TC_PD_139",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 전시템플릿관리",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2929,7 +2822,6 @@
       "tcId": "TC_PD_140",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "각 페이지 노드와 Front 실제 화면 간 1:1 매핑 관계는 상세 확인 필요",
-      "screenName": "Admin 전시페이지관리",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2956,7 +2848,6 @@
       "tcId": "TC_PD_141",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 전시페이지관리",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -2983,7 +2874,6 @@
       "displayNo": 110,
       "tcId": "TC_PD_142",
       "verifyNote": "[확인필요] 실제 변경 테스트는 운영 데이터 훼손 방지를 위해 미실행 — TC_PD_102에서 정적 데이터 일치는 이미 확인됨(동적 변경 반영 여부만 미검증)",
-      "screenName": "",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -3010,7 +2900,6 @@
       "displayNo": 111,
       "tcId": "TC_PD_143",
       "verifyNote": "",
-      "screenName": "",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -3037,7 +2926,6 @@
       "displayNo": 112,
       "tcId": "TC_PD_144",
       "verifyNote": "현재 Front SALE 페이지는 \"등록된 컨텐츠가 없습니다\" Empty State로 노출(TC_PD_106) — Admin 측에도 등록된 컨텐츠가 없는 것이 원인인지 대조 확인 필요 [확인필요]",
-      "screenName": "",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -3064,7 +2952,6 @@
       "displayNo": 113,
       "tcId": "TC_PD_145",
       "verifyNote": "",
-      "screenName": "",
       "module": "PD",
       "moduleName": "상품전시(+전시)"
     },
@@ -3091,7 +2978,6 @@
       "tcId": "TC_PR_001",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 쿠폰관리",
       "module": "PR",
       "moduleName": "이벤트/기획전/쿠폰행사"
     },
@@ -3118,7 +3004,6 @@
       "tcId": "TC_PR_002",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 쿠폰관리",
       "module": "PR",
       "moduleName": "이벤트/기획전/쿠폰행사"
     },
@@ -3145,7 +3030,6 @@
       "tcId": "TC_PR_003",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 쿠폰관리",
       "module": "PR",
       "moduleName": "이벤트/기획전/쿠폰행사"
     },
@@ -3172,7 +3056,6 @@
       "tcId": "TC_PR_004",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 쿠폰관리",
       "module": "PR",
       "moduleName": "이벤트/기획전/쿠폰행사"
     },
@@ -3199,7 +3082,6 @@
       "tcId": "TC_PR_005",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "쿠폰 발급이 자동인지 수동 다운로드/응모(PR 모듈) 방식인지, 발급 조건 미충족인지 확인 필요",
-      "screenName": "",
       "module": "PR",
       "moduleName": "이벤트/기획전/쿠폰행사"
     },
@@ -3226,7 +3108,6 @@
       "displayNo": 6,
       "remark": "",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PR",
       "moduleName": "이벤트/기획전/쿠폰행사"
     },
@@ -3253,7 +3134,6 @@
       "displayNo": 7,
       "remark": "",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PR",
       "moduleName": "이벤트/기획전/쿠폰행사"
     },
@@ -3280,7 +3160,6 @@
       "displayNo": 8,
       "remark": "",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "PR",
       "moduleName": "이벤트/기획전/쿠폰행사"
     },
@@ -3307,7 +3186,6 @@
       "displayNo": 9,
       "tcId": "TC_PR_009",
       "verifyNote": "",
-      "screenName": "Admin 대행사관리",
       "module": "PR",
       "moduleName": "이벤트/기획전/쿠폰행사"
     },
@@ -3334,7 +3212,6 @@
       "displayNo": 10,
       "tcId": "TC_PR_010",
       "verifyNote": "실제 등록 테스트 미실행 — 현재 Front에 노출 중인 할인 상품들이 이 Admin 화면을 통해 설정된 것인지 배경 확인 필요",
-      "screenName": "",
       "module": "PR",
       "moduleName": "이벤트/기획전/쿠폰행사"
     },
@@ -3361,7 +3238,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "화면상 \"*\" 필수 표시는 있으나 HTML required 속성이 없어 실제 차단 로직(JS) 존재 여부 확인 필요",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3388,7 +3264,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
       "verifyNote": "실제 안내 문구 확인 필요",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3415,7 +3290,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
       "verifyNote": "실제 안내 문구 확인 필요",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3442,7 +3316,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
       "verifyNote": "실시간 중복체크 UI(버튼/자동체크) 제공 여부 미확인",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3469,7 +3342,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
       "verifyNote": "",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3496,7 +3368,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019, DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3523,7 +3394,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
       "verifyNote": "실제 안내 문구 확인 필요",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3550,7 +3420,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019) — 참고: 휴대폰번호/생년월일 형식·범위 검증 유무를 수동으로 반복 확인했으나 시도마다 결과가 달라(성공/무응답/API 200 후 미이동 등) 결론을 내리지 못함, 별도 결함 미등록(BACKFILL_ISSUES.md 참조, 후속 조사 필요)",
       "verifyNote": "실제 안내 문구 확인 필요",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3577,7 +3446,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019) — 참고: 휴대폰번호/생년월일 형식·범위 검증 유무를 수동으로 반복 확인했으나 시도마다 결과가 달라(성공/무응답/API 200 후 미이동 등) 결론을 내리지 못함, 별도 결함 미등록(BACKFILL_ISSUES.md 참조, 후속 조사 필요)",
       "verifyNote": "",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3604,7 +3472,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3631,7 +3498,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019) — 참고: 휴대폰번호/생년월일 형식·범위 검증 유무를 수동으로 반복 확인했으나 시도마다 결과가 달라(성공/무응답/API 200 후 미이동 등) 결론을 내리지 못함, 별도 결함 미등록(BACKFILL_ISSUES.md 참조, 후속 조사 필요)",
       "verifyNote": "실제 차단 여부 확인 필요",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3658,7 +3524,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
       "verifyNote": "연동 서비스 및 팝업 방식 미확인",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3685,7 +3550,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
       "verifyNote": "연동 동작 미확인",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3712,7 +3576,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3739,7 +3602,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3766,7 +3628,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3793,7 +3654,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
       "verifyNote": "실제 차단 여부 확인 필요",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3820,7 +3680,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
       "verifyNote": "",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3847,7 +3706,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3874,7 +3732,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
       "verifyNote": "실제 안내 문구 확인 필요",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3901,7 +3758,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019) — 참고: 1회 실행에서 회원가입 아이디 중복확인(checkLoginId) API 응답이 5초 초과 지연되는 현상도 관찰되었으나 재현이 불안정해 별도 결함으로는 등록하지 않음(BACKFILL_ISSUES.md 참조)",
       "verifyNote": "실제 제출 시 서버 처리 결과 미확인(가입 API 응답 확인 필요)",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3928,7 +3784,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019, DEF_데모사이트_018, DEF_데모사이트_006, DEF_데모사이트_005)",
       "verifyNote": "로그인 자동 처리 여부 및 이동 경로 확인 필요",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3955,7 +3810,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_018, DEF_데모사이트_005, DEF_데모사이트_006)",
       "verifyNote": "",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -3982,7 +3836,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
       "verifyNote": "관측 결과 전체 입력 필드에 maxlength 속성이 없어 클라이언트 단 길이 제한 여부 확인 필요",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4009,7 +3862,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019)",
       "verifyNote": "",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4036,7 +3888,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_019, DEF_데모사이트_006, DEF_데모사이트_005, DEF_데모사이트_018)",
       "verifyNote": "",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4063,7 +3914,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4090,7 +3940,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_018, DEF_데모사이트_005, DEF_데모사이트_006)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4117,7 +3966,6 @@
       "system": "FO",
       "remark": "사전조건(로그인 500 에러 화면 노출)이 2026-09-29 재관찰 결과에서도 재현되지 않아 테스트 불가 — TC_MB_030/031/032와 동일 사유(2026-08-24 최초 확인 당시 이 TC만 누락되어 갱신 안 된 상태였음).",
       "verifyNote": "",
-      "screenName": "로그인",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4144,7 +3992,6 @@
       "system": "FO",
       "remark": "사전조건(로그인 500 에러 화면 노출 등)이 2026-08-24 재관찰 결과 재현되지 않아 테스트 불가",
       "verifyNote": "",
-      "screenName": "로그인",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4171,7 +4018,6 @@
       "system": "FO",
       "remark": "사전조건(로그인 500 에러 화면 노출 등)이 2026-08-24 재관찰 결과 재현되지 않아 테스트 불가",
       "verifyNote": "",
-      "screenName": "로그인",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4198,7 +4044,6 @@
       "system": "FO",
       "remark": "사전조건(로그인 500 에러 화면 노출 등)이 2026-08-24 재관찰 결과 재현되지 않아 테스트 불가",
       "verifyNote": "결함 수정 후 전체 회원 기능 재검증 필요",
-      "screenName": "",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4225,7 +4070,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "임시 저장(draft) 기능 존재 여부 확인 필요",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4252,7 +4096,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "모바일 시안 기준값 없어 실측 확정 필요",
-      "screenName": "",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4279,7 +4122,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "회원가입",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4306,7 +4148,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4333,7 +4174,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_018, DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4360,7 +4200,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "마이페이지",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4387,7 +4226,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_018, DEF_데모사이트_005, DEF_데모사이트_006)",
       "verifyNote": "",
-      "screenName": "",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4414,7 +4252,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_018, DEF_데모사이트_005, DEF_데모사이트_006)",
       "verifyNote": "",
-      "screenName": "",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4441,7 +4278,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_018, DEF_데모사이트_005, DEF_데모사이트_006)",
       "verifyNote": "",
-      "screenName": "",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4468,7 +4304,6 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "장바구니",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4495,7 +4330,6 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_018, DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4522,7 +4356,6 @@
       "tcId": "TC_MB_044",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 회원관리",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4549,7 +4382,6 @@
       "tcId": "TC_MB_045",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 회원관리",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4576,7 +4408,6 @@
       "tcId": "TC_MB_046",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 회원관리",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4603,7 +4434,6 @@
       "tcId": "TC_MB_047",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 회원관리",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4630,7 +4460,6 @@
       "displayNo": 48,
       "tcId": "TC_MB_048",
       "verifyNote": "",
-      "screenName": "마이페이지 개인정보수정",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4657,7 +4486,6 @@
       "displayNo": 49,
       "tcId": "TC_MB_049",
       "verifyNote": "실제 상태 변경 및 로그인 차단 동작 미실행(운영 데이터 훼손 방지를 위해 실제 계정으로는 미실행, 테스트 계정 마련 후 재검증 필요)",
-      "screenName": "Admin 회원관리",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4684,7 +4512,6 @@
       "displayNo": 50,
       "tcId": "TC_MB_050",
       "verifyNote": "",
-      "screenName": "Admin 리뷰관리",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4711,7 +4538,6 @@
       "displayNo": 51,
       "tcId": "TC_MB_051",
       "verifyNote": "",
-      "screenName": "Admin 라벨관리",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4738,7 +4564,6 @@
       "displayNo": 52,
       "tcId": "TC_MB_052",
       "verifyNote": "",
-      "screenName": "Admin 라벨관리",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4765,7 +4590,6 @@
       "displayNo": 53,
       "tcId": "TC_MB_053",
       "verifyNote": "라벨-상품 매핑 상세 미확인, Front PDP 리뷰 영역에서 라벨 뱃지 UI 자체를 관찰하지 못함",
-      "screenName": "",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4792,7 +4616,6 @@
       "displayNo": 1,
       "remark": "",
       "verifyNote": "",
-      "screenName": "장바구니",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -4819,7 +4642,6 @@
       "displayNo": 2,
       "remark": "",
       "verifyNote": "",
-      "screenName": "장바구니",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -4846,7 +4668,6 @@
       "displayNo": 3,
       "remark": "특정 상품ID(/products/99)가 판매종료되어 임의의 상품 기준으로 일반화(2026-08-21)",
       "verifyNote": "",
-      "screenName": "",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -4873,7 +4694,6 @@
       "displayNo": 4,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "배송비 등 부가 항목 포함 여부 확정 필요",
-      "screenName": "장바구니",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -4900,7 +4720,6 @@
       "displayNo": 5,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "삭제 확인 팝업 유무 확인 필요",
-      "screenName": "장바구니",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -4927,7 +4746,6 @@
       "displayNo": 6,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "",
-      "screenName": "장바구니",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -4954,7 +4772,6 @@
       "displayNo": 7,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "신규 라인 분리 처리 가능성도 있어 실제 동작 확정 필요",
-      "screenName": "상품상세",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -4981,7 +4798,6 @@
       "displayNo": 8,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018, DEF_데모사이트_007)",
       "verifyNote": "[확인필요] 뱃지 노출 여부 실측 필요",
-      "screenName": "",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5008,7 +4824,6 @@
       "displayNo": 9,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "옵션 변경 UI 제공 여부 미확인",
-      "screenName": "장바구니",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5035,7 +4850,6 @@
       "displayNo": 10,
       "remark": "",
       "verifyNote": "로그인 결함(500 에러)으로 로그인 유도 시 후속 진행 불가, 결함 해결 후 재검증 필요",
-      "screenName": "장바구니",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5062,7 +4876,6 @@
       "displayNo": 11,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "세션 저장 방식(localStorage/쿠키/서버) 확인 필요",
-      "screenName": "",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5089,7 +4902,6 @@
       "displayNo": 12,
       "remark": "",
       "verifyNote": "",
-      "screenName": "장바구니",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5116,7 +4928,6 @@
       "displayNo": 13,
       "remark": "현재 카탈로그에 재현 가능한 품절 상품이 없어 사전조건을 만들 수 없음(2026-08-24) — automation/BACKFILL_ISSUES.md ## OP 참고, 수동 검증 권장",
       "verifyNote": "품절 발생 시점 처리 정책 확인 필요",
-      "screenName": "장바구니",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5143,7 +4954,6 @@
       "displayNo": 14,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "최대 수량 정책값 미확인",
-      "screenName": "",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5170,7 +4980,6 @@
       "displayNo": 15,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "",
-      "screenName": "장바구니",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5197,7 +5006,6 @@
       "tcId": "TC_OP_016",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 주문리스트",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5224,7 +5032,6 @@
       "tcId": "TC_OP_017",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 주문리스트",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5251,7 +5058,6 @@
       "tcId": "TC_OP_018",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 주문리스트",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5278,7 +5084,6 @@
       "tcId": "TC_OP_019",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 주문리스트",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5305,7 +5110,6 @@
       "displayNo": 20,
       "tcId": "TC_OP_020",
       "verifyNote": "",
-      "screenName": "Admin 배송지관리",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5332,7 +5136,6 @@
       "displayNo": 21,
       "tcId": "TC_OP_021",
       "verifyNote": "실제 등록 테스트 미실행 — 별도 시나리오로 재검증 필요(선행 우려였던 DEF_009는 오탐으로 정정됨, TC_MB_046 참고)",
-      "screenName": "",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5359,7 +5162,6 @@
       "displayNo": 22,
       "tcId": "TC_OP_022",
       "verifyNote": "[확인필요] jspark81 명의의 실제 주문이 없어(TC_MY_026 참고) 검증용 주문 데이터 준비가 선행되어야 함. 기존에 참조했던 O260820790055는 봇 계정 소유로 확인되어 jspark81 시나리오에 사용 불가(DEF_008 오탐 확인 과정에서 발견)",
-      "screenName": "",
       "module": "OP",
       "moduleName": "구매프로세스"
     },
@@ -5386,7 +5188,6 @@
       "displayNo": 1,
       "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_024는 완료 처리).",
       "verifyNote": "",
-      "screenName": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5413,7 +5214,6 @@
       "displayNo": 2,
       "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_025는 완료 처리).",
       "verifyNote": "실제 지원 언어 목록 및 전환 범위 확인 필요",
-      "screenName": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5440,7 +5240,6 @@
       "displayNo": 3,
       "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_026는 완료 처리).",
       "verifyNote": "저장 방식(쿠키/localStorage) 확인 필요",
-      "screenName": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5467,7 +5266,6 @@
       "displayNo": 4,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_021)",
       "verifyNote": "",
-      "screenName": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5494,7 +5292,6 @@
       "displayNo": 5,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)",
       "verifyNote": "실제 동작 방식 미확인",
-      "screenName": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5521,7 +5318,6 @@
       "displayNo": 6,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)",
       "verifyNote": "실제 안내 문구 및 허용 확장자 확인 필요",
-      "screenName": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5548,7 +5344,6 @@
       "displayNo": 7,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)",
       "verifyNote": "실제 이미지 인식/매칭 로직 미확인",
-      "screenName": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5575,7 +5370,6 @@
       "displayNo": 8,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5602,7 +5396,6 @@
       "displayNo": 9,
       "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 헤더 메뉴 구성이 기대결과와 불일치 (관련 결함 DEF_데모사이트_027, 신규 유지).",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5629,7 +5422,6 @@
       "displayNo": 10,
       "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 모바일 뷰포트에서 반응형 헤더 전환 미구현 (관련 결함 DEF_데모사이트_028, 신규 유지).",
       "verifyNote": "[확인필요] 모바일 헤더 UI 존재 여부 실측 필요",
-      "screenName": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5656,7 +5448,6 @@
       "displayNo": 11,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_029",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5683,7 +5474,6 @@
       "displayNo": 12,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_030",
       "verifyNote": "실제 오프라인 처리 UX 미확인",
-      "screenName": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5710,7 +5500,6 @@
       "displayNo": 13,
       "remark": "",
       "verifyNote": "실제 적용 여부 미확인",
-      "screenName": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5737,7 +5526,6 @@
       "displayNo": 14,
       "remark": "",
       "verifyNote": "",
-      "screenName": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5764,7 +5552,6 @@
       "displayNo": 15,
       "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_031는 완료 처리).",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5791,7 +5578,6 @@
       "displayNo": 16,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_022)",
       "verifyNote": "[확인필요] 일부 이미지 alt가 상품명이 아닌 파일명으로 노출됨(TC_SYS_017 참조)",
-      "screenName": "메인",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5818,7 +5604,6 @@
       "displayNo": 17,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_022)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5845,7 +5630,6 @@
       "displayNo": 18,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_023)",
       "verifyNote": "",
-      "screenName": "메인",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5872,7 +5656,6 @@
       "displayNo": 19,
       "remark": "",
       "verifyNote": "",
-      "screenName": "로그인",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5899,7 +5682,6 @@
       "displayNo": 20,
       "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 강제 다크 컬러스킴 적용해도 배경 미전환 (관련 결함 DEF_데모사이트_032, 신규 유지).",
       "verifyNote": "다크모드 지원 여부 자체가 미확인 — 미지원 시 라이트 테마 고정 노출이 정상",
-      "screenName": "메인",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5926,7 +5708,6 @@
       "displayNo": 21,
       "tcId": "TC_CO_021",
       "verifyNote": "",
-      "screenName": "Admin 워크플로우관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5953,7 +5734,6 @@
       "displayNo": 22,
       "tcId": "TC_CO_022",
       "verifyNote": "",
-      "screenName": "Admin 워크플로우관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -5980,7 +5760,6 @@
       "displayNo": 23,
       "tcId": "TC_CO_023",
       "verifyNote": "",
-      "screenName": "Admin 모니터링",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6007,7 +5786,6 @@
       "displayNo": 24,
       "tcId": "TC_CO_024",
       "verifyNote": "",
-      "screenName": "Admin 공통코드관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6034,7 +5812,6 @@
       "displayNo": 25,
       "tcId": "TC_CO_025",
       "verifyNote": "",
-      "screenName": "Admin 공통코드관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6061,7 +5838,6 @@
       "displayNo": 26,
       "tcId": "TC_CO_026",
       "verifyNote": "",
-      "screenName": "Admin 다국어관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6088,7 +5864,6 @@
       "displayNo": 27,
       "tcId": "TC_CO_027",
       "verifyNote": "",
-      "screenName": "Admin 다국어관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6115,7 +5890,6 @@
       "displayNo": 28,
       "tcId": "TC_CO_028",
       "verifyNote": "",
-      "screenName": "Admin 프로그램관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6142,7 +5916,6 @@
       "displayNo": 29,
       "tcId": "TC_CO_029",
       "verifyNote": "",
-      "screenName": "Admin 메뉴관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6169,7 +5942,6 @@
       "displayNo": 30,
       "tcId": "TC_CO_030",
       "verifyNote": "Front 사이트에도 영향을 주는지 여부는 미확인",
-      "screenName": "Admin 화면관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6196,7 +5968,6 @@
       "displayNo": 31,
       "tcId": "TC_CO_031",
       "verifyNote": "",
-      "screenName": "Admin 화면관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6223,7 +5994,6 @@
       "displayNo": 32,
       "tcId": "TC_CO_032",
       "verifyNote": "[확인필요] 실제 대시보드 홈 화면 반영 여부 미검증",
-      "screenName": "Admin 대시보드관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6250,7 +6020,6 @@
       "displayNo": 33,
       "tcId": "TC_CO_033",
       "verifyNote": "",
-      "screenName": "Admin 대시보드관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6277,7 +6046,6 @@
       "displayNo": 34,
       "tcId": "TC_CO_034",
       "verifyNote": "",
-      "screenName": "Admin 권한관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6304,7 +6072,6 @@
       "displayNo": 35,
       "tcId": "TC_CO_035",
       "verifyNote": "",
-      "screenName": "Admin 권한관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6331,7 +6098,6 @@
       "displayNo": 36,
       "tcId": "TC_CO_036",
       "verifyNote": "",
-      "screenName": "Admin 관리자관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6358,7 +6124,6 @@
       "displayNo": 37,
       "tcId": "TC_CO_037",
       "verifyNote": "신규 관리자 등록 시 권한 부여 절차/승인 프로세스 존재 여부 미확인",
-      "screenName": "Admin 관리자관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6385,7 +6150,6 @@
       "displayNo": 38,
       "tcId": "TC_CO_038",
       "verifyNote": "",
-      "screenName": "Admin 권한별메뉴",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6412,7 +6176,6 @@
       "displayNo": 39,
       "tcId": "TC_CO_039",
       "verifyNote": "[확인필요] 권한별메뉴(TC_CO_037) 화면에서 설정한 값과 상호 일치하는지(양방향 데이터 정합성) 미검증",
-      "screenName": "Admin 메뉴별권한",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6439,7 +6202,6 @@
       "displayNo": 40,
       "tcId": "TC_CO_040",
       "verifyNote": "",
-      "screenName": "Admin 배치관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6466,7 +6228,6 @@
       "displayNo": 41,
       "tcId": "TC_CO_041",
       "verifyNote": "",
-      "screenName": "Admin 배치관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6493,7 +6254,6 @@
       "displayNo": 42,
       "tcId": "TC_CO_042",
       "verifyNote": "",
-      "screenName": "Admin 로그인내역조회",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6520,7 +6280,6 @@
       "displayNo": 43,
       "tcId": "TC_CO_043",
       "verifyNote": "",
-      "screenName": "Admin 관리자로그관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6547,7 +6306,6 @@
       "displayNo": 44,
       "tcId": "TC_CO_044",
       "verifyNote": "Health 상태가 실제 정상(green)인지 확인 필요 — 상품/카테고리 검색 기능과 연계된 인프라이므로 이상 시 Front 검색 기능 영향 가능",
-      "screenName": "Admin 검색엔진관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6574,7 +6332,6 @@
       "displayNo": 45,
       "tcId": "TC_CO_045",
       "verifyNote": "",
-      "screenName": "Admin Agent관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6601,7 +6358,6 @@
       "displayNo": 46,
       "tcId": "TC_CO_046",
       "verifyNote": "",
-      "screenName": "Admin Agent관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6628,7 +6384,6 @@
       "displayNo": 47,
       "tcId": "TC_CO_047",
       "verifyNote": "",
-      "screenName": "Admin Tool관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6655,7 +6410,6 @@
       "displayNo": 48,
       "tcId": "TC_CO_048",
       "verifyNote": "",
-      "screenName": "Admin Sample",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6682,7 +6436,6 @@
       "displayNo": 49,
       "tcId": "TC_CO_049",
       "verifyNote": "",
-      "screenName": "Admin PUSH관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6709,7 +6462,6 @@
       "displayNo": 50,
       "tcId": "TC_CO_050",
       "verifyNote": "[확인필요] 실제 발송 시 Front 사용자 단말에 반영되는지 여부는 별도 검증 필요",
-      "screenName": "Admin PUSH관리",
       "module": "CO",
       "moduleName": "시스템(공통)"
     },
@@ -6736,7 +6488,6 @@
       "displayNo": 1,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 주문내역",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -6763,7 +6514,6 @@
       "displayNo": 2,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 주문내역",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -6790,7 +6540,6 @@
       "displayNo": 3,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 주문내역",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -6817,7 +6566,6 @@
       "displayNo": 4,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 주문내역",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -6844,7 +6592,6 @@
       "displayNo": 5,
       "remark": "2026-08-21: 500 에러 결함이 재검증 과정에서 CORS 에러로 증상이 바뀐 것을 확인, 내용 갱신",
       "verifyNote": "2026-08-21 재검증: 최초 발견 시(2026-08-20) 500 Internal Server Error였으나 현재는 200으로 페이지 자체는 정상 렌더링됨. 다만 페이지 진입 시 카카오(kauth.kakao.com)/네이버(nid.naver.com) OAuth 인증 요청이 자동으로 발생하며 CORS 정책으로 실패(net::ERR_FAILED) — 콘솔 에러 감지 규칙에 의해 여전히 결함으로 분류됨. 이 데모 환경이 지속적으로 변경되고 있어(봇 트래픽/개발 반영) 증상이 달라진 것으로 추정",
-      "screenName": "마이페이지 SNS연결설정",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -6871,7 +6618,6 @@
       "displayNo": 6,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 위시리스트",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -6898,7 +6644,6 @@
       "displayNo": 7,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 위시리스트",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -6925,7 +6670,6 @@
       "displayNo": 8,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 위시리스트",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -6952,7 +6696,6 @@
       "displayNo": 9,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 배송주소록관리",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -6979,7 +6722,6 @@
       "displayNo": 10,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 배송주소록관리",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7006,7 +6748,6 @@
       "displayNo": 11,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 배송주소록관리",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7033,7 +6774,6 @@
       "displayNo": 12,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 쿠폰",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7060,7 +6800,6 @@
       "displayNo": 13,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002, DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "마이페이지 쿠폰",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7087,7 +6826,6 @@
       "displayNo": 14,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 1:1문의",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7114,7 +6852,6 @@
       "displayNo": 15,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 1:1문의",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7141,7 +6878,6 @@
       "displayNo": 16,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 리뷰목록",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7168,7 +6904,6 @@
       "displayNo": 17,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 리뷰목록",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7195,7 +6930,6 @@
       "displayNo": 18,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "아이디 필드의 실제 수정 가능 여부 미확인",
-      "screenName": "마이페이지 개인정보수정",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7222,7 +6956,6 @@
       "displayNo": 19,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 개인정보수정",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7249,7 +6982,6 @@
       "displayNo": 20,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 개인정보수정",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7276,7 +7008,6 @@
       "displayNo": 21,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 개인정보수정",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7303,7 +7034,6 @@
       "displayNo": 22,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 개인정보수정",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7330,7 +7060,6 @@
       "displayNo": 23,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "실제 안내 문구 및 차단 여부 확인 필요",
-      "screenName": "마이페이지 회원탈퇴",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7357,7 +7086,6 @@
       "displayNo": 24,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "실제 안내 문구 확인 필요",
-      "screenName": "마이페이지 회원탈퇴",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7384,7 +7112,6 @@
       "displayNo": 25,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 회원탈퇴",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7411,7 +7138,6 @@
       "displayNo": 26,
       "tcId": "TC_MY_026",
       "verifyNote": "재검증 시 Admin 주문리스트의 주문(O260820790055)을 jspark81 소유로 오인했으나, 실제 조회 결과 해당 주문은 봇 계정(mbrId=406, 봇_186324) 소유로 확인됨(오늘 생성된 주문 4건 모두 봇 계정). jspark81로 실제 신규 주문을 생성해 Front-Admin 동기화를 재검증하려 했으나 TossPayments 결제위젯 연동 단계에서 Playwright 자동화가 어려워 완료하지 못함 — 결제위젯을 우회하지 않는 별도 테스트 데이터 준비 방안 필요",
-      "screenName": "",
       "module": "MY",
       "moduleName": "마이페이지"
     },
@@ -7438,7 +7164,6 @@
       "displayNo": 1,
       "remark": "",
       "verifyNote": "",
-      "screenName": "공지사항",
       "module": "CS",
       "moduleName": "고객센터/정책"
     },
@@ -7465,7 +7190,6 @@
       "displayNo": 2,
       "remark": "",
       "verifyNote": "",
-      "screenName": "공지사항",
       "module": "CS",
       "moduleName": "고객센터/정책"
     },
@@ -7492,7 +7216,6 @@
       "displayNo": 3,
       "remark": "",
       "verifyNote": "",
-      "screenName": "FAQ",
       "module": "CS",
       "moduleName": "고객센터/정책"
     },
@@ -7519,7 +7242,6 @@
       "displayNo": 4,
       "remark": "",
       "verifyNote": "",
-      "screenName": "FAQ",
       "module": "CS",
       "moduleName": "고객센터/정책"
     },
@@ -7546,7 +7268,6 @@
       "displayNo": 5,
       "remark": "관련 결함: DEF_데모사이트_005",
       "verifyNote": "[확인필요] 페이지 미구현 또는 라우팅 오류로 추정 — DEF 결함 등록 대상",
-      "screenName": "고객센터",
       "module": "CS",
       "moduleName": "고객센터/정책"
     },
@@ -7573,7 +7294,6 @@
       "displayNo": 6,
       "remark": "관련 결함: DEF_데모사이트_006",
       "verifyNote": "[확인필요] 페이지 미구현 또는 라우팅 오류로 추정 — DEF 결함 등록 대상",
-      "screenName": "고객센터",
       "module": "CS",
       "moduleName": "고객센터/정책"
     },
@@ -7600,7 +7320,6 @@
       "tcId": "TC_CS_007",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 클레임리스트",
       "module": "CS",
       "moduleName": "고객센터/정책"
     },
@@ -7627,7 +7346,6 @@
       "tcId": "TC_CS_008",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 클레임리스트",
       "module": "CS",
       "moduleName": "고객센터/정책"
     },
@@ -7654,7 +7372,6 @@
       "tcId": "TC_CS_009",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 클레임리스트",
       "module": "CS",
       "moduleName": "고객센터/정책"
     }

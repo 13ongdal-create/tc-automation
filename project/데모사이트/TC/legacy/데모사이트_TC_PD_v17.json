@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PD",
     "moduleName": "상품전시(+전시)",
-    "version": 18,
+    "version": 17,
     "changeHistory": [
       {
         "version": 1,
@@ -89,11 +89,6 @@
         "version": 17,
         "date": "2026-09-29",
         "summary": "케이스 고도화 조사(모듈정의 정정 2단계): \"예외·회귀\"는 SKILL.md 5항 매핑표에 없는 대분류값이며 이미 type 컬럼에 \"회귀\" 등으로 표현되는 정보와 중복 — 해당 값을 쓰던 11건(TC_PD_028/041/043/063/067/068/078/079/082/084/095)의 대분류를 실제 도메인 \"상품\"으로 정정 (type 컬럼은 변경 없음)."
-      },
-      {
-        "version": 18,
-        "date": "2026-09-29",
-        "summary": "screenName(화면명) 컬럼 전체 백필: TC 수행절차(steps) 1단계에 명시된 진입 화면을 근거로 자동/수동 판단해 기재 (헤더/푸터 등 전역 공통 컴포넌트, Front-Admin 교차검증처럼 화면을 하나로 특정할 수 없는 TC는 AGENTS.md 2항 원칙대로 빈 값 유지)."
       }
     ]
   },
@@ -120,8 +115,7 @@
       "displayNo": 1,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "상품상세"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_002",
@@ -145,8 +139,7 @@
       "displayNo": 2,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "상품상세"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_003",
@@ -170,8 +163,7 @@
       "displayNo": 3,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "상품상세"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_028",
@@ -195,8 +187,7 @@
       "displayNo": 4,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "상품상세"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_029",
@@ -220,8 +211,7 @@
       "displayNo": 5,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "상품상세"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_030",
@@ -245,8 +235,7 @@
       "displayNo": 6,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "상품상세"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_031",
@@ -270,8 +259,7 @@
       "displayNo": 7,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_032",
@@ -295,8 +283,7 @@
       "displayNo": 8,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_033",
@@ -320,8 +307,7 @@
       "displayNo": 9,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_034",
@@ -345,8 +331,7 @@
       "displayNo": 10,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_035",
@@ -370,8 +355,7 @@
       "displayNo": 11,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_036",
@@ -395,8 +379,7 @@
       "displayNo": 12,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_037",
@@ -420,8 +403,7 @@
       "displayNo": 13,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_038",
@@ -445,8 +427,7 @@
       "displayNo": 14,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_039",
@@ -470,8 +451,7 @@
       "displayNo": 15,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_040",
@@ -495,8 +475,7 @@
       "displayNo": 16,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_041",
@@ -520,8 +499,7 @@
       "displayNo": 17,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_042",
@@ -545,8 +523,7 @@
       "displayNo": 18,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_043",
@@ -570,8 +547,7 @@
       "displayNo": 19,
       "system": "FO",
       "remark": "",
-      "verifyNote": "필터·정렬 조합 처리 방식 확정 필요",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": "필터·정렬 조합 처리 방식 확정 필요"
     },
     {
       "tcId": "TC_PD_044",
@@ -595,8 +571,7 @@
       "displayNo": 20,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_045",
@@ -620,8 +595,7 @@
       "displayNo": 21,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_046",
@@ -645,8 +619,7 @@
       "displayNo": 22,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_047",
@@ -670,8 +643,7 @@
       "displayNo": 23,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_048",
@@ -695,8 +667,7 @@
       "displayNo": 24,
       "system": "FO",
       "remark": "",
-      "verifyNote": "로그인 유도 여부 미확정",
-      "screenName": "남성 카테고리 목록"
+      "verifyNote": "로그인 유도 여부 미확정"
     },
     {
       "tcId": "TC_PD_049",
@@ -720,8 +691,7 @@
       "displayNo": 25,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_050",
@@ -745,8 +715,7 @@
       "displayNo": 26,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "액세서리 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -770,8 +739,7 @@
       "displayNo": 27,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -795,8 +763,7 @@
       "displayNo": 28,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -820,8 +787,7 @@
       "displayNo": 29,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -845,8 +811,7 @@
       "displayNo": 30,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -870,8 +835,7 @@
       "displayNo": 31,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -895,8 +859,7 @@
       "displayNo": 32,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -920,8 +883,7 @@
       "displayNo": 33,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -945,8 +907,7 @@
       "displayNo": 34,
       "system": "FO",
       "remark": "",
-      "verifyNote": "스펙 확정 시 재검증 필요 (현재는 제목만 노출되고 옵션 컨테이너가 비어있음이 관측됨: <div class=\"space-y-3\"></div>)",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": "스펙 확정 시 재검증 필요 (현재는 제목만 노출되고 옵션 컨테이너가 비어있음이 관측됨: <div class=\"space-y-3\"></div>)"
     },
     {
       "platform": "Web",
@@ -970,8 +931,7 @@
       "displayNo": 35,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -995,8 +955,7 @@
       "displayNo": 36,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1020,8 +979,7 @@
       "displayNo": 37,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1045,8 +1003,7 @@
       "displayNo": 38,
       "system": "FO",
       "remark": " 필터링 결과 건수가 라이브 카탈로그에 따라 변동되어 2페이지 존재를 전제하지 않도록 수정(2026-08-21)",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1070,8 +1027,7 @@
       "displayNo": 39,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1095,8 +1051,7 @@
       "displayNo": 40,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1120,8 +1075,7 @@
       "displayNo": 41,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1145,8 +1099,7 @@
       "displayNo": 42,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1170,8 +1123,7 @@
       "displayNo": 43,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1195,8 +1147,7 @@
       "displayNo": 44,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1220,8 +1171,7 @@
       "displayNo": 45,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1245,8 +1195,7 @@
       "displayNo": 46,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1270,8 +1219,7 @@
       "displayNo": 47,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1295,8 +1243,7 @@
       "displayNo": 48,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1320,8 +1267,7 @@
       "displayNo": 49,
       "system": "FO",
       "remark": "2026-08-24: 자동화 코드가 오늘 관측 범위(/categories/111)에 품절 상품이 없어 test.skip()으로 건너뛴 것을 이전 배치7에서 Fail로 잘못 기록했던 데이터 오류를 N/A로 정정. 결함이 아니라 현재 라이브 카탈로그에 검증 대상(품절 상품)이 없어 판정 불가한 상태 — 품절 상품이 있는 카테고리를 찾으면 재작성 필요.",
-      "verifyNote": "스펙 확정 시 재검증 필요 (오늘 관측 범위에는 품절 상품 없음)",
-      "screenName": "품절 상품이 포함된 카테고리 목록"
+      "verifyNote": "스펙 확정 시 재검증 필요 (오늘 관측 범위에는 품절 상품 없음)"
     },
     {
       "platform": "Web",
@@ -1345,8 +1291,7 @@
       "displayNo": 50,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
-      "verifyNote": "",
-      "screenName": "여성 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1370,8 +1315,7 @@
       "displayNo": 51,
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1395,8 +1339,7 @@
       "displayNo": 52,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "상품상세"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1420,8 +1363,7 @@
       "displayNo": 53,
       "system": "FO",
       "remark": "",
-      "verifyNote": "리뷰 없는 상품의 기본 별점 표기 기준(별점 미노출/0점 표시 등)이 의도된 것인지 정책 확인 필요",
-      "screenName": "상품상세"
+      "verifyNote": "리뷰 없는 상품의 기본 별점 표기 기준(별점 미노출/0점 표시 등)이 의도된 것인지 정책 확인 필요"
     },
     {
       "platform": "Web",
@@ -1445,8 +1387,7 @@
       "displayNo": 54,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "상품상세"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1470,8 +1411,7 @@
       "displayNo": 55,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "상품상세"
+      "verifyNote": ""
     },
     {
       "platform": "Web",
@@ -1495,8 +1435,7 @@
       "displayNo": 56,
       "system": "FO",
       "remark": "",
-      "verifyNote": "",
-      "screenName": "상품상세"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_086",
@@ -1520,8 +1459,7 @@
       "origin": "기존",
       "displayNo": 57,
       "remark": "",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_087",
@@ -1545,8 +1483,7 @@
       "origin": "기존",
       "displayNo": 58,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_088",
@@ -1570,8 +1507,7 @@
       "origin": "기존",
       "displayNo": 59,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "순환 정책 확정 필요",
-      "screenName": "메인"
+      "verifyNote": "순환 정책 확정 필요"
     },
     {
       "tcId": "TC_PD_092",
@@ -1595,8 +1531,7 @@
       "origin": "기존",
       "displayNo": 60,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_093",
@@ -1620,8 +1555,7 @@
       "origin": "기존",
       "displayNo": 61,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_094",
@@ -1645,8 +1579,7 @@
       "origin": "기존",
       "displayNo": 62,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_095",
@@ -1670,8 +1603,7 @@
       "origin": "기존",
       "displayNo": 63,
       "remark": "",
-      "verifyNote": "현재는 데이터가 항상 존재해 실측 불가, 관리자 데이터 제거 후 재검증 필요",
-      "screenName": "메인"
+      "verifyNote": "현재는 데이터가 항상 존재해 실측 불가, 관리자 데이터 제거 후 재검증 필요"
     },
     {
       "tcId": "TC_PD_096",
@@ -1695,8 +1627,7 @@
       "origin": "기존",
       "displayNo": 64,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_097",
@@ -1720,8 +1651,7 @@
       "origin": "기존",
       "displayNo": 65,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_098",
@@ -1745,8 +1675,7 @@
       "origin": "기존",
       "displayNo": 66,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_099",
@@ -1770,8 +1699,7 @@
       "origin": "기존",
       "displayNo": 67,
       "remark": "",
-      "verifyNote": "[확인필요] 실제 소량 데이터 상태 재현 후 검증 필요",
-      "screenName": "메인"
+      "verifyNote": "[확인필요] 실제 소량 데이터 상태 재현 후 검증 필요"
     },
     {
       "tcId": "TC_PD_100",
@@ -1795,8 +1723,7 @@
       "origin": "기존",
       "displayNo": 68,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "정가 단독 노출 시 취소선 잔여 여백 발생 여부 재검증 필요",
-      "screenName": "메인"
+      "verifyNote": "정가 단독 노출 시 취소선 잔여 여백 발생 여부 재검증 필요"
     },
     {
       "tcId": "TC_PD_101",
@@ -1820,8 +1747,7 @@
       "origin": "기존",
       "displayNo": 69,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_001)",
-      "verifyNote": "로그인 페이지(/login)로 유도되는지, 비로그인 위시리스트가 임시 저장되는지 스펙 확정 후 재검증. 현재 /login 자체가 500 에러 상태라 유도 시나리오 검증이 차단됨",
-      "screenName": "메인"
+      "verifyNote": "로그인 페이지(/login)로 유도되는지, 비로그인 위시리스트가 임시 저장되는지 스펙 확정 후 재검증. 현재 /login 자체가 500 에러 상태라 유도 시나리오 검증이 차단됨"
     },
     {
       "tcId": "TC_PD_102",
@@ -1845,8 +1771,7 @@
       "origin": "기존",
       "displayNo": 70,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_103",
@@ -1870,8 +1795,7 @@
       "origin": "기존",
       "displayNo": 71,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "새 탭으로 열리는지, 현재 탭 이탈 방식인지 기획 의도 확인 필요 (관측 결과 target 속성 없어 현재 탭 이동)",
-      "screenName": "메인"
+      "verifyNote": "새 탭으로 열리는지, 현재 탭 이탈 방식인지 기획 의도 확인 필요 (관측 결과 target 속성 없어 현재 탭 이동)"
     },
     {
       "tcId": "TC_PD_104",
@@ -1895,8 +1819,7 @@
       "origin": "기존",
       "displayNo": 72,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "브랜드관"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_105",
@@ -1920,8 +1843,7 @@
       "origin": "기존",
       "displayNo": 73,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "브랜드관"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_106",
@@ -1945,8 +1867,7 @@
       "origin": "기존",
       "displayNo": 74,
       "remark": "",
-      "verifyNote": "",
-      "screenName": "SALE(HotDeal)"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_107",
@@ -1970,8 +1891,7 @@
       "origin": "기존",
       "displayNo": 75,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "데이터 미등록(운영 이슈)인지 기능 결함인지 확인 필요",
-      "screenName": "메인"
+      "verifyNote": "데이터 미등록(운영 이슈)인지 기능 결함인지 확인 필요"
     },
     {
       "tcId": "TC_PD_108",
@@ -1995,8 +1915,7 @@
       "origin": "기존",
       "displayNo": 76,
       "remark": "",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_109",
@@ -2020,8 +1939,7 @@
       "origin": "기존",
       "displayNo": 77,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_110",
@@ -2045,8 +1963,7 @@
       "origin": "기존",
       "displayNo": 78,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_111",
@@ -2070,8 +1987,7 @@
       "origin": "기존",
       "displayNo": 79,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_112",
@@ -2095,8 +2011,7 @@
       "origin": "기존",
       "displayNo": 80,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_113",
@@ -2120,8 +2035,7 @@
       "origin": "기존",
       "displayNo": 81,
       "remark": "",
-      "verifyNote": "관측 결과 href=\"\", \"#\"로 설정된 placeholder 상태 — 실제 배치 콘텐츠로 교체 필요",
-      "screenName": ""
+      "verifyNote": "관측 결과 href=\"\", \"#\"로 설정된 placeholder 상태 — 실제 배치 콘텐츠로 교체 필요"
     },
     {
       "tcId": "TC_PD_114",
@@ -2145,8 +2059,7 @@
       "origin": "기존",
       "displayNo": 82,
       "remark": "",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_115",
@@ -2170,8 +2083,7 @@
       "origin": "기존",
       "displayNo": 83,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "국문 서비스(3TOP)에 영문 placeholder 타이틀/설명이 그대로 노출 — 실서비스 문구로 교체 필요",
-      "screenName": "메인"
+      "verifyNote": "국문 서비스(3TOP)에 영문 placeholder 타이틀/설명이 그대로 노출 — 실서비스 문구로 교체 필요"
     },
     {
       "tcId": "TC_PD_116",
@@ -2195,8 +2107,7 @@
       "origin": "기존",
       "displayNo": 84,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_005)",
-      "verifyNote": "실제 목적지 경로 및 콘텐츠 존재 여부 미확인",
-      "screenName": "메인"
+      "verifyNote": "실제 목적지 경로 및 콘텐츠 존재 여부 미확인"
     },
     {
       "tcId": "TC_PD_117",
@@ -2220,8 +2131,7 @@
       "origin": "기존",
       "displayNo": 85,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_006)",
-      "verifyNote": "실제 목적지 경로 및 콘텐츠 존재 여부 미확인",
-      "screenName": "메인"
+      "verifyNote": "실제 목적지 경로 및 콘텐츠 존재 여부 미확인"
     },
     {
       "tcId": "TC_PD_118",
@@ -2245,8 +2155,7 @@
       "origin": "기존",
       "displayNo": 86,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "실제 목적지 경로 미확인",
-      "screenName": "메인"
+      "verifyNote": "실제 목적지 경로 미확인"
     },
     {
       "tcId": "TC_PD_119",
@@ -2270,8 +2179,7 @@
       "origin": "기존",
       "displayNo": 87,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "실제 목적지 경로 미확인",
-      "screenName": "메인"
+      "verifyNote": "실제 목적지 경로 미확인"
     },
     {
       "tcId": "TC_PD_120",
@@ -2295,8 +2203,7 @@
       "origin": "기존",
       "displayNo": 88,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "실서비스 문구로 교체 필요",
-      "screenName": "메인"
+      "verifyNote": "실서비스 문구로 교체 필요"
     },
     {
       "tcId": "TC_PD_121",
@@ -2320,8 +2227,7 @@
       "origin": "기존",
       "displayNo": 89,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_122",
@@ -2345,8 +2251,7 @@
       "origin": "기존",
       "displayNo": 90,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "Figma 모바일 시안 없어 실측 기준값 확정 필요",
-      "screenName": ""
+      "verifyNote": "Figma 모바일 시안 없어 실측 기준값 확정 필요"
     },
     {
       "tcId": "TC_PD_123",
@@ -2370,8 +2275,7 @@
       "origin": "기존",
       "displayNo": 91,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_124",
@@ -2395,8 +2299,7 @@
       "origin": "기존",
       "displayNo": 92,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_125",
@@ -2420,8 +2323,7 @@
       "origin": "기존",
       "displayNo": 93,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "실제 적용 여부 미확인",
-      "screenName": ""
+      "verifyNote": "실제 적용 여부 미확인"
     },
     {
       "tcId": "TC_PD_126",
@@ -2445,8 +2347,7 @@
       "system": "FO",
       "displayNo": 94,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
-      "verifyNote": "",
-      "screenName": "아우터 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_127",
@@ -2470,8 +2371,7 @@
       "system": "FO",
       "displayNo": 95,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
-      "verifyNote": "",
-      "screenName": "상의(남성) 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_128",
@@ -2495,8 +2395,7 @@
       "system": "FO",
       "displayNo": 96,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
-      "verifyNote": "",
-      "screenName": "드레스 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_129",
@@ -2520,8 +2419,7 @@
       "system": "FO",
       "displayNo": 97,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
-      "verifyNote": "점퍼는 GNB상 아우터/상의와 같은 레벨로 보이나 실제로는 아우터 하위 카테고리 — 이 3단계 구조가 의도된 설계인지 확인 필요",
-      "screenName": "점퍼 카테고리 목록"
+      "verifyNote": "점퍼는 GNB상 아우터/상의와 같은 레벨로 보이나 실제로는 아우터 하위 카테고리 — 이 3단계 구조가 의도된 설계인지 확인 필요"
     },
     {
       "tcId": "TC_PD_130",
@@ -2545,8 +2443,7 @@
       "system": "FO",
       "displayNo": 98,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
-      "verifyNote": "",
-      "screenName": "상의(여성) 카테고리 목록"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_PD_131",
@@ -2570,8 +2467,7 @@
       "system": "FO",
       "displayNo": 99,
       "remark": "",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "majorCategory": "상품",
@@ -2595,8 +2491,7 @@
       "displayNo": 100,
       "tcId": "TC_PD_132",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 상품관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "상품",
@@ -2620,8 +2515,7 @@
       "displayNo": 101,
       "tcId": "TC_PD_133",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 상품관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "상품",
@@ -2645,8 +2539,7 @@
       "displayNo": 102,
       "tcId": "TC_PD_134",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 상품관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "상품",
@@ -2670,8 +2563,7 @@
       "displayNo": 103,
       "tcId": "TC_PD_135",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 상품관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "전시",
@@ -2695,8 +2587,7 @@
       "displayNo": 104,
       "tcId": "TC_PD_136",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 전시카테고리관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "전시",
@@ -2720,8 +2611,7 @@
       "displayNo": 105,
       "tcId": "TC_PD_137",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 전시카테고리관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "전시",
@@ -2745,8 +2635,7 @@
       "displayNo": 106,
       "tcId": "TC_PD_138",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 전시코너관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "전시",
@@ -2770,8 +2659,7 @@
       "displayNo": 107,
       "tcId": "TC_PD_139",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 전시템플릿관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "전시",
@@ -2795,8 +2683,7 @@
       "displayNo": 108,
       "tcId": "TC_PD_140",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "각 페이지 노드와 Front 실제 화면 간 1:1 매핑 관계는 상세 확인 필요",
-      "screenName": "Admin 전시페이지관리"
+      "verifyNote": "각 페이지 노드와 Front 실제 화면 간 1:1 매핑 관계는 상세 확인 필요"
     },
     {
       "majorCategory": "전시",
@@ -2820,8 +2707,7 @@
       "displayNo": 109,
       "tcId": "TC_PD_141",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 전시페이지관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "상품",
@@ -2845,8 +2731,7 @@
       "remark": "",
       "displayNo": 110,
       "tcId": "TC_PD_142",
-      "verifyNote": "[확인필요] 실제 변경 테스트는 운영 데이터 훼손 방지를 위해 미실행 — TC_PD_102에서 정적 데이터 일치는 이미 확인됨(동적 변경 반영 여부만 미검증)",
-      "screenName": ""
+      "verifyNote": "[확인필요] 실제 변경 테스트는 운영 데이터 훼손 방지를 위해 미실행 — TC_PD_102에서 정적 데이터 일치는 이미 확인됨(동적 변경 반영 여부만 미검증)"
     },
     {
       "majorCategory": "전시",
@@ -2870,8 +2755,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 111,
       "tcId": "TC_PD_143",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "majorCategory": "전시",
@@ -2895,8 +2779,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 112,
       "tcId": "TC_PD_144",
-      "verifyNote": "현재 Front SALE 페이지는 \"등록된 컨텐츠가 없습니다\" Empty State로 노출(TC_PD_106) — Admin 측에도 등록된 컨텐츠가 없는 것이 원인인지 대조 확인 필요 [확인필요]",
-      "screenName": ""
+      "verifyNote": "현재 Front SALE 페이지는 \"등록된 컨텐츠가 없습니다\" Empty State로 노출(TC_PD_106) — Admin 측에도 등록된 컨텐츠가 없는 것이 원인인지 대조 확인 필요 [확인필요]"
     },
     {
       "majorCategory": "전시",
@@ -2920,8 +2803,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 113,
       "tcId": "TC_PD_145",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     }
   ]
 }

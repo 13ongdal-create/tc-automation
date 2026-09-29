@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "CO",
     "moduleName": "시스템(공통)",
-    "version": 10,
+    "version": 9,
     "changeHistory": [
       {
         "version": 1,
@@ -49,11 +49,6 @@
         "version": 9,
         "date": "2026-09-29",
         "summary": "케이스 고도화 조사(모듈정의 정정 2단계): TC_CO_014/019의 대분류 \"예외·회귀\"를 \"시스템\"으로 정정. TC_CO_017/018은 alt텍스트 접근성 검증인데 대분류가 \"예외·회귀\"로 제각각이었던 것을 동일 성격의 TC_CO_016과 맞춰 \"품질·비기능\"으로 통일. TC_CO_020(다크모드)의 대분류 \"전시\"는 상품 노출 도메인이 아닌 사이트 전역 UI/시스템 기능이라 \"시스템\"으로 정정."
-      },
-      {
-        "version": 10,
-        "date": "2026-09-29",
-        "summary": "screenName(화면명) 컬럼 전체 백필: TC 수행절차(steps) 1단계에 명시된 진입 화면을 근거로 자동/수동 판단해 기재 (헤더/푸터 등 전역 공통 컴포넌트, Front-Admin 교차검증처럼 화면을 하나로 특정할 수 없는 TC는 AGENTS.md 2항 원칙대로 빈 값 유지)."
       }
     ]
   },
@@ -80,8 +75,7 @@
       "origin": "기존",
       "displayNo": 1,
       "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_024는 완료 처리).",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "tcId": "TC_CO_002",
@@ -105,8 +99,7 @@
       "origin": "기존",
       "displayNo": 2,
       "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_025는 완료 처리).",
-      "verifyNote": "실제 지원 언어 목록 및 전환 범위 확인 필요",
-      "screenName": ""
+      "verifyNote": "실제 지원 언어 목록 및 전환 범위 확인 필요"
     },
     {
       "tcId": "TC_CO_003",
@@ -130,8 +123,7 @@
       "origin": "기존",
       "displayNo": 3,
       "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_026는 완료 처리).",
-      "verifyNote": "저장 방식(쿠키/localStorage) 확인 필요",
-      "screenName": ""
+      "verifyNote": "저장 방식(쿠키/localStorage) 확인 필요"
     },
     {
       "tcId": "TC_CO_004",
@@ -155,8 +147,7 @@
       "origin": "기존",
       "displayNo": 4,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_021)",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "tcId": "TC_CO_005",
@@ -180,8 +171,7 @@
       "origin": "기존",
       "displayNo": 5,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)",
-      "verifyNote": "실제 동작 방식 미확인",
-      "screenName": ""
+      "verifyNote": "실제 동작 방식 미확인"
     },
     {
       "tcId": "TC_CO_006",
@@ -205,8 +195,7 @@
       "origin": "기존",
       "displayNo": 6,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)",
-      "verifyNote": "실제 안내 문구 및 허용 확장자 확인 필요",
-      "screenName": ""
+      "verifyNote": "실제 안내 문구 및 허용 확장자 확인 필요"
     },
     {
       "tcId": "TC_CO_007",
@@ -230,8 +219,7 @@
       "origin": "기존",
       "displayNo": 7,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)",
-      "verifyNote": "실제 이미지 인식/매칭 로직 미확인",
-      "screenName": ""
+      "verifyNote": "실제 이미지 인식/매칭 로직 미확인"
     },
     {
       "tcId": "TC_CO_008",
@@ -255,8 +243,7 @@
       "origin": "기존",
       "displayNo": 8,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "tcId": "TC_CO_009",
@@ -280,8 +267,7 @@
       "origin": "기존",
       "displayNo": 9,
       "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 헤더 메뉴 구성이 기대결과와 불일치 (관련 결함 DEF_데모사이트_027, 신규 유지).",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_CO_010",
@@ -305,8 +291,7 @@
       "origin": "기존",
       "displayNo": 10,
       "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 모바일 뷰포트에서 반응형 헤더 전환 미구현 (관련 결함 DEF_데모사이트_028, 신규 유지).",
-      "verifyNote": "[확인필요] 모바일 헤더 UI 존재 여부 실측 필요",
-      "screenName": ""
+      "verifyNote": "[확인필요] 모바일 헤더 UI 존재 여부 실측 필요"
     },
     {
       "tcId": "TC_CO_011",
@@ -330,8 +315,7 @@
       "origin": "기존",
       "displayNo": 11,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_029",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_CO_012",
@@ -355,8 +339,7 @@
       "origin": "기존",
       "displayNo": 12,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_030",
-      "verifyNote": "실제 오프라인 처리 UX 미확인",
-      "screenName": ""
+      "verifyNote": "실제 오프라인 처리 UX 미확인"
     },
     {
       "tcId": "TC_CO_013",
@@ -380,8 +363,7 @@
       "origin": "기존",
       "displayNo": 13,
       "remark": "",
-      "verifyNote": "실제 적용 여부 미확인",
-      "screenName": ""
+      "verifyNote": "실제 적용 여부 미확인"
     },
     {
       "tcId": "TC_CO_014",
@@ -405,8 +387,7 @@
       "origin": "기존",
       "displayNo": 14,
       "remark": "",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "tcId": "TC_CO_015",
@@ -430,8 +411,7 @@
       "origin": "기존",
       "displayNo": 15,
       "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_031는 완료 처리).",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_CO_016",
@@ -455,8 +435,7 @@
       "origin": "기존",
       "displayNo": 16,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_022)",
-      "verifyNote": "[확인필요] 일부 이미지 alt가 상품명이 아닌 파일명으로 노출됨(TC_SYS_017 참조)",
-      "screenName": "메인"
+      "verifyNote": "[확인필요] 일부 이미지 alt가 상품명이 아닌 파일명으로 노출됨(TC_SYS_017 참조)"
     },
     {
       "tcId": "TC_CO_017",
@@ -480,8 +459,7 @@
       "origin": "기존",
       "displayNo": 17,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_022)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_CO_018",
@@ -505,8 +483,7 @@
       "origin": "기존",
       "displayNo": 18,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_023)",
-      "verifyNote": "",
-      "screenName": "메인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_CO_019",
@@ -530,8 +507,7 @@
       "origin": "기존",
       "displayNo": 19,
       "remark": "",
-      "verifyNote": "",
-      "screenName": "로그인"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_CO_020",
@@ -555,8 +531,7 @@
       "origin": "기존",
       "displayNo": 20,
       "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 강제 다크 컬러스킴 적용해도 배경 미전환 (관련 결함 DEF_데모사이트_032, 신규 유지).",
-      "verifyNote": "다크모드 지원 여부 자체가 미확인 — 미지원 시 라이트 테마 고정 노출이 정상",
-      "screenName": "메인"
+      "verifyNote": "다크모드 지원 여부 자체가 미확인 — 미지원 시 라이트 테마 고정 노출이 정상"
     },
     {
       "majorCategory": "시스템",
@@ -580,8 +555,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 21,
       "tcId": "TC_CO_021",
-      "verifyNote": "",
-      "screenName": "Admin 워크플로우관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -605,8 +579,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 22,
       "tcId": "TC_CO_022",
-      "verifyNote": "",
-      "screenName": "Admin 워크플로우관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -630,8 +603,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 23,
       "tcId": "TC_CO_023",
-      "verifyNote": "",
-      "screenName": "Admin 모니터링"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -655,8 +627,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 24,
       "tcId": "TC_CO_024",
-      "verifyNote": "",
-      "screenName": "Admin 공통코드관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -680,8 +651,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 25,
       "tcId": "TC_CO_025",
-      "verifyNote": "",
-      "screenName": "Admin 공통코드관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -705,8 +675,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 26,
       "tcId": "TC_CO_026",
-      "verifyNote": "",
-      "screenName": "Admin 다국어관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -730,8 +699,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 27,
       "tcId": "TC_CO_027",
-      "verifyNote": "",
-      "screenName": "Admin 다국어관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -755,8 +723,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 28,
       "tcId": "TC_CO_028",
-      "verifyNote": "",
-      "screenName": "Admin 프로그램관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -780,8 +747,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 29,
       "tcId": "TC_CO_029",
-      "verifyNote": "",
-      "screenName": "Admin 메뉴관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -805,8 +771,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 30,
       "tcId": "TC_CO_030",
-      "verifyNote": "Front 사이트에도 영향을 주는지 여부는 미확인",
-      "screenName": "Admin 화면관리"
+      "verifyNote": "Front 사이트에도 영향을 주는지 여부는 미확인"
     },
     {
       "majorCategory": "시스템",
@@ -830,8 +795,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 31,
       "tcId": "TC_CO_031",
-      "verifyNote": "",
-      "screenName": "Admin 화면관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -855,8 +819,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 32,
       "tcId": "TC_CO_032",
-      "verifyNote": "[확인필요] 실제 대시보드 홈 화면 반영 여부 미검증",
-      "screenName": "Admin 대시보드관리"
+      "verifyNote": "[확인필요] 실제 대시보드 홈 화면 반영 여부 미검증"
     },
     {
       "majorCategory": "시스템",
@@ -880,8 +843,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 33,
       "tcId": "TC_CO_033",
-      "verifyNote": "",
-      "screenName": "Admin 대시보드관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -905,8 +867,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 34,
       "tcId": "TC_CO_034",
-      "verifyNote": "",
-      "screenName": "Admin 권한관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -930,8 +891,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 35,
       "tcId": "TC_CO_035",
-      "verifyNote": "",
-      "screenName": "Admin 권한관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -955,8 +915,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 36,
       "tcId": "TC_CO_036",
-      "verifyNote": "",
-      "screenName": "Admin 관리자관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -980,8 +939,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 37,
       "tcId": "TC_CO_037",
-      "verifyNote": "신규 관리자 등록 시 권한 부여 절차/승인 프로세스 존재 여부 미확인",
-      "screenName": "Admin 관리자관리"
+      "verifyNote": "신규 관리자 등록 시 권한 부여 절차/승인 프로세스 존재 여부 미확인"
     },
     {
       "majorCategory": "시스템",
@@ -1005,8 +963,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 38,
       "tcId": "TC_CO_038",
-      "verifyNote": "",
-      "screenName": "Admin 권한별메뉴"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -1030,8 +987,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 39,
       "tcId": "TC_CO_039",
-      "verifyNote": "[확인필요] 권한별메뉴(TC_CO_037) 화면에서 설정한 값과 상호 일치하는지(양방향 데이터 정합성) 미검증",
-      "screenName": "Admin 메뉴별권한"
+      "verifyNote": "[확인필요] 권한별메뉴(TC_CO_037) 화면에서 설정한 값과 상호 일치하는지(양방향 데이터 정합성) 미검증"
     },
     {
       "majorCategory": "시스템",
@@ -1055,8 +1011,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 40,
       "tcId": "TC_CO_040",
-      "verifyNote": "",
-      "screenName": "Admin 배치관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -1080,8 +1035,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 41,
       "tcId": "TC_CO_041",
-      "verifyNote": "",
-      "screenName": "Admin 배치관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -1105,8 +1059,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 42,
       "tcId": "TC_CO_042",
-      "verifyNote": "",
-      "screenName": "Admin 로그인내역조회"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -1130,8 +1083,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 43,
       "tcId": "TC_CO_043",
-      "verifyNote": "",
-      "screenName": "Admin 관리자로그관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -1155,8 +1107,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 44,
       "tcId": "TC_CO_044",
-      "verifyNote": "Health 상태가 실제 정상(green)인지 확인 필요 — 상품/카테고리 검색 기능과 연계된 인프라이므로 이상 시 Front 검색 기능 영향 가능",
-      "screenName": "Admin 검색엔진관리"
+      "verifyNote": "Health 상태가 실제 정상(green)인지 확인 필요 — 상품/카테고리 검색 기능과 연계된 인프라이므로 이상 시 Front 검색 기능 영향 가능"
     },
     {
       "majorCategory": "시스템",
@@ -1180,8 +1131,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 45,
       "tcId": "TC_CO_045",
-      "verifyNote": "",
-      "screenName": "Admin Agent관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -1205,8 +1155,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 46,
       "tcId": "TC_CO_046",
-      "verifyNote": "",
-      "screenName": "Admin Agent관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -1230,8 +1179,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 47,
       "tcId": "TC_CO_047",
-      "verifyNote": "",
-      "screenName": "Admin Tool관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -1255,8 +1203,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 48,
       "tcId": "TC_CO_048",
-      "verifyNote": "",
-      "screenName": "Admin Sample"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -1280,8 +1227,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 49,
       "tcId": "TC_CO_049",
-      "verifyNote": "",
-      "screenName": "Admin PUSH관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "시스템",
@@ -1305,8 +1251,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 50,
       "tcId": "TC_CO_050",
-      "verifyNote": "[확인필요] 실제 발송 시 Front 사용자 단말에 반영되는지 여부는 별도 검증 필요",
-      "screenName": "Admin PUSH관리"
+      "verifyNote": "[확인필요] 실제 발송 시 Front 사용자 단말에 반영되는지 여부는 별도 검증 필요"
     }
   ]
 }

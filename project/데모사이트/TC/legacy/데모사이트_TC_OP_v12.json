@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "OP",
     "moduleName": "구매프로세스",
-    "version": 13,
+    "version": 12,
     "changeHistory": [
       {
         "version": 1,
@@ -64,11 +64,6 @@
         "version": 12,
         "date": "2026-09-29",
         "summary": "케이스 고도화 조사(모듈정의 정정 2단계): 대분류 \"예외·회귀\"를 쓰던 TC_OP_007/013을 \"구매프로세스\"로 정정. TC_OP_014(장바구니 최대수량 초과 검증)는 대분류가 \"상품\"으로 잘못 기재돼 있었는데 실제 내용(장바구니 기능)에 맞춰 \"구매프로세스\"로 정정."
-      },
-      {
-        "version": 13,
-        "date": "2026-09-29",
-        "summary": "screenName(화면명) 컬럼 전체 백필: TC 수행절차(steps) 1단계에 명시된 진입 화면을 근거로 자동/수동 판단해 기재 (헤더/푸터 등 전역 공통 컴포넌트, Front-Admin 교차검증처럼 화면을 하나로 특정할 수 없는 TC는 AGENTS.md 2항 원칙대로 빈 값 유지)."
       }
     ]
   },
@@ -95,8 +90,7 @@
       "origin": "기존",
       "displayNo": 1,
       "remark": "",
-      "verifyNote": "",
-      "screenName": "장바구니"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_OP_002",
@@ -120,8 +114,7 @@
       "origin": "기존",
       "displayNo": 2,
       "remark": "",
-      "verifyNote": "",
-      "screenName": "장바구니"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_OP_003",
@@ -145,8 +138,7 @@
       "origin": "기존",
       "displayNo": 3,
       "remark": "특정 상품ID(/products/99)가 판매종료되어 임의의 상품 기준으로 일반화(2026-08-21)",
-      "verifyNote": "",
-      "screenName": ""
+      "verifyNote": ""
     },
     {
       "tcId": "TC_OP_004",
@@ -170,8 +162,7 @@
       "origin": "기존",
       "displayNo": 4,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
-      "verifyNote": "배송비 등 부가 항목 포함 여부 확정 필요",
-      "screenName": "장바구니"
+      "verifyNote": "배송비 등 부가 항목 포함 여부 확정 필요"
     },
     {
       "tcId": "TC_OP_005",
@@ -195,8 +186,7 @@
       "origin": "기존",
       "displayNo": 5,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
-      "verifyNote": "삭제 확인 팝업 유무 확인 필요",
-      "screenName": "장바구니"
+      "verifyNote": "삭제 확인 팝업 유무 확인 필요"
     },
     {
       "tcId": "TC_OP_006",
@@ -220,8 +210,7 @@
       "origin": "기존",
       "displayNo": 6,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
-      "verifyNote": "",
-      "screenName": "장바구니"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_OP_007",
@@ -245,8 +234,7 @@
       "origin": "기존",
       "displayNo": 7,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
-      "verifyNote": "신규 라인 분리 처리 가능성도 있어 실제 동작 확정 필요",
-      "screenName": "상품상세"
+      "verifyNote": "신규 라인 분리 처리 가능성도 있어 실제 동작 확정 필요"
     },
     {
       "tcId": "TC_OP_008",
@@ -270,8 +258,7 @@
       "origin": "기존",
       "displayNo": 8,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018, DEF_데모사이트_007)",
-      "verifyNote": "[확인필요] 뱃지 노출 여부 실측 필요",
-      "screenName": ""
+      "verifyNote": "[확인필요] 뱃지 노출 여부 실측 필요"
     },
     {
       "tcId": "TC_OP_009",
@@ -295,8 +282,7 @@
       "origin": "기존",
       "displayNo": 9,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
-      "verifyNote": "옵션 변경 UI 제공 여부 미확인",
-      "screenName": "장바구니"
+      "verifyNote": "옵션 변경 UI 제공 여부 미확인"
     },
     {
       "tcId": "TC_OP_010",
@@ -320,8 +306,7 @@
       "origin": "기존",
       "displayNo": 10,
       "remark": "",
-      "verifyNote": "로그인 결함(500 에러)으로 로그인 유도 시 후속 진행 불가, 결함 해결 후 재검증 필요",
-      "screenName": "장바구니"
+      "verifyNote": "로그인 결함(500 에러)으로 로그인 유도 시 후속 진행 불가, 결함 해결 후 재검증 필요"
     },
     {
       "tcId": "TC_OP_011",
@@ -345,8 +330,7 @@
       "origin": "기존",
       "displayNo": 11,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
-      "verifyNote": "세션 저장 방식(localStorage/쿠키/서버) 확인 필요",
-      "screenName": ""
+      "verifyNote": "세션 저장 방식(localStorage/쿠키/서버) 확인 필요"
     },
     {
       "tcId": "TC_OP_012",
@@ -370,8 +354,7 @@
       "origin": "기존",
       "displayNo": 12,
       "remark": "",
-      "verifyNote": "",
-      "screenName": "장바구니"
+      "verifyNote": ""
     },
     {
       "tcId": "TC_OP_013",
@@ -395,8 +378,7 @@
       "origin": "기존",
       "displayNo": 13,
       "remark": "현재 카탈로그에 재현 가능한 품절 상품이 없어 사전조건을 만들 수 없음(2026-08-24) — automation/BACKFILL_ISSUES.md ## OP 참고, 수동 검증 권장",
-      "verifyNote": "품절 발생 시점 처리 정책 확인 필요",
-      "screenName": "장바구니"
+      "verifyNote": "품절 발생 시점 처리 정책 확인 필요"
     },
     {
       "tcId": "TC_OP_014",
@@ -420,8 +402,7 @@
       "origin": "기존",
       "displayNo": 14,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
-      "verifyNote": "최대 수량 정책값 미확인",
-      "screenName": ""
+      "verifyNote": "최대 수량 정책값 미확인"
     },
     {
       "tcId": "TC_OP_015",
@@ -445,8 +426,7 @@
       "origin": "기존",
       "displayNo": 15,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
-      "verifyNote": "",
-      "screenName": "장바구니"
+      "verifyNote": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -470,8 +450,7 @@
       "displayNo": 16,
       "tcId": "TC_OP_016",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 주문리스트"
+      "verifyNote": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -495,8 +474,7 @@
       "displayNo": 17,
       "tcId": "TC_OP_017",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 주문리스트"
+      "verifyNote": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -520,8 +498,7 @@
       "displayNo": 18,
       "tcId": "TC_OP_018",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 주문리스트"
+      "verifyNote": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -545,8 +522,7 @@
       "displayNo": 19,
       "tcId": "TC_OP_019",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
-      "verifyNote": "",
-      "screenName": "Admin 주문리스트"
+      "verifyNote": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -570,8 +546,7 @@
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 20,
       "tcId": "TC_OP_020",
-      "verifyNote": "",
-      "screenName": "Admin 배송지관리"
+      "verifyNote": ""
     },
     {
       "majorCategory": "구매프로세스",
@@ -595,8 +570,7 @@
       "remark": "2026-08-20: 선행 근거로 언급했던 DEF_009가 오탐으로 정정되어 문구 수정 / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 21,
       "tcId": "TC_OP_021",
-      "verifyNote": "실제 등록 테스트 미실행 — 별도 시나리오로 재검증 필요(선행 우려였던 DEF_009는 오탐으로 정정됨, TC_MB_046 참고)",
-      "screenName": ""
+      "verifyNote": "실제 등록 테스트 미실행 — 별도 시나리오로 재검증 필요(선행 우려였던 DEF_009는 오탐으로 정정됨, TC_MB_046 참고)"
     },
     {
       "majorCategory": "구매프로세스",
@@ -620,8 +594,7 @@
       "remark": "2026-08-20: 선행 근거였던 DEF_008이 오탐으로 정정되어 문구 및 이유 수정 / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 22,
       "tcId": "TC_OP_022",
-      "verifyNote": "[확인필요] jspark81 명의의 실제 주문이 없어(TC_MY_026 참고) 검증용 주문 데이터 준비가 선행되어야 함. 기존에 참조했던 O260820790055는 봇 계정 소유로 확인되어 jspark81 시나리오에 사용 불가(DEF_008 오탐 확인 과정에서 발견)",
-      "screenName": ""
+      "verifyNote": "[확인필요] jspark81 명의의 실제 주문이 없어(TC_MY_026 참고) 검증용 주문 데이터 준비가 선행되어야 함. 기존에 참조했던 O260820790055는 봇 계정 소유로 확인되어 jspark81 시나리오에 사용 불가(DEF_008 오탐 확인 과정에서 발견)"
     }
   ]
 }
