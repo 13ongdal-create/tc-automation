@@ -168,12 +168,41 @@
       </div>
     </div>
 
-    <div class="panel panel-placeholder">
+    <div class="panel panel-wide">
       <div class="panel-head">
         <h2>▶ 테스트 실행 큐</h2>
-        <span class="panel-sub badge-soon">다음 배치 예정</span>
+        <span class="panel-sub" id="tqStatus">대기 중</span>
       </div>
-      <p class="placeholder-text">모듈 선택 → 순차 실행 → 실시간 로그 스트리밍이 이 자리에 들어갑니다.</p>
+
+      <label class="field-label" for="tqScope">실행 범위 구분 *</label>
+      <select id="tqScope">
+        <option value="all">전체 TC 일괄 실행</option>
+        <option value="module">특정 모듈별 (중분류) 실행</option>
+        <option value="defect-retest">결함 재검증 (Fail/Blocked 대상)</option>
+        <option value="pending">미수행 (대기) 케이스 대상</option>
+        <option value="p1">P1 (Critical) 케이스만 실행</option>
+      </select>
+
+      <div id="tqModuleRow" hidden>
+        <label class="field-label">모듈 선택</label>
+        <div id="tqModuleChecks" class="tq-module-checks"><span class="placeholder-text">프로젝트를 선택하세요</span></div>
+      </div>
+
+      <label class="field-label" for="tqHeaded">브라우저 실행 화면 (Playwright)</label>
+      <select id="tqHeaded">
+        <option value="0">⚡ 백그라운드 실행 (화면 숨김 / 고속)</option>
+        <option value="1">🖥 화면 표시 (headed, 느림 · 디버그용)</option>
+      </select>
+
+      <div class="tq-preview" id="tqPreview">프로젝트를 선택하면 실행 대상 현황이 표시됩니다.</div>
+
+      <div class="tq-actions">
+        <button type="button" id="btnTqStart" class="btn btn-primary" disabled>▶ 테스트 실행 시작</button>
+        <button type="button" id="btnTqCancel" class="btn btn-outline" hidden>■ 중단</button>
+      </div>
+
+      <div id="tqModuleQueue" class="tq-module-queue"></div>
+      <pre id="tqLog" class="tq-log" hidden></pre>
     </div>
 
   </section>

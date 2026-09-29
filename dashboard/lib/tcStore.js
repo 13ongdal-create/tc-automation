@@ -88,4 +88,4 @@ function getPriorityByModule(project) {
   return result;
 }
 
-module.exports = { findFullViewer, getChangeHistory, getPriorityByModule };
+module.exports = { findFullViewer, getChangeHistory, getPriorityByModule, readModuleFiles };

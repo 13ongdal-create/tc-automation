@@ -12,6 +12,9 @@ const tcStore = require('./lib/tcStore');
 const claudeRunner = require('./lib/claudeRunner');
 const chatSessions = require('./lib/chatSessions');
 const auth = require('./lib/auth');
+const testQueue = require('./lib/testQueue');
+const testRunner = require('./lib/testRunner');
+const resultsProcessor = require('./lib/resultsProcessor');
 
 // 채팅 패널이 spawn하는 claude CLI(Windows에서 .cmd shim → 내부적으로 cmd.exe 경유)가 종료될 때
 // 같은 콘솔 세션 전체(그룹 0)로 Ctrl+C를 보내는 사례가 실측 확인됨 — 이 서버 프로세스까지 함께
@@ -246,6 +249,21 @@ function runKey(project, userKey) {
   return `${project}::${userKey || 'anonymous'}`;
 }
 
+// project -> { cancelled: boolean, currentHandle: object|null } — 테스트 실행 큐는 채팅과 달리
+// 사용자별이 아니라 프로젝트당 하나만 돕니다(같은 프로젝트의 _scratch/playwright-report 결과
+// 파일 경로를 공유하므로, 여러 로그인 세션이 동시에 큐를 돌리면 서로의 results.json을 덮어씀).
+const testQueueRuns = new Map();
+
+/** 채팅(claude 세션)이 같은 프로젝트에서 이미 Playwright를 실행 중일 수 있어(Bash 허용 도구 참조),
+ * 두 실행 경로가 같은 _scratch/playwright-report/{project}/results.json을 동시에 덮어쓰지 않도록
+ * 서로 busy 여부를 확인합니다. */
+function chatBusyForProject(project) {
+  for (const key of activeRuns.keys()) {
+    if (key.startsWith(`${project}::`)) return true;
+  }
+  return false;
+}
+
 wss.on('connection', (ws, req) => {
   ws.userKey = auth.getCookie(req.headers.cookie, SESSION_COOKIE);
   ws.on('message', async (raw) => {
@@ -264,6 +282,93 @@ wss.on('connection', (ws, req) => {
       return;
     }
 
+    if (msg.type === 'cancelTests') {
+      const run = testQueueRuns.get(msg.project);
+      if (run) {
+        run.cancelled = true;
+        if (run.currentHandle) run.currentHandle.cancel();
+      }
+      return;
+    }
+
+    if (msg.type === 'runTests') {
+      const { project, scope, moduleCodes, headed } = msg;
+      if (!project || !scope) {
+        return wsSend(ws, { type: 'queueError', project, error: 'project와 scope가 필요합니다.' });
+      }
+      if (testQueueRuns.has(project)) {
+        return wsSend(ws, { type: 'queueError', project, error: '이 프로젝트에서 이미 테스트 실행 큐가 진행 중입니다.' });
+      }
+      if (chatBusyForProject(project)) {
+        return wsSend(ws, { type: 'queueError', project, error: '이 프로젝트의 채팅(큐돌이) 세션이 실행 중입니다. 완료 후 다시 시도해주세요.' });
+      }
+
+      let plan;
+      try {
+        plan = testQueue.resolvePlan(project, scope, { moduleCodes });
+      } catch (err) {
+        return wsSend(ws, { type: 'queueError', project, error: err.message });
+      }
+      if (!plan.length) {
+        return wsSend(ws, { type: 'queueError', project, error: '실행할 대상 TC가 없습니다 (해당 범위에 자동화된 TC가 없습니다).' });
+      }
+
+      const runState = { cancelled: false, currentHandle: null };
+      testQueueRuns.set(project, runState);
+      wsSend(ws, {
+        type: 'queueAck',
+        project,
+        plan: plan.map((p) => ({ moduleCode: p.moduleCode, count: p.tcIds ? p.tcIds.length : null })),
+      });
+
+      (async () => {
+        const totals = { executed: 0, pass: 0, fail: 0, na: 0, newDefects: [], reopenedDefects: [], stillFailingDefects: [], passedWithOpenDefect: [] };
+        for (const step of plan) {
+          if (runState.cancelled) break;
+          wsSend(ws, { type: 'queueModuleStart', project, moduleCode: step.moduleCode });
+          try {
+            await testRunner.runSpec({
+              project,
+              specFile: step.specFile,
+              tcIds: step.tcIds,
+              headed: !!headed,
+              onProcess: (h) => { runState.currentHandle = h; },
+              onLog: (line) => wsSend(ws, { type: 'queueLog', project, moduleCode: step.moduleCode, line }),
+            });
+          } catch (err) {
+            if (!err.cancelled) wsSend(ws, { type: 'queueLog', project, moduleCode: step.moduleCode, line: `[오류] ${err.message}` });
+          }
+          if (runState.cancelled) break;
+
+          const resultsJson = testRunner.readResultsJson(project);
+          if (resultsJson) {
+            const flat = testRunner.flattenResults(resultsJson);
+            const relevant = step.tcIds ? flat.filter((f) => step.tcIds.includes(f.tcId)) : flat;
+            let moduleSummary;
+            try {
+              moduleSummary = resultsProcessor.applyModuleResults(project, step.moduleCode, relevant);
+            } catch (err) {
+              wsSend(ws, { type: 'queueModuleDone', project, moduleCode: step.moduleCode, summary: null, error: err.message });
+              continue;
+            }
+            ['executed', 'pass', 'fail', 'na'].forEach((k) => { totals[k] += moduleSummary[k]; });
+            ['newDefects', 'reopenedDefects', 'stillFailingDefects', 'passedWithOpenDefect'].forEach((k) => totals[k].push(...moduleSummary[k]));
+            wsSend(ws, { type: 'queueModuleDone', project, moduleCode: step.moduleCode, summary: moduleSummary });
+          } else {
+            wsSend(ws, { type: 'queueModuleDone', project, moduleCode: step.moduleCode, summary: null, error: '결과 파일을 읽지 못했습니다.' });
+          }
+        }
+        try {
+          resultsProcessor.writeResultsIndex(project);
+        } catch {
+          // index.html 갱신 실패는 치명적이지 않음(데이터 자체는 이미 반영됨) — 조용히 넘어감
+        }
+        testQueueRuns.delete(project);
+        wsSend(ws, { type: 'queueDone', project, cancelled: runState.cancelled, totals });
+      })();
+      return;
+    }
+
     if (msg.type !== 'message' || !msg.project || !msg.text || !msg.text.trim()) {
       return wsSend(ws, { type: 'error', error: 'project와 text가 필요합니다.' });
     }
@@ -273,6 +378,9 @@ wss.on('connection', (ws, req) => {
 
     if (activeRuns.has(rk)) {
       return wsSend(ws, { type: 'error', project, error: '이 프로젝트에서 이미 진행 중인 요청이 있습니다. 완료 후 다시 시도해주세요.' });
+    }
+    if (testQueueRuns.has(project)) {
+      return wsSend(ws, { type: 'error', project, error: '이 프로젝트에서 테스트 실행 큐가 진행 중입니다. 완료 후 다시 시도해주세요.' });
     }
 
     const session = chatSessions.ensure(project, userKey);
@@ -323,6 +431,21 @@ app.post('/api/:project/chat/reset', (req, res) => {
   const token = auth.getCookie(req.headers.cookie, SESSION_COOKIE);
   chatSessions.reset(req.params.project, token);
   res.json({ ok: true });
+});
+
+// ── ▶ 테스트 실행 큐 (zero-token — claude 미사용, Playwright를 직접 spawn) ──────────────
+app.get('/api/:project/test-queue/modules', (req, res) => {
+  res.json({ modules: testQueue.listRunnableModules(req.params.project) });
+});
+
+app.get('/api/:project/test-queue/preview', (req, res) => {
+  const { scope, moduleCodes } = req.query;
+  try {
+    const codes = typeof moduleCodes === 'string' ? moduleCodes.split(',').filter(Boolean) : [];
+    res.json(testQueue.preview(req.params.project, scope, { moduleCodes: codes }));
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
 function lanAddresses() {

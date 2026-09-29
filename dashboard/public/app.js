@@ -54,6 +54,16 @@ const el = {
   defectTableBody: document.getElementById('defectTableBody'),
   defectListMore: document.getElementById('defectListMore'),
   resultsList: document.getElementById('resultsList'),
+  tqStatus: document.getElementById('tqStatus'),
+  tqScope: document.getElementById('tqScope'),
+  tqModuleRow: document.getElementById('tqModuleRow'),
+  tqModuleChecks: document.getElementById('tqModuleChecks'),
+  tqHeaded: document.getElementById('tqHeaded'),
+  tqPreview: document.getElementById('tqPreview'),
+  btnTqStart: document.getElementById('btnTqStart'),
+  btnTqCancel: document.getElementById('btnTqCancel'),
+  tqModuleQueue: document.getElementById('tqModuleQueue'),
+  tqLog: document.getElementById('tqLog'),
   chatStatus: document.getElementById('chatStatus'),
   chatMessages: document.getElementById('chatMessages'),
   chatForm: document.getElementById('chatForm'),
@@ -122,7 +132,7 @@ async function loadProjects() {
 async function loadAll() {
   const project = el.projectSelect.value;
   if (!project) return;
-  await Promise.all([loadKpi(project), loadDefects(project), loadResults(project), loadChatHistory(project)]);
+  await Promise.all([loadKpi(project), loadDefects(project), loadResults(project), loadChatHistory(project), loadTestQueueModules(project)]);
 }
 
 // ── 🏠 홈 (프로젝트 카드) ↔ 📁 프로젝트 상세 화면 전환 ─────────────────────
@@ -1020,9 +1030,201 @@ function connectWs() {
       if (statusMsgEl) { statusMsgEl.remove(); statusMsgEl = null; }
       appendChatBubble('assistant', msg.error, 'is-error');
       setChatBusy(false);
+    } else if (msg.type === 'queueAck') {
+      tqRenderQueue(msg.plan);
+    } else if (msg.type === 'queueModuleStart') {
+      tqSetModuleState(msg.moduleCode, 'running', '실행 중');
+    } else if (msg.type === 'queueLog') {
+      tqAppendLog(msg.line);
+    } else if (msg.type === 'queueModuleDone') {
+      tqHandleModuleDone(msg.moduleCode, msg.summary, msg.error);
+    } else if (msg.type === 'queueDone') {
+      tqHandleDone(msg.totals, msg.cancelled);
+    } else if (msg.type === 'queueError') {
+      tqSetRunning(false);
+      el.tqPreview.textContent = msg.error;
+      el.tqPreview.classList.add('tq-preview-error');
     }
   };
 }
+
+// ── ▶ 테스트 실행 큐 (zero-token — claude 미사용, Playwright 직접 실행) ──────────────────
+let tqModules = []; // 현재 프로젝트에서 실행 가능한(자동화 코드가 있는) 모듈 목록
+let tqRunning = false;
+const tqRows = {}; // moduleCode -> 큐 목록의 행 엘리먼트
+
+function tqSelectedModuleCodes() {
+  return Array.from(el.tqModuleChecks.querySelectorAll('input[type=checkbox]:checked')).map((c) => c.value);
+}
+
+function tqUpdateModuleRowVisibility() {
+  el.tqModuleRow.hidden = el.tqScope.value !== 'module';
+}
+
+async function loadTestQueueModules(project) {
+  tqModules = [];
+  el.tqModuleChecks.innerHTML = '<span class="placeholder-text">불러오는 중…</span>';
+  try {
+    const res = await fetch(`/api/${encodeURIComponent(project)}/test-queue/modules`);
+    const data = await res.json();
+    tqModules = data.modules || [];
+  } catch {
+    tqModules = [];
+  }
+  el.tqModuleChecks.innerHTML = tqModules.length
+    ? tqModules
+        .map((m) => `<label><input type="checkbox" value="${esc(m.moduleCode)}">${esc(m.moduleName)} (${esc(m.moduleCode)}, ${m.automatedCount}건)</label>`)
+        .join('')
+    : '<span class="placeholder-text">자동화된 모듈이 없습니다 (TC/automation/tests/*.spec.js 필요)</span>';
+  tqUpdateModuleRowVisibility();
+  el.tqModuleQueue.innerHTML = '';
+  el.tqLog.hidden = true;
+  el.tqLog.textContent = '';
+  tqSetRunning(false);
+  refreshTqPreview();
+}
+
+async function refreshTqPreview() {
+  const project = el.projectSelect.value;
+  if (!project) {
+    el.tqPreview.textContent = '프로젝트를 선택하면 실행 대상 현황이 표시됩니다.';
+    el.tqPreview.classList.remove('tq-preview-error');
+    el.btnTqStart.disabled = true;
+    return;
+  }
+  const scope = el.tqScope.value;
+  const moduleCodes = scope === 'module' ? tqSelectedModuleCodes() : [];
+  if (scope === 'module' && !moduleCodes.length) {
+    el.tqPreview.textContent = '실행할 모듈을 하나 이상 선택하세요.';
+    el.tqPreview.classList.remove('tq-preview-error');
+    el.btnTqStart.disabled = true;
+    return;
+  }
+  try {
+    const qs = new URLSearchParams({ scope, moduleCodes: moduleCodes.join(',') });
+    const res = await fetch(`/api/${encodeURIComponent(project)}/test-queue/preview?${qs}`);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || '실행 대상을 조회하지 못했습니다.');
+    el.tqPreview.classList.remove('tq-preview-error');
+    if (!data.targetCount) {
+      el.tqPreview.textContent = '이 범위에 실행 대상 TC가 없습니다.';
+      el.btnTqStart.disabled = true;
+      return;
+    }
+    const byModule = data.modules.map((m) => `${esc(m.moduleCode)} ${m.count}건`).join(', ');
+    let html = `실행 대상 <b>${data.targetCount}건</b> (${byModule})`;
+    if (data.excludedNoAutomation) html += ` — 자동화 코드가 없어 제외된 TC ${data.excludedNoAutomation}건`;
+    el.tqPreview.innerHTML = html;
+    el.btnTqStart.disabled = tqRunning;
+  } catch (err) {
+    el.tqPreview.textContent = err.message;
+    el.tqPreview.classList.add('tq-preview-error');
+    el.btnTqStart.disabled = true;
+  }
+}
+
+el.tqScope.addEventListener('change', () => {
+  tqUpdateModuleRowVisibility();
+  refreshTqPreview();
+});
+el.tqModuleChecks.addEventListener('change', (e) => {
+  if (e.target.matches('input[type=checkbox]')) refreshTqPreview();
+});
+function tqSetRunning(running) {
+  tqRunning = running;
+  el.btnTqStart.hidden = running;
+  el.btnTqCancel.hidden = !running;
+  el.tqScope.disabled = running;
+  el.tqHeaded.disabled = running;
+  el.tqModuleChecks.querySelectorAll('input').forEach((c) => { c.disabled = running; });
+  el.tqStatus.textContent = running ? '실행 중…' : '대기 중';
+  if (!running) refreshTqPreview();
+}
+
+function tqRenderQueue(plan) {
+  Object.keys(tqRows).forEach((k) => delete tqRows[k]);
+  el.tqModuleQueue.innerHTML = plan
+    .map((p) => {
+      const label = p.count != null ? `${esc(p.moduleCode)} (${p.count}건)` : esc(p.moduleCode);
+      return `<div class="tq-module-row" data-module="${esc(p.moduleCode)}">
+        <span class="tq-mod-name">${label}</span>
+        <span class="tq-mod-result" data-role="result"></span>
+        <span class="tq-pill" data-role="pill">대기</span>
+      </div>`;
+    })
+    .join('');
+  el.tqModuleQueue.querySelectorAll('.tq-module-row').forEach((row) => { tqRows[row.dataset.module] = row; });
+}
+
+function tqSetModuleState(moduleCode, cls, label) {
+  const row = tqRows[moduleCode];
+  if (!row) return;
+  const pill = row.querySelector('[data-role="pill"]');
+  pill.className = `tq-pill tq-pill-${cls}`;
+  pill.textContent = label;
+}
+
+function tqHandleModuleDone(moduleCode, summary, error) {
+  const row = tqRows[moduleCode];
+  if (!row) return;
+  if (error || !summary) {
+    tqSetModuleState(moduleCode, 'fail', '오류');
+    row.querySelector('[data-role="result"]').textContent = error || '결과를 읽지 못함';
+    return;
+  }
+  const hasFail = summary.fail > 0;
+  tqSetModuleState(moduleCode, hasFail ? 'fail' : 'done', hasFail ? '실패 포함 완료' : '완료');
+  const parts = [`Pass ${summary.pass}`, `Fail ${summary.fail}`];
+  if (summary.na) parts.push(`N/A ${summary.na}`);
+  if (summary.newDefects.length) parts.push(`신규 결함 ${summary.newDefects.length}건`);
+  if (summary.reopenedDefects.length) parts.push(`재발생 ${summary.reopenedDefects.length}건`);
+  row.querySelector('[data-role="result"]').textContent = parts.join(' · ');
+  if (summary.passedWithOpenDefect.length) {
+    tqAppendLog(`[안내] ${moduleCode}: ${summary.passedWithOpenDefect.join(', ')} 재검증 통과 — 열려있는 결함을 완료 처리하려면 결함 관리 표에서 직접 상태를 변경해주세요 (자동으로 닫지 않습니다).`);
+  }
+}
+
+function tqAppendLog(line) {
+  el.tqLog.hidden = false;
+  el.tqLog.textContent += (el.tqLog.textContent ? '\n' : '') + line;
+  el.tqLog.scrollTop = el.tqLog.scrollHeight;
+}
+
+function tqHandleDone(totals, cancelled) {
+  tqSetRunning(false);
+  const project = el.projectSelect.value;
+  if (cancelled) {
+    tqAppendLog('[중단됨] 사용자 요청으로 큐 실행을 중단했습니다.');
+  } else {
+    tqAppendLog(
+      `[완료] 총 ${totals.executed}건 실행 — Pass ${totals.pass} / Fail ${totals.fail} / N/A ${totals.na}` +
+        (totals.newDefects.length ? ` · 신규 결함 ${totals.newDefects.length}건` : '') +
+        (totals.reopenedDefects.length ? ` · 재발생 결함 ${totals.reopenedDefects.length}건` : '')
+    );
+    tqAppendLog('[참고] TC/defects.json/results 스냅샷 JSON은 갱신됐습니다. HTML 뷰어(TC 뷰어·결함현황 탭·실행이력 상세 페이지)는 채팅에서 "뷰어 갱신해줘"라고 요청해야 최신 데이터로 다시 생성됩니다.');
+  }
+  if (project) loadAll(); // KPI·결함 표·실행 이력 목록에 방금 결과 반영
+}
+
+el.btnTqStart.addEventListener('click', () => {
+  const project = el.projectSelect.value;
+  if (!project || tqRunning || !ws || ws.readyState !== WebSocket.OPEN) return;
+  const scope = el.tqScope.value;
+  const moduleCodes = scope === 'module' ? tqSelectedModuleCodes() : [];
+  const headed = el.tqHeaded.value === '1';
+  el.tqLog.textContent = '';
+  el.tqLog.hidden = true;
+  el.tqModuleQueue.innerHTML = '';
+  tqSetRunning(true);
+  ws.send(JSON.stringify({ type: 'runTests', project, scope, moduleCodes, headed }));
+});
+
+el.btnTqCancel.addEventListener('click', () => {
+  const project = el.projectSelect.value;
+  if (!project || !ws || ws.readyState !== WebSocket.OPEN) return;
+  ws.send(JSON.stringify({ type: 'cancelTests', project }));
+  el.tqStatus.textContent = '중단 요청을 보냈습니다…';
+});
 
 el.chatForm.addEventListener('submit', (e) => {
   e.preventDefault();
