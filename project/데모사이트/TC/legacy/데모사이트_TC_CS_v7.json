@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "CS",
     "moduleName": "고객센터/정책",
-    "version": 8,
+    "version": 7,
     "changeHistory": [
       {
         "version": 1,
@@ -39,11 +39,6 @@
         "version": 7,
         "date": "2026-08-27",
         "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
-      },
-      {
-        "version": 8,
-        "date": "2026-09-29",
-        "summary": "엑셀 업로드 반영 (git_test.xlsx) — 수정 0건, 신규 1건"
       }
     ]
   },
@@ -263,31 +258,6 @@
       "tcId": "TC_CS_009",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": ""
-    },
-    {
-      "tcId": "TC_CS_998",
-      "system": "FO",
-      "majorCategory": "고객센터/정책",
-      "midCategory": "",
-      "minorCategory": "",
-      "screenName": "",
-      "platform": "Web",
-      "type": "",
-      "item": "git 자동커밋 테스트",
-      "baseDoc": "-",
-      "priority": "P1",
-      "testData": "",
-      "precondition": "특이 사전조건 없음",
-      "steps": "1) 절차",
-      "expected": "1) 기대결과",
-      "verifyNote": "",
-      "result": "",
-      "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
-      "remark": "",
-      "origin": "신규",
-      "displayNo": 10
     }
   ]
 }
