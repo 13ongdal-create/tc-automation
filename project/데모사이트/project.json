@@ -1,8 +1,9 @@
 {
   "project": "데모사이트",
-  "url": "http://192.168.10.116:30180/categories/111",
+  "url": "http://192.168.10.116:30180",
   "testType": "통합",
   "analysisBasis": "둘다",
   "createdAt": "2026-08-18",
-  "hasTestAccounts": true
+  "hasTestAccounts": true,
+  "adminUrl": "http://192.168.10.116:30280"
 }
