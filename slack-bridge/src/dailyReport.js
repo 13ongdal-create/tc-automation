@@ -58,8 +58,14 @@ function buildDailyReportPrompt() {
   return [
     `오늘(${today}) 평일 정기 현황 보고를 작성해주세요.`,
     `**이 실행은 "관찰 + 노션 기록"만 수행합니다 — 코드 수정, git commit/push, 자동화 테스트 실행은 하지 않습니다.**`,
-    `"${TC_AUTOMATION_ROOT}" 저장소(2026-08-24부터 agents-config/slack-bridge를 git subtree로 포함한 단일 저장소)에서, 경로 범위를 나눠 \`git log --since="${since}" --oneline -- <path>\`로 그 이후 변경사항을 확인하세요: (a) \`-- slack-bridge\`, (b) \`-- agents-config\`.`,
-    `변경사항을 두 갈래로 분류하세요: (a) 큐돌이 봇/인프라 관련(slack-bridge 코드, 권한 설정, 배포 등) → "${QUEOLDI_PAGE}" 페이지, (b) TC 생성/테스트/결함관리 규칙·스킬·워크플로우 관련(AGENTS.md/SKILL.md/role-definition.md) → "${CLAUDE_QA_PAGE}" 페이지.`,
+    `"${TC_AUTOMATION_ROOT}" 저장소(2026-08-24부터 agents-config/slack-bridge를 git subtree로 포함한 단일 저장소)에서, 경로 범위를 나눠 \`git log --since="${since}" --oneline -- <path>\`로 그 이후 변경사항을 확인하세요: (a) \`-- slack-bridge\`, (b) \`-- agents-config\`, (c) \`-- dashboard\`.`,
+    // [수정 2026-09-29] 큐돌이(Slack 봇) 종료(2026-08-24) 이후 실제 QA 워크플로우 인터페이스가
+    // dashboard/로 옮겨갔는데도 이 프롬프트가 계속 (a)(b)만 감시해, 2026-09-08 이후 3주 가까이
+    // dashboard/ 커밋만 쌓이는 동안 두 노션 페이지가 전혀 갱신되지 않는 상태로 방치되었음(실측
+    // 발견). 스케줄러 자체는 매일 실행되어 lastResultOk:true를 계속 남겼지만, 감시 범위 밖이라
+    // "변경사항 없음"조차 기록되지 않고 그냥 아무 것도 안 한 것 — (c) dashboard 경로를 추가해
+    // 재발 방지.
+    `변경사항을 두 갈래로 분류하세요: (a) 큐돌이 봇/인프라 관련(slack-bridge 코드, 권한 설정, 배포 등) → "${QUEOLDI_PAGE}" 페이지, (b) TC 생성/테스트/결함관리 규칙·스킬·워크플로우 관련(AGENTS.md/SKILL.md/role-definition.md, 그리고 큐돌이를 대체한 dashboard/ 코드 — 테스트 실행 큐, TC 업로드, 채팅 패널 등) → "${CLAUDE_QA_PAGE}" 페이지.`,
     `각 페이지를 notion-fetch로 먼저 읽고, 변경사항이 있으면 관련 섹션(구현 현황/규칙 구조/리스크 등)을 갱신하세요. 그다음 반드시 두 페이지 모두의 "업데이트 이력" 표에 오늘 날짜로 새 행을 추가하세요 — 변경사항이 없었다면 "변경사항 없음 — 안정적으로 운영 중"으로 기록합니다 (평일 매일 기록이 원칙이며, 변경 유무와 무관하게 두 페이지 다 기록합니다).`,
     pending
       ? `사용자가 남긴 추가 요청사항이 있습니다 — 이번 보고에 반드시 반영하세요:\n"""${pending}"""`
