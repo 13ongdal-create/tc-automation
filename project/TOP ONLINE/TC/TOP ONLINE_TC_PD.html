@@ -78,7 +78,7 @@
   select.result-select[data-val="Fail"]{color:var(--fail);font-weight:600;}
   input.free-input{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
 
-  .col-no{width:2.5%} .col-id{width:5.5%} .col-system{width:2.5%} .col-cat{width:3%} .col-mod{width:3.5%} .col-sub{width:3.5%} .col-screen{width:3.5%}
+  .col-check{width:2%} .col-no{width:2.5%} .col-id{width:5.5%} .col-system{width:2.5%} .col-cat{width:3%} .col-mod{width:3.5%} .col-sub{width:3.5%} .col-screen{width:3.5%}
   .col-platform{width:2.5%} .col-type{width:2.5%} .col-title{width:6.5%} .col-ref{width:3.5%}
   .col-priority{width:2.5%} .col-testdata{width:5%} .col-precond{width:5.5%} .col-proc{width:8.5%} .col-expected{width:8.5%}
   .col-result{width:4.5%} .col-assignee{width:3.5%} .col-issue{width:8%} .col-issuelink{width:8%} .col-remark{width:8%}
@@ -98,6 +98,7 @@
   #defectTable tbody tr:hover{background:var(--headbg);}
   #defectModalImg{max-width:100%;border-radius:8px;border:1px solid var(--border);display:block;margin-top:10px;}
   #defectModalHistory{margin:8px 0 0;padding-left:18px;font-size:12px;color:var(--muted);line-height:1.7;}
+  #runPanel{background:#0d1117;color:#c9d1d9;border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;font-family:Consolas,Menlo,monospace;white-space:pre-wrap;word-break:break-all;max-height:220px;overflow-y:auto;}
 
   .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;align-items:center;justify-content:center;}
   .modal-overlay.open{display:flex;}
@@ -172,12 +173,16 @@
 
   <div class="toolbar" id="toolbarBlock">
     <div class="count" id="filteredCount"></div>
+    <button id="btnRunSelected" disabled>▶ 선택 TC 테스트 실행</button>
   </div>
+
+  <div id="runPanel" style="display:none;"></div>
 
   <div class="table-wrap" id="tcTableWrap">
     <table class="tc">
       <thead>
         <tr>
+          <th class="col-check"><input type="checkbox" id="checkAllTc" title="현재 보이는 TC 전체 선택"></th>
           <th class="col-no">No.</th>
           <th class="col-id">TC ID</th>
           <th class="col-system">system</th>
@@ -315,6 +320,16 @@ if (decodeURIComponent(location.hash || '').replace(/^#/, '').includes('결함�
 let filterState = { keyword: '', priority: '', type: '', origin: '' };
 let defectFilterStatus = '전체';
 
+// [추가 2026-09-29] "체크한 TC 테스트 수행" 기능 — 대시보드의 테스트 실행 큐(zero-token,
+// dashboard/lib/testQueue.js·testRunner.js·resultsProcessor.js)를 이 뷰어(같은 오리진의
+// /project-files/ 경로로 서빙되어 대시보드 로그인 세션 쿠키를 공유함)에서 WebSocket으로
+// 직접 호출합니다. 완료 후 TC/defects.json은 갱신되지만 이 HTML 자체(생성 시점 스냅샷)는
+// 자동 갱신되지 않으므로, 최신 데이터 반영은 "뷰어 갱신해줘" 채팅 요청으로 별도 진행합니다.
+const PROJECT_NAME = 'TOP ONLINE';
+let selectedTcIds = new Set();
+let testRunActive = false;
+let runPanelVisible = false;
+
 function esc(s) {
   return String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -383,6 +398,7 @@ function render() {
     document.getElementById(id).style.display = defectMode ? 'none' : '';
   });
   document.getElementById('defectPanel').style.display = defectMode ? '' : 'none';
+  document.getElementById('runPanel').style.display = defectMode ? 'none' : (runPanelVisible ? 'block' : 'none');
   if (defectMode) { renderDefects(); return; }
 
   let filtered = currentTab === '전체' ? TC_DATA : TC_DATA.filter(t => t.midCategory === currentTab);
@@ -434,6 +450,7 @@ function render() {
   const kw = filterState.keyword;
   tbody.innerHTML = filtered.map(t => `
     <tr data-id="${esc(t.tcId)}">
+      <td class="center"><input type="checkbox" class="tc-check" data-tcid="${esc(t.tcId)}"></td>
       <td class="center">${esc(t.displayNo)}</td>
       <td>${hl(t.tcId, kw)}</td>
       <td class="center"><span class="badge ${t.system==='BO'?'P1':'P3'}">${esc(t.system||'FO')}</span></td>
@@ -470,6 +487,82 @@ function render() {
   });
   tbody.querySelectorAll('input.assignee').forEach(inp => inp.onchange = () => { TC_DATA.find(t=>t.tcId===inp.closest('tr').dataset.id).assignee = inp.value; });
   tbody.querySelectorAll('input.issuelink').forEach(inp => inp.onchange = () => { TC_DATA.find(t=>t.tcId===inp.closest('tr').dataset.id).issueLink = inp.value; });
+
+  tbody.querySelectorAll('input.tc-check').forEach(cb => {
+    cb.checked = selectedTcIds.has(cb.dataset.tcid);
+    cb.onchange = () => {
+      if (cb.checked) selectedTcIds.add(cb.dataset.tcid); else selectedTcIds.delete(cb.dataset.tcid);
+      updateRunButton();
+    };
+  });
+  const checkAll = document.getElementById('checkAllTc');
+  checkAll.checked = filtered.length > 0 && filtered.every(t => selectedTcIds.has(t.tcId));
+  checkAll.onchange = () => {
+    filtered.forEach(t => { if (checkAll.checked) selectedTcIds.add(t.tcId); else selectedTcIds.delete(t.tcId); });
+    render();
+  };
+  updateRunButton();
+}
+
+function updateRunButton() {
+  const btn = document.getElementById('btnRunSelected');
+  const n = selectedTcIds.size;
+  btn.textContent = n ? `▶ 선택 TC 테스트 실행 (${n}건)` : '▶ 선택 TC 테스트 실행';
+  btn.disabled = n === 0 || testRunActive;
+}
+
+function appendRunLog(line) {
+  const panel = document.getElementById('runPanel');
+  runPanelVisible = true;
+  panel.style.display = 'block';
+  panel.textContent += (panel.textContent ? '\n' : '') + line;
+  panel.scrollTop = panel.scrollHeight;
+}
+
+function runSelectedTests() {
+  if (testRunActive || selectedTcIds.size === 0) return;
+  const tcIds = [...selectedTcIds];
+  testRunActive = true;
+  updateRunButton();
+  document.getElementById('runPanel').textContent = '';
+  appendRunLog(`[시작] 선택한 TC ${tcIds.length}건 실행 요청: ${tcIds.join(', ')}`);
+
+  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+  const sock = new WebSocket(`${proto}://${location.host}/ws/chat`);
+  sock.onopen = () => sock.send(JSON.stringify({ type: 'runTests', project: PROJECT_NAME, scope: 'custom', tcIds, headed: false }));
+  sock.onerror = () => appendRunLog('[오류] 서버 연결에 실패했습니다 — 대시보드에 로그인된 상태로 이 페이지를 열었는지 확인해주세요.');
+  sock.onclose = () => { testRunActive = false; updateRunButton(); };
+  sock.onmessage = (ev) => {
+    let msg;
+    try { msg = JSON.parse(ev.data); } catch { return; }
+    if (msg.project !== PROJECT_NAME) return;
+    if (msg.type === 'queueAck') {
+      appendRunLog(`[대상 확정] ${msg.plan.map(p => p.moduleCode + (p.count != null ? `(${p.count}건)` : '')).join(', ')}`);
+    } else if (msg.type === 'queueModuleStart') {
+      appendRunLog(`[${msg.moduleCode}] 실행 시작`);
+    } else if (msg.type === 'queueLog') {
+      appendRunLog(msg.line);
+    } else if (msg.type === 'queueModuleDone') {
+      if (msg.summary) {
+        let line = `[${msg.moduleCode}] 완료 — Pass ${msg.summary.pass} / Fail ${msg.summary.fail}`;
+        if (msg.summary.na) line += ` / N/A ${msg.summary.na}`;
+        if (msg.summary.newDefects.length) line += ` · 신규 결함 ${msg.summary.newDefects.join(', ')}`;
+        if (msg.summary.reopenedDefects.length) line += ` · 재발생 ${msg.summary.reopenedDefects.join(', ')}`;
+        appendRunLog(line);
+      } else {
+        appendRunLog(`[${msg.moduleCode}] 오류: ${msg.error || '결과 파일을 읽지 못했습니다.'}`);
+      }
+    } else if (msg.type === 'queueDone') {
+      appendRunLog(msg.cancelled ? '[중단됨] 실행이 중단되었습니다.' : '[완료] 모든 실행이 끝났습니다.');
+      if (!msg.cancelled) {
+        appendRunLog('[참고] TC/defects.json·results 스냅샷 JSON은 갱신됐지만, 이 페이지(HTML)는 생성 시점 스냅샷이라 자동으로 반영되지 않습니다. 최신 결과는 대시보드 또는 JSON 파일에서 확인하거나, 채팅에 "뷰어 갱신해줘"라고 요청해 다시 생성해주세요.');
+      }
+      sock.close();
+    } else if (msg.type === 'queueError') {
+      appendRunLog(`[오류] ${msg.error}`);
+      sock.close();
+    }
+  };
 }
 
 function resultSelect(t) {
@@ -596,6 +689,7 @@ document.getElementById('statsToggle').onclick = () => {
   icon.textContent = open ? '▶' : '▼';
 };
 
+document.getElementById('btnRunSelected').onclick = runSelectedTests;
 document.getElementById('btnAccMatrix').onclick = () => document.getElementById('accModalOverlay').classList.add('open');
 document.getElementById('btnFlowMap').onclick = () => document.getElementById('flowModalOverlay').classList.add('open');
 document.querySelectorAll('.modal-close').forEach(btn => btn.onclick = (e) => e.target.closest('.modal-overlay').classList.remove('open'));
