@@ -1,12 +1,19 @@
-// 테스트 실행 큐 — 실행 범위(전체/모듈/결함재검증/미수행/P1)를 실제 실행 대상(spec 파일 + tcId 목록)
-// 으로 해석하는 순수 로직 (Claude 미사용, 토큰 소모 없음). 실행 자체는 testRunner.js,
-// 실행 결과의 TC/defects.json 반영은 resultsProcessor.js가 담당합니다.
+// 테스트 실행 큐 — 모듈/시스템/우선순위/수행상태 필터(또는 TC 뷰어에서 직접 고른 tcId 목록)를
+// 실제 실행 대상(spec 파일 + tcId 목록)으로 해석하는 순수 로직 (Claude 미사용, 토큰 소모 없음).
+// 실행 자체는 testRunner.js, 실행 결과의 TC/defects.json 반영은 resultsProcessor.js가 담당합니다.
 const fs = require('fs');
 const path = require('path');
 const { PROJECTS_ROOT, TC_AUTOMATION_ROOT } = require('./defectStore');
 const tcStore = require('./tcStore');
 
-const SCOPES = ['all', 'module', 'defect-retest', 'pending', 'p1', 'custom'];
+// 'filter': 모듈/시스템/우선순위/수행상태 조합으로 대상을 좁히는 대시보드 패널의 기본 모드.
+// 'custom': TC 뷰어(HTML)에서 체크박스로 직접 고른 tcId 목록.
+const SCOPES = ['filter', 'custom'];
+const PRIORITIES = ['P1', 'P2', 'P3'];
+const SYSTEMS = ['FO', 'BO'];
+// 'none' = 미수행(실행결과 미입력). Blocked는 2026-08-27부로 N/A에 통합되어 선택지에서 제외
+// (AGENTS.md 10항 "실행결과 값 정의").
+const STATUSES = ['none', 'Pass', 'Fail', 'N/A', 'N/T'];
 
 function automationDir(project) {
   return path.join(PROJECTS_ROOT, project, 'TC', 'automation', 'tests');
@@ -58,35 +65,39 @@ function listRunnableModules(project) {
   return out.sort((a, b) => a.moduleCode.localeCompare(b.moduleCode));
 }
 
-function matcherFor(scope) {
-  if (scope === 'all') return () => true;
-  if (scope === 'defect-retest') return (i) => i.result === 'Fail' || i.result === 'Blocked';
-  if (scope === 'pending') return (i) => !i.result;
-  if (scope === 'p1') return (i) => i.priority === 'P1';
-  return () => false;
+/** 우선순위/시스템/수행상태 필터를 하나의 판정 함수로 합칩니다. 각 값이 falsy면 "전체"(필터 없음). */
+function itemMatcher({ priority, system, status } = {}) {
+  return (item) => {
+    if (priority && item.priority !== priority) return false;
+    if (system && (item.system || 'FO') !== system) return false;
+    if (status === 'none') { if (item.result) return false; }
+    else if (status && item.result !== status) return false;
+    return true;
+  };
 }
 
-/** scope에 따라 실행할 [{moduleCode, specFile, tcIds}] 목록을 만듭니다. tcIds가 null이면 spec 파일 전체 실행. */
+/** opts.moduleCodes(배열, 비어있으면 전체)로 실행 가능 모듈 목록을 좁힙니다. */
+function selectModules(project, moduleCodes) {
+  const modules = listRunnableModules(project);
+  if (!Array.isArray(moduleCodes) || !moduleCodes.length) return modules;
+  const codes = new Set(moduleCodes);
+  return modules.filter((m) => codes.has(m.moduleCode));
+}
+
+/**
+ * scope에 따라 실행할 [{moduleCode, specFile, tcIds}] 목록을 만듭니다. tcIds가 null이면 spec 파일
+ * 전체 실행(필터가 하나도 없을 때만) — 있으면 그 tcId들만 --grep으로 선별 실행합니다.
+ */
 function resolvePlan(project, scope, opts = {}) {
   if (!SCOPES.includes(scope)) throw new Error(`scope는 ${SCOPES.join('/')} 중 하나여야 합니다.`);
-  const modules = listRunnableModules(project);
 
-  if (scope === 'module') {
-    const codes = new Set(Array.isArray(opts.moduleCodes) ? opts.moduleCodes : [opts.moduleCode].filter(Boolean));
-    if (!codes.size) throw new Error('실행할 모듈을 선택해주세요.');
-    return modules
-      .filter((m) => codes.has(m.moduleCode))
-      .map((m) => ({ moduleCode: m.moduleCode, specFile: m.specFile, tcIds: null }));
-  }
-  if (scope === 'all') {
-    return modules.map((m) => ({ moduleCode: m.moduleCode, specFile: m.specFile, tcIds: null }));
-  }
   if (scope === 'custom') {
     // TC 뷰어(HTML)에서 체크박스로 직접 고른 tcId 목록 — 여러 모듈에 걸쳐 있을 수 있어 각 tcId가
     // 실제로 속한 모듈을 찾아 그 모듈의 --grep 대상으로 묶습니다. 존재하지 않거나(오타 등) 자동화가
     // 안 된 tcId는 조용히 제외합니다 (preview()의 excludedNoAutomation으로 건수만 알림).
     const requested = [...new Set(Array.isArray(opts.tcIds) ? opts.tcIds : [])];
     if (!requested.length) throw new Error('실행할 TC를 선택해주세요.');
+    const modules = listRunnableModules(project);
     const canonical = new Map(tcStore.readModuleFiles(project).map((m) => [m.moduleCode, m]));
     const plan = [];
     for (const m of modules) {
@@ -99,11 +110,19 @@ function resolvePlan(project, scope, opts = {}) {
     return plan;
   }
 
-  // defect-retest / pending / p1 — 모듈 전체가 아니라 조건에 맞고 실제로 자동화된 TC만 --grep으로 선별
-  const matches = matcherFor(scope);
+  // scope === 'filter' — 모듈/시스템/우선순위/수행상태를 자유롭게 조합
+  const selected = selectModules(project, opts.moduleCodes);
+  if (!selected.length) throw new Error('실행할 모듈이 없습니다.');
+
+  const hasItemFilter = !!(opts.priority || opts.system || opts.status);
+  if (!hasItemFilter) {
+    return selected.map((m) => ({ moduleCode: m.moduleCode, specFile: m.specFile, tcIds: null }));
+  }
+
+  const matches = itemMatcher(opts);
   const canonical = new Map(tcStore.readModuleFiles(project).map((m) => [m.moduleCode, m]));
   const plan = [];
-  for (const m of modules) {
+  for (const m of selected) {
     const mod = canonical.get(m.moduleCode);
     const automatedIds = extractTcIdsFromSpec(path.join(TC_AUTOMATION_ROOT, m.specFile));
     const tcIds = (mod.data.items || [])
@@ -125,10 +144,12 @@ function preview(project, scope, opts = {}) {
   if (scope === 'custom') {
     const requestedUnique = new Set(Array.isArray(opts.tcIds) ? opts.tcIds : []).size;
     excludedNoAutomation = Math.max(0, requestedUnique - targetCount);
-  } else if (scope !== 'module') {
-    const matches = matcherFor(scope);
+  } else {
+    const moduleCodes = Array.isArray(opts.moduleCodes) && opts.moduleCodes.length ? new Set(opts.moduleCodes) : null;
+    const matches = itemMatcher(opts);
     let totalMatching = 0;
     for (const m of tcStore.readModuleFiles(project)) {
+      if (moduleCodes && !moduleCodes.has(m.moduleCode)) continue;
       totalMatching += (m.data.items || []).filter(matches).length;
     }
     excludedNoAutomation = Math.max(0, totalMatching - targetCount);
@@ -142,4 +163,4 @@ function preview(project, scope, opts = {}) {
   };
 }
 
-module.exports = { SCOPES, listRunnableModules, resolvePlan, preview };
+module.exports = { SCOPES, PRIORITIES, SYSTEMS, STATUSES, listRunnableModules, resolvePlan, preview };

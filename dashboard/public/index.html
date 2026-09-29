@@ -174,18 +174,32 @@
         <span class="panel-sub" id="tqStatus">대기 중</span>
       </div>
 
-      <label class="field-label" for="tqScope">실행 범위 구분 *</label>
-      <select id="tqScope">
-        <option value="all">전체 TC 일괄 실행</option>
-        <option value="module">특정 모듈별 (중분류) 실행</option>
-        <option value="defect-retest">결함 재검증 (Fail/Blocked 대상)</option>
-        <option value="pending">미수행 (대기) 케이스 대상</option>
-        <option value="p1">P1 (Critical) 케이스만 실행</option>
+      <label class="field-label" for="tqModule">모듈</label>
+      <select id="tqModule"><option value="">전체 모듈</option></select>
+
+      <label class="field-label" for="tqSystem">시스템</label>
+      <select id="tqSystem">
+        <option value="">전체 시스템</option>
+        <option value="FO">FO</option>
+        <option value="BO">BO</option>
       </select>
 
-      <div id="tqModuleRow" hidden>
-        <label class="field-label">모듈 선택</label>
-        <div id="tqModuleChecks" class="tq-module-checks"><span class="placeholder-text">프로젝트를 선택하세요</span></div>
+      <label class="field-label">우선순위</label>
+      <div class="tq-pill-group" id="tqPriorityPills">
+        <button type="button" class="tq-pill-btn active" data-value="">전체</button>
+        <button type="button" class="tq-pill-btn" data-value="P1">P1</button>
+        <button type="button" class="tq-pill-btn" data-value="P2">P2</button>
+        <button type="button" class="tq-pill-btn" data-value="P3">P3</button>
+      </div>
+
+      <label class="field-label">수행상태</label>
+      <div class="tq-pill-group" id="tqStatusPills">
+        <button type="button" class="tq-pill-btn active" data-value="">전체</button>
+        <button type="button" class="tq-pill-btn" data-value="none">미수행</button>
+        <button type="button" class="tq-pill-btn" data-value="Pass">Pass</button>
+        <button type="button" class="tq-pill-btn" data-value="Fail">Fail</button>
+        <button type="button" class="tq-pill-btn" data-value="N/A">N/A</button>
+        <button type="button" class="tq-pill-btn" data-value="N/T">N/T</button>
       </div>
 
       <label class="field-label" for="tqHeaded">브라우저 실행 화면 (Playwright)</label>

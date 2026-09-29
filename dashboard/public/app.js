@@ -55,9 +55,10 @@ const el = {
   defectListMore: document.getElementById('defectListMore'),
   resultsList: document.getElementById('resultsList'),
   tqStatus: document.getElementById('tqStatus'),
-  tqScope: document.getElementById('tqScope'),
-  tqModuleRow: document.getElementById('tqModuleRow'),
-  tqModuleChecks: document.getElementById('tqModuleChecks'),
+  tqModule: document.getElementById('tqModule'),
+  tqSystem: document.getElementById('tqSystem'),
+  tqPriorityPills: document.getElementById('tqPriorityPills'),
+  tqStatusPills: document.getElementById('tqStatusPills'),
   tqHeaded: document.getElementById('tqHeaded'),
   tqPreview: document.getElementById('tqPreview'),
   btnTqStart: document.getElementById('btnTqStart'),
@@ -1053,17 +1054,26 @@ let tqModules = []; // 현재 프로젝트에서 실행 가능한(자동화 코�
 let tqRunning = false;
 const tqRows = {}; // moduleCode -> 큐 목록의 행 엘리먼트
 
-function tqSelectedModuleCodes() {
-  return Array.from(el.tqModuleChecks.querySelectorAll('input[type=checkbox]:checked')).map((c) => c.value);
+/** 우선순위/수행상태 필터는 라디오 버튼처럼 하나만 선택되는 pill 그룹입니다 — 현재 선택값(data-value)을 읽고 바꿉니다. */
+function tqPillValue(groupEl) {
+  const active = groupEl.querySelector('.tq-pill-btn.active');
+  return active ? active.dataset.value : '';
 }
-
-function tqUpdateModuleRowVisibility() {
-  el.tqModuleRow.hidden = el.tqScope.value !== 'module';
+function tqWirePillGroup(groupEl) {
+  groupEl.addEventListener('click', (e) => {
+    const btn = e.target.closest('.tq-pill-btn');
+    if (!btn || tqRunning) return;
+    groupEl.querySelectorAll('.tq-pill-btn').forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+    refreshTqPreview();
+  });
 }
+tqWirePillGroup(el.tqPriorityPills);
+tqWirePillGroup(el.tqStatusPills);
 
 async function loadTestQueueModules(project) {
   tqModules = [];
-  el.tqModuleChecks.innerHTML = '<span class="placeholder-text">불러오는 중…</span>';
+  el.tqModule.innerHTML = '<option value="">불러오는 중…</option>';
   try {
     const res = await fetch(`/api/${encodeURIComponent(project)}/test-queue/modules`);
     const data = await res.json();
@@ -1071,17 +1081,31 @@ async function loadTestQueueModules(project) {
   } catch {
     tqModules = [];
   }
-  el.tqModuleChecks.innerHTML = tqModules.length
-    ? tqModules
-        .map((m) => `<label><input type="checkbox" value="${esc(m.moduleCode)}">${esc(m.moduleName)} (${esc(m.moduleCode)}, ${m.automatedCount}건)</label>`)
-        .join('')
-    : '<span class="placeholder-text">자동화된 모듈이 없습니다 (TC/automation/tests/*.spec.js 필요)</span>';
-  tqUpdateModuleRowVisibility();
+  el.tqModule.innerHTML =
+    '<option value="">전체 모듈</option>' +
+    tqModules.map((m) => `<option value="${esc(m.moduleCode)}">${esc(m.moduleName)} (${esc(m.moduleCode)}, ${m.automatedCount}건)</option>`).join('');
+  if (!tqModules.length) {
+    el.tqModule.innerHTML = '<option value="">자동화된 모듈 없음 (TC/automation/tests/*.spec.js 필요)</option>';
+  }
+  el.tqModule.value = '';
+  el.tqSystem.value = '';
+  [el.tqPriorityPills, el.tqStatusPills].forEach((g) => {
+    g.querySelectorAll('.tq-pill-btn').forEach((b) => b.classList.toggle('active', b.dataset.value === ''));
+  });
   el.tqModuleQueue.innerHTML = '';
   el.tqLog.hidden = true;
   el.tqLog.textContent = '';
   tqSetRunning(false);
   refreshTqPreview();
+}
+
+function tqCurrentFilters() {
+  return {
+    moduleCodes: el.tqModule.value ? [el.tqModule.value] : [],
+    system: el.tqSystem.value,
+    priority: tqPillValue(el.tqPriorityPills),
+    status: tqPillValue(el.tqStatusPills),
+  };
 }
 
 async function refreshTqPreview() {
@@ -1092,22 +1116,15 @@ async function refreshTqPreview() {
     el.btnTqStart.disabled = true;
     return;
   }
-  const scope = el.tqScope.value;
-  const moduleCodes = scope === 'module' ? tqSelectedModuleCodes() : [];
-  if (scope === 'module' && !moduleCodes.length) {
-    el.tqPreview.textContent = '실행할 모듈을 하나 이상 선택하세요.';
-    el.tqPreview.classList.remove('tq-preview-error');
-    el.btnTqStart.disabled = true;
-    return;
-  }
+  const { moduleCodes, system, priority, status } = tqCurrentFilters();
   try {
-    const qs = new URLSearchParams({ scope, moduleCodes: moduleCodes.join(',') });
+    const qs = new URLSearchParams({ scope: 'filter', moduleCodes: moduleCodes.join(','), system, priority, status });
     const res = await fetch(`/api/${encodeURIComponent(project)}/test-queue/preview?${qs}`);
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.error || '실행 대상을 조회하지 못했습니다.');
     el.tqPreview.classList.remove('tq-preview-error');
     if (!data.targetCount) {
-      el.tqPreview.textContent = '이 범위에 실행 대상 TC가 없습니다.';
+      el.tqPreview.textContent = '이 조건에 실행 대상 TC가 없습니다.';
       el.btnTqStart.disabled = true;
       return;
     }
@@ -1123,20 +1140,16 @@ async function refreshTqPreview() {
   }
 }
 
-el.tqScope.addEventListener('change', () => {
-  tqUpdateModuleRowVisibility();
-  refreshTqPreview();
-});
-el.tqModuleChecks.addEventListener('change', (e) => {
-  if (e.target.matches('input[type=checkbox]')) refreshTqPreview();
-});
+el.tqModule.addEventListener('change', refreshTqPreview);
+el.tqSystem.addEventListener('change', refreshTqPreview);
+
 function tqSetRunning(running) {
   tqRunning = running;
   el.btnTqStart.hidden = running;
   el.btnTqCancel.hidden = !running;
-  el.tqScope.disabled = running;
+  el.tqModule.disabled = running;
+  el.tqSystem.disabled = running;
   el.tqHeaded.disabled = running;
-  el.tqModuleChecks.querySelectorAll('input').forEach((c) => { c.disabled = running; });
   el.tqStatus.textContent = running ? '실행 중…' : '대기 중';
   if (!running) refreshTqPreview();
 }
@@ -1209,14 +1222,13 @@ function tqHandleDone(totals, cancelled) {
 el.btnTqStart.addEventListener('click', () => {
   const project = el.projectSelect.value;
   if (!project || tqRunning || !ws || ws.readyState !== WebSocket.OPEN) return;
-  const scope = el.tqScope.value;
-  const moduleCodes = scope === 'module' ? tqSelectedModuleCodes() : [];
+  const { moduleCodes, system, priority, status } = tqCurrentFilters();
   const headed = el.tqHeaded.value === '1';
   el.tqLog.textContent = '';
   el.tqLog.hidden = true;
   el.tqModuleQueue.innerHTML = '';
   tqSetRunning(true);
-  ws.send(JSON.stringify({ type: 'runTests', project, scope, moduleCodes, headed }));
+  ws.send(JSON.stringify({ type: 'runTests', project, scope: 'filter', moduleCodes, system, priority, status, headed }));
 });
 
 el.btnTqCancel.addEventListener('click', () => {
