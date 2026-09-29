@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "CO",
     "moduleName": "시스템(공통)",
-    "version": 9,
+    "version": 8,
     "changeHistory": [
       {
         "version": 1,
@@ -44,11 +44,6 @@
         "version": 8,
         "date": "2026-09-29",
         "summary": "케이스 고도화 조사(결함현황 정리 1단계): DEF_007 노이즈로 판명된 TC_CO_001/002/003/015 결과를 Pass로 정정, 노이즈와 별개로 실제 결함 확인된 TC_CO_009/010/020은 Fail 유지하되 근거를 재검증 결과로 갱신 (TC_CO_011/012는 이번 재검증 대상 아니어서 변경 없음)."
-      },
-      {
-        "version": 9,
-        "date": "2026-09-29",
-        "summary": "케이스 고도화 조사(모듈정의 정정 2단계): TC_CO_014/019의 대분류 \"예외·회귀\"를 \"시스템\"으로 정정. TC_CO_017/018은 alt텍스트 접근성 검증인데 대분류가 \"예외·회귀\"로 제각각이었던 것을 동일 성격의 TC_CO_016과 맞춰 \"품질·비기능\"으로 통일. TC_CO_020(다크모드)의 대분류 \"전시\"는 상품 노출 도메인이 아닌 사이트 전역 UI/시스템 기능이라 \"시스템\"으로 정정."
       }
     ]
   },
@@ -367,7 +362,7 @@
     },
     {
       "tcId": "TC_CO_014",
-      "majorCategory": "시스템",
+      "majorCategory": "예외·회귀",
       "midCategory": "공통",
       "minorCategory": "404처리",
       "platform": "Web",
@@ -439,7 +434,7 @@
     },
     {
       "tcId": "TC_CO_017",
-      "majorCategory": "품질·비기능",
+      "majorCategory": "예외·회귀",
       "midCategory": "접근성",
       "minorCategory": "alt파일명",
       "platform": "Web",
@@ -463,7 +458,7 @@
     },
     {
       "tcId": "TC_CO_018",
-      "majorCategory": "품질·비기능",
+      "majorCategory": "예외·회귀",
       "midCategory": "전시",
       "minorCategory": "인코딩오류",
       "platform": "Web",
@@ -487,7 +482,7 @@
     },
     {
       "tcId": "TC_CO_019",
-      "majorCategory": "시스템",
+      "majorCategory": "예외·회귀",
       "midCategory": "공통",
       "minorCategory": "페이지타이틀",
       "platform": "Web",
@@ -511,7 +506,7 @@
     },
     {
       "tcId": "TC_CO_020",
-      "majorCategory": "시스템",
+      "majorCategory": "전시",
       "midCategory": "UI",
       "minorCategory": "다크모드",
       "platform": "Web",

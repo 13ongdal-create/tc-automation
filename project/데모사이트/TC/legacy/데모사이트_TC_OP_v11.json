@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "OP",
     "moduleName": "구매프로세스",
-    "version": 12,
+    "version": 11,
     "changeHistory": [
       {
         "version": 1,
@@ -59,11 +59,6 @@
         "version": 11,
         "date": "2026-08-27",
         "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
-      },
-      {
-        "version": 12,
-        "date": "2026-09-29",
-        "summary": "케이스 고도화 조사(모듈정의 정정 2단계): 대분류 \"예외·회귀\"를 쓰던 TC_OP_007/013을 \"구매프로세스\"로 정정. TC_OP_014(장바구니 최대수량 초과 검증)는 대분류가 \"상품\"으로 잘못 기재돼 있었는데 실제 내용(장바구니 기능)에 맞춰 \"구매프로세스\"로 정정."
       }
     ]
   },
@@ -214,7 +209,7 @@
     },
     {
       "tcId": "TC_OP_007",
-      "majorCategory": "구매프로세스",
+      "majorCategory": "예외·회귀",
       "midCategory": "장바구니",
       "minorCategory": "중복담기",
       "platform": "Web",
@@ -358,7 +353,7 @@
     },
     {
       "tcId": "TC_OP_013",
-      "majorCategory": "구매프로세스",
+      "majorCategory": "예외·회귀",
       "midCategory": "장바구니",
       "minorCategory": "품절처리",
       "platform": "Web",
@@ -382,7 +377,7 @@
     },
     {
       "tcId": "TC_OP_014",
-      "majorCategory": "구매프로세스",
+      "majorCategory": "상품",
       "midCategory": "장바구니",
       "minorCategory": "최대수량",
       "platform": "Web",

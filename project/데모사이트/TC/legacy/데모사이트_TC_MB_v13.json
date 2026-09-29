@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "MB",
     "moduleName": "회원",
-    "version": 14,
+    "version": 13,
     "changeHistory": [
       {
         "version": 1,
@@ -69,11 +69,6 @@
         "version": 13,
         "date": "2026-09-29",
         "summary": "케이스 고도화 조사(결함현황 정리 1단계): TC_MB_029 재검증 — 로그인 500 에러 전제가 현재 재현되지 않아 result를 Pass에서 N/A로 정정, 형제 TC(030/031/032)와 동일한 \"테스트 불가\" 사유로 통일 (2026-08-24 배치 당시 이 TC만 누락됐던 것을 보완)."
-      },
-      {
-        "version": 14,
-        "date": "2026-09-29",
-        "summary": "케이스 고도화 조사(모듈정의 정정 2단계): 대분류 \"예외·회귀\"를 쓰던 4건(TC_MB_011/030/032/046)을 실제 도메인 \"회원\"으로 정정(type 컬럼에 이미 \"회귀\"/\"유효성\" 등으로 표현되는 정보와 중복이었음)."
       }
     ]
   },
@@ -320,7 +315,7 @@
     },
     {
       "tcId": "TC_MB_011",
-      "majorCategory": "회원",
+      "majorCategory": "예외·회귀",
       "midCategory": "회원가입",
       "minorCategory": "생년월일",
       "platform": "Web",
@@ -776,7 +771,7 @@
     },
     {
       "tcId": "TC_MB_030",
-      "majorCategory": "회원",
+      "majorCategory": "예외·회귀",
       "midCategory": "로그인",
       "minorCategory": "에러화면",
       "platform": "Web",
@@ -824,7 +819,7 @@
     },
     {
       "tcId": "TC_MB_032",
-      "majorCategory": "회원",
+      "majorCategory": "예외·회귀",
       "midCategory": "로그인영향도",
       "minorCategory": "파급효과",
       "platform": "Web",
@@ -1159,7 +1154,7 @@
       "verifyNote": ""
     },
     {
-      "majorCategory": "회원",
+      "majorCategory": "예외·회귀",
       "midCategory": "Admin회원관리",
       "minorCategory": "데이터정합성",
       "platform": "Admin",

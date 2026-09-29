@@ -3,16 +3,16 @@
     "project": "데모사이트",
     "module": "전체",
     "moduleName": "통합(Full) 뷰어",
-    "version": 9,
+    "version": 8,
     "generatedAt": "2026-09-29",
     "sourceModules": [
-      "PD v17(113건)",
-      "PR v9(10건)",
-      "MB v14(53건)",
-      "OP v12(22건)",
-      "CO v9(50건)",
+      "PD v16(113건)",
+      "PR v8(10건)",
+      "MB v13(53건)",
+      "OP v11(22건)",
+      "CO v8(50건)",
       "MY v7(26건)",
-      "CS v8(9건)"
+      "CS v7(9건)"
     ],
     "note": "이 파일은 읽기 전용 스냅샷입니다. 실제 편집은 각 모듈별 개별 파일에서 이루어집니다."
   },
@@ -97,7 +97,7 @@
     },
     {
       "tcId": "TC_PD_028",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "상품상세",
       "minorCategory": "미존재상품",
       "platform": "Web",
@@ -435,7 +435,7 @@
     },
     {
       "tcId": "TC_PD_041",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "카테고리목록",
       "minorCategory": "결과없음",
       "platform": "Web",
@@ -487,7 +487,7 @@
     },
     {
       "tcId": "TC_PD_043",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "카테고리목록",
       "minorCategory": "정렬+필터조합",
       "platform": "Web",
@@ -882,7 +882,7 @@
       "issueSummary": "",
       "issueLink": "",
       "tcId": "TC_PD_063",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "카테고리목록",
       "minorCategory": "평점필터",
       "type": "UI",
@@ -986,7 +986,7 @@
       "issueSummary": "",
       "issueLink": "DEF_데모사이트_013",
       "tcId": "TC_PD_067",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "카테고리목록",
       "minorCategory": "필터유지",
       "type": "회귀",
@@ -1012,7 +1012,7 @@
       "issueSummary": "",
       "issueLink": "",
       "tcId": "TC_PD_068",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "카테고리목록",
       "minorCategory": "페이지네이션",
       "type": "회귀",
@@ -1272,7 +1272,7 @@
       "issueSummary": "",
       "issueLink": "",
       "tcId": "TC_PD_078",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "상품유닛",
       "minorCategory": "품절",
       "type": "회귀",
@@ -1298,7 +1298,7 @@
       "issueSummary": "",
       "issueLink": "",
       "tcId": "TC_PD_079",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "상품유닛",
       "minorCategory": "위시리스트",
       "type": "기능",
@@ -1377,7 +1377,7 @@
       "issueLink": "",
       "origin": "신규",
       "tcId": "TC_PD_082",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "상품상세",
       "minorCategory": "평점/리뷰수",
       "type": "UI",
@@ -1429,7 +1429,7 @@
       "issueLink": "DEF_데모사이트_001",
       "origin": "신규",
       "tcId": "TC_PD_084",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "상품상세",
       "minorCategory": "위시리스트",
       "type": "기능",
@@ -1631,7 +1631,7 @@
     },
     {
       "tcId": "TC_PD_095",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "인기상품",
       "minorCategory": "EmptyState",
       "platform": "Web",
@@ -3060,7 +3060,7 @@
       "moduleName": "이벤트/기획전/쿠폰행사"
     },
     {
-      "majorCategory": "구매프로세스",
+      "majorCategory": "예외·회귀",
       "midCategory": "Admin쿠폰관리",
       "minorCategory": "데이터정합성",
       "platform": "Admin",
@@ -3087,7 +3087,7 @@
     },
     {
       "tcId": "TC_PR_006",
-      "majorCategory": "전시",
+      "majorCategory": "이벤트",
       "midCategory": "메인배너",
       "minorCategory": "배너CTA",
       "platform": "Web",
@@ -3113,7 +3113,7 @@
     },
     {
       "tcId": "TC_PR_007",
-      "majorCategory": "전시",
+      "majorCategory": "이벤트",
       "midCategory": "메인배너",
       "minorCategory": "배너CTA",
       "platform": "Web",
@@ -3139,7 +3139,7 @@
     },
     {
       "tcId": "TC_PR_008",
-      "majorCategory": "전시",
+      "majorCategory": "이벤트",
       "midCategory": "메인배너",
       "minorCategory": "배너CTA",
       "platform": "Web",
@@ -3164,7 +3164,7 @@
       "moduleName": "이벤트/기획전/쿠폰행사"
     },
     {
-      "majorCategory": "구매프로세스",
+      "majorCategory": "이벤트",
       "midCategory": "Admin대행사관리",
       "minorCategory": "목록조회",
       "platform": "Admin",
@@ -3190,7 +3190,7 @@
       "moduleName": "이벤트/기획전/쿠폰행사"
     },
     {
-      "majorCategory": "구매프로세스",
+      "majorCategory": "이벤트",
       "midCategory": "Front-Admin정합성",
       "minorCategory": "가격할인동기화",
       "platform": "Web",
@@ -3477,7 +3477,7 @@
     },
     {
       "tcId": "TC_MB_011",
-      "majorCategory": "회원",
+      "majorCategory": "예외·회귀",
       "midCategory": "회원가입",
       "minorCategory": "생년월일",
       "platform": "Web",
@@ -3971,7 +3971,7 @@
     },
     {
       "tcId": "TC_MB_030",
-      "majorCategory": "회원",
+      "majorCategory": "예외·회귀",
       "midCategory": "로그인",
       "minorCategory": "에러화면",
       "platform": "Web",
@@ -4023,7 +4023,7 @@
     },
     {
       "tcId": "TC_MB_032",
-      "majorCategory": "회원",
+      "majorCategory": "예외·회귀",
       "midCategory": "로그인영향도",
       "minorCategory": "파급효과",
       "platform": "Web",
@@ -4386,7 +4386,7 @@
       "moduleName": "회원"
     },
     {
-      "majorCategory": "회원",
+      "majorCategory": "예외·회귀",
       "midCategory": "Admin회원관리",
       "minorCategory": "데이터정합성",
       "platform": "Admin",
@@ -4751,7 +4751,7 @@
     },
     {
       "tcId": "TC_OP_007",
-      "majorCategory": "구매프로세스",
+      "majorCategory": "예외·회귀",
       "midCategory": "장바구니",
       "minorCategory": "중복담기",
       "platform": "Web",
@@ -4907,7 +4907,7 @@
     },
     {
       "tcId": "TC_OP_013",
-      "majorCategory": "구매프로세스",
+      "majorCategory": "예외·회귀",
       "midCategory": "장바구니",
       "minorCategory": "품절처리",
       "platform": "Web",
@@ -4933,7 +4933,7 @@
     },
     {
       "tcId": "TC_OP_014",
-      "majorCategory": "구매프로세스",
+      "majorCategory": "상품",
       "midCategory": "장바구니",
       "minorCategory": "최대수량",
       "platform": "Web",
@@ -5505,7 +5505,7 @@
     },
     {
       "tcId": "TC_CO_014",
-      "majorCategory": "시스템",
+      "majorCategory": "예외·회귀",
       "midCategory": "공통",
       "minorCategory": "404처리",
       "platform": "Web",
@@ -5583,7 +5583,7 @@
     },
     {
       "tcId": "TC_CO_017",
-      "majorCategory": "품질·비기능",
+      "majorCategory": "예외·회귀",
       "midCategory": "접근성",
       "minorCategory": "alt파일명",
       "platform": "Web",
@@ -5609,7 +5609,7 @@
     },
     {
       "tcId": "TC_CO_018",
-      "majorCategory": "품질·비기능",
+      "majorCategory": "예외·회귀",
       "midCategory": "전시",
       "minorCategory": "인코딩오류",
       "platform": "Web",
@@ -5635,7 +5635,7 @@
     },
     {
       "tcId": "TC_CO_019",
-      "majorCategory": "시스템",
+      "majorCategory": "예외·회귀",
       "midCategory": "공통",
       "minorCategory": "페이지타이틀",
       "platform": "Web",
@@ -5661,7 +5661,7 @@
     },
     {
       "tcId": "TC_CO_020",
-      "majorCategory": "시스템",
+      "majorCategory": "전시",
       "midCategory": "UI",
       "minorCategory": "다크모드",
       "platform": "Web",
@@ -7298,7 +7298,7 @@
       "moduleName": "고객센터/정책"
     },
     {
-      "majorCategory": "클레임",
+      "majorCategory": "구매프로세스",
       "midCategory": "Admin클레임리스트",
       "minorCategory": "EmptyState",
       "platform": "Admin",
@@ -7324,7 +7324,7 @@
       "moduleName": "고객센터/정책"
     },
     {
-      "majorCategory": "클레임",
+      "majorCategory": "구매프로세스",
       "midCategory": "Admin클레임리스트",
       "minorCategory": "목록컬럼",
       "platform": "Admin",
@@ -7350,7 +7350,7 @@
       "moduleName": "고객센터/정책"
     },
     {
-      "majorCategory": "클레임",
+      "majorCategory": "구매프로세스",
       "midCategory": "Admin클레임리스트",
       "minorCategory": "클레임상태필터",
       "platform": "Admin",

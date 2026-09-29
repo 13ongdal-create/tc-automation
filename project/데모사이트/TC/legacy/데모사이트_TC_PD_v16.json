@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PD",
     "moduleName": "상품전시(+전시)",
-    "version": 17,
+    "version": 16,
     "changeHistory": [
       {
         "version": 1,
@@ -84,11 +84,6 @@
         "version": 16,
         "date": "2026-08-27",
         "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
-      },
-      {
-        "version": 17,
-        "date": "2026-09-29",
-        "summary": "케이스 고도화 조사(모듈정의 정정 2단계): \"예외·회귀\"는 SKILL.md 5항 매핑표에 없는 대분류값이며 이미 type 컬럼에 \"회귀\" 등으로 표현되는 정보와 중복 — 해당 값을 쓰던 11건(TC_PD_028/041/043/063/067/068/078/079/082/084/095)의 대분류를 실제 도메인 \"상품\"으로 정정 (type 컬럼은 변경 없음)."
       }
     ]
   },
@@ -167,7 +162,7 @@
     },
     {
       "tcId": "TC_PD_028",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "상품상세",
       "minorCategory": "미존재상품",
       "platform": "Web",
@@ -479,7 +474,7 @@
     },
     {
       "tcId": "TC_PD_041",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "카테고리목록",
       "minorCategory": "결과없음",
       "platform": "Web",
@@ -527,7 +522,7 @@
     },
     {
       "tcId": "TC_PD_043",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "카테고리목록",
       "minorCategory": "정렬+필터조합",
       "platform": "Web",
@@ -892,7 +887,7 @@
       "issueSummary": "",
       "issueLink": "",
       "tcId": "TC_PD_063",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "카테고리목록",
       "minorCategory": "평점필터",
       "type": "UI",
@@ -988,7 +983,7 @@
       "issueSummary": "",
       "issueLink": "DEF_데모사이트_013",
       "tcId": "TC_PD_067",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "카테고리목록",
       "minorCategory": "필터유지",
       "type": "회귀",
@@ -1012,7 +1007,7 @@
       "issueSummary": "",
       "issueLink": "",
       "tcId": "TC_PD_068",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "카테고리목록",
       "minorCategory": "페이지네이션",
       "type": "회귀",
@@ -1252,7 +1247,7 @@
       "issueSummary": "",
       "issueLink": "",
       "tcId": "TC_PD_078",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "상품유닛",
       "minorCategory": "품절",
       "type": "회귀",
@@ -1276,7 +1271,7 @@
       "issueSummary": "",
       "issueLink": "",
       "tcId": "TC_PD_079",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "상품유닛",
       "minorCategory": "위시리스트",
       "type": "기능",
@@ -1349,7 +1344,7 @@
       "issueLink": "",
       "origin": "신규",
       "tcId": "TC_PD_082",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "상품상세",
       "minorCategory": "평점/리뷰수",
       "type": "UI",
@@ -1397,7 +1392,7 @@
       "issueLink": "DEF_데모사이트_001",
       "origin": "신규",
       "tcId": "TC_PD_084",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "상품상세",
       "minorCategory": "위시리스트",
       "type": "기능",
@@ -1583,7 +1578,7 @@
     },
     {
       "tcId": "TC_PD_095",
-      "majorCategory": "상품",
+      "majorCategory": "예외·회귀",
       "midCategory": "인기상품",
       "minorCategory": "EmptyState",
       "platform": "Web",

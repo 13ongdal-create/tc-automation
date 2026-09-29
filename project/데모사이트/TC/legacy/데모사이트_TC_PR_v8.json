@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PR",
     "moduleName": "이벤트/기획전/쿠폰행사",
-    "version": 9,
+    "version": 8,
     "changeHistory": [
       {
         "version": 1,
@@ -44,11 +44,6 @@
         "version": 8,
         "date": "2026-08-27",
         "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
-      },
-      {
-        "version": 9,
-        "date": "2026-09-29",
-        "summary": "케이스 고도화 조사(모듈정의 정정 2단계): TC_PR_005/009/010의 대분류 \"예외·회귀\"를 실제 도메인 \"구매프로세스\"(쿠폰/가격할인)로 정정. TC_PR_006~008의 대분류 \"이벤트\"는 SKILL.md 5항 매핑표상 전시(DSP) 모듈의 중분류 예시일 뿐 대분류 값이 아니므로 \"전시\"로 정정(중분류 \"메인배너\"는 유지)."
       }
     ]
   },
@@ -150,7 +145,7 @@
       "verifyNote": ""
     },
     {
-      "majorCategory": "구매프로세스",
+      "majorCategory": "예외·회귀",
       "midCategory": "Admin쿠폰관리",
       "minorCategory": "데이터정합성",
       "platform": "Admin",
@@ -175,7 +170,7 @@
     },
     {
       "tcId": "TC_PR_006",
-      "majorCategory": "전시",
+      "majorCategory": "이벤트",
       "midCategory": "메인배너",
       "minorCategory": "배너CTA",
       "platform": "Web",
@@ -199,7 +194,7 @@
     },
     {
       "tcId": "TC_PR_007",
-      "majorCategory": "전시",
+      "majorCategory": "이벤트",
       "midCategory": "메인배너",
       "minorCategory": "배너CTA",
       "platform": "Web",
@@ -223,7 +218,7 @@
     },
     {
       "tcId": "TC_PR_008",
-      "majorCategory": "전시",
+      "majorCategory": "이벤트",
       "midCategory": "메인배너",
       "minorCategory": "배너CTA",
       "platform": "Web",
@@ -246,7 +241,7 @@
       "verifyNote": ""
     },
     {
-      "majorCategory": "구매프로세스",
+      "majorCategory": "이벤트",
       "midCategory": "Admin대행사관리",
       "minorCategory": "목록조회",
       "platform": "Admin",
@@ -270,7 +265,7 @@
       "verifyNote": ""
     },
     {
-      "majorCategory": "구매프로세스",
+      "majorCategory": "이벤트",
       "midCategory": "Front-Admin정합성",
       "minorCategory": "가격할인동기화",
       "platform": "Web",
