@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PD",
     "moduleName": "상품전시(+전시)",
-    "version": 18,
+    "version": 17,
     "changeHistory": [
       {
         "version": 1,
@@ -89,11 +89,6 @@
         "version": 17,
         "date": "2026-09-29",
         "summary": "엑셀 업로드 반영 (DEMO SITE_TC_PD.xlsx) — 수정 48건, 신규 29건"
-      },
-      {
-        "version": 18,
-        "date": "2026-09-29",
-        "summary": "엑셀 업로드 반영 (DEMO SITE_TC_PD.xlsx) — 수정 77건, 신규 0건"
       }
     ]
   },
