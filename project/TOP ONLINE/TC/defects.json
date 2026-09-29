@@ -18,9 +18,21 @@
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-25", "status": "신규", "note": "Phase 1~3 URL 관찰 중 최초 발견 (카드1: TC_DSP_006/007, 카드2: TC_DSP_009 대상)" },
-      { "at": "2026-08-26", "status": "신규", "note": "module 표기 정정(1차): \"MD's PICK\" → \"전시(MD's PICK)\" (TC_DSP.json meta.moduleName과 표기 불일치 — 사용자 지적으로 발견)" },
-      { "at": "2026-08-26", "status": "신규", "note": "module/화면명 필드 분리 정책 확정에 따라 재정정(2차): module을 \"전시\"(대분류만)로 되돌리고 screenName=\"MD's PICK\" 필드를 신설해 별도 기재 — 1차 수정처럼 대분류에 화면명을 괄호 병기하면 대시보드 모듈별 집계 시 같은 모듈의 다른 화면이 별도 항목으로 쪼개지는 문제가 있어 공통 정책(AGENTS.md 2/20-2항)으로 확정" }
+      {
+        "at": "2026-08-25",
+        "status": "신규",
+        "note": "Phase 1~3 URL 관찰 중 최초 발견 (카드1: TC_DSP_006/007, 카드2: TC_DSP_009 대상)"
+      },
+      {
+        "at": "2026-08-26",
+        "status": "신규",
+        "note": "module 표기 정정(1차): \"MD's PICK\" → \"전시(MD's PICK)\" (TC_DSP.json meta.moduleName과 표기 불일치 — 사용자 지적으로 발견)"
+      },
+      {
+        "at": "2026-08-26",
+        "status": "신규",
+        "note": "module/화면명 필드 분리 정책 확정에 따라 재정정(2차): module을 \"전시\"(대분류만)로 되돌리고 screenName=\"MD's PICK\" 필드를 신설해 별도 기재 — 1차 수정처럼 대분류에 화면명을 괄호 병기하면 대시보드 모듈별 집계 시 같은 모듈의 다른 화면이 별도 항목으로 쪼개지는 문제가 있어 공통 정책(AGENTS.md 2/20-2항)으로 확정"
+      }
     ]
   },
   {
@@ -42,8 +54,16 @@
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-25", "status": "신규", "note": "Phase 1 관찰(/login) 및 Phase 3 재관찰(/products/98) 중 동일 시그니처로 발견. 스크린샷은 최초 재현 시점에 확보하지 못했고 이후 재시도(32회)에서도 재현되지 않아 화면 텍스트 캡처로 대체(TC/defects/DEF_TOP ONLINE_002.console.json 참조)" },
-      { "at": "2026-08-26", "status": "신규", "note": "사용자 지적으로 스크린샷 미확보 상태를 재점검 — 동시 다발 요청 방식으로 재시도해 /products/63에서 재현 성공, 스크린샷(TC/defects/DEF_TOP ONLINE_002.png) 확보. 이때 응답이 실제 HTTP 500이었음을 확인해 재현 조건에 대한 근거를 보강함(consoleLog의 reproductionHistory 참조)" }
+      {
+        "at": "2026-08-25",
+        "status": "신규",
+        "note": "Phase 1 관찰(/login) 및 Phase 3 재관찰(/products/98) 중 동일 시그니처로 발견. 스크린샷은 최초 재현 시점에 확보하지 못했고 이후 재시도(32회)에서도 재현되지 않아 화면 텍스트 캡처로 대체(TC/defects/DEF_TOP ONLINE_002.console.json 참조)"
+      },
+      {
+        "at": "2026-08-26",
+        "status": "신규",
+        "note": "사용자 지적으로 스크린샷 미확보 상태를 재점검 — 동시 다발 요청 방식으로 재시도해 /products/63에서 재현 성공, 스크린샷(TC/defects/DEF_TOP ONLINE_002.png) 확보. 이때 응답이 실제 HTTP 500이었음을 확인해 재현 조건에 대한 근거를 보강함(consoleLog의 reproductionHistory 참조)"
+      }
     ]
   },
   {
@@ -65,8 +85,47 @@
     "assignee": "",
     "issueLink": "",
     "history": [
-      { "at": "2026-08-26", "status": "신규", "note": "Phase 5(TOP ONLINE DSP.spec.js 35건 headed 실행) 중 24건이 실패해 원인 조사 중 발견. 실패 로그 대부분이 동일한 콘솔/네트워크 에러 시그니처를 공유하는 것을 확인해 단일 근본원인으로 규명(데모사이트 DEF_007 사례와 동일한 패턴) — 순차 재현 3회 모두 재현되어 간헐적 결함(DEF_TOP ONLINE_002)과는 별개의, 결정적으로 재현되는 결함으로 분류" },
-      { "at": "2026-08-26", "status": "신규", "note": "자동화 코드 버그(위시리스트 잔여 상태로 인한 대기) 수정 후 재검증하는 과정에서, /mypage/wishlist 등 다른 페이지에서도 외부 링크(naver/google/3top) 프리페치 404가 동일 패턴으로 재현됨을 추가 확인 — 로그인 페이지 국한이 아닌 더 넓은 범위의 결함으로 요약/실제결과 갱신" }
+      {
+        "at": "2026-08-26",
+        "status": "신규",
+        "note": "Phase 5(TOP ONLINE DSP.spec.js 35건 headed 실행) 중 24건이 실패해 원인 조사 중 발견. 실패 로그 대부분이 동일한 콘솔/네트워크 에러 시그니처를 공유하는 것을 확인해 단일 근본원인으로 규명(데모사이트 DEF_007 사례와 동일한 패턴) — 순차 재현 3회 모두 재현되어 간헐적 결함(DEF_TOP ONLINE_002)과는 별개의, 결정적으로 재현되는 결함으로 분류"
+      },
+      {
+        "at": "2026-08-26",
+        "status": "신규",
+        "note": "자동화 코드 버그(위시리스트 잔여 상태로 인한 대기) 수정 후 재검증하는 과정에서, /mypage/wishlist 등 다른 페이지에서도 외부 링크(naver/google/3top) 프리페치 404가 동일 패턴으로 재현됨을 추가 확인 — 로그인 페이지 국한이 아닌 더 넓은 범위의 결함으로 요약/실제결과 갱신"
+      }
+    ]
+  },
+  {
+    "defectId": "DEF_TOP ONLINE_004",
+    "tcId": "TC_PD_001",
+    "module": "상품",
+    "screenName": "상품상세",
+    "severity": "P3",
+    "status": "신규",
+    "summary": "상품상세 > Failed to load resource: the server responded with a status of 40",
+    "testEnv": "",
+    "testSteps": "1) 카테고리 또는 MD's PICK 등 목록에서 첫 번째로 노출되는 상품의 상품상세 진입",
+    "actualResult": "콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\nError: 콘솔/네트워크 에러가 감지되어 실패 처리합니다.\n- 콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n- 실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\n- 스크린샷: D:\\QA\\tc-automation\\_scratch\\test-results\\TOP ONLINE\\project-TOP ONLINE-TC-auto-a9469-PD-TC-PD-001-기본정보-상품명-노출-검증-chromium\\console-error-screenshot.png",
+    "expectedResult": "상품명이 화면 상단에 노출된다",
+    "detectedAt": "2026-09-29",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_TOP ONLINE_004.png",
+    "consoleLog": "TC/defects/DEF_TOP ONLINE_004.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-09-29",
+        "status": "신규",
+        "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      },
+      {
+        "at": "2026-09-29",
+        "status": "신규",
+        "note": "요약 문구 정정 (라벨 줄 '콘솔 에러:'만 뽑히던 요약 생성 버그 수정 후 재적용): 상품상세 > 콘솔 에러: → 상품상세 > Failed to load resource: the server responded with a status of 40"
+      }
     ]
   }
 ]
