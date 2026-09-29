@@ -333,7 +333,7 @@ function writeResultsIndex(project) {
 <td>${r.dateFmt}</td><td>${escHtml(r.moduleCode)}</td><td>${r.total}</td><td>${r.executed}</td>
 <td>${r.pass}</td><td>${r.fail}</td><td>${r.na}</td><td>${r.nt}</td><td>${r.none}</td>
 <td>${r.execRate}%</td><td>${r.passRate}%</td><td>${r.failRate}%</td>
-<td><a href="${escHtml(project)}_TC_${escHtml(r.moduleCode)}_Result_${r.dateStr}.json">JSON</a></td>
+<td><a href="${escHtml(project)}_TC_${escHtml(r.moduleCode)}_Result_${r.dateStr}.html">보기</a></td>
 </tr>`
     )
     .join('\n');
