@@ -20,8 +20,11 @@ module.exports = defineConfig({
   ],
   use: {
     headless: true,
-    screenshot: 'only-on-failure',
-    trace: 'retain-on-failure',
+    // 대시보드 "단계 재생(녹화)" 모드(PW_RECORD=1)에서는 성공/실패와 무관하게 영상+트레이스를 남깁니다.
+    screenshot: process.env.PW_RECORD === '1' ? 'on' : 'only-on-failure',
+    // 디스크 절약: 녹화 모드에서는 용량이 큰 트레이스를 끄고(영상+스크린샷만), 해상도도 낮춥니다.
+    trace: process.env.PW_RECORD === '1' ? 'off' : 'retain-on-failure',
+    video: process.env.PW_RECORD === '1' ? { mode: 'on', size: { width: 800, height: 450 } } : 'off',
     // locale 미지정 시 브라우저 기본 로케일(en-US 등)로 렌더링되어 한국어 사이트가 영어로 표시되는
     // 경우가 있어 명시적으로 고정 (2026-08-19, 데모사이트 상품상세 테스트에서 발견)
     locale: 'ko-KR',

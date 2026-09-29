@@ -16,6 +16,7 @@ const testQueue = require('./lib/testQueue');
 const testRunner = require('./lib/testRunner');
 const resultsProcessor = require('./lib/resultsProcessor');
 const tcUpload = require('./lib/tcUpload');
+const gitOps = require('./lib/gitOps');
 
 // 채팅 패널이 spawn하는 claude CLI(Windows에서 .cmd shim → 내부적으로 cmd.exe 경유)가 종료될 때
 // 같은 콘솔 세션 전체(그룹 0)로 Ctrl+C를 보내는 사례가 실측 확인됨 — 이 서버 프로세스까지 함께
@@ -120,12 +121,36 @@ app.use('/project-files/:project', (req, res, next) => {
   express.static(path.join(defectStore.PROJECTS_ROOT, req.params.project))(req, res, next);
 });
 
+// 녹화 모드(단계 재생)로 보존한 영상/트레이스/스크린샷 — 위 전역 인증 미들웨어 뒤라 로그인 필요.
+app.use('/replays/:project', (req, res, next) => {
+  if (!/^[^\\/.][^\\/]*$/.test(req.params.project)) return res.status(400).end();
+  express.static(path.join(testRunner.REPLAYS_ROOT, req.params.project))(req, res, next);
+});
+
 app.get('/api/:project/meta', (req, res) => {
   res.json(projectStore.loadMeta(req.params.project));
 });
 
 app.get('/api/projects', (req, res) => {
   res.json({ projects: projectStore.listProjects() });
+});
+
+// 저장소 전체 기준 git 상태(브랜치·ahead/behind·최근 커밋) — 프로젝트별이 아니라 저장소가 하나라
+// 전역 라우트입니다. AGENTS.md 18항: push는 절대 자동 실행하지 않고 이 버튼을 눌렀을 때만 실행.
+app.get('/api/git/status', async (req, res) => {
+  try {
+    res.json(await gitOps.status());
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/git/push', async (req, res) => {
+  try {
+    res.json(await gitOps.push());
+  } catch (err) {
+    res.status(500).json({ error: (err.stderr || err.message || '').trim().slice(0, 1000) });
+  }
 });
 
 app.post('/api/projects', (req, res) => {
@@ -294,7 +319,7 @@ wss.on('connection', (ws, req) => {
     }
 
     if (msg.type === 'runTests') {
-      const { project, scope, moduleCodes, tcIds, priority, system, status, headed } = msg;
+      const { project, scope, moduleCodes, tcIds, priority, system, status, headed, record } = msg;
       if (!project || !scope) {
         return wsSend(ws, { type: 'queueError', project, error: 'project와 scope가 필요합니다.' });
       }
@@ -323,6 +348,10 @@ wss.on('connection', (ws, req) => {
         plan: plan.map((p) => ({ moduleCode: p.moduleCode, count: p.tcIds ? p.tcIds.length : null })),
       });
 
+      if (record) {
+        try { testRunner.pruneReplays(project); } catch { /* 정리 실패는 실행을 막지 않음 */ }
+      }
+      const replayRunId =new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
       (async () => {
         const totals = { executed: 0, pass: 0, fail: 0, na: 0, newDefects: [], reopenedDefects: [], stillFailingDefects: [], passedWithOpenDefect: [] };
         for (const step of plan) {
@@ -334,6 +363,7 @@ wss.on('connection', (ws, req) => {
               specFile: step.specFile,
               tcIds: step.tcIds,
               headed: !!headed,
+              record: !!record,
               onProcess: (h) => { runState.currentHandle = h; },
               onLog: (line) => wsSend(ws, { type: 'queueLog', project, moduleCode: step.moduleCode, line }),
             });
@@ -346,6 +376,13 @@ wss.on('connection', (ws, req) => {
           if (resultsJson) {
             const flat = testRunner.flattenResults(resultsJson);
             const relevant = step.tcIds ? flat.filter((f) => step.tcIds.includes(f.tcId)) : flat;
+            if (record) {
+              try {
+                wsSend(ws, { type: 'queueReplay', project, moduleCode: step.moduleCode, items: testRunner.collectReplays(project, replayRunId, step.moduleCode, relevant) });
+              } catch (err) {
+                wsSend(ws, { type: 'queueLog', project, moduleCode: step.moduleCode, line: `[안내] 재생 파일 보존 실패: ${err.message}` });
+              }
+            }
             let moduleSummary;
             try {
               moduleSummary = resultsProcessor.applyModuleResults(project, step.moduleCode, relevant);
@@ -365,8 +402,14 @@ wss.on('connection', (ws, req) => {
         } catch {
           // index.html 갱신 실패는 치명적이지 않음(데이터 자체는 이미 반영됨) — 조용히 넘어감
         }
+        let git;
+        if (totals.executed > 0) {
+          const summary = `테스트 실행 큐 결과 반영 (${totals.executed}건 실행 — Pass ${totals.pass}/Fail ${totals.fail}/N/A ${totals.na}` +
+            (totals.newDefects.length ? `, 신규 결함 ${totals.newDefects.length}건` : '') + ')';
+          git = await gitOps.commitPaths([`project/${project}`], `${project}: ${summary}`);
+        }
         testQueueRuns.delete(project);
-        wsSend(ws, { type: 'queueDone', project, cancelled: runState.cancelled, totals });
+        wsSend(ws, { type: 'queueDone', project, cancelled: runState.cancelled, totals, git });
       })();
       return;
     }
@@ -443,11 +486,16 @@ app.get('/api/:project/test-queue/modules', (req, res) => {
 // TC 엑셀 업로드 — 이미 등록된 TC를 수정하거나 신규 TC를 추가합니다(zero-token, claude 미사용).
 // body: { fileName, dataBase64 } — 프런트에서 File을 base64로 인코딩해 JSON으로 보냄.
 app.post('/api/:project/tc-upload', async (req, res) => {
+  const { project } = req.params;
   const { fileName, dataBase64 } = req.body || {};
   if (!dataBase64) return res.status(400).json({ error: '업로드할 파일 데이터가 없습니다.' });
   try {
     const buffer = Buffer.from(dataBase64, 'base64');
-    const result = await tcUpload.applyUpload(req.params.project, buffer, fileName || 'uploaded.xlsx');
+    const result = await tcUpload.applyUpload(project, buffer, fileName || 'uploaded.xlsx');
+    if (result.updatedTcIds.length || result.createdTcIds.length) {
+      const summary = `엑셀 업로드 반영 (${fileName || 'uploaded.xlsx'}) — 수정 ${result.updatedTcIds.length}건, 신규 ${result.createdTcIds.length}건`;
+      result.git = await gitOps.commitPaths([`project/${project}`], `${project}: ${summary}`);
+    }
     res.json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });

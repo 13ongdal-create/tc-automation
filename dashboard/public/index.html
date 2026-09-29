@@ -18,6 +18,7 @@
   <div class="topbar-controls">
     <label for="projectSelect" class="visually-hidden">프로젝트</label>
     <select id="projectSelect"></select>
+    <button id="btnGitStatus" class="btn btn-outline" title="git 상태 · push">🔗 Git</button>
     <button id="btnRefresh" class="btn btn-outline">새로고침</button>
     <button id="btnLogout" class="btn btn-outline">로그아웃</button>
   </div>
@@ -209,6 +210,7 @@
       <select id="tqHeaded">
         <option value="0">⚡ 백그라운드 실행 (화면 숨김 / 고속)</option>
         <option value="1">🖥 화면 표시 (headed, 느림 · 디버그용)</option>
+        <option value="2">🎞 단계 재생 (창 없이 녹화 → 실행 후 팝업에서 영상 재생)</option>
       </select>
       <div class="tq-preview tq-preview-error" id="tqHeadedNote" hidden>
         ⚠ 대시보드가 지금처럼 Windows 예약 작업(S4U, 상시구동)으로 실행 중이면 세션 0 격리 때문에
@@ -221,6 +223,7 @@
       <div class="tq-actions">
         <button type="button" id="btnTqStart" class="btn btn-primary" disabled>▶ 테스트 실행 시작</button>
         <button type="button" id="btnTqCancel" class="btn btn-outline" hidden>■ 중단</button>
+        <button type="button" id="btnTqReplay" class="btn btn-outline" hidden>🎞 실행 재생 보기</button>
       </div>
 
       <div id="tqModuleQueue" class="tq-module-queue"></div>
@@ -327,6 +330,30 @@
     <div class="modal-actions">
       <button type="button" id="btnCancelTcUpload" class="btn btn-outline">닫기</button>
       <button type="button" id="btnTcUploadSubmit" class="btn btn-primary" disabled>업로드 및 반영</button>
+    </div>
+  </div>
+</div>
+
+<!-- 테스트 실행 재생 모달 (단계 재생 모드로 녹화한 영상/스크린샷) -->
+<div id="replayModal" class="modal-overlay" hidden>
+  <div class="modal-box modal-box-replay">
+    <h2>테스트 실행 재생</h2>
+    <div id="replayList" class="replay-list"></div>
+    <div class="modal-actions">
+      <button type="button" id="btnCloseReplay" class="btn btn-outline">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 🔗 Git 상태 · push 모달 -->
+<div id="gitStatusModal" class="modal-overlay" hidden>
+  <div class="modal-box">
+    <h2>Git 상태</h2>
+    <div id="gitStatusBody" class="placeholder-text">불러오는 중…</div>
+    <div class="modal-error" id="gitStatusError"></div>
+    <div class="modal-actions">
+      <button type="button" id="btnCloseGitStatus" class="btn btn-outline">닫기</button>
+      <button type="button" id="btnGitPush" class="btn btn-primary" disabled>origin으로 push</button>
     </div>
   </div>
 </div>

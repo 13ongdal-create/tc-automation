@@ -40,7 +40,7 @@ function escapeRegExp(s) {
  */
 function runSpec(opts) {
   return new Promise((resolve, reject) => {
-    const { project, specFile, tcIds, headed, onLog, onProcess } = opts;
+    const { project, specFile, tcIds, headed, record, onLog, onProcess } = opts;
     const args = [PLAYWRIGHT_CLI, 'test', '--config', CONFIG_PATH, specFile];
     if (tcIds && tcIds.length) {
       args.push('--grep', `(${tcIds.map(escapeRegExp).join('|')})`);
@@ -49,7 +49,7 @@ function runSpec(opts) {
 
     const child = spawn(process.execPath, args, {
       cwd: TC_AUTOMATION_ROOT,
-      env: { ...process.env, PW_RUN_ID: project },
+      env: { ...process.env, PW_RUN_ID: project, PW_RECORD: record ? '1' : '0' },
       shell: false,
       windowsHide: true,
     });
@@ -140,4 +140,41 @@ function flattenResults(resultsJson) {
   return out;
 }
 
-module.exports = { runSpec, readResultsJson, flattenResults };
+const REPLAYS_ROOT = path.join(TC_AUTOMATION_ROOT, '_scratch', 'replays');
+
+/**
+ * 녹화 모드로 방금 끝난 모듈의 영상/트레이스/스크린샷을 모듈 실행마다 덮어쓰이는 outputDir 밖으로
+ * 복사해 보존하고, 팝업에 뿌릴 [{tcId, title, status, video, trace, screenshots[]}] 를 만듭니다.
+ * URL은 대시보드의 /replays/{project}/... 정적 라우트 기준입니다.
+ */
+function collectReplays(project, runId, moduleCode, flat) {
+  const dir = path.join(REPLAYS_ROOT, project, runId, moduleCode);
+  fs.mkdirSync(dir, { recursive: true });
+  const base = `/replays/${encodeURIComponent(project)}/${encodeURIComponent(runId)}/${encodeURIComponent(moduleCode)}`;
+  return flat.map((f) => {
+    const item = { tcId: f.tcId, title: f.title, status: f.status, moduleCode, video: null, trace: null, screenshots: [] };
+    let shot = 0;
+    for (const att of f.attachments) {
+      if (!att.path || !fs.existsSync(att.path)) continue;
+      const ext = path.extname(att.path) || '';
+      let name;
+      if (att.name === 'video') name = `${f.tcId}.video${ext}`;
+      else if (att.name === 'trace') name = `${f.tcId}.trace${ext}`;
+      else if (att.contentType === 'image/png') name = `${f.tcId}.shot${++shot}${ext}`;
+      else continue;
+      fs.copyFileSync(att.path, path.join(dir, name));
+      const url = `${base}/${encodeURIComponent(name)}`;
+      if (att.name === 'video') item.video = url;
+      else if (att.name === 'trace') item.trace = url;
+      else item.screenshots.push(url);
+    }
+    return item;
+  });
+}
+
+/** 프로젝트의 이전 녹화 실행본을 전부 지웁니다 — 항상 "가장 최근 1회 실행"만 디스크에 남겨 용량을 고정합니다. */
+function pruneReplays(project) {
+  fs.rmSync(path.join(REPLAYS_ROOT, project), { recursive: true, force: true });
+}
+
+module.exports = { runSpec, readResultsJson, flattenResults, collectReplays, pruneReplays, REPLAYS_ROOT };

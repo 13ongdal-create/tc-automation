@@ -54,6 +54,12 @@ const el = {
   tcUploadResult: document.getElementById('tcUploadResult'),
   btnCancelTcUpload: document.getElementById('btnCancelTcUpload'),
   btnTcUploadSubmit: document.getElementById('btnTcUploadSubmit'),
+  btnGitStatus: document.getElementById('btnGitStatus'),
+  gitStatusModal: document.getElementById('gitStatusModal'),
+  gitStatusBody: document.getElementById('gitStatusBody'),
+  gitStatusError: document.getElementById('gitStatusError'),
+  btnCloseGitStatus: document.getElementById('btnCloseGitStatus'),
+  btnGitPush: document.getElementById('btnGitPush'),
   tcPriorityChart: document.getElementById('tcPriorityChart'),
   tcPriorityBody: document.getElementById('tcPriorityBody'),
   tcHistoryLink: document.getElementById('tcHistoryLink'),
@@ -67,6 +73,10 @@ const el = {
   tqPriorityPills: document.getElementById('tqPriorityPills'),
   tqStatusPills: document.getElementById('tqStatusPills'),
   tqHeaded: document.getElementById('tqHeaded'),
+  btnTqReplay: document.getElementById('btnTqReplay'),
+  replayModal: document.getElementById('replayModal'),
+  replayList: document.getElementById('replayList'),
+  btnCloseReplay: document.getElementById('btnCloseReplay'),
   tqHeadedNote: document.getElementById('tqHeadedNote'),
   tqPreview: document.getElementById('tqPreview'),
   btnTqStart: document.getElementById('btnTqStart'),
@@ -1047,6 +1057,8 @@ function connectWs() {
       tqAppendLog(msg.line);
     } else if (msg.type === 'queueModuleDone') {
       tqHandleModuleDone(msg.moduleCode, msg.summary, msg.error);
+    } else if (msg.type === 'queueReplay') {
+      tqReplayItems.push(...msg.items);
     } else if (msg.type === 'queueDone') {
       tqHandleDone(msg.totals, msg.cancelled);
     } else if (msg.type === 'queueError') {
@@ -1261,6 +1273,39 @@ el.tqHeaded.addEventListener('change', () => {
   el.tqHeadedNote.hidden = el.tqHeaded.value !== '1';
 });
 
+// ── 단계 재생(녹화) 모드: 실행 후 팝업으로 TC별 영상/스크린샷 재생 ─────────────────────────
+let tqReplayItems = [];
+
+function openReplayModal() {
+  if (!tqReplayItems.length) return;
+  el.replayList.innerHTML = tqReplayItems
+    .map((it) => {
+      const shots = it.screenshots.map((u) => `<a href="${esc(u)}" target="_blank" rel="noopener"><img src="${esc(u)}" alt="스크린샷" loading="lazy"></a>`).join('');
+      return `<div class="replay-item">
+        <div class="replay-item-head">
+          <span>${esc(it.moduleCode)} · ${esc(it.tcId)}</span>
+          <span class="replay-status-${esc(it.status)}">${esc(it.status)}</span>
+          <span>${esc(it.title)}</span>
+        </div>
+        ${it.video ? `<video controls preload="metadata" src="${esc(it.video)}"></video>` : '<div class="placeholder-text">녹화된 영상이 없습니다.</div>'}
+        ${shots ? `<div class="replay-shots">${shots}</div>` : ''}
+        ${it.trace ? `<div class="replay-links"><a href="${esc(it.trace)}" download>트레이스(.zip) 다운로드</a> — <code>npx playwright show-trace</code> 로 단계별 DOM 스냅샷 확인</div>` : ''}
+      </div>`;
+    })
+    .join('');
+  el.replayModal.hidden = false;
+}
+
+function closeReplayModal() {
+  el.replayModal.hidden = true;
+  el.replayList.querySelectorAll('video').forEach((v) => v.pause());
+  el.replayList.innerHTML = '';
+}
+
+el.btnTqReplay.addEventListener('click', openReplayModal);
+el.btnCloseReplay.addEventListener('click', closeReplayModal);
+el.replayModal.addEventListener('click', (e) => { if (e.target === el.replayModal) closeReplayModal(); });
+
 function tqSetRunning(running) {
   tqRunning = running;
   el.btnTqStart.hidden = running;
@@ -1335,6 +1380,8 @@ function tqHandleDone(totals, cancelled) {
     tqAppendLog('[참고] TC/defects.json/results 스냅샷 JSON은 갱신됐습니다. HTML 뷰어(TC 뷰어·결함현황 탭·실행이력 상세 페이지)는 채팅에서 "뷰어 갱신해줘"라고 요청해야 최신 데이터로 다시 생성됩니다.');
   }
   if (project) loadAll(); // KPI·결함 표·실행 이력 목록에 방금 결과 반영
+  el.btnTqReplay.hidden = !tqReplayItems.length;
+  if (tqReplayItems.length) openReplayModal(); // 녹화 모드였다면 실행 직후 재생 팝업 자동 오픈
 }
 
 el.btnTqStart.addEventListener('click', () => {
@@ -1342,11 +1389,14 @@ el.btnTqStart.addEventListener('click', () => {
   if (!project || tqRunning || !ws || ws.readyState !== WebSocket.OPEN) return;
   const { moduleCodes, system, priority, status } = tqCurrentFilters();
   const headed = el.tqHeaded.value === '1';
+  const record = el.tqHeaded.value === '2';
+  tqReplayItems = [];
+  el.btnTqReplay.hidden = true;
   el.tqLog.textContent = '';
   el.tqLog.hidden = true;
   el.tqModuleQueue.innerHTML = '';
   tqSetRunning(true);
-  ws.send(JSON.stringify({ type: 'runTests', project, scope: 'filter', moduleCodes, system, priority, status, headed }));
+  ws.send(JSON.stringify({ type: 'runTests', project, scope: 'filter', moduleCodes, system, priority, status, headed, record }));
 });
 
 el.btnTqCancel.addEventListener('click', () => {
@@ -1392,6 +1442,51 @@ el.btnChatReset.addEventListener('click', async () => {
   if (!confirm('이 프로젝트의 대화를 새로 시작할까요? (지금까지 나눈 대화 맥락이 초기화됩니다)')) return;
   await fetch(`/api/${encodeURIComponent(project)}/chat/reset`, { method: 'POST' });
   await loadChatHistory(project);
+});
+
+// ── 🔗 Git 상태 · push (전역 — 저장소가 하나라 프로젝트 단위가 아님) ──────────────────────
+async function openGitStatusModal() {
+  el.gitStatusModal.hidden = false;
+  el.gitStatusError.textContent = '';
+  el.gitStatusBody.textContent = '불러오는 중…';
+  el.btnGitPush.disabled = true;
+  try {
+    const res = await fetch('/api/git/status');
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || '조회에 실패했습니다.');
+    if (!data.ahead) {
+      el.gitStatusBody.innerHTML = `<div class="gs-branch">${esc(data.branch)}</div><div class="gs-clean">origin과 동기화됨 — push할 커밋이 없습니다.</div>`;
+      el.btnGitPush.disabled = true;
+    } else {
+      el.gitStatusBody.innerHTML =
+        `<div class="gs-branch">${esc(data.branch)}</div>` +
+        `<div class="gs-ahead">origin보다 ${data.ahead}개 커밋 앞서 있습니다 (push 대기 중):</div>` +
+        `<ul>${data.recentCommits.map((c) => `<li>${esc(c.hash)} ${esc(c.message)}</li>`).join('')}</ul>`;
+      el.btnGitPush.disabled = false;
+    }
+  } catch (err) {
+    el.gitStatusBody.textContent = '';
+    el.gitStatusError.textContent = err.message;
+  }
+}
+el.btnGitStatus.addEventListener('click', openGitStatusModal);
+el.btnCloseGitStatus.addEventListener('click', () => { el.gitStatusModal.hidden = true; });
+el.gitStatusModal.addEventListener('click', (e) => { if (e.target === el.gitStatusModal) el.gitStatusModal.hidden = true; });
+el.btnGitPush.addEventListener('click', async () => {
+  el.gitStatusError.textContent = '';
+  el.btnGitPush.disabled = true;
+  el.btnGitPush.textContent = 'push 중…';
+  try {
+    const res = await fetch('/api/git/push', { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'push에 실패했습니다.');
+    await openGitStatusModal(); // 최신 상태(ahead 0)로 갱신
+  } catch (err) {
+    el.gitStatusError.textContent = err.message;
+    el.btnGitPush.disabled = false;
+  } finally {
+    el.btnGitPush.textContent = 'origin으로 push';
+  }
 });
 
 el.projectSelect.addEventListener('change', () => showProject(el.projectSelect.value));
