@@ -1,7 +1,11 @@
 # TC 자동화 파이프라인 설계 문서 (Slack 연동)
 
+<!-- [수정 전 2026-08-25]
 > 상태: **설계안 (미구현)** — 실제 Slack Bot/서버 구축 전, 요청→생성→수정→컨펌→커밋까지 전체 흐름과 필요 구성요소를 정의합니다.
 > 관련 문서: `.agents/AGENTS.md` (16~18항), `.agents/skills/qa-test-case-generator/SKILL.md`
+-->
+> 상태: **설계안 (최종 보류, 2026-08-24)** — 아래 옵션 B(커스텀 Slack App + CLI 브릿지)까지 코드 수준으로 구축되었으나, Playwright/git 명령이 헤드리스 세션에서 승인 대기로 반복 차단되는 문제(`_reference/PRD.md` 구 버전의 리스크 기록 참조)가 완전히 해결되지 못한 채 2026-08-24 Slack 봇(큐돌이) 사용이 공식 종료되어 **실제 프로덕션 가동 없이 보류**되었습니다. 실제 현재 가동 중인 파이프라인은 로컬 대시보드(`dashboard/`) 중심이며, **`_reference/PRD.md` 13항**에 PRD 형식으로 재정의되어 있습니다. 아래 1~7항은 최초 설계 의도 보존 목적으로 그대로 유지합니다.
+> 관련 문서: `agents-config/AGENTS.md` (13·17~20항), `agents-config/skills/qa-test-case-generator/SKILL.md`, **`_reference/PRD.md` 13항(현재 실제 파이프라인)**
 
 ---
 
