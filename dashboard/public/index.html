@@ -326,7 +326,10 @@
       만드는 형식 그대로) — 필드명은 엑셀 헤더가 아니라 tcId/majorCategory/steps/expected 같은
       캐노니컬 스키마 이름을 그대로 씁니다.<br>
       두 형식 모두 <b>TC ID가 이미 등록된 값이면 수정, 비어있으면 대분류를 기준으로 신규 추가</b>되며,
-      값이 채워진 칸/필드만 반영되고 나머지는 기존 값을 그대로 둡니다.
+      값이 채워진 칸/필드만 반영되고 나머지는 기존 값을 그대로 둡니다.<br>
+      <b>단, TC ID가 같아도 대/중/소분류·테스트항목 중 값이 있는 게 서로 다르면</b> 같은 TC의 수정이
+      아니라 우연히 ID만 겹친 별개 케이스로 보고, 기존 TC는 그대로 둔 채 새 TC ID로 분리 생성합니다
+      (결과 화면에 어떤 항목이 분리 생성됐는지 안내됩니다).
     </p>
     <label class="field-label" for="tcUploadFile">파일 (.xlsx 또는 .json)</label>
     <input type="file" id="tcUploadFile" accept=".xlsx,.json">

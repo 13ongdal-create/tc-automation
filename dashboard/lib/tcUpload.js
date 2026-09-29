@@ -32,8 +32,16 @@ const FIELD_ALIASES = {
   issueLink: ['이슈링크'],
   remark: ['비고'],
 };
-const FIELD_LABELS = { majorCategory: '대분류', item: '테스트항목', steps: '테스트 수행 절차', expected: '기대결과', priority: '우선순위' };
+const FIELD_LABELS = {
+  majorCategory: '대분류', midCategory: '중분류', minorCategory: '소분류',
+  item: '테스트항목', steps: '테스트 수행 절차', expected: '기대결과', priority: '우선순위',
+};
 const REQUIRED_FIELDS = ['majorCategory', 'item', 'steps', 'expected', 'priority'];
+// TC ID가 같아도 이 4개 필드 중 "업로드 쪽과 기존 쪽 둘 다 값이 있는데 서로 다른" 것이 하나라도
+// 있으면 같은 TC가 아니라 우연히 ID만 겹친 다른 케이스로 판단합니다(사용자 요청, 2026-09-29) —
+// 대/중/소분류가 같아도 테스트항목이 다르면 역시 다른 케이스입니다. 어느 한쪽이라도 값이 없으면
+// (기존 데이터가 원래 비어있던 필드 등) 비교 대상에서 제외해 오탐(false positive)을 줄입니다.
+const IDENTITY_FIELDS = ['majorCategory', 'midCategory', 'minorCategory', 'item'];
 const PRIORITY_VALUES = ['P1', 'P2', 'P3'];
 const SYSTEM_VALUES = ['FO', 'BO'];
 const RESULT_VALUES = ['Pass', 'Fail', 'N/A', 'N/T'];
@@ -112,6 +120,17 @@ function readJsonRows(buffer) {
     }
     return row;
   });
+}
+
+/** row와 existingItem 사이에 IDENTITY_FIELDS 중 "둘 다 값이 있는데 다른" 필드가 있으면 그 필드명을,
+ * 없으면(같거나 비교 불가) null을 반환합니다. */
+function findIdentityMismatch(row, existingItem) {
+  for (const f of IDENTITY_FIELDS) {
+    const uploaded = row[f];
+    const existing = existingItem[f];
+    if (uploaded && existing && uploaded !== existing) return f;
+  }
+  return null;
 }
 
 function validateRow(row, isNew) {
@@ -206,8 +225,12 @@ async function applyUpload(project, buffer, sourceFileName) {
     }
   }
   const tcIndex = new Map(); // tcId -> moduleCode (이번 업로드에서 새로 배정된 것 포함)
+  const itemsById = new Map(); // tcId -> 기존 항목 원본(중복 판정용 — 신규 배정분은 여기 없음)
   for (const m of moduleFiles) {
-    for (const item of m.data.items || []) tcIndex.set(item.tcId, m.moduleCode);
+    for (const item of m.data.items || []) {
+      tcIndex.set(item.tcId, m.moduleCode);
+      itemsById.set(item.tcId, item);
+    }
   }
 
   const pendingByModule = new Map(); // moduleCode -> { updates:[{tcId,fields}], creates:[{tcId,fields}] }
@@ -246,17 +269,36 @@ async function applyUpload(project, buffer, sourceFileName) {
         continue;
       }
       const existingCode = tcIndex.get(tcId);
-      const isNew = existingCode === undefined;
+      let isNew = existingCode === undefined;
+      const existingItem = !isNew && itemsById.get(tcId);
+
+      // TC ID는 같은데 대/중/소분류·테스트항목 중 하나라도 실제로 다르면(둘 다 값이 있을 때만
+      // 비교) 같은 TC가 아니라 ID만 우연히 겹친 다른 케이스로 보고, 기존 TC는 건드리지 않은 채
+      // 새 TC ID로 분리 생성합니다 (사용자 요청, 2026-09-29).
+      let mismatchField = null;
+      if (existingItem) {
+        mismatchField = findIdentityMismatch(row, existingItem);
+        if (mismatchField) isNew = true;
+      }
+
       const err = validateRow(row, isNew);
       if (err) {
-        skipped.push({ row: rowLabel, tcId, reason: err });
+        skipped.push({ row: rowLabel, tcId, reason: err + (mismatchField ? ` (기존 ${tcId}와 ${FIELD_LABELS[mismatchField]} 값이 달라 별개 케이스로 판단됨)` : '') });
         continue;
       }
       if (row.majorCategory && byName.get(row.majorCategory) && byName.get(row.majorCategory) !== code) {
         warnings.push(`${rowLabel} ${tcId}: 파일의 대분류("${row.majorCategory}")가 다른 모듈(${byName.get(row.majorCategory)})의 값과 같아 보이지만, TC ID 기준(모듈 ${code})으로 반영했습니다.`);
       }
       const pending = ensurePending(code);
-      if (isNew) {
+      if (mismatchField) {
+        const newId = nextIdFor(code);
+        warnings.push(
+          `${rowLabel}: TC ID "${tcId}"는 이미 등록돼 있지만 ${FIELD_LABELS[mismatchField]} 값이 다릅니다` +
+            ` ("${existingItem[mismatchField]}" → "${row[mismatchField]}") — 같은 TC의 수정이 아니라 별개 케이스로 판단해` +
+            ` 신규 TC ${newId}로 생성했습니다 (기존 ${tcId}는 수정하지 않음).`
+        );
+        pending.creates.push({ tcId: newId, fields: row });
+      } else if (isNew) {
         pending.creates.push({ tcId, fields: row });
         tcIndex.set(tcId, code);
       } else {
