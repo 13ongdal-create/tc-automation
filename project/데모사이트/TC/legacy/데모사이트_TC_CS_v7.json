@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "CS",
     "moduleName": "고객센터/정책",
-    "version": 8,
+    "version": 7,
     "changeHistory": [
       {
         "version": 1,
@@ -39,11 +39,6 @@
         "version": 7,
         "date": "2026-08-27",
         "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
-      },
-      {
-        "version": 8,
-        "date": "2026-09-29",
-        "summary": "엑셀 업로드 반영 (viewer_refresh_test.xlsx) — 수정 1건, 신규 0건"
       }
     ]
   },
@@ -135,7 +130,7 @@
       "expected": "1) 2) 입력한 키워드가 포함된 FAQ 항목만 노출된다",
       "testData": "검색어=배송",
       "result": "Pass",
-      "assignee": "뷰어갱신테스트",
+      "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
