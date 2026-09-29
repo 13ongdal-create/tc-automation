@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "MB",
     "moduleName": "회원",
-    "version": 13,
+    "version": 12,
     "changeHistory": [
       {
         "version": 1,
@@ -64,11 +64,6 @@
         "version": 12,
         "date": "2026-08-27",
         "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
-      },
-      {
-        "version": 13,
-        "date": "2026-09-29",
-        "summary": "케이스 고도화 조사(결함현황 정리 1단계): TC_MB_029 재검증 — 로그인 500 에러 전제가 현재 재현되지 않아 result를 Pass에서 N/A로 정정, 형제 TC(030/031/032)와 동일한 \"테스트 불가\" 사유로 통일 (2026-08-24 배치 당시 이 TC만 누락됐던 것을 보완)."
       }
     ]
   },
@@ -759,15 +754,15 @@
       "steps": "1) 로그인 직접 접속",
       "expected": "로그인 폼이 정상 노출되어야 하나, 실제로는 \"시스템 오류가 발생했습니다\" 500 Internal Server Error 화면이 노출됨",
       "testData": "접속 URL=/login, 응답코드=500",
-      "result": "N/A",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 29,
       "system": "FO",
-      "remark": "사전조건(로그인 500 에러 화면 노출)이 2026-09-29 재관찰 결과에서도 재현되지 않아 테스트 불가 — TC_MB_030/031/032와 동일 사유(2026-08-24 최초 확인 당시 이 TC만 누락되어 갱신 안 된 상태였음).",
-      "verifyNote": ""
+      "remark": "",
+      "verifyNote": "[확인필요] 서버 컴포넌트 렌더링 에러 원인 파악 및 수정 필요 — DEF 결함 등록 대상"
     },
     {
       "tcId": "TC_MB_030",

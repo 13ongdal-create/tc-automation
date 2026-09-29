@@ -3,14 +3,14 @@
     "project": "데모사이트",
     "module": "전체",
     "moduleName": "통합(Full) 뷰어",
-    "version": 8,
-    "generatedAt": "2026-09-29",
+    "version": 7,
+    "generatedAt": "2026-08-27",
     "sourceModules": [
       "PD v16(113건)",
       "PR v8(10건)",
-      "MB v13(53건)",
+      "MB v12(53건)",
       "OP v11(22건)",
-      "CO v8(50건)",
+      "CO v7(50건)",
       "MY v7(26건)",
       "CS v7(9건)"
     ],
@@ -2978,8 +2978,7 @@
       "tcId": "TC_PR_001",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "module": "PR",
-      "moduleName": "이벤트/기획전/쿠폰행사"
+      "module": "PR"
     },
     {
       "majorCategory": "구매프로세스",
@@ -3004,8 +3003,7 @@
       "tcId": "TC_PR_002",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "module": "PR",
-      "moduleName": "이벤트/기획전/쿠폰행사"
+      "module": "PR"
     },
     {
       "majorCategory": "구매프로세스",
@@ -3030,8 +3028,7 @@
       "tcId": "TC_PR_003",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "module": "PR",
-      "moduleName": "이벤트/기획전/쿠폰행사"
+      "module": "PR"
     },
     {
       "majorCategory": "구매프로세스",
@@ -3056,8 +3053,7 @@
       "tcId": "TC_PR_004",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "module": "PR",
-      "moduleName": "이벤트/기획전/쿠폰행사"
+      "module": "PR"
     },
     {
       "majorCategory": "예외·회귀",
@@ -3082,8 +3078,7 @@
       "tcId": "TC_PR_005",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "쿠폰 발급이 자동인지 수동 다운로드/응모(PR 모듈) 방식인지, 발급 조건 미충족인지 확인 필요",
-      "module": "PR",
-      "moduleName": "이벤트/기획전/쿠폰행사"
+      "module": "PR"
     },
     {
       "tcId": "TC_PR_006",
@@ -3108,8 +3103,7 @@
       "displayNo": 6,
       "remark": "",
       "verifyNote": "",
-      "module": "PR",
-      "moduleName": "이벤트/기획전/쿠폰행사"
+      "module": "PR"
     },
     {
       "tcId": "TC_PR_007",
@@ -3134,8 +3128,7 @@
       "displayNo": 7,
       "remark": "",
       "verifyNote": "",
-      "module": "PR",
-      "moduleName": "이벤트/기획전/쿠폰행사"
+      "module": "PR"
     },
     {
       "tcId": "TC_PR_008",
@@ -3160,8 +3153,7 @@
       "displayNo": 8,
       "remark": "",
       "verifyNote": "",
-      "module": "PR",
-      "moduleName": "이벤트/기획전/쿠폰행사"
+      "module": "PR"
     },
     {
       "majorCategory": "이벤트",
@@ -3186,8 +3178,7 @@
       "displayNo": 9,
       "tcId": "TC_PR_009",
       "verifyNote": "",
-      "module": "PR",
-      "moduleName": "이벤트/기획전/쿠폰행사"
+      "module": "PR"
     },
     {
       "majorCategory": "이벤트",
@@ -3212,8 +3203,7 @@
       "displayNo": 10,
       "tcId": "TC_PR_010",
       "verifyNote": "실제 등록 테스트 미실행 — 현재 Front에 노출 중인 할인 상품들이 이 Admin 화면을 통해 설정된 것인지 배경 확인 필요",
-      "module": "PR",
-      "moduleName": "이벤트/기획전/쿠폰행사"
+      "module": "PR"
     },
     {
       "tcId": "TC_MB_001",
@@ -3957,15 +3947,15 @@
       "steps": "1) 로그인 직접 접속",
       "expected": "로그인 폼이 정상 노출되어야 하나, 실제로는 \"시스템 오류가 발생했습니다\" 500 Internal Server Error 화면이 노출됨",
       "testData": "접속 URL=/login, 응답코드=500",
-      "result": "N/A",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "기존",
       "displayNo": 29,
       "system": "FO",
-      "remark": "사전조건(로그인 500 에러 화면 노출)이 2026-09-29 재관찰 결과에서도 재현되지 않아 테스트 불가 — TC_MB_030/031/032와 동일 사유(2026-08-24 최초 확인 당시 이 TC만 누락되어 갱신 안 된 상태였음).",
-      "verifyNote": "",
+      "remark": "",
+      "verifyNote": "[확인필요] 서버 컴포넌트 렌더링 에러 원인 파악 및 수정 필요 — DEF 결함 등록 대상",
       "module": "MB",
       "moduleName": "회원"
     },
@@ -4616,8 +4606,7 @@
       "displayNo": 1,
       "remark": "",
       "verifyNote": "",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_OP_002",
@@ -4642,8 +4631,7 @@
       "displayNo": 2,
       "remark": "",
       "verifyNote": "",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_OP_003",
@@ -4668,8 +4656,7 @@
       "displayNo": 3,
       "remark": "특정 상품ID(/products/99)가 판매종료되어 임의의 상품 기준으로 일반화(2026-08-21)",
       "verifyNote": "",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_OP_004",
@@ -4694,8 +4681,7 @@
       "displayNo": 4,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "배송비 등 부가 항목 포함 여부 확정 필요",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_OP_005",
@@ -4720,8 +4706,7 @@
       "displayNo": 5,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "삭제 확인 팝업 유무 확인 필요",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_OP_006",
@@ -4746,8 +4731,7 @@
       "displayNo": 6,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_OP_007",
@@ -4772,8 +4756,7 @@
       "displayNo": 7,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "신규 라인 분리 처리 가능성도 있어 실제 동작 확정 필요",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_OP_008",
@@ -4798,8 +4781,7 @@
       "displayNo": 8,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018, DEF_데모사이트_007)",
       "verifyNote": "[확인필요] 뱃지 노출 여부 실측 필요",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_OP_009",
@@ -4824,8 +4806,7 @@
       "displayNo": 9,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "옵션 변경 UI 제공 여부 미확인",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_OP_010",
@@ -4850,8 +4831,7 @@
       "displayNo": 10,
       "remark": "",
       "verifyNote": "로그인 결함(500 에러)으로 로그인 유도 시 후속 진행 불가, 결함 해결 후 재검증 필요",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_OP_011",
@@ -4876,8 +4856,7 @@
       "displayNo": 11,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "세션 저장 방식(localStorage/쿠키/서버) 확인 필요",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_OP_012",
@@ -4902,8 +4881,7 @@
       "displayNo": 12,
       "remark": "",
       "verifyNote": "",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_OP_013",
@@ -4928,8 +4906,7 @@
       "displayNo": 13,
       "remark": "현재 카탈로그에 재현 가능한 품절 상품이 없어 사전조건을 만들 수 없음(2026-08-24) — automation/BACKFILL_ISSUES.md ## OP 참고, 수동 검증 권장",
       "verifyNote": "품절 발생 시점 처리 정책 확인 필요",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_OP_014",
@@ -4954,8 +4931,7 @@
       "displayNo": 14,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "최대 수량 정책값 미확인",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_OP_015",
@@ -4980,8 +4956,7 @@
       "displayNo": 15,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)",
       "verifyNote": "",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "majorCategory": "구매프로세스",
@@ -5006,8 +4981,7 @@
       "tcId": "TC_OP_016",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "majorCategory": "구매프로세스",
@@ -5032,8 +5006,7 @@
       "tcId": "TC_OP_017",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "majorCategory": "구매프로세스",
@@ -5058,8 +5031,7 @@
       "tcId": "TC_OP_018",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "majorCategory": "구매프로세스",
@@ -5084,8 +5056,7 @@
       "tcId": "TC_OP_019",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011) / 해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "majorCategory": "구매프로세스",
@@ -5110,8 +5081,7 @@
       "displayNo": 20,
       "tcId": "TC_OP_020",
       "verifyNote": "",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "majorCategory": "구매프로세스",
@@ -5136,8 +5106,7 @@
       "displayNo": 21,
       "tcId": "TC_OP_021",
       "verifyNote": "실제 등록 테스트 미실행 — 별도 시나리오로 재검증 필요(선행 우려였던 DEF_009는 오탐으로 정정됨, TC_MB_046 참고)",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "majorCategory": "구매프로세스",
@@ -5162,8 +5131,7 @@
       "displayNo": 22,
       "tcId": "TC_OP_022",
       "verifyNote": "[확인필요] jspark81 명의의 실제 주문이 없어(TC_MY_026 참고) 검증용 주문 데이터 준비가 선행되어야 함. 기존에 참조했던 O260820790055는 봇 계정 소유로 확인되어 jspark81 시나리오에 사용 불가(DEF_008 오탐 확인 과정에서 발견)",
-      "module": "OP",
-      "moduleName": "구매프로세스"
+      "module": "OP"
     },
     {
       "tcId": "TC_CO_001",
@@ -5179,14 +5147,14 @@
       "steps": "1) 헤더 \"🇰🇷 한국어\" 버튼 클릭",
       "expected": "지원 언어 목록이 드롭다운으로 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "N/T",
       "assignee": "",
-      "issueSummary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
+      "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 1,
-      "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_024는 완료 처리).",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
@@ -5205,14 +5173,14 @@
       "steps": "1) 언어선택 드롭다운에서 한국어 외 다른 언어 선택",
       "expected": "화면 텍스트가 선택한 언어로 전환된다",
       "testData": "",
-      "result": "Pass",
+      "result": "N/T",
       "assignee": "",
-      "issueSummary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
+      "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 2,
-      "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_025는 완료 처리).",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "실제 지원 언어 목록 및 전환 범위 확인 필요",
       "module": "CO",
       "moduleName": "시스템(공통)"
@@ -5231,14 +5199,14 @@
       "steps": "1) 언어 전환 후 브라우저 새로고침(F5)",
       "expected": "새로고침 후에도 전환된 언어가 유지된다",
       "testData": "",
-      "result": "Pass",
+      "result": "N/T",
       "assignee": "",
-      "issueSummary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
+      "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 3,
-      "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_026는 완료 처리).",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "저장 방식(쿠키/localStorage) 확인 필요",
       "module": "CO",
       "moduleName": "시스템(공통)"
@@ -5387,14 +5355,14 @@
       "steps": "1) 메인(/) 진입\n2) 헤더 메뉴 순서 확인",
       "expected": "\"전체카테고리 - SALE - MD's PICK - BRAND\" 순서로 노출된다",
       "testData": "",
-      "result": "Fail",
+      "result": "N/T",
       "assignee": "",
-      "issueSummary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
+      "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 9,
-      "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 헤더 메뉴 구성이 기대결과와 불일치 (관련 결함 DEF_데모사이트_027, 신규 유지).",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
@@ -5413,14 +5381,14 @@
       "steps": "1) 뷰포트를 375x812(모바일)로 축소\n2) 헤더 영역 확인",
       "expected": "헤더 메뉴가 햄버거 아이콘으로 축소되어 노출된다",
       "testData": "",
-      "result": "Fail",
+      "result": "N/T",
       "assignee": "",
-      "issueSummary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
+      "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 10,
-      "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 모바일 뷰포트에서 반응형 헤더 전환 미구현 (관련 결함 DEF_데모사이트_028, 신규 유지).",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "[확인필요] 모바일 헤더 UI 존재 여부 실측 필요",
       "module": "CO",
       "moduleName": "시스템(공통)"
@@ -5439,14 +5407,14 @@
       "steps": "1) Chromium 브라우저로 메인(/) 진입\n2) 헤더/푸터 레이아웃 확인",
       "expected": "요소 겹침이나 깨짐 없이 정상 렌더링된다",
       "testData": "",
-      "result": "Fail",
+      "result": "N/T",
       "assignee": "",
-      "issueSummary": "품질·비기능 > Failed to load resource: the server responded with a status of 404 (No",
+      "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 11,
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_029",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
@@ -5465,14 +5433,14 @@
       "steps": "1) 개발자도구 Network에서 Offline 체크\n2) 페이지 새로고침 시도",
       "expected": "오프라인 안내 화면 또는 재시도 UI가 노출된다",
       "testData": "",
-      "result": "Fail",
+      "result": "N/T",
       "assignee": "",
-      "issueSummary": "품질·비기능 > Failed to load resource: the server responded with a status of 404 (No",
+      "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 12,
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_030",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "실제 오프라인 처리 UX 미확인",
       "module": "CO",
       "moduleName": "시스템(공통)"
@@ -5543,14 +5511,14 @@
       "steps": "1) 메인(/) 진입\n2) Tab 키로 검색/장바구니/언어선택 버튼 순차 이동",
       "expected": "각 요소에 포커스 시 시각적 포커스 표시(outline 등)가 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "N/T",
       "assignee": "",
-      "issueSummary": "품질·비기능 > Failed to load resource: the server responded with a status of 404 (No",
+      "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 15,
-      "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_031는 완료 처리).",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
       "module": "CO",
       "moduleName": "시스템(공통)"
@@ -5673,14 +5641,14 @@
       "steps": "1) OS/브라우저 다크모드 설정 활성화 후 메인(/) 접속",
       "expected": "사이트가 다크 테마로 전환되어 노출된다",
       "testData": "",
-      "result": "Fail",
+      "result": "N/T",
       "assignee": "",
-      "issueSummary": "전시 > Failed to load resource: the server responded with a status of 404 (No",
+      "issueSummary": "",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 20,
-      "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 강제 다크 컬러스킴 적용해도 배경 미전환 (관련 결함 DEF_데모사이트_032, 신규 유지).",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "다크모드 지원 여부 자체가 미확인 — 미지원 시 라이트 테마 고정 노출이 정상",
       "module": "CO",
       "moduleName": "시스템(공통)"
@@ -7261,12 +7229,12 @@
       "testData": "접속 URL=/policy, 응답코드=404",
       "result": "Fail",
       "assignee": "",
-      "issueSummary": "고객센터 > 개인정보처리방침(/policy) 접근 시 404 에러 발생",
+      "issueSummary": "",
       "issueLink": "DEF_데모사이트_005",
       "origin": "신규",
       "system": "FO",
       "displayNo": 5,
-      "remark": "관련 결함: DEF_데모사이트_005",
+      "remark": "",
       "verifyNote": "[확인필요] 페이지 미구현 또는 라우팅 오류로 추정 — DEF 결함 등록 대상",
       "module": "CS",
       "moduleName": "고객센터/정책"
@@ -7287,12 +7255,12 @@
       "testData": "접속 URL=/service, 응답코드=404",
       "result": "Fail",
       "assignee": "",
-      "issueSummary": "고객센터 > 이용약관(/service) 접근 시 404 에러 발생",
+      "issueSummary": "",
       "issueLink": "DEF_데모사이트_006",
       "origin": "신규",
       "system": "FO",
       "displayNo": 6,
-      "remark": "관련 결함: DEF_데모사이트_006",
+      "remark": "",
       "verifyNote": "[확인필요] 페이지 미구현 또는 라우팅 오류로 추정 — DEF 결함 등록 대상",
       "module": "CS",
       "moduleName": "고객센터/정책"
@@ -7310,7 +7278,7 @@
       "steps": "1) Admin 클레임리스트 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) \"데이터가 없습니다\" 문구가 노출된다(현재 클레임 0건 — Front에서 취소/반품/교환 신청 이력 없음)",
       "testData": "",
-      "result": "Pass",
+      "result": "N/T",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -7336,7 +7304,7 @@
       "steps": "1) Admin 클레임리스트 진입",
       "expected": "주문매체/클레임일시/클레임번호/주문번호/전시카테고리/브랜드명/회원등급/클레임상태/배송상태 컬럼이 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "N/T",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -7362,7 +7330,7 @@
       "steps": "1) Admin 클레임리스트 진입 2) 클레임상태 드롭다운 클릭",
       "expected": "1) 2) \"전체/취소신청/취소완료/반품신청/반품완료/배송중지/교환신청/교환완료\" 7개 옵션이 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "N/T",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",

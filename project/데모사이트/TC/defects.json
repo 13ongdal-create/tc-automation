@@ -225,6 +225,11 @@
         "at": "2026-08-27",
         "status": "신규",
         "note": "진행현황 점검 중 재확인: 메인(/) 로드 시 www.naver.com 오인식 404 여전히 재현됨(변화 없음)."
+      },
+      {
+        "at": "2026-09-29",
+        "status": "신규",
+        "note": "CO 모듈 케이스 고도화 조사 중 재확인: 언어선택/헤더메뉴/반응형/크로스브라우저/오프라인/키보드포커스/다크모드 등 전혀 무관한 기능을 검증하던 TC 9건(TC_CO_001/002/003/009/010/011/012/015/020)이 이 결함과 동일 시그니처(www.naver.com!?_rsc=... 404)로 개별 결함(DEF_024~032)이 자동 등록됐음을 확인. 근본원인 동일하여 DEF_024~032는 이 결함으로 통합 관리(아래 각 레코드 참조). 재현율은 여전히 간헐적(같은 날 재관찰 시 일부 TC에서만 재현)."
       }
     ],
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
@@ -350,6 +355,11 @@
         "at": "2026-08-27",
         "status": "재발생",
         "note": "PD 모듈 N/T TC 13건(TC_PD_132~145 Admin 연동) 재실행 결과 POST /api/v1.0/login이 13/13 모두 500 재현 (adminLogin() 헬퍼의 3회 재시도도 전부 소진). 같은 날 앞선 수동 재확인(headed, 3회 연속 200 성공)과 정반대 — 완료 처리를 재발생으로 되돌림. 간헐적(intermittent) 서버 결함으로 재확인, 근본 원인 미해결 상태로 판단."
+      },
+      {
+        "at": "2026-09-29",
+        "status": "재발생",
+        "note": "케이스 고도화 조사 중 재확인: ko-KR 로케일로 Admin 로그인 시도 시 즉시 500 재현. 간헐적 결함, 상태 재발생 유지."
       }
     ]
   },
@@ -679,8 +689,8 @@
     "module": "시스템",
     "screenName": "",
     "severity": "P3",
-    "status": "신규",
-    "summary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
+    "status": "완료",
+    "summary": "시스템 > [DEF_007 파급 노이즈로 종결] Failed to load resource: the server responded with a status of 404 (No",
     "testEnv": "",
     "testSteps": "1) 헤더 \"🇰🇷 한국어\" 버튼 클릭",
     "actualResult": "콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\nError: 콘솔/네트워크 에러가 감지되어 실패 처리합니다.\n- 콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n- 실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\n- 스크린샷: D:\\QA\\tc-automation\\_scratch\\test-results\\데모사이트\\project-데모사이트-TC-automatio-dc30d-어선택-언어선택-버튼-클릭-시-드롭다운-노출-검증-chromium\\console-error-screenshot.png",
@@ -696,6 +706,11 @@
         "at": "2026-09-29",
         "status": "신규",
         "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      },
+      {
+        "at": "2026-09-29",
+        "status": "완료",
+        "note": "케이스 고도화 조사 중 재검증(TC_CO_001) — DEF_007과 동일 근본원인(전역 배너 href 프로토콜 누락)의 파급 노이즈로 확인, 본연의 검증 대상 기능(언어선택 드롭다운 노출)은 정상 동작 확인됨. 별도 결함으로 유지하지 않고 완료 처리, DEF_007로 통합 관리."
       }
     ]
   },
@@ -705,8 +720,8 @@
     "module": "시스템",
     "screenName": "",
     "severity": "P3",
-    "status": "신규",
-    "summary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
+    "status": "완료",
+    "summary": "시스템 > [DEF_007 파급 노이즈로 종결] Failed to load resource: the server responded with a status of 404 (No",
     "testEnv": "",
     "testSteps": "1) 언어선택 드롭다운에서 한국어 외 다른 언어 선택",
     "actualResult": "콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\n  404 http://192.168.10.116:30180/www.naver.com?_rsc=3lb4g\nError: 콘솔/네트워크 에러가 감지되어 실패 처리합니다.\n- 콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n- 실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\n  404 http://192.168.10.116:30180/www.naver.com?_rsc=3lb4g\n- 스크린샷: D:\\QA\\tc-automation\\_scratch\\test-results\\데모사이트\\project-데모사이트-TC-automatio-714d3-02-언어선택-언어-전환-시-화면-언어-반영-검증-chromium\\console-error-screenshot.png",
@@ -722,6 +737,11 @@
         "at": "2026-09-29",
         "status": "신규",
         "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      },
+      {
+        "at": "2026-09-29",
+        "status": "완료",
+        "note": "케이스 고도화 조사 중 재검증(TC_CO_002) — DEF_007과 동일 근본원인(전역 배너 href 프로토콜 누락)의 파급 노이즈로 확인, 본연의 검증 대상 기능(언어 전환 시 화면 반영)은 정상 동작 확인됨. 별도 결함으로 유지하지 않고 완료 처리, DEF_007로 통합 관리."
       }
     ]
   },
@@ -731,8 +751,8 @@
     "module": "시스템",
     "screenName": "",
     "severity": "P3",
-    "status": "신규",
-    "summary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
+    "status": "완료",
+    "summary": "시스템 > [DEF_007 파급 노이즈로 종결] Failed to load resource: the server responded with a status of 404 (No",
     "testEnv": "",
     "testSteps": "1) 언어 전환 후 브라우저 새로고침(F5)",
     "actualResult": "콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\n  404 http://192.168.10.116:30180/www.naver.com?_rsc=3lb4g\n  404 http://192.168.10.116:30180/www.naver.com?_rsc=3lb4g\nError: 콘솔/네트워크 에러가 감지되어 실패 처리합니다.\n- 콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n- 실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\n  404 http://192.168.10.116:30180/www.naver.com?_rsc=3lb4g\n  404 http://192.168.10.116:30180/www.naver.com?_rsc=3lb4g\n- 스크린샷: D:\\QA\\tc-automation\\_scratch\\test-results\\데모사이트\\project-데모사이트-TC-automatio-8fbdf-선택-언어-전환-후-새로고침-시-선택값-유지-검증-chromium\\console-error-screenshot.png",
@@ -748,6 +768,11 @@
         "at": "2026-09-29",
         "status": "신규",
         "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      },
+      {
+        "at": "2026-09-29",
+        "status": "완료",
+        "note": "케이스 고도화 조사 중 재검증(TC_CO_003) — DEF_007과 동일 근본원인(전역 배너 href 프로토콜 누락)의 파급 노이즈로 확인, 본연의 검증 대상 기능(언어 전환 후 새로고침 유지)은 정상 동작 확인됨. 별도 결함으로 유지하지 않고 완료 처리, DEF_007로 통합 관리."
       }
     ]
   },
@@ -761,7 +786,7 @@
     "summary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
     "testEnv": "",
     "testSteps": "1) 메인(/) 진입\n2) 헤더 메뉴 순서 확인",
-    "actualResult": "콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\nError: 콘솔/네트워크 에러가 감지되어 실패 처리합니다.\n- 콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n- 실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\n- 스크린샷: D:\\QA\\tc-automation\\_scratch\\test-results\\데모사이트\\project-데모사이트-TC-automatio-51dd8-LE-MD-s-PICK-BRAND-노출-순서-검증-chromium\\console-error-screenshot.png",
+    "actualResult": "콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\nError: 콘솔/네트워크 에러가 감지되어 실패 처리합니다.\n- 콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n- 실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\n- 스크린샷: D:\\QA\\tc-automation\\_scratch\\test-results\\데모사이트\\project-데모사이트-TC-automatio-51dd8-LE-MD-s-PICK-BRAND-노출-순서-검증-chromium\\console-error-screenshot.png\n\n[2026-09-29 재검증 추가 확인] 콘솔 404 노이즈(DEF_007)와 별개로, 실제 헤더 메뉴 구성이 TC 기대결과(\"전체카테고리-SALE-MD's PICK-BRAND\" 순서)와 불일치 — \"전체카테고리\"/\"BRAND\" 텍스트 자체가 현재 헤더에 존재하지 않음. TC 작성 시점 스펙과 실측이 어긋난 것인지, 실제 UI 결함인지 추가 확인 필요.",
     "expectedResult": "\"전체카테고리 - SALE - MD's PICK - BRAND\" 순서로 노출된다",
     "detectedAt": "2026-09-29",
     "source": "automation",
@@ -774,6 +799,11 @@
         "at": "2026-09-29",
         "status": "신규",
         "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      },
+      {
+        "at": "2026-09-29",
+        "status": "신규",
+        "note": "DEF_007 노이즈 여부와 별개로 실제 헤더 메뉴 구성 불일치를 재확인 — DEF_007 통합 대상에서 제외하고 별도 결함으로 계속 추적(신규 유지)"
       }
     ]
   },
@@ -787,7 +817,7 @@
     "summary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
     "testEnv": "",
     "testSteps": "1) 뷰포트를 375x812(모바일)로 축소\n2) 헤더 영역 확인",
-    "actualResult": "콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\nError: 콘솔/네트워크 에러가 감지되어 실패 처리합니다.\n- 콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n- 실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\n- 스크린샷: D:\\QA\\tc-automation\\_scratch\\test-results\\데모사이트\\project-데모사이트-TC-automatio-75d54-반응형-모바일-뷰포트-헤더-햄버거-메뉴-전환-검증-chromium\\console-error-screenshot.png",
+    "actualResult": "콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\nError: 콘솔/네트워크 에러가 감지되어 실패 처리합니다.\n- 콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n- 실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\n- 스크린샷: D:\\QA\\tc-automation\\_scratch\\test-results\\데모사이트\\project-데모사이트-TC-automatio-75d54-반응형-모바일-뷰포트-헤더-햄버거-메뉴-전환-검증-chromium\\console-error-screenshot.png\n\n[2026-09-29 재검증 추가 확인] 콘솔 404 노이즈(DEF_007)와 별개로, 375x812 모바일 뷰포트에서 햄버거 아이콘·데스크탑 GNB 둘 다 노출되지 않음을 직접 확인 — 반응형 헤더 전환 자체가 미구현 상태로 판단됨.",
     "expectedResult": "헤더 메뉴가 햄버거 아이콘으로 축소되어 노출된다",
     "detectedAt": "2026-09-29",
     "source": "automation",
@@ -800,6 +830,11 @@
         "at": "2026-09-29",
         "status": "신규",
         "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      },
+      {
+        "at": "2026-09-29",
+        "status": "신규",
+        "note": "DEF_007 노이즈 여부와 별개로 반응형 헤더 미구현을 직접 재확인 — [확인필요] 상태 해소, 정식 결함으로 확정(신규 유지)"
       }
     ]
   },
@@ -861,8 +896,8 @@
     "module": "품질·비기능",
     "screenName": "",
     "severity": "P3",
-    "status": "신규",
-    "summary": "품질·비기능 > Failed to load resource: the server responded with a status of 404 (No",
+    "status": "완료",
+    "summary": "품질·비기능 > [DEF_007 파급 노이즈로 종결] Failed to load resource: the server responded with a status of 404 (No",
     "testEnv": "",
     "testSteps": "1) 메인(/) 진입\n2) Tab 키로 검색/장바구니/언어선택 버튼 순차 이동",
     "actualResult": "콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\nError: 콘솔/네트워크 에러가 감지되어 실패 처리합니다.\n- 콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n- 실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\n- 스크린샷: D:\\QA\\tc-automation\\_scratch\\test-results\\데모사이트\\project-데모사이트-TC-automatio-d678f-요-버튼-키보드-Tab-이동-및-포커스-표시-검증-chromium\\console-error-screenshot.png",
@@ -878,6 +913,11 @@
         "at": "2026-09-29",
         "status": "신규",
         "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      },
+      {
+        "at": "2026-09-29",
+        "status": "완료",
+        "note": "케이스 고도화 조사 중 재검증(TC_CO_015) — DEF_007과 동일 근본원인(전역 배너 href 프로토콜 누락)의 파급 노이즈로 확인, 본연의 검증 대상 기능(키보드 Tab 포커스 표시(outline 정상 노출))은 정상 동작 확인됨. 별도 결함으로 유지하지 않고 완료 처리, DEF_007로 통합 관리."
       }
     ]
   },
@@ -891,7 +931,7 @@
     "summary": "전시 > Failed to load resource: the server responded with a status of 404 (No",
     "testEnv": "",
     "testSteps": "1) OS/브라우저 다크모드 설정 활성화 후 메인(/) 접속",
-    "actualResult": "콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\nError: 콘솔/네트워크 에러가 감지되어 실패 처리합니다.\n- 콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n- 실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\n- 스크린샷: D:\\QA\\tc-automation\\_scratch\\test-results\\데모사이트\\project-데모사이트-TC-automatio-5f5f2-CO-020-UI-사이트-다크모드-지원-여부-검증-chromium\\console-error-screenshot.png",
+    "actualResult": "콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\nError: 콘솔/네트워크 에러가 감지되어 실패 처리합니다.\n- 콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n- 실패 요청:\n  404 http://192.168.10.116:30180/www.naver.com!?_rsc=3lb4g\n- 스크린샷: D:\\QA\\tc-automation\\_scratch\\test-results\\데모사이트\\project-데모사이트-TC-automatio-5f5f2-CO-020-UI-사이트-다크모드-지원-여부-검증-chromium\\console-error-screenshot.png\n\n[2026-09-29 재검증 추가 확인] 콘솔 404 노이즈(DEF_007)와 별개로, 강제로 다크 컬러스킴을 적용해도 body 배경색이 투명(rgba(0,0,0,0))으로 유지되어 다크 테마가 실제로 적용되지 않음을 직접 확인.",
     "expectedResult": "사이트가 다크 테마로 전환되어 노출된다",
     "detectedAt": "2026-09-29",
     "source": "automation",
@@ -904,6 +944,11 @@
         "at": "2026-09-29",
         "status": "신규",
         "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      },
+      {
+        "at": "2026-09-29",
+        "status": "신규",
+        "note": "DEF_007 노이즈 여부와 별개로 다크모드 미적용을 직접 재확인 — DEF_007 통합 대상에서 제외하고 별도 결함으로 계속 추적(신규 유지)"
       }
     ]
   }

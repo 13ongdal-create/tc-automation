@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "CO",
     "moduleName": "시스템(공통)",
-    "version": 8,
+    "version": 7,
     "changeHistory": [
       {
         "version": 1,
@@ -39,11 +39,6 @@
         "version": 7,
         "date": "2026-08-27",
         "summary": "실행결과 값 Blocked 폐기 — N/A로 통합(전체 정책 변경, AGENTS.md 10항/SKILL.md 3항 반영). 뷰어 드롭다운·통계표·CSV/XLSX 내보내기에서 Blocked 컬럼 제거. 기존 데이터에는 Blocked로 기록된 TC가 없어 항목 값 자체는 변경 없음."
-      },
-      {
-        "version": 8,
-        "date": "2026-09-29",
-        "summary": "케이스 고도화 조사(결함현황 정리 1단계): DEF_007 노이즈로 판명된 TC_CO_001/002/003/015 결과를 Pass로 정정, 노이즈와 별개로 실제 결함 확인된 TC_CO_009/010/020은 Fail 유지하되 근거를 재검증 결과로 갱신 (TC_CO_011/012는 이번 재검증 대상 아니어서 변경 없음)."
       }
     ]
   },
@@ -62,14 +57,14 @@
       "steps": "1) 헤더 \"🇰🇷 한국어\" 버튼 클릭",
       "expected": "지원 언어 목록이 드롭다운으로 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "Fail",
       "assignee": "",
       "issueSummary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 1,
-      "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_024는 완료 처리).",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_024",
       "verifyNote": ""
     },
     {
@@ -86,14 +81,14 @@
       "steps": "1) 언어선택 드롭다운에서 한국어 외 다른 언어 선택",
       "expected": "화면 텍스트가 선택한 언어로 전환된다",
       "testData": "",
-      "result": "Pass",
+      "result": "Fail",
       "assignee": "",
       "issueSummary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 2,
-      "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_025는 완료 처리).",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_025",
       "verifyNote": "실제 지원 언어 목록 및 전환 범위 확인 필요"
     },
     {
@@ -110,14 +105,14 @@
       "steps": "1) 언어 전환 후 브라우저 새로고침(F5)",
       "expected": "새로고침 후에도 전환된 언어가 유지된다",
       "testData": "",
-      "result": "Pass",
+      "result": "Fail",
       "assignee": "",
       "issueSummary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 3,
-      "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_026는 완료 처리).",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_026",
       "verifyNote": "저장 방식(쿠키/localStorage) 확인 필요"
     },
     {
@@ -261,7 +256,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 9,
-      "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 헤더 메뉴 구성이 기대결과와 불일치 (관련 결함 DEF_데모사이트_027, 신규 유지).",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_027",
       "verifyNote": ""
     },
     {
@@ -285,7 +280,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 10,
-      "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 모바일 뷰포트에서 반응형 헤더 전환 미구현 (관련 결함 DEF_데모사이트_028, 신규 유지).",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_028",
       "verifyNote": "[확인필요] 모바일 헤더 UI 존재 여부 실측 필요"
     },
     {
@@ -398,14 +393,14 @@
       "steps": "1) 메인(/) 진입\n2) Tab 키로 검색/장바구니/언어선택 버튼 순차 이동",
       "expected": "각 요소에 포커스 시 시각적 포커스 표시(outline 등)가 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "Fail",
       "assignee": "",
       "issueSummary": "품질·비기능 > Failed to load resource: the server responded with a status of 404 (No",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 15,
-      "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_031는 완료 처리).",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_031",
       "verifyNote": ""
     },
     {
@@ -525,7 +520,7 @@
       "system": "FO",
       "origin": "기존",
       "displayNo": 20,
-      "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 강제 다크 컬러스킴 적용해도 배경 미전환 (관련 결함 DEF_데모사이트_032, 신규 유지).",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_032",
       "verifyNote": "다크모드 지원 여부 자체가 미확인 — 미지원 시 라이트 테마 고정 노출이 정상"
     },
     {
