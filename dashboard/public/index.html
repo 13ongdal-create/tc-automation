@@ -315,16 +315,21 @@
 <!-- + TC 업로드 모달 -->
 <div id="tcUploadModal" class="modal-overlay" hidden>
   <div class="modal-box modal-box-lg">
-    <h2>TC 엑셀 업로드</h2>
+    <h2>TC 업로드</h2>
     <p class="placeholder-text">
-      AGENTS.md 2항 컬럼(TC ID/system/대분류/중분류/소분류/화면명/플랫폼/유형/테스트항목(시나리오)/
-      기준문서/우선순위/테스트 데이터/사전조건/테스트 수행 절차/기대결과/실행결과/담당자/이슈내용
-      요약/이슈링크/비고) 헤더를 그대로 쓴 .xlsx 파일만 지원합니다. <b>TC ID가 이미 등록된 값이면
-      수정, 비어있으면 대분류를 기준으로 신규 추가</b>됩니다 — 값이 채워진 칸만 반영되고 빈 칸은
-      기존 값을 그대로 둡니다. 여러 시트/여러 모듈이 섞여 있어도 됩니다.
+      <b>.xlsx</b> — AGENTS.md 2항 컬럼(TC ID/system/대분류/중분류/소분류/화면명/플랫폼/유형/
+      테스트항목(시나리오)/기준문서/우선순위/테스트 데이터/사전조건/테스트 수행 절차/기대결과/
+      실행결과/담당자/이슈내용 요약/이슈링크/비고) 헤더를 그대로 쓴 시트. 여러 시트/여러 모듈이
+      섞여 있어도 됩니다.<br>
+      <b>.json</b> — TC 항목 배열(<code>[{"tcId":"...", "majorCategory":"...", ...}, ...]</code>)
+      또는 캐노니컬 파일 전체(<code>{"meta":{...},"items":[...]}</code>, TC 뷰어의 "JSON 저장"이
+      만드는 형식 그대로) — 필드명은 엑셀 헤더가 아니라 tcId/majorCategory/steps/expected 같은
+      캐노니컬 스키마 이름을 그대로 씁니다.<br>
+      두 형식 모두 <b>TC ID가 이미 등록된 값이면 수정, 비어있으면 대분류를 기준으로 신규 추가</b>되며,
+      값이 채워진 칸/필드만 반영되고 나머지는 기존 값을 그대로 둡니다.
     </p>
-    <label class="field-label" for="tcUploadFile">엑셀 파일</label>
-    <input type="file" id="tcUploadFile" accept=".xlsx">
+    <label class="field-label" for="tcUploadFile">파일 (.xlsx 또는 .json)</label>
+    <input type="file" id="tcUploadFile" accept=".xlsx,.json">
     <div class="modal-error" id="tcUploadError"></div>
     <div id="tcUploadResult" class="tc-upload-result" hidden></div>
     <div class="modal-actions">

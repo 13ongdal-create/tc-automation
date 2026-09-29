@@ -86,6 +86,34 @@ async function readWorkbookRows(buffer) {
   return rows;
 }
 
+/**
+ * JSON 업로드에서 헤더를 인식해 엑셀과 동일한 {필드명: 값, __sheet, __rowNumber} 행 배열을 만듭니다.
+ * 두 형태를 모두 받습니다: TC 항목 배열([{tcId,...}, ...]) 또는 캐노니컬 파일 전체({meta,items}) —
+ * 후자는 TC 뷰어의 "JSON 저장" 버튼이 그대로 만드는 형태라, 뷰어에서 내려받은 파일을 그대로
+ * 다시 올릴 수 있습니다. 키는 엑셀 헤더가 아니라 캐노니컬 필드명(tcId/majorCategory/steps/...)을
+ * 그대로 사용해야 합니다 — 사람이 적는 엑셀과 달리 표기 흔들림을 고려할 필요가 없습니다.
+ */
+function readJsonRows(buffer) {
+  let parsed;
+  try {
+    parsed = JSON.parse(buffer.toString('utf8'));
+  } catch (err) {
+    throw new Error(`JSON 파싱에 실패했습니다: ${err.message}`);
+  }
+  const list = Array.isArray(parsed) ? parsed : Array.isArray(parsed.items) ? parsed.items : null;
+  if (!list) throw new Error('JSON은 TC 항목 배열([{...}, ...]) 이거나 { "items": [...] } 형태여야 합니다.');
+
+  const fields = Object.keys(FIELD_ALIASES);
+  return list.map((raw, idx) => {
+    const row = { __sheet: 'JSON', __rowNumber: idx + 1 };
+    for (const f of fields) {
+      const v = raw ? raw[f] : undefined;
+      row[f] = v == null ? '' : String(v).trim();
+    }
+    return row;
+  });
+}
+
 function validateRow(row, isNew) {
   if (isNew) {
     for (const f of REQUIRED_FIELDS) {
@@ -143,7 +171,8 @@ function buildNewItem(tcId, fields) {
 }
 
 /**
- * 엑셀 업로드를 프로젝트의 TC 캐노니컬 JSON에 반영합니다.
+ * 엑셀(.xlsx) 또는 JSON(.json) 업로드를 프로젝트의 TC 캐노니컬 JSON에 반영합니다. 파일 형식은
+ * sourceFileName의 확장자로 판단합니다.
  * - TC ID가 있고 이미 등록되어 있으면: 값이 채워진 필드만 수정
  * - TC ID가 있는데 아직 없으면: 그 ID로 신규 생성
  * - TC ID가 없으면: 대분류로 기존 모듈을 찾아 그 모듈의 다음 번호로 신규 생성
@@ -151,8 +180,16 @@ function buildNewItem(tcId, fields) {
  * @returns {Promise<{updatedTcIds:string[], createdTcIds:string[], skipped:object[], warnings:string[], modules:object[]}>}
  */
 async function applyUpload(project, buffer, sourceFileName) {
-  const rows = await readWorkbookRows(buffer);
-  if (!rows.length) throw new Error('엑셀에서 인식 가능한 TC 행을 찾지 못했습니다 — 헤더가 AGENTS.md 2항 컬럼명과 일치하는지 확인해주세요.');
+  const isJson = /\.json$/i.test(sourceFileName || '');
+  const sourceLabel = isJson ? 'JSON' : '엑셀';
+  const rows = isJson ? readJsonRows(buffer) : await readWorkbookRows(buffer);
+  if (!rows.length) {
+    throw new Error(
+      isJson
+        ? 'JSON에서 TC 항목을 찾지 못했습니다 — 필드명이 캐노니컬 스키마(tcId/majorCategory/steps/expected/priority 등)와 일치하는지 확인해주세요.'
+        : '엑셀에서 인식 가능한 TC 행을 찾지 못했습니다 — 헤더가 AGENTS.md 2항 컬럼명과 일치하는지 확인해주세요.'
+    );
+  }
 
   const moduleFiles = tcStore.readModuleFiles(project);
   if (!moduleFiles.length) throw new Error('이 프로젝트에 캐노니컬 TC 파일이 없습니다 — 먼저 모듈을 최소 1개 생성해주세요.');
@@ -276,7 +313,7 @@ async function applyUpload(project, buffer, sourceFileName) {
     canonical.meta.changeHistory.push({
       version: canonical.meta.version,
       date: today,
-      summary: `엑셀 업로드 반영 (${sourceFileName}) — 수정 ${pending.updates.length}건, 신규 ${pending.creates.length}건`,
+      summary: `${sourceLabel} 업로드 반영 (${sourceFileName}) — 수정 ${pending.updates.length}건, 신규 ${pending.creates.length}건`,
     });
 
     fs.writeFileSync(filePath, JSON.stringify(canonical, null, 2) + '\n', 'utf8');

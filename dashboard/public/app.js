@@ -1069,7 +1069,7 @@ function connectWs() {
   };
 }
 
-// ── + TC 업로드 (zero-token — claude 미사용, 엑셀을 직접 파싱해 캐노니컬 TC json에 반영) ──────
+// ── + TC 업로드 (zero-token — claude 미사용, 엑셀/JSON을 직접 파싱해 캐노니컬 TC json에 반영) ──
 function openTcUploadModal() {
   el.tcUploadFile.value = '';
   el.tcUploadError.textContent = '';

@@ -483,8 +483,9 @@ app.get('/api/:project/test-queue/modules', (req, res) => {
   res.json({ modules: testQueue.listRunnableModules(req.params.project) });
 });
 
-// TC 엑셀 업로드 — 이미 등록된 TC를 수정하거나 신규 TC를 추가합니다(zero-token, claude 미사용).
-// body: { fileName, dataBase64 } — 프런트에서 File을 base64로 인코딩해 JSON으로 보냄.
+// TC 엑셀/JSON 업로드 — 이미 등록된 TC를 수정하거나 신규 TC를 추가합니다(zero-token, claude 미사용).
+// body: { fileName, dataBase64 } — 프런트에서 File을 base64로 인코딩해 JSON으로 보냄. 형식은
+// fileName 확장자(.xlsx/.json)로 tcUpload.applyUpload가 판단합니다.
 app.post('/api/:project/tc-upload', async (req, res) => {
   const { project } = req.params;
   const { fileName, dataBase64 } = req.body || {};
@@ -493,7 +494,8 @@ app.post('/api/:project/tc-upload', async (req, res) => {
     const buffer = Buffer.from(dataBase64, 'base64');
     const result = await tcUpload.applyUpload(project, buffer, fileName || 'uploaded.xlsx');
     if (result.updatedTcIds.length || result.createdTcIds.length) {
-      const summary = `엑셀 업로드 반영 (${fileName || 'uploaded.xlsx'}) — 수정 ${result.updatedTcIds.length}건, 신규 ${result.createdTcIds.length}건`;
+      const sourceLabel = /\.json$/i.test(fileName || '') ? 'JSON' : '엑셀';
+      const summary = `${sourceLabel} 업로드 반영 (${fileName || 'uploaded.xlsx'}) — 수정 ${result.updatedTcIds.length}건, 신규 ${result.createdTcIds.length}건`;
       result.git = await gitOps.commitPaths([`project/${project}`], `${project}: ${summary}`);
     }
     res.json(result);
