@@ -451,3 +451,15 @@ test('[TC_CO_050][PUSH관리] "PUSH 등록" 버튼 클릭 시 등록 화면 이�
   await page.getByRole('button', { name: 'PUSH 등록', exact: true }).click();
   await page.waitForTimeout(500);
 });
+
+test('[TC_CO_051][전체목록] 언어선택 드롭다운의 지원 언어 전체 목록 검증', async ({ page }) => {
+  await page.goto(BASE + '/', { waitUntil: 'load' });
+  await page.getByText('한국어').first().click();
+  // 2026-09-30 관찰: 지원 언어는 한국어/English/日本語 3개뿐 (TC_CO_001은 노출 여부만 확인, 이 TC는 전체 목록 자체를 검증)
+  await expect(page.getByText('한국어').nth(1)).toBeVisible();
+  await expect(page.getByText('English')).toBeVisible();
+  await expect(page.getByText('日本語')).toBeVisible();
+  const flagCount = await page.locator('body').innerText();
+  const count = (flagCount.match(/🇰🇷|🇺🇸|🇯🇵/g) || []).length;
+  expect(count).toBe(4); // 헤더 표시용 1개 + 드롭다운 옵션 3개
+});

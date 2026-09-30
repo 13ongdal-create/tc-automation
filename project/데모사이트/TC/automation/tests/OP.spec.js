@@ -298,3 +298,179 @@ test('[TC_OP_020][Admin배송지관리] 목록 컬럼 노출 검증', async ({ p
   await page.waitForTimeout(1000);
   await expect(page.getByText('배송지 목록')).toBeVisible();
 });
+
+// ── 결제하기(/checkout) 플로우 (케이스 고도화 Priority 3, 2026-09-30) ──────────────────────
+// 우편번호/주소 입력란은 readonly라 "주소 찾기" 외부 팝업(다음 우편번호 서비스)을 통해서만
+// 채워짐(2026-09-29 관찰). 헤드리스 자동화로는 그 팝업을 완결할 수 없어, React controlled
+// input의 네이티브 setter를 직접 호출해 값을 주입한다 — 사용자가 "주소 찾기"로 채운 뒤의
+// 상태를 흉내내는 용도로만 사용하고, 그 팝업 자체의 동작은 검증하지 않는다.
+async function setReactInputValue(page, selector, value) {
+  await page.locator(selector).evaluate((el, val) => {
+    const proto = Object.getPrototypeOf(el);
+    const desc = Object.getOwnPropertyDescriptor(proto, 'value');
+    desc.set.call(el, val);
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+  }, value);
+}
+
+async function goToCheckout(page, categoryPath = '/categories/110') {
+  await addFirstProductToCart(page, categoryPath);
+  await page.goto(BASE + '/cart', { waitUntil: 'load' });
+  await page.getByRole('button', { name: '주문하기', exact: true }).click();
+  await page.waitForURL('**/checkout', { timeout: 10000 });
+}
+
+async function fillCheckoutForm(page, skip = []) {
+  if (!skip.includes('name')) await page.locator('input[placeholder="이름을 입력해주세요"]').fill('박지숙');
+  if (!skip.includes('email')) await page.locator('input[placeholder="이메일 주소를 입력해주세요"]').fill('test@example.com');
+  if (!skip.includes('phone')) await page.locator('input[placeholder="010-0000-0000"]').fill('01012341234');
+  if (!skip.includes('zip')) await setReactInputValue(page, 'input[placeholder="우편번호"]', '12345');
+  if (!skip.includes('address')) await setReactInputValue(page, 'input[placeholder="주소"]', '서울시 강남구 테헤란로 1');
+  if (!skip.includes('detail')) await page.locator('input[placeholder="상세 주소를 입력해주세요"]').fill('101동 202호');
+}
+
+function priceIn(text, label) {
+  const idx = text.indexOf(label);
+  if (idx === -1) return null;
+  const m = text.slice(idx, idx + 60).match(/([\d,]+)\s*원/);
+  return m ? Number(m[1].replace(/,/g, '')) : null;
+}
+
+test('[TC_OP_023][진입] 장바구니 "주문하기" 클릭 시 결제하기 화면 진입 검증', async ({ page }) => {
+  acceptDialogs(page);
+  await login(page);
+  await clearCart(page);
+  await goToCheckout(page);
+  await expect(page.getByText('SECURE CHECKOUT')).toBeVisible();
+  await expect(page.getByText('I. 배송 정보')).toBeVisible();
+});
+
+test('[TC_OP_024][필수값-이름] 이름 미입력 상태로 "결제하기" 클릭 시 차단 검증', async ({ page }) => {
+  acceptDialogs(page);
+  await login(page);
+  await clearCart(page);
+  await goToCheckout(page);
+  await fillCheckoutForm(page, ['name']);
+  await page.getByRole('button', { name: /결제하기/ }).click();
+  await page.waitForTimeout(500);
+  expect(page.url()).toContain('/checkout');
+  const valid = await page.locator('input[placeholder="이름을 입력해주세요"]').evaluate((el) => el.checkValidity());
+  expect(valid).toBe(false);
+});
+
+test('[TC_OP_025][필수값-이메일] 이메일 미입력 상태로 "결제하기" 클릭 시 차단 검증', async ({ page }) => {
+  acceptDialogs(page);
+  await login(page);
+  await clearCart(page);
+  await goToCheckout(page);
+  await fillCheckoutForm(page, ['email']);
+  await page.getByRole('button', { name: /결제하기/ }).click();
+  await page.waitForTimeout(500);
+  expect(page.url()).toContain('/checkout');
+  const valid = await page.locator('input[placeholder="이메일 주소를 입력해주세요"]').evaluate((el) => el.checkValidity());
+  expect(valid).toBe(false);
+});
+
+test('[TC_OP_026][필수값-전화번호] 전화번호 미입력 상태로 "결제하기" 클릭 시 차단 검증', async ({ page }) => {
+  acceptDialogs(page);
+  await login(page);
+  await clearCart(page);
+  await goToCheckout(page);
+  await fillCheckoutForm(page, ['phone']);
+  await page.getByRole('button', { name: /결제하기/ }).click();
+  await page.waitForTimeout(500);
+  expect(page.url()).toContain('/checkout');
+  const valid = await page.locator('input[placeholder="010-0000-0000"]').evaluate((el) => el.checkValidity());
+  expect(valid).toBe(false);
+});
+
+test('[TC_OP_027][필수값-주소] 주소(우편번호/상세주소) 미입력 상태로 "결제하기" 클릭 시 차단 검증', async ({ page }) => {
+  acceptDialogs(page);
+  await login(page);
+  await clearCart(page);
+  await goToCheckout(page);
+  await fillCheckoutForm(page, ['zip', 'address']);
+  await page.getByRole('button', { name: /결제하기/ }).click();
+  await page.waitForTimeout(500);
+  expect(page.url()).toContain('/checkout');
+  const valid = await page.locator('input[placeholder="우편번호"]').evaluate((el) => el.checkValidity());
+  expect(valid).toBe(false);
+});
+
+test('[TC_OP_028][주소찾기] "주소 찾기" 버튼 클릭 시 우편번호 검색 팝업 노출 검증', async ({ page }) => {
+  acceptDialogs(page);
+  await login(page);
+  await clearCart(page);
+  await goToCheckout(page);
+  const popupPromise = page.waitForEvent('popup');
+  await page.getByRole('button', { name: '주소 찾기' }).click();
+  const popup = await popupPromise;
+  expect(popup).toBeTruthy();
+  await popup.close();
+});
+
+test('[TC_OP_029][배송요청사항-문앞] 배송요청사항 "부재시 문앞에 놓아주세요" 선택 시 반영 검증', async ({ page }) => {
+  acceptDialogs(page);
+  await login(page);
+  await clearCart(page);
+  await goToCheckout(page);
+  await page.locator('select').first().selectOption({ label: '부재시 문앞에 놓아주세요' });
+  expect(await page.locator('select').first().inputValue()).toBe('부재시 문앞에 놓아주세요');
+});
+
+test('[TC_OP_030][배송요청사항-연락] 배송요청사항 "배송 전 연락바랍니다" 선택 시 반영 검증', async ({ page }) => {
+  acceptDialogs(page);
+  await login(page);
+  await clearCart(page);
+  await goToCheckout(page);
+  await page.locator('select').first().selectOption({ label: '배송 전 연락바랍니다' });
+  expect(await page.locator('select').first().inputValue()).toBe('배송 전 연락바랍니다');
+});
+
+test('[TC_OP_031][금액계산] 주문 요약 금액 계산 정합성 검증', async ({ page }) => {
+  acceptDialogs(page);
+  await login(page);
+  await clearCart(page);
+  await goToCheckout(page);
+  const text = await page.locator('body').innerText();
+  const productAmount = priceIn(text, '상품 금액');
+  const totalAmount = priceIn(text, '총 결제 금액');
+  expect(productAmount).not.toBeNull();
+  // 배송비 "Free"(무료) 기준 — 상품 금액과 총 결제 금액이 동일해야 함
+  expect(totalAmount).toBe(productAmount);
+});
+
+test('[TC_OP_032][상품보기펼치기] "상품 보기 (N)" 버튼 클릭 시 주문 상품 상세 펼치기 검증', async ({ page }) => {
+  test.skip(true, '[확인필요] 펼치기 클릭 후 실제 노출 내용을 이번 조사에서 명확히 확인하지 못해 재관찰 필요');
+});
+
+test('[TC_OP_033][결제수단부재] 결제하기 화면 결제수단 선택 UI 부재 확인', async ({ page }) => {
+  acceptDialogs(page);
+  await login(page);
+  await clearCart(page);
+  await goToCheckout(page);
+  // 2026-09-29 관찰: 결제수단(카드/간편결제 등) 선택용 라디오/셀렉트가 전혀 없음(DEF_데모사이트_034)
+  expect(await page.locator('input[type="radio"]').count()).toBe(0);
+});
+
+test('[TC_OP_034][결제완료] 필수값 정상 입력 후 결제 완료 처리 및 주문번호 생성 검증', async ({ page }) => {
+  test.skip(true, '[확인필요] 우편번호 입력란이 "주소 찾기" 외부 팝업을 통해서만 채워지는 구조라 자동화로 전체 제출 성공까지 확인하지 못함 — 재관찰 필요');
+});
+
+test('[TC_OP_035][주문내역반영] 결제 완료 후 마이페이지 주문내역 반영 검증', async ({ page }) => {
+  test.skip(true, '[확인필요] 선행 TC(TC_OP_034 결제 완료 처리)가 자동화로 확정되지 않아 함께 보류');
+});
+
+test('[TC_OP_036][전체미선택] 장바구니 전체 미선택 상태에서 "주문하기" 클릭 차단 검증', async ({ page }) => {
+  acceptDialogs(page);
+  await login(page);
+  await clearCart(page);
+  await addFirstProductToCart(page);
+  await page.goto(BASE + '/cart', { waitUntil: 'load' });
+  await page.waitForTimeout(300);
+  const checkboxes = await page.locator('input[type="checkbox"]').all();
+  for (const cb of checkboxes) await cb.uncheck();
+  await page.waitForTimeout(200);
+  await expect(page.getByRole('button', { name: '주문하기' })).toBeDisabled();
+});

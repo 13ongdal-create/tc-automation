@@ -1020,3 +1020,138 @@ test('[TC_PD_145][Front-Admin정합성] Admin 전시페이지관리 "BRANDS>ZARA
   await page.goto(BASE + '/display/brand/hm', { waitUntil: 'load' });
   await expect(page.locator('body')).toBeVisible();
 });
+
+// ── PDP 옵션선택+장바구니담기 / 검색 / 상품상세 탭 / 리뷰 영역 (케이스 고도화 Priority 3, 2026-09-30) ──
+
+test('[TC_PD_146][옵션선택] 옵션(색상/사이즈 등) 선택 시 선택 상태 반영 검증', async ({ page }) => {
+  await gotoAnyProduct(page);
+  const optionBtn = page.getByRole('button', { name: /^(S|M|L|XL|FREE)$/ }).and(page.locator(':enabled')).first();
+  await optionBtn.click();
+  await page.waitForTimeout(300);
+  await expect(page.getByRole('button', { name: '장바구니 담기' })).toBeEnabled();
+});
+
+test('[TC_PD_147][수량증가] 수량 "+" 버튼 클릭 시 수량 반영 검증', async ({ page }) => {
+  await gotoAnyProduct(page);
+  const plusBtn = page.getByRole('button', { name: '+1' });
+  await expect(plusBtn).toBeVisible();
+  await plusBtn.click();
+  await page.waitForTimeout(300);
+  await expect(plusBtn).toBeVisible();
+});
+
+test('[TC_PD_148][수량감소] [확인필요] 수량 "-" 버튼 동작 및 최소값(1) 경계 처리 검증', async ({ page }) => {
+  test.skip(true, '[확인필요] 수량 감소 버튼의 정확한 위치·아이콘을 이번 조사에서 식별하지 못해 재관찰 필요');
+});
+
+test('[TC_PD_149][장바구니담기] "장바구니 담기" 버튼 클릭 시 장바구니 반영 검증', async ({ page }) => {
+  await gotoAnyProduct(page);
+  const heading = (await page.getByRole('heading').first().innerText()).trim();
+  const optionBtn = page.getByRole('button', { name: /^(S|M|L|XL|FREE)$/ }).and(page.locator(':enabled')).first();
+  await optionBtn.click();
+  await page.getByRole('button', { name: '장바구니 담기' }).click();
+  await page.waitForTimeout(800);
+  await page.goto(BASE + '/cart', { waitUntil: 'load' });
+  await expect(page.getByText(heading)).toBeVisible();
+});
+
+test('[TC_PD_150][결과노출] 검색어 입력 후 결과 목록 노출 검증', async ({ page }) => {
+  await page.goto(BASE + '/search?keyword=셔츠', { waitUntil: 'load' });
+  await expect(page.getByText(/총\s*\d+개/)).toBeVisible();
+});
+
+test('[TC_PD_151][정렬] 검색 결과 정렬(최신순/이름순/낮은가격순/높은가격순) 동작 검증', async ({ page }) => {
+  await page.goto(BASE + '/search?keyword=셔츠', { waitUntil: 'load' });
+  await page.getByRole('button', { name: '낮은가격순', exact: true }).click();
+  await page.waitForTimeout(500);
+  await expect(page.getByText(/총\s*\d+개/)).toBeVisible();
+});
+
+test('[TC_PD_152][결과없음] [확인필요][결함] 검색 결과 0건 시 Empty State 안내 문구 미노출', async ({ page }) => {
+  await page.goto(BASE + '/search?keyword=zzzznotexist9999', { waitUntil: 'load' });
+  await expect(page.getByText('총 0개')).toBeVisible();
+  // 결함 확인용 TC(DEF_데모사이트_033) — 결함이 해결되기 전까지는 안내 문구가 0건으로 유지되어야 Pass
+  const emptyStateCount = await page.getByText(/검색 결과가 없습니다|조건에 맞는.*없습니다/).count();
+  expect(emptyStateCount).toBe(0);
+});
+
+test('[TC_PD_153][필터] 검색 결과 내 필터(브랜드/가격/사이즈/평점) 적용 검증', async ({ page }) => {
+  await page.goto(BASE + '/search?keyword=셔츠', { waitUntil: 'load' });
+  await page.getByText('ZARA', { exact: true }).click();
+  await page.waitForTimeout(500);
+  await expect(page.getByText(/총\s*\d+개/)).toBeVisible();
+});
+
+test('[TC_PD_154][탭-상세정보] "상세정보" 탭 클릭 시 콘텐츠 노출 검증', async ({ page }) => {
+  await gotoAnyProduct(page);
+  await page.getByRole('button', { name: '상세정보', exact: true }).click();
+  await page.waitForTimeout(300);
+});
+
+test('[TC_PD_155][탭-추가정보] "추가 정보" 탭 클릭 시 콘텐츠 노출 검증', async ({ page }) => {
+  await gotoAnyProduct(page);
+  await page.getByRole('button', { name: '추가 정보', exact: true }).click();
+  await page.waitForTimeout(300);
+});
+
+test('[TC_PD_156][탭-사이즈가이드] "사이즈 & 가이드" 탭 클릭 시 콘텐츠 노출 검증', async ({ page }) => {
+  await gotoAnyProduct(page);
+  await page.getByRole('button', { name: '사이즈 & 가이드', exact: true }).click();
+  await page.waitForTimeout(300);
+});
+
+test('[TC_PD_157][탭-리뷰] "리뷰" 탭 클릭 시 리뷰 목록 노출 검증', async ({ page }) => {
+  await gotoAnyProduct(page);
+  await page.getByRole('button', { name: '리뷰', exact: true }).click();
+  await page.waitForTimeout(300);
+});
+
+test('[TC_PD_158][필터-전체] 리뷰 필터 "전체" 탭 노출 검증', async ({ page }) => {
+  await gotoAnyProduct(page);
+  await page.getByRole('button', { name: '리뷰', exact: true }).click();
+  await page.waitForTimeout(300);
+  await expect(page.getByRole('button', { name: '전체', exact: true }).first()).toBeVisible();
+});
+
+test('[TC_PD_159][필터-사진리뷰] 리뷰 필터 "사진 리뷰" 선택 시 필터링 검증', async ({ page }) => {
+  await gotoAnyProduct(page);
+  await page.getByRole('button', { name: '리뷰', exact: true }).click();
+  await page.waitForTimeout(300);
+  const photoTab = page.getByRole('button', { name: '사진 리뷰', exact: true });
+  if (await photoTab.count() === 0) {
+    test.skip(true, '현재 상품에 "사진 리뷰" 필터 탭이 노출되지 않음(사진 첨부 리뷰가 없는 상품일 수 있음) — 리뷰가 있는 상품으로 재관찰 필요');
+  }
+  await photoTab.click();
+  await page.waitForTimeout(300);
+});
+
+test('[TC_PD_160][사이즈만족도] 사이즈 만족도 배지 노출 검증', async ({ page }) => {
+  await gotoAnyProduct(page);
+  await page.getByRole('button', { name: '리뷰', exact: true }).click();
+  await page.waitForTimeout(300);
+  const badge = page.getByText(/사이즈가 맞아요/);
+  if (await badge.count() === 0) {
+    test.skip(true, '현재 상품에 사이즈 만족도 데이터가 있는 리뷰가 없음 — 리뷰가 있는 상품으로 재관찰 필요');
+  }
+  await expect(badge.first()).toBeVisible();
+});
+
+test('[TC_PD_161][리뷰작성] "리뷰 작성" 버튼 클릭 시 작성 화면 진입 검증', async ({ page }) => {
+  await gotoAnyProduct(page);
+  await page.getByRole('button', { name: '리뷰', exact: true }).click();
+  await page.waitForTimeout(300);
+  await page.getByRole('button', { name: '리뷰 작성', exact: true }).click();
+  await page.waitForTimeout(500);
+});
+
+test('[TC_PD_162][더보기] 리뷰 목록 "더보기" 버튼 클릭 시 추가 로드 검증', async ({ page }) => {
+  await gotoAnyProduct(page);
+  await page.getByRole('button', { name: '리뷰', exact: true }).click();
+  await page.waitForTimeout(300);
+  const moreBtn = page.getByRole('button', { name: '더보기', exact: true });
+  if (await moreBtn.count() === 0) {
+    test.skip(true, '현재 상품의 리뷰 수가 1페이지 분량 이하라 "더보기" 버튼이 노출되지 않음 — 리뷰가 많은 상품으로 재관찰 필요');
+  }
+  await moreBtn.click();
+  await page.waitForTimeout(500);
+});

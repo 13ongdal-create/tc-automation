@@ -476,3 +476,17 @@ test('[TC_MB_053][Front-Admin정합성 라벨노출][결함차단] Admin 대표 
   // DEF_데모사이트_011(Admin 로그인 ko-KR 500)로 Admin 접근 자체가 막혀 있어 검증 불가
   await adminLogin(page);
 });
+
+test('[TC_MB_054][remember-me체크] remember-me 체크 후 로그인 시 세션 유지 검증', async ({ page }) => {
+  test.skip(true, '[확인필요] remember-me 체크 시 실제 세션/쿠키 유지 기간 정책이 확인되지 않아 재관찰 필요');
+});
+
+test('[TC_MB_055][remember-me미체크] remember-me 미체크 상태 기본 로그인 동작 검증', async ({ page }) => {
+  await page.goto(BASE + '/login', { waitUntil: 'load' });
+  const rememberMe = page.locator('input[name="remember-me"]');
+  await expect(rememberMe).not.toBeChecked();
+  await page.locator('input[name="loginId"]').fill(ACCOUNT.id);
+  await page.locator('input[name="pswd"]').fill(ACCOUNT.pw);
+  await page.getByRole('button', { name: '로그인', exact: true }).click();
+  await page.waitForURL(BASE + '/', { timeout: 10000 });
+});

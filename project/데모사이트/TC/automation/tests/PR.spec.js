@@ -123,3 +123,32 @@ test('[TC_PR_010][Admin가격할인관리] [확인필요] 등록된 소행사 �
   }
   expect(activeFound).toBe(true);
 });
+
+test('[TC_PR_011][Admin발급] Admin 쿠폰 발급 처리 검증', async ({ page }) => {
+  test.skip(true, '[확인필요] Admin 쿠폰관리 화면의 실제 "발급" 액션 UI(대상 지정/발급 버튼 등)를 이번 조사에서 관찰하지 못해 보류 — 재관찰 후 작성');
+});
+
+test('[TC_PR_012][쿠폰함반영] Admin 발급 쿠폰의 Front 마이페이지 쿠폰함 반영 검증', async ({ page }) => {
+  test.skip(true, '[확인필요] 선행 TC(TC_PR_011 Admin 쿠폰 발급)가 자동화로 확정되지 않아 함께 보류');
+});
+
+test('[TC_PR_013][결제적용] 결제하기 화면 쿠폰 적용 시 할인 금액 반영 검증', async ({ page }) => {
+  await page.goto(BASE + '/login', { waitUntil: 'load' });
+  await page.locator('input[name="loginId"]').fill('jspark81');
+  await page.locator('input[name="pswd"]').fill('q1w2e3r4!');
+  await page.getByRole('button', { name: '로그인', exact: true }).click();
+  await page.waitForURL(BASE + '/', { timeout: 10000 });
+  await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
+  await page.locator('a[href^="/products/"]').first().click();
+  await page.waitForURL('**/products/**');
+  const sizeBtn = page.getByRole('button', { name: /^(S|M|L|XL|FREE)$/ }).and(page.locator(':enabled')).first();
+  await sizeBtn.click();
+  await page.getByRole('button', { name: '장바구니 담기' }).click();
+  await page.waitForTimeout(800);
+  await page.goto(BASE + '/cart', { waitUntil: 'load' });
+  await page.getByRole('checkbox').first().check();
+  await page.getByRole('button', { name: '주문하기', exact: true }).click();
+  await page.waitForURL('**/checkout', { timeout: 10000 });
+  // 2026-09-29 관찰: 결제하기 화면에 쿠폰 적용 입력/선택 UI가 존재하지 않음(DEF_데모사이트_034, TC_OP_033과 동일 맥락) — 구조적 확인용 TC
+  await expect(page.getByText('쿠폰')).toHaveCount(0);
+});

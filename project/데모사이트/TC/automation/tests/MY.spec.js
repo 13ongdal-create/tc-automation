@@ -206,3 +206,22 @@ test('[TC_MY_026][주문내역] [확인필요] Front 마이페이지 주문내�
   // jspark81 명의의 실제 주문이 없어 Empty State가 정상 동작(2026-08-20 재검증: 기존에 참조한 주문은 봇 계정 소유로 확인됨)
   await expect(page.getByText('최근 주문 내역이 없습니다')).toBeVisible();
 });
+
+test('[TC_MY_027][원본노출] 개인정보수정 화면 이름/아이디/생년월일 원본값 노출 확인', async ({ page }) => {
+  await login(page);
+  await page.goto(BASE + '/mypage/edit', { waitUntil: 'load' });
+  // 2026-09-29 관찰: 세 필드 모두 마스킹 없이 원본값 그대로 노출됨(정책 의도 여부 [확인필요])
+  await expect(page.getByText('박지숙')).toBeVisible();
+  await expect(page.getByText('jspark81')).toBeVisible();
+  await expect(page.getByText('2026.08.18')).toBeVisible();
+});
+
+test('[TC_MY_028][비밀번호마스킹] 개인정보수정 화면 비밀번호 마스킹("********") 노출 검증', async ({ page }) => {
+  await login(page);
+  await page.goto(BASE + '/mypage/edit', { waitUntil: 'load' });
+  await expect(page.getByText('********')).toBeVisible();
+});
+
+test('[TC_MY_029][연락처공란] 전화번호/이메일 필드 값 미노출 현상 확인', async ({ page }) => {
+  test.skip(true, '[확인필요] 전화번호/이메일 필드가 공란인 현상이 계정 데이터 문제인지 화면 문제인지 원인 미확인 — 원인 조사 후 구체적 어서션 작성 필요');
+});
