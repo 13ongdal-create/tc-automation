@@ -175,10 +175,22 @@ so no data migration was needed. -->
 - **Windows + Git Bash**: passing a `/d/...`-style path *inside* a quoted `node -e "..."` string is
   unreliable (MSYS's auto path-conversion doesn't always trigger there) and fails with a confusing
   `Cannot find module` pointing at a mangled path. Use `D:/...` forward-slash form in those cases instead.
-- **`playwright.config.js` sets `locale: 'ko-KR'`** — this is load-bearing, not incidental: it once
+<!-- [수정 전 2026-09-30] - **`playwright.config.js` sets `locale: 'ko-KR'`** — this is load-bearing, not incidental: it once
   surfaced a real server-side defect (Admin login 500s only under a Korean browser locale). Don't drop it
   when touching the config, and remember live-environment automation failures can be genuine locale- or
   data-dependent bugs, not flaky tests — confirm root cause before assuming "just retry".
+  2026-09-30 재검증 결과 locale 미지정 상태에서도 Front/Admin 한국어 UI가 정상 렌더링됨을 확인, 그리고
+  이 전역 고정이 그 defect(DEF_데모사이트_011)를 매번 트리거해 무관한 Admin TC 40여 건까지 지연시키는
+  부작용이 드러나 전역 고정을 해제함 — 아래 항목으로 대체. -->
+- **`playwright.config.js`는 더 이상 전역 `locale: 'ko-KR'`을 고정하지 않습니다** (2026-09-30부).
+  Admin 로그인 간헐적 결함(DEF_데모사이트_011, ko-KR Accept-Language일 때만 서버 500)이 전역 고정 때문에
+  매 실행마다 트리거되어 무관한 Admin 연동 TC까지 재시도로 지연시키던 문제를 해소하기 위함. 이 결함
+  자체는 데모사이트 `project/데모사이트/TC/automation/tests/CO.spec.js`의 `[DEF_011회귀][ko-KR로케일]`
+  전용 테스트에서 `browser.newContext({ locale: 'ko-KR' })`로 격리해 계속 추적합니다. 다른 프로젝트에서
+  비슷한 "특정 로케일에서만 재현되는 서버 결함"을 만나면, 전역 `use.locale`을 고정하는 대신 이 패턴처럼
+  결함 추적용 테스트 1건에만 로케일을 격리 지정하는 쪽을 우선 검토하세요 — 전역 고정은 그 결함과 무관한
+  모든 테스트에 부작용을 퍼뜨립니다. (라이브 환경 자동화 실패가 로케일/데이터 의존 진짜 버그일 수 있다는
+  원 취지 자체는 유효합니다 — "일단 재시도"로 넘기지 말고 근본원인을 먼저 확인하세요.)
 - Don't hardcode specific product IDs, exact catalog counts, or prices in automation against a live URL —
   the catalog changes underneath you. Navigate to "the first available item in category X" and assert
   structure/format instead (AGENTS.md §20-8).
