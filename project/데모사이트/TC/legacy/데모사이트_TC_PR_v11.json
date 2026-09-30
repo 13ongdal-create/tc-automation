@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PR",
     "moduleName": "이벤트/기획전/쿠폰행사",
-    "version": 12,
+    "version": 11,
     "changeHistory": [
       {
         "version": 1,
@@ -59,11 +59,6 @@
         "version": 11,
         "date": "2026-09-30",
         "summary": "케이스 고도화 3단계(Priority 3): 쿠폰 발급→쿠폰함 반영→결제 적용 End-to-End 신규 TC 3건 추가(TC_PR_11~13). 결제하기 화면 쿠폰 적용은 UI 부재로 [확인필요] 등록(TC_OP_033과 연계)."
-      },
-      {
-        "version": 12,
-        "date": "2026-09-30",
-        "summary": "TC_PR_009: 결과를 Fail→N/T로 정정 — 이 TC 본연의 검증 대상(Admin 대행사관리 목록)과 무관하게 Admin 로그인 결함(DEF_데모사이트_011)에 막혀 재현된 것으로 확인(20-7항). 중복 등록됐던 DEF_035는 DEF_011로 통합."
       }
     ]
   },
@@ -281,13 +276,13 @@
       "steps": "1) Admin 대행사관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 프로모션 대행사 아이디/명/시작일시/종료일시/사용여부/작성자/등록일시 컬럼과 \"등록\" 버튼이 노출된다(현재 0건)",
       "testData": "",
-      "result": "N/T",
+      "result": "Fail",
       "assignee": "",
       "issueSummary": "Admin 대행사관리 > 테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)",
       "issueLink": "",
       "origin": "신규",
       "system": "BO",
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011); 관련 결함: DEF_데모사이트_035",
       "displayNo": 9,
       "tcId": "TC_PR_009",
       "verifyNote": "",

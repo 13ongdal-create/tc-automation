@@ -1013,8 +1013,8 @@
     "module": "구매프로세스",
     "screenName": "Admin 대행사관리",
     "severity": "P3",
-    "status": "신규",
-    "summary": "Admin 대행사관리 > 테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)",
+    "status": "완료",
+    "summary": "Admin 대행사관리 > [DEF_011 중복으로 종결] 테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)",
     "testEnv": "",
     "testSteps": "1) Admin 대행사관리 진입 2) \"조회\" 버튼 클릭",
     "actualResult": "테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)\n콘솔 에러:\n  Failed to load resource: the server responded with a status of 500 ()\n  Failed to load resource: the server responded with a status of 500 ()\n  Failed to load resource: the server responded with a status of 500 ()\n실패 요청:\n  500 http://192.168.10.116:30280/api/v1.0/login\n  500 http://192.168.10.116:30280/api/v1.0/login\n  500 http://192.168.10.116:30280/api/v1.0/login\nTest timeout of 30000ms exceeded.",
@@ -1030,6 +1030,11 @@
         "at": "2026-09-30",
         "status": "신규",
         "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      },
+      {
+        "at": "2026-09-30",
+        "status": "완료",
+        "note": "동일 시그니처(POST /api/v1.0/login 500)로 이미 등록된 DEF_데모사이트_011(Admin 로그인 ko-KR 로케일 결함)과 근본원인이 같음을 확인 — 테스트 실행 큐 자동 등록 로직이 tcId 기준으로만 중복을 판정해(DEF_011은 tcId 미지정) 별도 신규 결함으로 잘못 생성됐던 것. 별도 결함으로 유지하지 않고 완료 처리, DEF_011로 통합 관리."
       }
     ]
   }
