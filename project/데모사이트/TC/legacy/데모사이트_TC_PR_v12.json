@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PR",
     "moduleName": "이벤트/기획전/쿠폰행사",
-    "version": 13,
+    "version": 12,
     "changeHistory": [
       {
         "version": 1,
@@ -64,11 +64,6 @@
         "version": 12,
         "date": "2026-09-30",
         "summary": "TC_PR_009: 결과를 Fail→N/T로 정정 — 이 TC 본연의 검증 대상(Admin 대행사관리 목록)과 무관하게 Admin 로그인 결함(DEF_데모사이트_011)에 막혀 재현된 것으로 확인(20-7항). 중복 등록됐던 DEF_035는 DEF_011로 통합."
-      },
-      {
-        "version": 13,
-        "date": "2026-09-30",
-        "summary": "TC_PR_009: N/T→Pass로 정정 — 이 TC는 DEF_011(ko-KR 전용 결함) 자체를 검증하는 TC가 아니라 Admin 대행사관리 화면을 보는 TC인데, ko-KR 격리 조치(전역 locale 고정 해제) 이후에는 더 이상 이 결함에 막히지 않음을 재실행으로 확인(사용자 지적으로 재검토)."
       }
     ]
   },
@@ -286,13 +281,13 @@
       "steps": "1) Admin 대행사관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 프로모션 대행사 아이디/명/시작일시/종료일시/사용여부/작성자/등록일시 컬럼과 \"등록\" 버튼이 노출된다(현재 0건)",
       "testData": "",
-      "result": "Pass",
+      "result": "N/T",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "Admin 대행사관리 > 테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)",
       "issueLink": "",
       "origin": "신규",
       "system": "BO",
-      "remark": "2026-09-30 ko-KR 로케일 격리(전역 locale 고정 해제) 적용 후 재실행 — DEF_데모사이트_011에 막히지 않고 5.1초 만에 정상 Pass 확인",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 9,
       "tcId": "TC_PR_009",
       "verifyNote": "",
