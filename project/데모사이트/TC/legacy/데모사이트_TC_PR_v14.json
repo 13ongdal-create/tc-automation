@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PR",
     "moduleName": "이벤트/기획전/쿠폰행사",
-    "version": 15,
+    "version": 14,
     "changeHistory": [
       {
         "version": 1,
@@ -74,11 +74,6 @@
         "version": 14,
         "date": "2026-09-30",
         "summary": "TC_PR_003, TC_PR_004: DEF_데모사이트_011(Admin 로그인 ko-KR 결함)에 막혀 N/T였던 기능 유형 TC를 미실행으로 초기화 — ko-KR 격리 조치(전역 locale 고정 해제) 이후 더 이상 이 결함에 막히지 않으므로(TC_PR_009 재검증으로 확인) 재실행 대상으로 전환. 실제 Pass/Fail은 다음 테스트 실행 큐 수행 시 반영."
-      },
-      {
-        "version": 15,
-        "date": "2026-09-30",
-        "summary": "TC_PR_001, TC_PR_002, TC_PR_010: DEF_데모사이트_011(Admin 로그인 ko-KR 결함)에 막혀 N/T였던 UI/데이터 유형 TC를 미실행으로 초기화 — ko-KR 격리 조치(전역 locale 고정 해제) 이후 더 이상 이 결함에 막히지 않으므로 재실행 대상으로 전환(직전 배치의 기능 유형 23건과 동일 사유, 사용자 요청으로 범위 확대). 실제 Pass/Fail은 다음 테스트 실행 큐 수행 시 반영."
       }
     ]
   },
@@ -96,7 +91,7 @@
       "steps": "1) Admin 쿠폰관리(/promotion쿠폰(/coupon)) 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 소행사번호/소행사명/행사시작일시/행사종료일시/쿠폰명/쿠폰유형/정액·정률/할인액(률)/최소주문금액 컬럼과 함께 쿠폰 4건이 노출된다(예: \"20% 할인 쿠폰(아우터)\" 정률 20%, 최소주문금액 10,000원)",
       "testData": "",
-      "result": "",
+      "result": "N/T",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -104,7 +99,7 @@
       "system": "BO",
       "displayNo": 1,
       "tcId": "TC_PR_001",
-      "remark": "",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
       "screenName": "Admin 쿠폰관리"
     },
@@ -121,7 +116,7 @@
       "steps": "1) Admin 쿠폰관리(/promotion쿠폰(/coupon)) 진입 2) \"조회\" 버튼 클릭 3) 쿠폰유형 컬럼 확인",
       "expected": "1) 2) 3) 등록된 쿠폰이 상품쿠폰/즉시할인/장바구니쿠폰 유형으로 구분되어 노출된다",
       "testData": "",
-      "result": "",
+      "result": "N/T",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -129,7 +124,7 @@
       "system": "BO",
       "displayNo": 2,
       "tcId": "TC_PR_002",
-      "remark": "",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
       "screenName": "Admin 쿠폰관리"
     },
@@ -321,13 +316,13 @@
       "steps": "1) [BO] Admin 가격할인관리에서 임의 상품에 가격할인 행사 등록\n2) [FO] Front 해당 상품 PDP·카테고리 목록에서 할인가/할인율 배지 확인",
       "expected": "1) 2) Admin에 등록한 할인율이 Front 상품가·배지(예: \"-32%\")에 정확히 반영되어야 함",
       "testData": "-",
-      "result": "",
+      "result": "N/T",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
       "origin": "신규",
       "system": "FO",
-      "remark": "",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "displayNo": 10,
       "tcId": "TC_PR_010",
       "verifyNote": "실제 등록 테스트 미실행 — 현재 Front에 노출 중인 할인 상품들이 이 Admin 화면을 통해 설정된 것인지 배경 확인 필요",
