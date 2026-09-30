@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PR",
     "moduleName": "이벤트/기획전/쿠폰행사",
-    "version": 11,
+    "version": 10,
     "changeHistory": [
       {
         "version": 1,
@@ -54,11 +54,6 @@
         "version": 10,
         "date": "2026-09-29",
         "summary": "screenName(화면명) 컬럼 전체 백필: TC 수행절차(steps) 1단계에 명시된 진입 화면을 근거로 자동/수동 판단해 기재 (헤더/푸터 등 전역 공통 컴포넌트, Front-Admin 교차검증처럼 화면을 하나로 특정할 수 없는 TC는 AGENTS.md 2항 원칙대로 빈 값 유지)."
-      },
-      {
-        "version": 11,
-        "date": "2026-09-30",
-        "summary": "케이스 고도화 3단계(Priority 3): 쿠폰 발급→쿠폰함 반영→결제 적용 End-to-End 신규 TC 3건 추가(TC_PR_11~13). 결제하기 화면 쿠폰 적용은 UI 부재로 [확인필요] 등록(TC_OP_033과 연계)."
       }
     ]
   },
@@ -312,81 +307,6 @@
       "tcId": "TC_PR_010",
       "verifyNote": "실제 등록 테스트 미실행 — 현재 Front에 노출 중인 할인 상품들이 이 Admin 화면을 통해 설정된 것인지 배경 확인 필요",
       "screenName": ""
-    },
-    {
-      "tcId": "TC_PR_011",
-      "majorCategory": "구매프로세스",
-      "midCategory": "쿠폰E2E",
-      "platform": "Web",
-      "baseDoc": "-",
-      "testData": "",
-      "result": "",
-      "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
-      "origin": "신규",
-      "remark": "",
-      "minorCategory": "Admin발급",
-      "type": "기능",
-      "priority": "P2",
-      "system": "BO",
-      "item": "Admin 쿠폰 발급 처리 검증",
-      "precondition": "Admin 로그인 상태, Front 회원(jspark81) 대상 지정 가능",
-      "steps": "1) [BO] Admin 쿠폰관리에서 jspark81 대상 쿠폰 1매 발급 처리",
-      "expected": "발급 처리가 정상 완료되고 발급 내역에 반영된다",
-      "screenName": "Admin 쿠폰관리",
-      "verifyNote": "기존 TC_PR_001~004(쿠폰관리 UI 검증)와 범위 중복 여부 확인 필요",
-      "displayNo": 11
-    },
-    {
-      "tcId": "TC_PR_012",
-      "majorCategory": "구매프로세스",
-      "midCategory": "쿠폰E2E",
-      "platform": "Web",
-      "baseDoc": "-",
-      "testData": "",
-      "result": "",
-      "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
-      "origin": "신규",
-      "remark": "",
-      "minorCategory": "쿠폰함반영",
-      "type": "데이터",
-      "priority": "P1",
-      "system": "FO",
-      "item": "Admin 발급 쿠폰의 Front 마이페이지 쿠폰함 반영 검증",
-      "precondition": "직전 TC에서 jspark81 대상 쿠폰 발급 완료",
-      "steps": "1) [BO] Admin에서 쿠폰 발급 처리\n2) [FO] jspark81 Front 로그인 후 마이페이지 쿠폰함(TC_MY_012) 진입",
-      "expected": "방금 발급한 쿠폰이 마이페이지 쿠폰함에 노출된다",
-      "screenName": "마이페이지 쿠폰",
-      "verifyNote": "TC_PR_005([확인필요] 상태)와 동일 목적 — 이 TC로 대체 검증",
-      "displayNo": 12
-    },
-    {
-      "tcId": "TC_PR_013",
-      "majorCategory": "구매프로세스",
-      "midCategory": "쿠폰E2E",
-      "platform": "Web",
-      "baseDoc": "-",
-      "testData": "",
-      "result": "",
-      "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
-      "origin": "신규",
-      "remark": "",
-      "minorCategory": "결제적용",
-      "type": "기능",
-      "priority": "P3",
-      "system": "FO",
-      "item": "[확인필요] 결제하기 화면 쿠폰 적용 시 할인 금액 반영 검증",
-      "precondition": "Acc_Normal, 사용 가능한 쿠폰 보유, 장바구니에 상품 담겨 있음",
-      "steps": "1) 결제하기(/checkout) 화면 진입\n2) 쿠폰 적용 UI에서 보유 쿠폰 선택",
-      "expected": "[확인필요] 쿠폰 할인이 총 결제 금액에 반영되어야 할 것으로 예상되나, 2026-09-29 관찰 결과 결제하기 화면에 쿠폰 적용 UI 자체가 확인되지 않음(결제수단 선택 UI 부재와 같은 맥락, TC_OP_033 참조) — 재관찰 필요",
-      "screenName": "결제하기",
-      "verifyNote": "[확인필요] 결제하기 화면 쿠폰 적용 UI 존재 여부 재관찰 필요, TC_OP_033과 연계",
-      "displayNo": 13
     }
   ]
 }

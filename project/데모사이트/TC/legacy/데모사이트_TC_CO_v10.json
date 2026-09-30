@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "CO",
     "moduleName": "시스템(공통)",
-    "version": 11,
+    "version": 10,
     "changeHistory": [
       {
         "version": 1,
@@ -54,11 +54,6 @@
         "version": 10,
         "date": "2026-09-29",
         "summary": "screenName(화면명) 컬럼 전체 백필: TC 수행절차(steps) 1단계에 명시된 진입 화면을 근거로 자동/수동 판단해 기재 (헤더/푸터 등 전역 공통 컴포넌트, Front-Admin 교차검증처럼 화면을 하나로 특정할 수 없는 TC는 AGENTS.md 2항 원칙대로 빈 값 유지)."
-      },
-      {
-        "version": 11,
-        "date": "2026-09-30",
-        "summary": "케이스 고도화 3단계(Priority 3): 언어선택 드롭다운 지원 언어 전체 목록 검증 TC 1건 추가(TC_CO_51)."
       }
     ]
   },
@@ -1312,31 +1307,6 @@
       "tcId": "TC_CO_050",
       "verifyNote": "[확인필요] 실제 발송 시 Front 사용자 단말에 반영되는지 여부는 별도 검증 필요",
       "screenName": "Admin PUSH관리"
-    },
-    {
-      "tcId": "TC_CO_051",
-      "majorCategory": "시스템",
-      "midCategory": "언어선택",
-      "minorCategory": "전체목록",
-      "platform": "Web",
-      "type": "UI",
-      "priority": "P3",
-      "item": "언어선택 드롭다운의 지원 언어 전체 목록 검증",
-      "baseDoc": "-",
-      "precondition": "특이 사전조건 없음",
-      "steps": "1) 헤더 \"🇰🇷 한국어\" 버튼 클릭\n2) 드롭다운에 노출되는 전체 언어 목록 확인",
-      "expected": "지원하는 전체 언어 목록(한국어 포함)이 드롭다운에 노출된다 — 기존 TC_CO_001은 드롭다운 노출 여부만 검증, 이 TC는 노출된 전체 목록 자체를 검증",
-      "testData": "",
-      "result": "",
-      "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
-      "system": "FO",
-      "origin": "신규",
-      "displayNo": 51,
-      "remark": "",
-      "verifyNote": "",
-      "screenName": ""
     }
   ]
 }

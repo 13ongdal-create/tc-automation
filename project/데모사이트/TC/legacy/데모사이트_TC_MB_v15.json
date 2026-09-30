@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "MB",
     "moduleName": "회원",
-    "version": 16,
+    "version": 15,
     "changeHistory": [
       {
         "version": 1,
@@ -79,11 +79,6 @@
         "version": 15,
         "date": "2026-09-29",
         "summary": "screenName(화면명) 컬럼 전체 백필: TC 수행절차(steps) 1단계에 명시된 진입 화면을 근거로 자동/수동 판단해 기재 (헤더/푸터 등 전역 공통 컴포넌트, Front-Admin 교차검증처럼 화면을 하나로 특정할 수 없는 TC는 AGENTS.md 2항 원칙대로 빈 값 유지)."
-      },
-      {
-        "version": 16,
-        "date": "2026-09-30",
-        "summary": "케이스 고도화 3단계(Priority 3): 로그인 화면 remember-me 체크박스 신규 TC 2건 추가(TC_MB_54~55). 실제 세션 유지 정책은 미확인이라 [확인필요]로 등록."
       }
     ]
   },
@@ -1412,55 +1407,6 @@
       "tcId": "TC_MB_053",
       "verifyNote": "라벨-상품 매핑 상세 미확인, Front PDP 리뷰 영역에서 라벨 뱃지 UI 자체를 관찰하지 못함",
       "screenName": ""
-    },
-    {
-      "tcId": "TC_MB_054",
-      "majorCategory": "회원",
-      "midCategory": "로그인",
-      "platform": "Web",
-      "baseDoc": "-",
-      "testData": "",
-      "result": "",
-      "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
-      "system": "FO",
-      "origin": "신규",
-      "remark": "",
-      "screenName": "로그인",
-      "minorCategory": "remember-me체크",
-      "type": "기능",
-      "priority": "P3",
-      "item": "[확인필요] remember-me 체크 후 로그인 시 세션 유지 검증",
-      "precondition": "로그인 화면 진입",
-      "steps": "1) \"remember-me\" 체크박스 체크\n2) 아이디/비밀번호 입력 후 로그인",
-      "expected": "[확인필요] 체크 시 세션 유지 기간이 연장되어야 할 것으로 예상되나, 실제 유지 기간·쿠키 정책이 확인되지 않아 재관찰 필요",
-      "verifyNote": "[확인필요] remember-me 체크 시 실제 세션/쿠키 유지 정책 확인 필요",
-      "displayNo": 54
-    },
-    {
-      "tcId": "TC_MB_055",
-      "majorCategory": "회원",
-      "midCategory": "로그인",
-      "platform": "Web",
-      "baseDoc": "-",
-      "testData": "",
-      "result": "",
-      "assignee": "",
-      "issueSummary": "",
-      "issueLink": "",
-      "system": "FO",
-      "origin": "신규",
-      "remark": "",
-      "screenName": "로그인",
-      "minorCategory": "remember-me미체크",
-      "type": "기능",
-      "priority": "P3",
-      "item": "remember-me 미체크 상태 기본 로그인 동작 검증",
-      "precondition": "로그인 화면 진입",
-      "steps": "1) \"remember-me\" 체크박스를 체크하지 않은 상태로 아이디/비밀번호 입력 후 로그인",
-      "expected": "체크박스 상태와 무관하게 로그인 자체는 정상 처리된다",
-      "displayNo": 55
     }
   ]
 }
