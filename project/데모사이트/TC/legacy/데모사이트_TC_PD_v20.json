@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PD",
     "moduleName": "상품전시(+전시)",
-    "version": 21,
+    "version": 20,
     "changeHistory": [
       {
         "version": 1,
@@ -104,11 +104,6 @@
         "version": 20,
         "date": "2026-09-30",
         "summary": "TC_PD_148: 검색 결과 0건 Empty State 미노출을 결함(DEF_데모사이트_033)으로 정식 등록, [확인필요] 해제."
-      },
-      {
-        "version": 21,
-        "date": "2026-09-30",
-        "summary": "TC_PD_133, TC_PD_135, TC_PD_137, TC_PD_141: DEF_데모사이트_011(Admin 로그인 ko-KR 결함)에 막혀 N/T였던 기능 유형 TC를 미실행으로 초기화 — ko-KR 격리 조치(전역 locale 고정 해제) 이후 더 이상 이 결함에 막히지 않으므로(TC_PR_009 재검증으로 확인) 재실행 대상으로 전환. 실제 Pass/Fail은 다음 테스트 실행 큐 수행 시 반영."
       }
     ]
   },
@@ -2626,7 +2621,7 @@
       "steps": "1) Admin 상품관리 진입 2) 브랜드 필터에 \"lululemon\" 선택 후 \"조회\" 클릭",
       "expected": "1) 2) 선택한 브랜드의 상품만 목록에 노출된다",
       "testData": "브랜드=lululemon",
-      "result": "",
+      "result": "N/T",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -2634,7 +2629,7 @@
       "system": "BO",
       "displayNo": 101,
       "tcId": "TC_PD_133",
-      "remark": "",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
       "screenName": "Admin 상품관리"
     },
@@ -2676,7 +2671,7 @@
       "steps": "1) Admin 상품관리 진입 2) \"등록\" 버튼 클릭",
       "expected": "1) 2) 상품 신규 등록 화면(폼)으로 이동한다",
       "testData": "",
-      "result": "",
+      "result": "N/T",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -2684,7 +2679,7 @@
       "system": "BO",
       "displayNo": 103,
       "tcId": "TC_PD_135",
-      "remark": "",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
       "screenName": "Admin 상품관리"
     },
@@ -2726,7 +2721,7 @@
       "steps": "1) Admin 전시카테고리관리 진입 2) \"카테고리 등록\" 버튼 클릭",
       "expected": "1) 2) 신규 카테고리 등록을 위한 입력 폼이 노출된다",
       "testData": "",
-      "result": "",
+      "result": "N/T",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -2734,7 +2729,7 @@
       "system": "BO",
       "displayNo": 105,
       "tcId": "TC_PD_137",
-      "remark": "",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
       "screenName": "Admin 전시카테고리관리"
     },
@@ -2826,7 +2821,7 @@
       "steps": "1) Admin 전시페이지관리 진입 2) \"페이지 등록\" 버튼 클릭",
       "expected": "1) 2) 신규 페이지 등록을 위한 입력 폼이 노출된다",
       "testData": "",
-      "result": "",
+      "result": "N/T",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -2834,7 +2829,7 @@
       "system": "BO",
       "displayNo": 109,
       "tcId": "TC_PD_141",
-      "remark": "",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
       "screenName": "Admin 전시페이지관리"
     },
