@@ -35,17 +35,16 @@ function escapeRegExp(s) {
 
 /**
  * spec 파일 하나(또는 --grep으로 좁힌 그 안의 일부 tcId들)를 실행합니다.
- * @param {{project:string, specFile:string, tcIds?:string[]|null, headed?:boolean,
+ * @param {{project:string, specFile:string, tcIds?:string[]|null, record?:boolean,
  *          onLog?:(line:string)=>void, onProcess?:(handle:object)=>void}} opts
  */
 function runSpec(opts) {
   return new Promise((resolve, reject) => {
-    const { project, specFile, tcIds, headed, record, onLog, onProcess } = opts;
+    const { project, specFile, tcIds, record, onLog, onProcess } = opts;
     const args = [PLAYWRIGHT_CLI, 'test', '--config', CONFIG_PATH, specFile];
     if (tcIds && tcIds.length) {
       args.push('--grep', `(${tcIds.map(escapeRegExp).join('|')})`);
     }
-    if (headed) args.push('--headed');
 
     const child = spawn(process.execPath, args, {
       cwd: TC_AUTOMATION_ROOT,

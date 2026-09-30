@@ -77,7 +77,6 @@ const el = {
   replayModal: document.getElementById('replayModal'),
   replayList: document.getElementById('replayList'),
   btnCloseReplay: document.getElementById('btnCloseReplay'),
-  tqHeadedNote: document.getElementById('tqHeadedNote'),
   tqPreview: document.getElementById('tqPreview'),
   btnTqStart: document.getElementById('btnTqStart'),
   btnTqCancel: document.getElementById('btnTqCancel'),
@@ -1111,7 +1110,11 @@ function renderTcUploadResult(data) {
     parts.push(`<div class="tur-skip">건너뜀 ${data.skipped.length}건</div><ul class="tur-skip">` + data.skipped.map((s) => `<li>${esc(s.row)} ${esc(s.tcId)} — ${esc(s.reason)}</li>`).join('') + '</ul>');
   }
   if (data.updatedTcIds.length || data.createdTcIds.length) {
-    parts.push('<div class="placeholder-text">※ TC JSON은 즉시 반영됐지만, 편집 가능한 TC 뷰어(HTML)는 이 업로드로 자동 갱신되지 않습니다 — 채팅에서 "뷰어 갱신해줘"라고 요청해주세요.</div>');
+    if (data.viewerRefresh && data.viewerRefresh.started) {
+      parts.push('<div class="placeholder-text">※ TC JSON은 즉시 반영됐고, 편집 가능한 TC 뷰어(HTML) 재생성을 채팅(큐돌이)에게 자동으로 요청했습니다 — 하단 채팅 패널에서 진행상황을 확인하세요.</div>');
+    } else if (data.viewerRefresh) {
+      parts.push(`<div class="placeholder-text tur-warn">※ TC JSON은 즉시 반영됐지만, 뷰어 자동 갱신 요청은 보내지 못했습니다(${esc(data.viewerRefresh.reason)}) — 채팅에서 직접 "뷰어 갱신해줘"라고 요청해주세요.</div>`);
+    }
   }
   el.tcUploadResult.innerHTML = parts.join('');
   el.tcUploadResult.hidden = false;
@@ -1266,12 +1269,6 @@ async function refreshTqPreview() {
 
 el.tqModule.addEventListener('change', refreshTqPreview);
 el.tqSystem.addEventListener('change', refreshTqPreview);
-// 대시보드가 Windows 예약 작업(S4U, 상시구동)으로 떠 있으면 세션 0 격리 때문에 headed 모드로
-// 실행해도 브라우저 창이 실제로는 안 보입니다(실측 확인, 2026-09-29) — 옵션 자체를 없애는 대신
-// 고른 즉시 이 제약을 알려줍니다.
-el.tqHeaded.addEventListener('change', () => {
-  el.tqHeadedNote.hidden = el.tqHeaded.value !== '1';
-});
 
 // ── 단계 재생(녹화) 모드: 실행 후 팝업으로 TC별 영상/스크린샷 재생 ─────────────────────────
 let tqReplayItems = [];
@@ -1388,15 +1385,14 @@ el.btnTqStart.addEventListener('click', () => {
   const project = el.projectSelect.value;
   if (!project || tqRunning || !ws || ws.readyState !== WebSocket.OPEN) return;
   const { moduleCodes, system, priority, status } = tqCurrentFilters();
-  const headed = el.tqHeaded.value === '1';
-  const record = el.tqHeaded.value === '2';
+  const record = el.tqHeaded.value === '1';
   tqReplayItems = [];
   el.btnTqReplay.hidden = true;
   el.tqLog.textContent = '';
   el.tqLog.hidden = true;
   el.tqModuleQueue.innerHTML = '';
   tqSetRunning(true);
-  ws.send(JSON.stringify({ type: 'runTests', project, scope: 'filter', moduleCodes, system, priority, status, headed, record }));
+  ws.send(JSON.stringify({ type: 'runTests', project, scope: 'filter', moduleCodes, system, priority, status, record }));
 });
 
 el.btnTqCancel.addEventListener('click', () => {

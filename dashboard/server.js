@@ -319,7 +319,7 @@ wss.on('connection', (ws, req) => {
     }
 
     if (msg.type === 'runTests') {
-      const { project, scope, moduleCodes, tcIds, priority, system, status, headed, record } = msg;
+      const { project, scope, moduleCodes, tcIds, priority, system, status, record } = msg;
       if (!project || !scope) {
         return wsSend(ws, { type: 'queueError', project, error: 'project와 scope가 필요합니다.' });
       }
@@ -362,7 +362,6 @@ wss.on('connection', (ws, req) => {
               project,
               specFile: step.specFile,
               tcIds: step.tcIds,
-              headed: !!headed,
               record: !!record,
               onProcess: (h) => { runState.currentHandle = h; },
               onLog: (line) => wsSend(ws, { type: 'queueLog', project, moduleCode: step.moduleCode, line }),
@@ -483,7 +482,67 @@ app.get('/api/:project/test-queue/modules', (req, res) => {
   res.json({ modules: testQueue.listRunnableModules(req.params.project) });
 });
 
-// TC 엑셀/JSON 업로드 — 이미 등록된 TC를 수정하거나 신규 TC를 추가합니다(zero-token, claude 미사용).
+/** userKey(로그인 세션 토큰)가 일치하는 모든 열린 WS 연결(그 사람이 연 다른 탭 포함)에 보냅니다 —
+ * REST 요청(tc-upload)에는 그 요청 자체의 WS 소켓이 없어서, 채팅 패널과 같은 브로드캐스트가 필요. */
+function wsBroadcast(userKey, payload) {
+  wss.clients.forEach((client) => {
+    if (client.userKey === userKey) wsSend(client, payload);
+  });
+}
+
+/**
+ * TC 업로드 직후 "TC 데이터는 이미 반영됐지만 편집 가능한 뷰어(HTML)는 자동 갱신 안 됨" 간극을
+ * 메우기 위해, 채팅(큐돌이)에게 뷰어 재생성을 자동으로 요청합니다(사용자 요청, 2026-09-29 —
+ * "TC 업로드 시 뷰어도 같이 업데이트되어야"). TC 데이터 자체의 정확성 판단이 아니라 이미 확정된
+ * JSON을 HTML로 옮기는 작업이라 claude 호출이 정당화된다고 판단했습니다(대시보드의 다른 zero-token
+ * 기능들과 달리 이 부분만 예외적으로 토큰을 씀 — 채팅 응답은 백그라운드로 진행되고 이 함수는
+ * 기다리지 않고 바로 반환합니다).
+ */
+function triggerViewerRefresh(project, userKey, modules) {
+  const rk = runKey(project, userKey);
+  if (activeRuns.has(rk)) return { started: false, reason: '이 프로젝트의 채팅 세션이 이미 진행 중입니다.' };
+  if (testQueueRuns.has(project)) return { started: false, reason: '이 프로젝트의 테스트 실행 큐가 진행 중입니다.' };
+
+  const moduleDesc = modules.map((m) => `${m.moduleName}(${m.moduleCode}, v${m.version})`).join(', ');
+  const text =
+    `방금 대시보드의 TC 업로드 기능으로 다음 모듈이 갱신되었습니다: ${moduleDesc}. TC 데이터(JSON)는 ` +
+    `이미 확정 반영된 상태이니, 이 모듈들의 TC 뷰어(HTML)만 최신 데이터 기준으로 재생성해주세요 ` +
+    `(Phase 승인 절차 불필요 — 뷰어 재생성 작업입니다). 이 프로젝트에 모듈이 2개 이상 있으면 ` +
+    `AGENTS.md 10항에 따라 통합(전체) 뷰어도 함께 갱신해주세요.`;
+
+  const session = chatSessions.ensure(project, userKey);
+  const isFirst = !session.sessionId;
+  chatSessions.appendMessage(project, userKey, 'user', text);
+  wsBroadcast(userKey, { type: 'ack', project, text });
+
+  const prompt = chatSessions.buildPrompt(project, text, isFirst);
+  const callbacks = {
+    onProcess: (handle) => activeRuns.set(rk, handle),
+    onStatus: (statusText) => wsBroadcast(userKey, { type: 'status', project, text: statusText }),
+    onIssue: (issueText) => wsBroadcast(userKey, { type: 'issue', project, text: issueText }),
+    allowedTools: CHAT_ALLOWED_TOOLS,
+  };
+
+  (async () => {
+    try {
+      const result = isFirst
+        ? await claudeRunner.startSession(prompt, callbacks)
+        : await claudeRunner.resumeSession(session.sessionId, prompt, callbacks);
+      if (result.sessionId) chatSessions.setSessionId(project, userKey, result.sessionId);
+      chatSessions.appendMessage(project, userKey, 'assistant', result.resultText);
+      wsBroadcast(userKey, { type: 'result', project, text: result.resultText, isError: result.isError });
+    } catch (err) {
+      wsBroadcast(userKey, { type: 'error', project, error: err.cancelled ? '중단되었습니다.' : `실행 오류: ${err.message}` });
+    } finally {
+      activeRuns.delete(rk);
+    }
+  })();
+
+  return { started: true };
+}
+
+// TC 엑셀/JSON 업로드 — 이미 등록된 TC를 수정하거나 신규 TC를 추가합니다(zero-token, claude 미사용
+// — 단, 업로드 완료 후 뷰어 재생성 요청은 위 triggerViewerRefresh를 통해 예외적으로 claude를 씀).
 // body: { fileName, dataBase64 } — 프런트에서 File을 base64로 인코딩해 JSON으로 보냄. 형식은
 // fileName 확장자(.xlsx/.json)로 tcUpload.applyUpload가 판단합니다.
 app.post('/api/:project/tc-upload', async (req, res) => {
@@ -497,6 +556,9 @@ app.post('/api/:project/tc-upload', async (req, res) => {
       const sourceLabel = /\.json$/i.test(fileName || '') ? 'JSON' : '엑셀';
       const summary = `${sourceLabel} 업로드 반영 (${fileName || 'uploaded.xlsx'}) — 수정 ${result.updatedTcIds.length}건, 신규 ${result.createdTcIds.length}건`;
       result.git = await gitOps.commitPaths([`project/${project}`], `${project}: ${summary}`);
+
+      const userKey = auth.getCookie(req.headers.cookie, SESSION_COOKIE);
+      result.viewerRefresh = triggerViewerRefresh(project, userKey, result.modules);
     }
     res.json(result);
   } catch (err) {
