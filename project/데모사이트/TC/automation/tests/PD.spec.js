@@ -14,7 +14,7 @@ async function gotoAnyProduct(page) {
   await page.waitForURL('**/products/**');
 }
 
-test('TC_PD_001 상품상세 기본 정보(상품명/브랜드/가격/할인율) 노출 검증', async ({ page }) => {
+test('[TC_PD_001][기본정보] 상품상세 기본 정보(상품명/브랜드/가격/할인율) 노출 검증', async ({ page }) => {
   await gotoAnyProduct(page);
   const heading = page.getByRole('heading').first();
   await expect(heading).toBeVisible();
@@ -23,12 +23,12 @@ test('TC_PD_001 상품상세 기본 정보(상품명/브랜드/가격/할인율)
   await expect(page.getByText(/[0-9,]+원/).first()).toBeVisible();
 });
 
-test('TC_PD_002 상품상세 상품코드 표기 형식 검증', async ({ page }) => {
+test('[TC_PD_002][상품코드] 상품상세 상품코드 표기 형식 검증', async ({ page }) => {
   await gotoAnyProduct(page);
   await expect(page.getByText(/상품 코드: PD\d+/)).toBeVisible();
 });
 
-test('TC_PD_003 상품상세 평점 및 리뷰수 노출 검증', async ({ page }) => {
+test('[TC_PD_003][평점/리뷰수] 상품상세 평점 및 리뷰수 노출 검증', async ({ page }) => {
   await gotoAnyProduct(page);
   await expect(page.getByText(/\(\d+\s*리뷰\)/)).toBeVisible();
 });
@@ -95,12 +95,12 @@ test('TC_PD_027 연관 상품 노출 및 이동 검증', async ({ page }) => {
   await page.waitForURL('**/products/**');
 });
 
-test('TC_PD_028 존재하지 않는 상품ID 접근 시 처리 검증', async ({ page }) => {
+test('[TC_PD_028][미존재상품] 존재하지 않는 상품ID 접근 시 처리 검증', async ({ page }) => {
   const res = await page.goto(BASE + '/products/999999', { waitUntil: 'load' });
   expect(res.status()).not.toBe(500);
 });
 
-test('TC_PD_029 상품상세 진입 시 콘솔/네트워크 에러 없음 검증', async ({ page }) => {
+test('[TC_PD_029][콘솔에러] 상품상세 진입 시 콘솔/네트워크 에러 없음 검증', async ({ page }) => {
   const consoleErrors = [];
   const badResponses = [];
   page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
@@ -110,7 +110,7 @@ test('TC_PD_029 상품상세 진입 시 콘솔/네트워크 에러 없음 검증
   expect(badResponses, `4xx/5xx 응답: ${badResponses.join(' | ')}`).toEqual([]);
 });
 
-test('TC_PD_030 브레드크럼 클릭 이동 검증', async ({ page }) => {
+test('[TC_PD_030][브레드크럼] 브레드크럼 클릭 이동 검증', async ({ page }) => {
   await gotoAnyProduct(page);
   // 동일 href를 가진 숨겨진 카테고리 메뉴 링크와 구분하기 위해 #breadcrumbs 영역으로 범위 좁힘 (2026-08-19)
   await page.locator('#breadcrumbs a[href="/categories/110"]').click();
@@ -118,53 +118,53 @@ test('TC_PD_030 브레드크럼 클릭 이동 검증', async ({ page }) => {
   expect(page.url()).toContain('/categories/110');
 });
 
-test('TC_PD_031 카테고리 목록 총 건수 표기 검증', async ({ page }) => {
+test('[TC_PD_031][총건수] 카테고리 목록 총 건수 표기 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   await expect(page.getByText(/총\s*\d+개/)).toBeVisible();
 });
 
-test('TC_PD_038 가격 슬라이더 최소값(0원) 경계값 텍스트 검증', async ({ page }) => {
+test('[TC_PD_038][가격필터] 가격 슬라이더 최소값(0원) 경계값 텍스트 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   await expect(page.getByText('0원')).toBeVisible();
 });
 
-test('TC_PD_039 가격 슬라이더 최대값 경계값 텍스트 검증', async ({ page }) => {
+test('[TC_PD_039][가격필터] 가격 슬라이더 최대값 경계값 텍스트 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   // 카테고리 내 최고가 상품이 바뀌면 최대값도 함께 바뀌므로 정확한 금액 대신 형식만 검증(2026-08-21)
   await expect(page.getByText(/[0-9,]+원/).last()).toBeVisible();
 });
 
-test('TC_PD_042 정렬 "최신순" 옵션 존재 검증', async ({ page }) => {
+test('[TC_PD_042][정렬] 정렬 "최신순" 옵션 존재 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   const sortSelect = page.locator('select').first();
   await sortSelect.selectOption({ label: '최신순' });
 });
 
-test('TC_PD_044 정렬 "낮은가격순" 적용 검증', async ({ page }) => {
+test('[TC_PD_044][정렬] 정렬 "낮은가격순" 적용 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   const sortSelect = page.locator('select').first();
   await sortSelect.selectOption({ label: '낮은가격순' });
   await page.waitForTimeout(500);
 });
 
-test('TC_PD_046 페이지네이션 1→2페이지 이동 검증', async ({ page }) => {
+test('[TC_PD_046][페이지네이션] 페이지네이션 1→2페이지 이동 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   await page.getByRole('button', { name: '2', exact: true }).click();
   await page.waitForTimeout(500);
 });
 
-test('TC_PD_047 페이지네이션 마지막 페이지 경계값 검증', async ({ page }) => {
+test('[TC_PD_047][페이지네이션] 페이지네이션 마지막 페이지 경계값 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   await page.getByRole('button', { name: '4', exact: true }).click();
   await page.waitForTimeout(500);
 });
 
-test('TC_PD_049 여성 카테고리 목록 진입 및 필터 노출 검증', async ({ page }) => {
+test('[TC_PD_049][상태값전개] 여성 카테고리 목록 진입 및 필터 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/111', { waitUntil: 'load' });
   await expect(page.getByRole('heading', { name: '여성' })).toBeVisible();
 });
 
-test('TC_PD_050 액세서리 카테고리 목록 진입 및 필터 노출 검증', async ({ page }) => {
+test('[TC_PD_050][상태값전개] 액세서리 카테고리 목록 진입 및 필터 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/112', { waitUntil: 'load' });
   await expect(page.getByText(/총\s*\d+개/)).toBeVisible();
 });
@@ -481,61 +481,61 @@ test('[TC_PD_131][필터구성] 카테고리별 노출 필터 항목 구성 차�
 });
 
 
-test('TC_PD_092 카테고리 하이라이트 "남자" 배너 이동 검증', async ({ page }) => {
+test('[TC_PD_092][남성배너] 카테고리 하이라이트 "남자" 배너 이동 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await page.locator('a[href="/categories/110"]').first().click();
   await page.waitForURL('**/categories/110');
   expect(page.url()).toContain('/categories/110');
 });
 
-test('TC_PD_093 카테고리 하이라이트 "여자" 배너 이동 검증', async ({ page }) => {
+test('[TC_PD_093][여성배너] 카테고리 하이라이트 "여자" 배너 이동 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await page.locator('a[href="/categories/111"]').first().click();
   await page.waitForURL('**/categories/111');
   expect(page.url()).toContain('/categories/111');
 });
 
-test('TC_PD_094 카테고리 하이라이트 "악세사리" 배너 이동 검증', async ({ page }) => {
+test('[TC_PD_094][악세사리배너] 카테고리 하이라이트 "악세사리" 배너 이동 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await page.locator('a[href="/categories/112"]').first().click();
   await page.waitForURL('**/categories/112');
   expect(page.url()).toContain('/categories/112');
 });
 
-test('TC_PD_102 입점 브랜드 - 내부 링크 브랜드(ZARA) 이동 검증', async ({ page }) => {
+test('[TC_PD_102][내부링크] 입점 브랜드 - 내부 링크 브랜드(ZARA) 이동 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await page.locator('a[href="/display/brand/zara"]').first().click();
   await page.waitForURL('**/display/brand/zara');
   expect(page.url()).toContain('/display/brand/zara');
 });
 
-test('TC_PD_104 브랜드관 히어로 SALE CTA 이동 검증', async ({ page }) => {
+test('[TC_PD_104][SALE CTA] 브랜드관 히어로 SALE CTA 이동 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await page.locator('a[href="/display/hot-deal"]').first().click();
   await page.waitForURL('**/display/hot-deal');
   expect(page.url()).toContain('/display/hot-deal');
 });
 
-test('TC_PD_105 브랜드관 히어로 MD\'s PICK CTA 이동 검증', async ({ page }) => {
+test('[TC_PD_105][MD Pick CTA] 브랜드관 히어로 MD\'s PICK CTA 이동 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await page.locator('a[href="/display/mds-pick"]').first().click();
   await page.waitForURL('**/display/mds-pick');
   expect(page.url()).toContain('/display/mds-pick');
 });
 
-test('TC_PD_106 SALE(hot-deal) 페이지 Empty State 노출 검증', async ({ page }) => {
+test('[TC_PD_106][EmptyState] SALE(hot-deal) 페이지 Empty State 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/display/hot-deal', { waitUntil: 'load' });
   await expect(page.getByText('등록된 컨텐츠가 없습니다')).toBeVisible();
 });
 
-test('TC_PD_114 헤더 로고 클릭 시 메인 이동 검증', async ({ page }) => {
+test('[TC_PD_114][로고] 헤더 로고 클릭 시 메인 이동 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   await page.locator('a[href="/"]').first().click();
   await page.waitForURL(BASE + '/');
   expect(page.url()).toBe(BASE + '/');
 });
 
-test('TC_PD_120 푸터 카피라이트 플레이스홀더 문구 노출 검증', async ({ page }) => {
+test('[TC_PD_120][카피라이트] 푸터 카피라이트 플레이스홀더 문구 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await expect(page.getByText('© 2026 YOUR COMPANY. ALL RIGHTS RESERVED.')).toBeVisible();
 });
@@ -625,14 +625,14 @@ test('[TC_PD_141][Admin전시페이지관리] "페이지 등록" 버튼 클릭 �
 // _shared/testFixtures.js는 이를 무조건 실패로 처리하므로, 메인 페이지를 거치는 TC는 자체 어서션이
 // 통과해도 이 결함 때문에 실패로 보고될 수 있다 — 결과 반영 시 20-7항에 따라 N/T로 처리한다.
 
-test('TC_PD_032 색상 필터(파랑) 적용 검증', async ({ page }) => {
+test('[TC_PD_032][색상필터] 색상 필터(파랑) 적용 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   await page.getByRole('checkbox', { name: '파랑' }).check();
   await page.waitForTimeout(500);
   await expect(page.getByRole('checkbox', { name: '파랑' })).toBeChecked();
 });
 
-test('TC_PD_033 브랜드 필터 전체(7개) 동시 체크 시 처리 검증', async ({ page }) => {
+test('[TC_PD_033][브랜드필터경계] 브랜드 필터 전체(7개) 동시 체크 시 처리 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   // 브랜드명은 CSS text-transform:uppercase로 화면엔 대문자로 보이지만 실제 DOM/접근성 이름은
   // 혼합 대소문자(예: "Lululemon")라 exact 대문자 매칭이 실패함(2026-08-24 확인) — 대소문자 무시 정규식 사용.
@@ -648,13 +648,13 @@ test('TC_PD_033 브랜드 필터 전체(7개) 동시 체크 시 처리 검증', 
   await expect(page.getByText(/총\s*\d+개/)).toBeVisible();
 });
 
-test('TC_PD_034 카테고리 목록 URL 쿼리 파라미터 비정상 값(가격 음수) 주입 시 안전 처리 검증', async ({ page }) => {
+test('[TC_PD_034][보안] 카테고리 목록 URL 쿼리 파라미터 비정상 값(가격 음수) 주입 시 안전 처리 검증', async ({ page }) => {
   const res = await page.goto(BASE + '/categories/110?minPrice=-99999', { waitUntil: 'load' });
   expect(res.status()).not.toBe(500);
   await expect(page.getByText(/총\s*\d+개/)).toBeVisible();
 });
 
-test('TC_PD_035 사이즈 필터 다중 선택(S+M) 조합 검증', async ({ page }) => {
+test('[TC_PD_035][사이즈필터] 사이즈 필터 다중 선택(S+M) 조합 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   // 체크 직후 목록 재조회로 필터 영역이 리렌더링되며 직전 선택이 일시적으로 풀리는 것처럼 보일 수 있어
   // (2026-08-24 확인), 각 체크 사이에 재렌더링이 끝날 시간을 준다.
@@ -666,14 +666,14 @@ test('TC_PD_035 사이즈 필터 다중 선택(S+M) 조합 검증', async ({ pag
   await expect(page.getByRole('checkbox', { name: 'M', exact: true })).toBeChecked();
 });
 
-test('TC_PD_036 스타일 필터(모던) 적용 검증', async ({ page }) => {
+test('[TC_PD_036][스타일필터] 스타일 필터(모던) 적용 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   await page.getByRole('checkbox', { name: '모던' }).check();
   await page.waitForTimeout(500);
   await expect(page.getByRole('checkbox', { name: '모던' })).toBeChecked();
 });
 
-test('TC_PD_037 브랜드 필터 다중 선택(ZARA+H&M) 조합 검증', async ({ page }) => {
+test('[TC_PD_037][브랜드필터] 브랜드 필터 다중 선택(ZARA+H&M) 조합 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   await page.getByRole('checkbox', { name: 'ZARA', exact: true }).check();
   await page.getByRole('checkbox', { name: 'H&M', exact: true }).check();
@@ -682,7 +682,7 @@ test('TC_PD_037 브랜드 필터 다중 선택(ZARA+H&M) 조합 검증', async (
   await expect(page.getByRole('checkbox', { name: 'H&M', exact: true })).toBeChecked();
 });
 
-test('TC_PD_040 색상+사이즈+브랜드 3중 조합 필터 검증', async ({ page }) => {
+test('[TC_PD_040][복합필터] 색상+사이즈+브랜드 3중 조합 필터 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   await page.getByRole('checkbox', { name: '검정' }).check();
   await page.getByRole('checkbox', { name: 'M', exact: true }).check();
@@ -691,7 +691,7 @@ test('TC_PD_040 색상+사이즈+브랜드 3중 조합 필터 검증', async ({ 
   await expect(page.getByText(/총\s*\d+개/)).toBeVisible();
 });
 
-test('TC_PD_041 필터 결과 없음 Empty State 검증', async ({ page }) => {
+test('[TC_PD_041][결과없음] 필터 결과 없음 Empty State 검증', async ({ page }) => {
   await page.goto(BASE + '/categories/110', { waitUntil: 'load' });
   const sliders = page.locator('input[type="range"]');
   // range input의 step=10000 단위에 맞지 않는 값(1000)은 fill 시 "Malformed value" 오류 발생(2026-08-24 확인)
@@ -714,7 +714,7 @@ test('[TC_PD_043][확인필요] 필터 적용 후 정렬 변경 시 필터 조�
   await expect(page.getByRole('checkbox', { name: '파랑' })).toBeChecked();
 });
 
-test('TC_PD_045 정렬 쿼리 파라미터 비정상 값 주입 시 안전 처리 검증', async ({ page }) => {
+test('[TC_PD_045][보안] 정렬 쿼리 파라미터 비정상 값 주입 시 안전 처리 검증', async ({ page }) => {
   let dialogAppeared = false;
   page.on('dialog', async (dialog) => { dialogAppeared = true; await dialog.dismiss(); });
   const res = await page.goto(BASE + '/categories/110?sort=' + encodeURIComponent('<script>alert(1)</script>'), { waitUntil: 'load' });
@@ -739,7 +739,7 @@ function visibleBannerSlide(page) {
   })();
 }
 
-test('TC_PD_086 메인 배너 자동 전환 노출 검증', async ({ page }) => {
+test('[TC_PD_086][배너캐러셀] 메인 배너 자동 전환 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   const first = await visibleBannerSlide(page);
   expect(first).not.toBeNull();
@@ -749,7 +749,7 @@ test('TC_PD_086 메인 배너 자동 전환 노출 검증', async ({ page }) => 
   expect(second).not.toBe(first);
 });
 
-test('TC_PD_087 메인 배너 화살표 수동 전환 검증', async ({ page }) => {
+test('[TC_PD_087][배너캐러셀] 메인 배너 화살표 수동 전환 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   const before = await visibleBannerSlide(page);
   await page.locator('[aria-label*="다음" i]').first().click();
@@ -773,7 +773,7 @@ test('[TC_PD_095][확인필요] 인기 상품 데이터 0건일 경우 섹션 �
   test.skip(true, '현재 인기 상품 데이터가 항상 존재해 0건 상태를 재현할 수 없음(verifyNote) — Admin에서 데이터 제거 후 재검증 필요');
 });
 
-test('TC_PD_096 상품 카드 NEW/BEST/ONLY 배지 조합 노출 검증', async ({ page }) => {
+test('[TC_PD_096][배지조합] 상품 카드 NEW/BEST/ONLY 배지 조합 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   const popularSection = page.getByText('인기 상품').locator('xpath=ancestor::section[1]');
   const cards = popularSection.locator('a[href^="/products/"]');
@@ -786,7 +786,7 @@ test('TC_PD_096 상품 카드 NEW/BEST/ONLY 배지 조합 노출 검증', async 
   expect(found).toBe(true);
 });
 
-test('TC_PD_097 인기 상품 카드 클릭 시 상품상세 이동 검증', async ({ page }) => {
+test('[TC_PD_097][상품카드] 인기 상품 카드 클릭 시 상품상세 이동 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   const popularSection = page.getByText('인기 상품').locator('xpath=ancestor::section[1]');
   await popularSection.locator('a[href^="/products/"]').first().click();
@@ -794,7 +794,7 @@ test('TC_PD_097 인기 상품 카드 클릭 시 상품상세 이동 검증', asy
   await expect(page.getByRole('heading').first()).toBeVisible();
 });
 
-test('TC_PD_098 상품 카드 할인율 표기 계산 정합성 검증', async ({ page }) => {
+test('[TC_PD_098][할인율] 상품 카드 할인율 표기 계산 정합성 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   const popularSection = page.getByText('인기 상품').locator('xpath=ancestor::section[1]');
   const cards = popularSection.locator('a[href^="/products/"]');
@@ -855,7 +855,7 @@ test('[TC_PD_107][확인필요] 헤더 SALE 메뉴 노출과 hot-deal 실데이�
   await expect(page.getByText('등록된 컨텐츠가 없습니다')).not.toBeVisible();
 });
 
-test('TC_PD_108 스타일 매거진 게시물 노출 및 상세 이동 검증', async ({ page }) => {
+test('[TC_PD_108][게시물] 스타일 매거진 게시물 노출 및 상세 이동 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await expect(page.getByText('스타일 매거진')).toBeVisible();
   const card = page.getByText('2026년 최신 아우터 트렌드').first();
@@ -866,14 +866,14 @@ test('TC_PD_108 스타일 매거진 게시물 노출 및 상세 이동 검증', 
   expect(page.url()).not.toBe(before);
 });
 
-test('TC_PD_109 헤더 "전체카테고리" 메뉴 오픈 검증', async ({ page }) => {
+test('[TC_PD_109][전체카테고리] 헤더 "전체카테고리" 메뉴 오픈 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await page.getByText('전체카테고리').first().hover();
   await page.waitForTimeout(300);
   await expect(page.locator('a[href="/categories/110"]').first()).toBeVisible();
 });
 
-test('TC_PD_110 카테고리 메뉴 - 남성 하위(아우터>점퍼, 상의) 노출 검증', async ({ page }) => {
+test('[TC_PD_110][카테고리트리] 카테고리 메뉴 - 남성 하위(아우터>점퍼, 상의) 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await page.getByText('전체카테고리').first().hover();
   await page.waitForTimeout(300);
@@ -881,7 +881,7 @@ test('TC_PD_110 카테고리 메뉴 - 남성 하위(아우터>점퍼, 상의) �
   await expect(page.locator('a[href="/categories/114"]').first()).toBeVisible();
 });
 
-test('TC_PD_111 카테고리 메뉴 - 여성 하위(드레스, 상의) 노출 검증', async ({ page }) => {
+test('[TC_PD_111][카테고리트리] 카테고리 메뉴 - 여성 하위(드레스, 상의) 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await page.getByText('전체카테고리').first().hover();
   await page.waitForTimeout(300);
@@ -889,7 +889,7 @@ test('TC_PD_111 카테고리 메뉴 - 여성 하위(드레스, 상의) 노출 �
   await expect(page.locator('a[href="/categories/117"]').first()).toBeVisible();
 });
 
-test('TC_PD_112 카테고리 메뉴 - 액세서리 하위 노출 검증', async ({ page }) => {
+test('[TC_PD_112][카테고리트리] 카테고리 메뉴 - 액세서리 하위 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await page.getByText('전체카테고리').first().hover();
   await page.waitForTimeout(300);
@@ -939,7 +939,7 @@ test('[TC_PD_119][확인필요] 푸터 "자주하는질문" 링크 이동 검증
   await expect(page.getByRole('link', { name: /자주\S{0,2}질문|FAQ/i })).toBeVisible();
 });
 
-test('TC_PD_121 푸터 결제수단(PayPal) 아이콘 노출 검증', async ({ page }) => {
+test('[TC_PD_121][결제수단] 푸터 결제수단(PayPal) 아이콘 노출 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await expect(page.getByAltText('PayPal')).toBeVisible();
 });
@@ -953,7 +953,7 @@ test('[TC_PD_122][확인필요] 모바일 뷰포트 메인 배너/카테고리 �
   expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 5);
 });
 
-test('TC_PD_123 메인 페이지 Chromium 기준 콘솔 에러 없음 검증', async ({ page }) => {
+test('[TC_PD_123][메인] 메인 페이지 Chromium 기준 콘솔 에러 없음 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await page.waitForTimeout(1000);
   // 배너 3건(DEF_데모사이트_007) 관련 콘솔 에러를 제외한 나머지가 없는지가 이 TC의 취지.
@@ -962,7 +962,7 @@ test('TC_PD_123 메인 페이지 Chromium 기준 콘솔 에러 없음 검증', a
   await expect(page.locator('body')).toBeVisible();
 });
 
-test('TC_PD_124 메인 진입 시 4xx/5xx 응답 없음 회귀 검증', async ({ page }) => {
+test('[TC_PD_124][응답코드] 메인 진입 시 4xx/5xx 응답 없음 회귀 검증', async ({ page }) => {
   await page.goto(BASE + '/', { waitUntil: 'load' });
   await page.waitForTimeout(1000);
   // TC_PD_123과 동일한 사유로 20-7항에 따라 N/T(DEF_데모사이트_007) 처리 대상.
