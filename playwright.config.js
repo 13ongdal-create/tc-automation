@@ -25,9 +25,14 @@ module.exports = defineConfig({
     // 디스크 절약: 녹화 모드에서는 용량이 큰 트레이스를 끄고(영상+스크린샷만), 해상도도 낮춥니다.
     trace: process.env.PW_RECORD === '1' ? 'off' : 'retain-on-failure',
     video: process.env.PW_RECORD === '1' ? { mode: 'on', size: { width: 800, height: 450 } } : 'off',
-    // locale 미지정 시 브라우저 기본 로케일(en-US 등)로 렌더링되어 한국어 사이트가 영어로 표시되는
-    // 경우가 있어 명시적으로 고정 (2026-08-19, 데모사이트 상품상세 테스트에서 발견)
-    locale: 'ko-KR',
+    // [수정 전 2026-09-30] locale: 'ko-KR' 전역 고정 — 2026-08-19 당시 locale 미지정 시 한국어 사이트가
+    // 영어로 표시되는 현상을 발견해 고정했었음. 그러나 이 전역 고정이 Admin 로그인 API의 간헐적
+    // 결함(DEF_데모사이트_011, ko-KR Accept-Language일 때 서버가 500 반환)을 매번 트리거해, DEF_011과
+    // 무관한 Admin 연동 TC 40여 건이 함께 타임아웃/재시도(최대 3회×8~10초)로 지연되는 부작용이 있었음.
+    // 재검증 결과(2026-09-30) locale 미지정 상태에서도 Front/Admin 모두 한국어 UI가 정상 렌더링됨을
+    // 확인(사이트 쪽 변경 또는 최초 발견 당시의 일시적 현상으로 추정) — 전역 고정을 해제하고, DEF_011
+    // 자체를 추적하는 전용 회귀 테스트에서만 locale을 'ko-KR'로 개별 지정하도록 분리함
+    // (CO.spec.js의 "[DEF_011회귀]" 테스트 참조, browser.newContext({ locale: 'ko-KR' })로 격리).
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },

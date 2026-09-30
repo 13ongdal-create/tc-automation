@@ -219,7 +219,7 @@ test('[TC_CO_020][UI] 사이트 다크모드 지원 여부 검증', async ({ pag
 async function adminLogin(page) {
   // 라이브 환경에서 Admin 로그인 API가 간헐적으로 500을 반환하는 현상 확인(2026-08-21) — 최대 3회 재시도
   for (let attempt = 1; attempt <= 3; attempt++) {
-    await page.goto(ADMIN_BASE + '/login', { waitUntil: 'networkidle' });
+    await page.goto(ADMIN_BASE + '/login', { waitUntil: 'load' });
     await page.locator('input[type="text"]').first().fill(ADMIN_ACCOUNT.id);
     await page.locator('input[type="password"]').first().fill(ADMIN_ACCOUNT.pw);
     await page.locator('button:has-text("LOG IN")').click();
@@ -232,6 +232,31 @@ async function adminLogin(page) {
     }
   }
 }
+
+// DEF_데모사이트_011 전용 회귀 확인 — 2026-09-30부로 playwright.config.js의 전역 locale:'ko-KR' 고정을
+// 해제하면서, 이 결함 자체를 계속 추적할 수 있도록 ko-KR 로케일을 이 테스트에만 별도로 지정한다.
+// 다른 Admin 연동 TC는 이제 기본(non-ko-KR) 로케일로 실행되어 이 결함의 영향을 받지 않는다.
+test('[DEF_011회귀][ko-KR로케일] Admin 로그인 ko-KR 로케일 500 재현 여부 검증', async ({ browser }) => {
+  const ctx = await browser.newContext({ locale: 'ko-KR' });
+  const page = await ctx.newPage();
+  let lastStatus = null;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    await page.goto(ADMIN_BASE + '/login', { waitUntil: 'load' });
+    await page.locator('input[type="text"]').first().fill(ADMIN_ACCOUNT.id);
+    await page.locator('input[type="password"]').first().fill(ADMIN_ACCOUNT.pw);
+    const [response] = await Promise.all([
+      page.waitForResponse((r) => r.url().includes('/api/v1.0/login')),
+      page.locator('button:has-text("LOG IN")').click(),
+    ]);
+    lastStatus = response.status();
+    if (lastStatus === 200) break;
+    await page.waitForTimeout(1500);
+  }
+  await ctx.close();
+  // 간헐적 결함(DEF_데모사이트_011) — 200이면 미재현(정상), 500이 계속되면 재현(결함 활성) 상태를
+  // 그대로 반영한다. 결함이 해결될 때까지는 이 TC가 Fail로 남는 것이 정상(20-7항 "결함 확인용 TC").
+  expect(lastStatus, `Admin 로그인(ko-KR) 3회 시도 최종 응답 상태코드`).toBe(200);
+});
 
 test('[TC_CO_021][워크플로우관리] 목록 컬럼 노출 검증', async ({ page }) => {
   await adminLogin(page);
