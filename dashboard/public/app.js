@@ -77,6 +77,8 @@ const el = {
   replayModal: document.getElementById('replayModal'),
   replayList: document.getElementById('replayList'),
   btnCloseReplay: document.getElementById('btnCloseReplay'),
+  replayStatusPills: document.getElementById('replayStatusPills'),
+  replayTcSearch: document.getElementById('replayTcSearch'),
   tqPreview: document.getElementById('tqPreview'),
   btnTqStart: document.getElementById('btnTqStart'),
   btnTqCancel: document.getElementById('btnTqCancel'),
@@ -1270,18 +1272,43 @@ async function refreshTqPreview() {
 el.tqModule.addEventListener('change', refreshTqPreview);
 el.tqSystem.addEventListener('change', refreshTqPreview);
 
-// ── 단계 재생(녹화) 모드: 실행 후 팝업으로 TC별 영상/스크린샷 재생 ─────────────────────────
+// ── 단계 재생(녹화) 모드: 실행 후 팝업으로 TC별 영상/스크린샷 재생 (상태/TC ID 필터 지원) ──────
 let tqReplayItems = [];
+let replayStatusFilter = '';
 
-function openReplayModal() {
-  if (!tqReplayItems.length) return;
-  el.replayList.innerHTML = tqReplayItems
+const REPLAY_STATUS_LABEL = { passed: 'Pass', failed: 'Fail', timedOut: 'Timeout', skipped: 'Skipped', interrupted: 'Interrupted' };
+
+function replayFilteredItems() {
+  const query = el.replayTcSearch.value.trim().toLowerCase();
+  return tqReplayItems.filter((it) => {
+    if (replayStatusFilter && it.status !== replayStatusFilter) return false;
+    if (query && !it.tcId.toLowerCase().includes(query)) return false;
+    return true;
+  });
+}
+
+function renderReplayStatusPills() {
+  const counts = {};
+  tqReplayItems.forEach((it) => { counts[it.status] = (counts[it.status] || 0) + 1; });
+  const statuses = Object.keys(counts);
+  const pills = [`<button type="button" class="tq-pill-btn${replayStatusFilter === '' ? ' active' : ''}" data-value="">전체 (${tqReplayItems.length})</button>`]
+    .concat(statuses.map((s) => `<button type="button" class="tq-pill-btn${replayStatusFilter === s ? ' active' : ''}" data-value="${esc(s)}">${esc(REPLAY_STATUS_LABEL[s] || s)} (${counts[s]})</button>`));
+  el.replayStatusPills.innerHTML = pills.join('');
+}
+
+function renderReplayList() {
+  const items = replayFilteredItems();
+  if (!items.length) {
+    el.replayList.innerHTML = '<div class="placeholder-text">조건에 맞는 실행 결과가 없습니다.</div>';
+    return;
+  }
+  el.replayList.innerHTML = items
     .map((it) => {
       const shots = it.screenshots.map((u) => `<a href="${esc(u)}" target="_blank" rel="noopener"><img src="${esc(u)}" alt="스크린샷" loading="lazy"></a>`).join('');
-      return `<div class="replay-item">
+      return `<div class="replay-item" id="replay-${esc(it.tcId)}">
         <div class="replay-item-head">
           <span>${esc(it.moduleCode)} · ${esc(it.tcId)}</span>
-          <span class="replay-status-${esc(it.status)}">${esc(it.status)}</span>
+          <span class="replay-status-${esc(it.status)}">${esc(REPLAY_STATUS_LABEL[it.status] || it.status)}</span>
           <span>${esc(it.title)}</span>
         </div>
         ${it.video ? `<video controls preload="metadata" src="${esc(it.video)}"></video>` : '<div class="placeholder-text">녹화된 영상이 없습니다.</div>'}
@@ -1290,6 +1317,14 @@ function openReplayModal() {
       </div>`;
     })
     .join('');
+}
+
+function openReplayModal() {
+  if (!tqReplayItems.length) return;
+  replayStatusFilter = '';
+  el.replayTcSearch.value = '';
+  renderReplayStatusPills();
+  renderReplayList();
   el.replayModal.hidden = false;
 }
 
@@ -1302,6 +1337,14 @@ function closeReplayModal() {
 el.btnTqReplay.addEventListener('click', openReplayModal);
 el.btnCloseReplay.addEventListener('click', closeReplayModal);
 el.replayModal.addEventListener('click', (e) => { if (e.target === el.replayModal) closeReplayModal(); });
+el.replayStatusPills.addEventListener('click', (e) => {
+  const btn = e.target.closest('.tq-pill-btn');
+  if (!btn) return;
+  replayStatusFilter = btn.dataset.value;
+  renderReplayStatusPills();
+  renderReplayList();
+});
+el.replayTcSearch.addEventListener('input', renderReplayList);
 
 function tqSetRunning(running) {
   tqRunning = running;
