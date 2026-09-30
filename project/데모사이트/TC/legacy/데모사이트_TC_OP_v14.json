@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "OP",
     "moduleName": "구매프로세스",
-    "version": 15,
+    "version": 14,
     "changeHistory": [
       {
         "version": 1,
@@ -74,11 +74,6 @@
         "version": 14,
         "date": "2026-09-30",
         "summary": "케이스 고도화 3단계(Priority 3): 결제하기(/checkout) 플로우 신규 TC 14건 추가(TC_OP_23~36) — 배송정보 필수값 검증, 배송요청사항, 금액 정합성, 장바구니 0건 차단 등. 결제수단 UI 부재/전체 결제완료 플로우는 자동화로 미완전 확인되어 [확인필요]로 등록(재관찰 필요)."
-      },
-      {
-        "version": 15,
-        "date": "2026-09-30",
-        "summary": "TC_OP_033: 결제하기 화면 결제수단 선택 UI 부재를 결함(DEF_데모사이트_034)으로 정식 등록."
       }
     ]
   },
@@ -896,7 +891,7 @@
       "issueLink": "",
       "system": "FO",
       "origin": "신규",
-      "remark": "결함으로 확정 등록됨 (관련 결함: DEF_데모사이트_034)",
+      "remark": "",
       "verifyNote": "[확인필요] Front 결제수단 선택 단계 부재가 정책상 의도된 것인지 기획 확인 필요",
       "screenName": "결제하기",
       "minorCategory": "결제수단부재",

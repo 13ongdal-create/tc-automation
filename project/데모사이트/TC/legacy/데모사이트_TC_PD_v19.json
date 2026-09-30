@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PD",
     "moduleName": "상품전시(+전시)",
-    "version": 20,
+    "version": 19,
     "changeHistory": [
       {
         "version": 1,
@@ -99,11 +99,6 @@
         "version": 19,
         "date": "2026-09-30",
         "summary": "케이스 고도화 3단계(Priority 3): PDP 옵션선택+장바구니담기 4건, 검색 4건(0건 Empty State 미노출 결함 후보 포함), 상품상세 탭 전환 4건, 리뷰 영역 5건 신규 추가 (TC_PD_146~162, 총 17건)."
-      },
-      {
-        "version": 20,
-        "date": "2026-09-30",
-        "summary": "TC_PD_148: 검색 결과 0건 Empty State 미노출을 결함(DEF_데모사이트_033)으로 정식 등록, [확인필요] 해제."
       }
     ]
   },
@@ -2995,8 +2990,8 @@
       "issueLink": "",
       "system": "FO",
       "origin": "신규",
-      "remark": "결함으로 확정 등록됨 (관련 결함: DEF_데모사이트_033)",
-      "verifyNote": "",
+      "remark": "",
+      "verifyNote": "[확인필요] 수량 감소 버튼 위치 및 최소값 경계 처리 재관찰 필요",
       "screenName": "상품상세",
       "midCategory": "상품상세",
       "minorCategory": "수량감소",
