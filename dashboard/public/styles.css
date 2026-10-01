@@ -174,12 +174,17 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 
 /* 💬 사이트분석 · TC 생성 채팅 패널 (접기/펼치기 가능, <details>/<summary>) */
 .panel-full{margin-top:18px;}
-/* summary는 ::before 삼각형 마커도 flex 아이템이라 justify-content:space-between을 쓰면
-   제목(h2)이 가운데로 밀림 — flex-start로 왼쪽 그룹(마커+제목)을 유지하고, 상태 뱃지만
-   margin-left:auto로 오른쪽에 붙인다. */
+/* 제목+진행상태를 왼쪽에 묶어두고, 접기/펼치기 삼각형 마커(::before)만 order로 맨 뒤로
+   보낸 뒤 margin-left:auto로 오른쪽 끝까지 밀어낸다 (다른 .pb-collapsible 패턴과 달리
+   이 패널만 마커를 오른쪽에 둠, 사용자 요청). */
 .panel-chat.pb-collapsible > summary.panel-head{justify-content:flex-start;}
-.panel-chat.pb-collapsible > summary.panel-head #chatStatus{margin-left:auto;}
+.panel-chat.pb-collapsible > summary.panel-head::before{order:2;margin-left:auto;margin-right:0;}
 .panel-chat-body{padding-top:4px;}
+
+/* 📋 TC 관리: "+ TC 업로드" 버튼을 제목 바로 옆(좌측 그룹)에 붙이고, 나머지 액션(Full TC 상세
+   보기 등)만 오른쪽 끝으로 민다 (사용자 요청, 채팅 패널과 동일한 배치 패턴). */
+.panel-tc .panel-head{justify-content:flex-start;}
+.panel-tc .panel-head-actions{margin-left:auto;}
 .panel-chat-toolbar{display:flex;justify-content:flex-end;margin-bottom:8px;}
 .panel-chat-toolbar .btn-sm{padding:5px 12px;font-size:12px;}
 .chat-messages{

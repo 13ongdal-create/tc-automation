@@ -111,7 +111,7 @@
   <details class="panel panel-full panel-chat pb-collapsible" id="chatPanel" open>
     <summary class="panel-head">
       <h2>💬 사이트분석 · TC 생성</h2>
-      <span class="panel-sub" id="chatStatus">연결 중…</span>
+      <span class="panel-sub">진행상태 : <span id="chatStatus">연결 중…</span></span>
     </summary>
     <div class="panel-chat-body">
       <div class="panel-chat-toolbar">
@@ -133,11 +133,11 @@
     <div class="table-wrap" id="detailModuleExecTable"><span class="placeholder-text">프로젝트를 선택하세요</span></div>
   </section>
 
-  <section class="panel panel-full">
+  <section class="panel panel-full panel-tc">
     <div class="panel-head">
       <h2>📋 TC 관리</h2>
+      <button type="button" id="btnTcUpload" class="btn btn-outline btn-sm">+ TC 업로드</button>
       <div class="panel-head-actions">
-        <button type="button" id="btnTcUpload" class="btn btn-outline">+ TC 업로드</button>
         <a id="tcDetailLink" class="project-block-link" href="#" target="_blank" rel="noopener" hidden>Full TC 상세 보기 →</a>
       </div>
     </div>
