@@ -91,7 +91,18 @@ const el = {
   btnChatSend: document.getElementById('btnChatSend'),
   btnChatCancel: document.getElementById('btnChatCancel'),
   btnChatReset: document.getElementById('btnChatReset'),
+  chatPanel: document.getElementById('chatPanel'),
 };
+
+// 채팅 패널 접기/펼치기 상태를 기억 (프로젝트 전환/새로고침에도 유지)
+try {
+  if (el.chatPanel) {
+    el.chatPanel.open = localStorage.getItem('chatPanelCollapsed') !== '1';
+    el.chatPanel.addEventListener('toggle', () => {
+      try { localStorage.setItem('chatPanelCollapsed', el.chatPanel.open ? '0' : '1'); } catch {}
+    });
+  }
+} catch {}
 
 let allProjects = [];
 
