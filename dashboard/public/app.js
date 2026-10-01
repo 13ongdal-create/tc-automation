@@ -449,7 +449,9 @@ function renderDefectStatusDonut(kpi) {
   return donutChart(segments, centerHtml, '등록된 결함 없음');
 }
 
-/** 결함현황 ③ — 모듈별 결함 상세 현황 표 */
+/** 결함현황 ③ — 모듈별 결함 상세 현황 표. "기타"는 신규/처리중/완료 외 상태(재검증대기/보류/재발생)
+ * 합계 — 2026-10-01 추가: 이 열이 없으면 상태 열 합이 전체 건수와 어긋나 보이는 문제가 있었음
+ * (defectStore.summary()의 byModule.기타 참조). */
 function renderModuleDefectTable(byModule) {
   if (!byModule || !byModule.length) return '<div class="empty-row">등록된 결함이 없습니다</div>';
   const rowsHtml = byModule
@@ -464,12 +466,13 @@ function renderModuleDefectTable(byModule) {
       <td>${m.신규 || 0}</td>
       <td>${m.처리중 || 0}</td>
       <td>${m.완료 || 0}</td>
+      <td>${m.기타 || 0}</td>
     </tr>`
     )
     .join('');
   return `
     <table class="pb-module-table">
-      <thead><tr><th>모듈</th><th>전체</th><th>Critical</th><th>Major</th><th>Minor</th><th>신규</th><th>처리중</th><th>완료</th></tr></thead>
+      <thead><tr><th>모듈</th><th>전체</th><th>Critical</th><th>Major</th><th>Minor</th><th>신규</th><th>처리중</th><th>완료</th><th>기타</th></tr></thead>
       <tbody>${rowsHtml}</tbody>
     </table>`;
 }
