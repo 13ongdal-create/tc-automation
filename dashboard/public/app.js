@@ -70,8 +70,8 @@ const el = {
   tqStatus: document.getElementById('tqStatus'),
   tqModule: document.getElementById('tqModule'),
   tqSystem: document.getElementById('tqSystem'),
-  tqPriorityPills: document.getElementById('tqPriorityPills'),
-  tqStatusPills: document.getElementById('tqStatusPills'),
+  tqPriority: document.getElementById('tqPriority'),
+  tqStatusFilter: document.getElementById('tqStatusFilter'),
   tqHeaded: document.getElementById('tqHeaded'),
   btnTqReplay: document.getElementById('btnTqReplay'),
   replayModal: document.getElementById('replayModal'),
@@ -1165,21 +1165,6 @@ let tqModules = []; // 현재 프로젝트에서 실행 가능한(자동화 코�
 let tqRunning = false;
 const tqRows = {}; // moduleCode -> 큐 목록의 행 엘리먼트
 
-/** 우선순위/수행상태 필터는 라디오 버튼처럼 하나만 선택되는 pill 그룹입니다 — 현재 선택값(data-value)을 읽고 바꿉니다. */
-function tqPillValue(groupEl) {
-  const active = groupEl.querySelector('.tq-pill-btn.active');
-  return active ? active.dataset.value : '';
-}
-function tqWirePillGroup(groupEl) {
-  groupEl.addEventListener('click', (e) => {
-    const btn = e.target.closest('.tq-pill-btn');
-    if (!btn || btn.disabled || tqRunning) return;
-    groupEl.querySelectorAll('.tq-pill-btn').forEach((b) => b.classList.remove('active'));
-    btn.classList.add('active');
-    refreshTqPreview();
-  });
-}
-
 /**
  * 현재 선택 조합 기준으로 "이 값을 고르면 몇 건인지"(facets)를 반영해, 골라도 0건인 선택지는
  * 비활성화합니다 — 선택 후에야 "대상 없음"을 알게 하지 않고, 고를 수 있는 값만 활성화된 상태로
@@ -1187,28 +1172,21 @@ function tqWirePillGroup(groupEl) {
  */
 function applyTqFacets(facets) {
   if (!facets) return;
-  Array.from(el.tqModule.options).forEach((opt) => {
-    if (!opt.value) return;
-    const f = facets.modules.find((m) => m.value === opt.value);
-    opt.disabled = !!f && f.count === 0;
-  });
-  Array.from(el.tqSystem.options).forEach((opt) => {
-    if (!opt.value) return;
-    const f = facets.systems.find((s) => s.value === opt.value);
-    opt.disabled = !!f && f.count === 0;
-  });
-  const applyPills = (groupEl, list) => {
-    groupEl.querySelectorAll('.tq-pill-btn').forEach((btn) => {
-      if (!btn.dataset.value) return;
-      const f = list.find((x) => x.value === btn.dataset.value);
-      btn.disabled = !!f && f.count === 0;
+  const applySelect = (selectEl, list) => {
+    Array.from(selectEl.options).forEach((opt) => {
+      if (!opt.value) return;
+      const f = list.find((x) => x.value === opt.value);
+      opt.disabled = !!f && f.count === 0;
     });
   };
-  applyPills(el.tqPriorityPills, facets.priorities);
-  applyPills(el.tqStatusPills, facets.statuses);
+  applySelect(el.tqModule, facets.modules);
+  applySelect(el.tqSystem, facets.systems);
+  applySelect(el.tqPriority, facets.priorities);
+  applySelect(el.tqStatusFilter, facets.statuses);
 }
-tqWirePillGroup(el.tqPriorityPills);
-tqWirePillGroup(el.tqStatusPills);
+[el.tqPriority, el.tqStatusFilter].forEach((sel) => {
+  sel.addEventListener('change', () => { if (!tqRunning) refreshTqPreview(); });
+});
 
 async function loadTestQueueModules(project) {
   tqModules = [];
@@ -1228,9 +1206,8 @@ async function loadTestQueueModules(project) {
   }
   el.tqModule.value = '';
   el.tqSystem.value = '';
-  [el.tqPriorityPills, el.tqStatusPills].forEach((g) => {
-    g.querySelectorAll('.tq-pill-btn').forEach((b) => b.classList.toggle('active', b.dataset.value === ''));
-  });
+  el.tqPriority.value = '';
+  el.tqStatusFilter.value = '';
   el.tqModuleQueue.innerHTML = '';
   el.tqLog.hidden = true;
   el.tqLog.textContent = '';
@@ -1242,8 +1219,8 @@ function tqCurrentFilters() {
   return {
     moduleCodes: el.tqModule.value ? [el.tqModule.value] : [],
     system: el.tqSystem.value,
-    priority: tqPillValue(el.tqPriorityPills),
-    status: tqPillValue(el.tqStatusPills),
+    priority: el.tqPriority.value,
+    status: el.tqStatusFilter.value,
   };
 }
 
@@ -1363,6 +1340,8 @@ function tqSetRunning(running) {
   el.btnTqCancel.hidden = !running;
   el.tqModule.disabled = running;
   el.tqSystem.disabled = running;
+  el.tqPriority.disabled = running;
+  el.tqStatusFilter.disabled = running;
   el.tqHeaded.disabled = running;
   el.tqStatus.textContent = running ? '실행 중…' : '대기 중';
   if (!running) refreshTqPreview();

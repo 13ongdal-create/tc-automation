@@ -197,7 +197,7 @@
   <section class="panel panel-full panel-tq">
     <div class="panel-head">
       <h2>▶ 테스트 실행 큐</h2>
-      <span class="panel-sub" id="tqStatus">대기 중</span>
+      <span class="panel-sub">진행상태 : <span id="tqStatus">대기 중</span></span>
     </div>
 
     <div class="tq-filters-row">
@@ -216,25 +216,25 @@
       </div>
 
       <div class="tq-field">
-        <label class="field-label">우선순위</label>
-        <div class="tq-pill-group" id="tqPriorityPills">
-          <button type="button" class="tq-pill-btn active" data-value="">전체</button>
-          <button type="button" class="tq-pill-btn" data-value="P1">P1</button>
-          <button type="button" class="tq-pill-btn" data-value="P2">P2</button>
-          <button type="button" class="tq-pill-btn" data-value="P3">P3</button>
-        </div>
+        <label class="field-label" for="tqPriority">우선순위</label>
+        <select id="tqPriority">
+          <option value="">전체</option>
+          <option value="P1">P1</option>
+          <option value="P2">P2</option>
+          <option value="P3">P3</option>
+        </select>
       </div>
 
       <div class="tq-field">
-        <label class="field-label">수행상태</label>
-        <div class="tq-pill-group" id="tqStatusPills">
-          <button type="button" class="tq-pill-btn active" data-value="">전체</button>
-          <button type="button" class="tq-pill-btn" data-value="none">미수행</button>
-          <button type="button" class="tq-pill-btn" data-value="Pass">Pass</button>
-          <button type="button" class="tq-pill-btn" data-value="Fail">Fail</button>
-          <button type="button" class="tq-pill-btn" data-value="N/A">N/A</button>
-          <button type="button" class="tq-pill-btn" data-value="N/T">N/T</button>
-        </div>
+        <label class="field-label" for="tqStatusFilter">수행상태</label>
+        <select id="tqStatusFilter">
+          <option value="">전체</option>
+          <option value="none">미수행</option>
+          <option value="Pass">Pass</option>
+          <option value="Fail">Fail</option>
+          <option value="N/A">N/A</option>
+          <option value="N/T">N/T</option>
+        </select>
       </div>
 
       <div class="tq-field tq-field-wide">
