@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>데모사이트 상품전시(+전시) 실행결과 스냅샷 (2026-10-01)</title>
+<style>
+  :root{ --bg:#f6f8fa; --panel:#fff; --text:#1f2328; --muted:#656d76; --border:#d0d7de; --accent:#0969da;
+    --p1:#cf222e; --p2:#9a6700; --p3:#0969da; --pass:#1a7f37; --fail:#cf222e; }
+  body{font-family:"Pretendard",sans-serif;background:var(--bg);color:var(--text);margin:0;padding:24px;}
+  h1{font-size:17px;} .sub{font-size:12.5px;color:var(--muted);margin-bottom:16px;}
+  .kpis{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap;}
+  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;min-width:80px;}
+  .kpi .num{font-size:18px;font-weight:700;} .kpi .label{font-size:11.5px;color:var(--muted);}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--panel);}
+  th,td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top;}
+  th{background:var(--bg);text-align:center;}
+  .badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;color:#fff;}
+  .badge.P1{background:var(--p1);} .badge.P2{background:var(--p2);} .badge.P3{background:var(--p3);}
+  .res-Pass{color:var(--pass);font-weight:700;} .res-Fail{color:var(--fail);font-weight:700;}
+  a{color:var(--accent);}
+  .links{margin:10px 0 18px;font-size:12.5px;}
+</style>
+</head>
+<body>
+<h1>데모사이트 · 상품전시(+전시)(PD) 실행결과 스냅샷</h1>
+<div class="sub">실행일 2026-10-01 · 이 페이지는 그 시점의 읽기 전용 스냅샷입니다(수정 불가) — 최신 편집 가능한 뷰어는 아래 링크를 이용하세요.</div>
+<div class="links">
+  <a href="index.html">← 실행 이력 목록</a> ·
+  <a href="../데모사이트_TC_PD.html">최신 TC 뷰어(PD)</a>
+</div>
+<div class="kpis">
+  <div class="kpi"><div class="num">130</div><div class="label">전체</div></div>
+  <div class="kpi"><div class="num">53</div><div class="label">Pass</div></div>
+  <div class="kpi"><div class="num">11</div><div class="label">Fail</div></div>
+  <div class="kpi"><div class="num">4</div><div class="label">N/A</div></div>
+  <div class="kpi"><div class="num">32</div><div class="label">N/T</div></div>
+  <div class="kpi"><div class="num">30</div><div class="label">미실행</div></div>
+</div>
+<table>
+<thead><tr><th>No.</th><th>TC ID</th><th>대분류</th><th>중분류</th><th>화면명</th><th>우선순위</th><th>테스트항목</th><th>실행결과</th><th>이슈내용</th><th>비고</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td><td>TC_PD_001</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P2">P2</span></td>
+<td>상품상세 기본 정보(상품명/브랜드/가격/할인율) 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>2</td><td>TC_PD_002</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P3">P3</span></td>
+<td>상품상세 상품코드 표기 형식 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>3</td><td>TC_PD_003</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P3">P3</span></td>
+<td>상품상세 평점 및 리뷰수 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>4</td><td>TC_PD_028</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P2">P2</span></td>
+<td>존재하지 않는 상품ID 접근 시 처리 검증</td><td class="res-Fail">Fail</td>
+<td>존재하지 않는 상품ID 접근 시 500 에러 발생 (기대: 404/안내 화면)</td><td></td>
+</tr>
+<tr>
+<td>5</td><td>TC_PD_029</td><td>품질·비기능</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P2">P2</span></td>
+<td>상품상세 진입 시 콘솔/네트워크 에러 없음 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>6</td><td>TC_PD_030</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P3">P3</span></td>
+<td>브레드크럼 클릭 이동 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>7</td><td>TC_PD_031</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>카테고리 목록 총 건수 표기 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>8</td><td>TC_PD_032</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>색상 필터(파랑) 적용 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>9</td><td>TC_PD_033</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>브랜드 필터 전체(7개) 동시 체크 시 처리 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>10</td><td>TC_PD_034</td><td>품질·비기능</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>카테고리 목록 URL 쿼리 파라미터 비정상 값(가격 음수) 주입 시 안전 처리 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>11</td><td>TC_PD_035</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>사이즈 필터 다중 선택(S+M) 조합 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>12</td><td>TC_PD_036</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>스타일 필터(모던/올드) 적용 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>13</td><td>TC_PD_037</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>브랜드 필터 다중 선택(ZARA+H&amp;M) 조합 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>14</td><td>TC_PD_038</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>가격 슬라이더 최소값(0원) 경계값 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>15</td><td>TC_PD_039</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>가격 슬라이더 최대값(430,000원) 경계값 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>16</td><td>TC_PD_040</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>색상+사이즈+브랜드 3중 조합 필터 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>17</td><td>TC_PD_041</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>필터 결과 없음 Empty State 검증</td><td class="res-Fail">Fail</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>18</td><td>TC_PD_042</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>정렬 &quot;최신순&quot; 적용 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>19</td><td>TC_PD_043</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>[확인필요] 필터 적용 후 정렬 변경 시 필터 조건 유지 여부 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>20</td><td>TC_PD_044</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>정렬 &quot;낮은가격순&quot; 적용 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>21</td><td>TC_PD_045</td><td>품질·비기능</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>정렬 쿼리 파라미터 비정상 값 주입 시 안전 처리 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>22</td><td>TC_PD_046</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>페이지네이션 1→2페이지 이동 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>23</td><td>TC_PD_047</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>페이지네이션 마지막 페이지 경계값 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>24</td><td>TC_PD_048</td><td>상품</td><td>카테고리목록</td>
+<td>남성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 카테고리 목록 상품 카드 위시리스트 추가 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>25</td><td>TC_PD_049</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>여성 카테고리 목록 진입 및 필터 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>26</td><td>TC_PD_050</td><td>상품</td><td>카테고리목록</td>
+<td>액세서리 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>액세서리 카테고리 목록 진입 및 필터 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>27</td><td>TC_PD_056</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>정렬 &quot;최신순&quot; 적용 시 실제 정렬 결과 데이터 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>28</td><td>TC_PD_057</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>정렬 &quot;이름순&quot; 적용 시 실제 정렬 결과 데이터 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>29</td><td>TC_PD_058</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>정렬 &quot;낮은가격순&quot; 적용 시 실제 정렬 결과 데이터 검증</td><td class="res-Fail">Fail</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>30</td><td>TC_PD_059</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>정렬 &quot;높은가격순&quot; 적용 시 실제 정렬 결과 데이터 검증</td><td class="res-Fail">Fail</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>31</td><td>TC_PD_060</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>색상 필터(파랑) 적용 시 노출 상품 데이터 정합성 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>32</td><td>TC_PD_061</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>사이즈 필터(S+M) 다중 선택 적용 시 노출 상품 데이터 정합성 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>33</td><td>TC_PD_062</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>브랜드 필터(ZARA) 적용 시 노출 상품 데이터 정합성 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>34</td><td>TC_PD_063</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 평점 필터 영역 실제 옵션 노출 여부 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>35</td><td>TC_PD_064</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>가격 슬라이더 최소값(0원) 경계값 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>36</td><td>TC_PD_065</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>가격 슬라이더 최대값(460,000원) 경계값 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>37</td><td>TC_PD_066</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>가격 슬라이더 임의 중간값(230,000원) 구간 적용 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>38</td><td>TC_PD_067</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>필터 적용 후 페이지 이동 시 필터 조건 유지 검증</td><td class="res-Fail">Fail</td>
+<td></td><td> 필터링 결과 건수가 라이브 카탈로그에 따라 변동되어 2페이지 존재를 전제하지 않도록 수정(2026-08-21)</td>
+</tr>
+<tr>
+<td>39</td><td>TC_PD_068</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>페이지네이션 이동 시 목록 중복·누락 없음 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>40</td><td>TC_PD_069</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>다중 필터(브랜드+가격) 조합 적용 시 목록 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>41</td><td>TC_PD_070</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>필터 적용 시 총 건수 표시가 실제 개수와 일치 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>42</td><td>TC_PD_071</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>카테고리 목록 진입 시 카테고리명(&quot;여성&quot;) 타이틀 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>43</td><td>TC_PD_072</td><td>상품</td><td>카테고리목록</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>목록 내 상품 클릭 시 상품상세 정상 진입 및 정보 일치 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>44</td><td>TC_PD_073</td><td>상품</td><td>상품유닛</td>
+<td>여성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>상품유닛 NEW 배지 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>45</td><td>TC_PD_074</td><td>상품</td><td>상품유닛</td>
+<td>여성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>상품유닛 BEST 배지 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>46</td><td>TC_PD_075</td><td>상품</td><td>상품유닛</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>상품유닛 정가+할인가+할인율 동시 표기 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>47</td><td>TC_PD_076</td><td>상품</td><td>상품유닛</td>
+<td>여성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>상품유닛 할인 없는 상품 단독 정가 표기 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>48</td><td>TC_PD_077</td><td>상품</td><td>상품유닛</td>
+<td>여성 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>상품유닛 브랜드명 표기 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>49</td><td>TC_PD_078</td><td>상품</td><td>상품유닛</td>
+<td>품절 상품이 포함된 카테고리 목록</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 품절 상품 카드 표기 및 구매 차단 처리 검증</td><td class="res-N/A">N/A</td>
+<td></td><td>2026-08-24: 자동화 코드가 오늘 관측 범위(/categories/111)에 품절 상품이 없어 test.skip()으로 건너뛴 것을 이전 배치7에서 Fail로 잘못 기록했던 데이터 오류를 N/A로 정정. 결함이 아니라 현재 라이브 카탈로그에 검증 대상(품절 상품)이 없어 판정 불가한 상태 — 품절 상품이 있는 카테고리를 찾으면 재작성 필요.</td>
+</tr>
+<tr>
+<td>50</td><td>TC_PD_079</td><td>상품</td><td>상품유닛</td>
+<td>여성 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>비로그인 상태에서 위시리스트 버튼 클릭 시 처리 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>51</td><td>TC_PD_080</td><td>상품</td><td>상품유닛</td>
+<td></td><td><span class="badge P2">P2</span></td>
+<td>로그인 상태에서 위시리스트 버튼 클릭 시 처리 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>52</td><td>TC_PD_081</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P3">P3</span></td>
+<td>상품 설명 텍스트 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>53</td><td>TC_PD_082</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 리뷰 0건일 때 별점 표시 방식 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>54</td><td>TC_PD_083</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P3">P3</span></td>
+<td>상품상세 페이지 NEW 배지 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>55</td><td>TC_PD_084</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P2">P2</span></td>
+<td>비로그인 상태 위시리스트 버튼 클릭 처리 검증 (상품상세)</td><td class="res-Fail">Fail</td>
+<td>비로그인 상태에서 위시리스트 버튼 클릭 시, /login 페이지 리소스 404 실패</td><td></td>
+</tr>
+<tr>
+<td>56</td><td>TC_PD_085</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P2">P2</span></td>
+<td>로그인 상태 위시리스트 버튼 클릭 처리 검증 (상품상세)</td><td class="res-Fail">Fail</td>
+<td>로그인 페이지(/login) 진입 시 리소스 404 실패</td><td></td>
+</tr>
+<tr>
+<td>57</td><td>TC_PD_086</td><td>전시</td><td>메인배너</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>메인 배너 자동 전환 노출 검증</td><td class="res-Fail">Fail</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>58</td><td>TC_PD_087</td><td>전시</td><td>메인배너</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>메인 배너 화살표 수동 전환 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>59</td><td>TC_PD_088</td><td>전시</td><td>메인배너</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>메인 배너 마지막 슬라이드에서 다음 화살표 클릭 시 순환(loop) 여부 경계 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>60</td><td>TC_PD_092</td><td>전시</td><td>카테고리하이라이트</td>
+<td>메인</td><td><span class="badge P2">P2</span></td>
+<td>카테고리 하이라이트 &quot;남자&quot; 배너 이동 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>61</td><td>TC_PD_093</td><td>전시</td><td>카테고리하이라이트</td>
+<td>메인</td><td><span class="badge P2">P2</span></td>
+<td>카테고리 하이라이트 &quot;여자&quot; 배너 이동 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>62</td><td>TC_PD_094</td><td>전시</td><td>카테고리하이라이트</td>
+<td>메인</td><td><span class="badge P2">P2</span></td>
+<td>카테고리 하이라이트 &quot;악세사리&quot; 배너 이동 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>63</td><td>TC_PD_095</td><td>상품</td><td>인기상품</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 인기 상품 데이터 0건일 경우 섹션 노출 처리 검증</td><td class="res-N/A">N/A</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>64</td><td>TC_PD_096</td><td>전시</td><td>인기상품</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>상품 카드 NEW/BEST/ONLY 배지 조합 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>65</td><td>TC_PD_097</td><td>전시</td><td>인기상품</td>
+<td>메인</td><td><span class="badge P2">P2</span></td>
+<td>인기 상품 카드 클릭 시 상품상세 이동 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>66</td><td>TC_PD_098</td><td>전시</td><td>인기상품</td>
+<td>메인</td><td><span class="badge P1">P1</span></td>
+<td>상품 카드 할인율 표기 계산 정합성 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>67</td><td>TC_PD_099</td><td>품질·비기능</td><td>최신상품</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 최신 상품 개수가 캐러셀 1페이지 노출 개수 미만일 때 레이아웃 검증</td><td class="res-N/A">N/A</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>68</td><td>TC_PD_100</td><td>전시</td><td>최신상품</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 할인 없는 상품 카드의 가격 표기 레이아웃 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>69</td><td>TC_PD_101</td><td>전시</td><td>인기상품</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 비회원 상태 위시리스트 추가 버튼 동작 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_001)</td>
+</tr>
+<tr>
+<td>70</td><td>TC_PD_102</td><td>전시</td><td>입점브랜드</td>
+<td>메인</td><td><span class="badge P2">P2</span></td>
+<td>입점 브랜드 - 내부 링크 브랜드(ZARA) 이동 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>71</td><td>TC_PD_103</td><td>전시</td><td>입점브랜드</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 입점 브랜드 - 외부 링크 브랜드(GUESS) 이동 방식 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>72</td><td>TC_PD_104</td><td>전시</td><td>브랜드관히어로</td>
+<td>브랜드관</td><td><span class="badge P2">P2</span></td>
+<td>브랜드관 히어로 SALE CTA 이동 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>73</td><td>TC_PD_105</td><td>전시</td><td>브랜드관히어로</td>
+<td>브랜드관</td><td><span class="badge P2">P2</span></td>
+<td>브랜드관 히어로 MD's PICK CTA 이동 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>74</td><td>TC_PD_106</td><td>전시</td><td>HotDeal</td>
+<td>SALE(HotDeal)</td><td><span class="badge P2">P2</span></td>
+<td>SALE(hot-deal) 페이지 Empty State 노출 검증</td><td class="res-Fail">Fail</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>75</td><td>TC_PD_107</td><td>전시</td><td>HotDeal</td>
+<td>메인</td><td><span class="badge P1">P1</span></td>
+<td>[확인필요] 헤더 SALE 메뉴 노출과 hot-deal 실데이터 존재 여부 정합성 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>76</td><td>TC_PD_108</td><td>전시</td><td>매거진</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>스타일 매거진 게시물 노출 및 상세 이동 검증</td><td class="res-Fail">Fail</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>77</td><td>TC_PD_109</td><td>전시</td><td>헤더공통</td>
+<td></td><td><span class="badge P2">P2</span></td>
+<td>헤더 &quot;전체카테고리&quot; 메뉴 오픈 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>78</td><td>TC_PD_110</td><td>전시</td><td>헤더공통</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>카테고리 메뉴 - 남성 하위(아우터&gt;점퍼, 상의) 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>79</td><td>TC_PD_111</td><td>전시</td><td>헤더공통</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>카테고리 메뉴 - 여성 하위(드레스, 상의) 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>80</td><td>TC_PD_112</td><td>전시</td><td>헤더공통</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>카테고리 메뉴 - 액세서리 하위 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>81</td><td>TC_PD_113</td><td>전시</td><td>헤더공통</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 헤더 BRAND 드롭다운 placeholder 링크(텍스트1~5) 클릭 검증</td><td class="res-Fail">Fail</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>82</td><td>TC_PD_114</td><td>전시</td><td>헤더공통</td>
+<td></td><td><span class="badge P2">P2</span></td>
+<td>헤더 로고 클릭 시 메인 이동 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>83</td><td>TC_PD_115</td><td>전시</td><td>메타정보</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 메인 페이지 타이틀/메타디스크립션 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>84</td><td>TC_PD_116</td><td>전시</td><td>푸터</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 푸터 &quot;개인정보처리방침&quot; 링크 이동 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_005)</td>
+</tr>
+<tr>
+<td>85</td><td>TC_PD_117</td><td>전시</td><td>푸터</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 푸터 &quot;이용약관&quot; 링크 이동 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_006)</td>
+</tr>
+<tr>
+<td>86</td><td>TC_PD_118</td><td>전시</td><td>푸터</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 푸터 &quot;공지사항&quot; 링크 이동 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>87</td><td>TC_PD_119</td><td>전시</td><td>푸터</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 푸터 &quot;자주하는질문&quot; 링크 이동 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>88</td><td>TC_PD_120</td><td>전시</td><td>푸터</td>
+<td>메인</td><td><span class="badge P2">P2</span></td>
+<td>푸터 카피라이트 문구 노출 검증(플레이스홀더 잔존 결함)</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>89</td><td>TC_PD_121</td><td>전시</td><td>푸터</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>푸터 결제수단(PayPal) 아이콘 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>90</td><td>TC_PD_122</td><td>전시</td><td>반응형</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 모바일 뷰포트 메인 배너/카테고리 레이아웃 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>91</td><td>TC_PD_123</td><td>품질·비기능</td><td>크로스브라우저</td>
+<td>메인</td><td><span class="badge P2">P2</span></td>
+<td>메인 페이지 Chromium 기준 콘솔 에러 없음 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>92</td><td>TC_PD_124</td><td>품질·비기능</td><td>네트워크</td>
+<td>메인</td><td><span class="badge P1">P1</span></td>
+<td>메인 진입 시 4xx/5xx 응답 없음 회귀 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>93</td><td>TC_PD_125</td><td>전시</td><td>이미지로딩</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 초기 로딩 시 이미지 lazy-loading/스켈레톤 UI 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>94</td><td>TC_PD_126</td><td>상품</td><td>카테고리목록</td>
+<td>아우터 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>아우터(113) 카테고리 진입 시 브레드크럼/상품목록 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td>2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).</td>
+</tr>
+<tr>
+<td>95</td><td>TC_PD_127</td><td>상품</td><td>카테고리목록</td>
+<td>상의(남성) 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>상의-남성(114) 카테고리 진입 시 브레드크럼/상품목록 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td>2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).</td>
+</tr>
+<tr>
+<td>96</td><td>TC_PD_128</td><td>상품</td><td>카테고리목록</td>
+<td>드레스 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>드레스(115) 카테고리 진입 시 브레드크럼/상품목록 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td>2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).</td>
+</tr>
+<tr>
+<td>97</td><td>TC_PD_129</td><td>상품</td><td>카테고리목록</td>
+<td>점퍼 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>[확인필요] 점퍼(116) 3단계 브레드크럼(남성&gt;아우터&gt;점퍼) 및 상품목록 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td>2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).</td>
+</tr>
+<tr>
+<td>98</td><td>TC_PD_130</td><td>상품</td><td>카테고리목록</td>
+<td>상의(여성) 카테고리 목록</td><td><span class="badge P2">P2</span></td>
+<td>상의-여성(117) 카테고리 진입 시 브레드크럼/상품목록 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td>2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).</td>
+</tr>
+<tr>
+<td>99</td><td>TC_PD_131</td><td>상품</td><td>카테고리목록</td>
+<td></td><td><span class="badge P2">P2</span></td>
+<td>카테고리별 노출 필터 항목 구성 차이 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>100</td><td>TC_PD_132</td><td>상품</td><td>Admin상품관리</td>
+<td>Admin 상품관리</td><td><span class="badge P1">P1</span></td>
+<td>Admin 상품관리 목록 및 Front 상품 데이터 일치 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>101</td><td>TC_PD_133</td><td>상품</td><td>Admin상품관리</td>
+<td>Admin 상품관리</td><td><span class="badge P2">P2</span></td>
+<td>검색구분/상품코드/브랜드/표준카테고리 필터 조회 동작 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>102</td><td>TC_PD_134</td><td>상품</td><td>Admin상품관리</td>
+<td>Admin 상품관리</td><td><span class="badge P3">P3</span></td>
+<td>판매상태 필터(전체/판매대기/판매중/일시품절/판매종료) 옵션 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>103</td><td>TC_PD_135</td><td>상품</td><td>Admin상품관리</td>
+<td>Admin 상품관리</td><td><span class="badge P2">P2</span></td>
+<td>&quot;등록&quot; 버튼 클릭 시 상품 등록 화면 이동 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>104</td><td>TC_PD_136</td><td>전시</td><td>Admin전시카테고리관리</td>
+<td>Admin 전시카테고리관리</td><td><span class="badge P2">P2</span></td>
+<td>전시카테고리관리 트리 UI 및 기본정보 필드 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>105</td><td>TC_PD_137</td><td>전시</td><td>Admin전시카테고리관리</td>
+<td>Admin 전시카테고리관리</td><td><span class="badge P3">P3</span></td>
+<td>&quot;카테고리 등록&quot; 버튼 클릭 시 신규 카테고리 입력 폼 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>106</td><td>TC_PD_138</td><td>전시</td><td>Admin전시코너관리</td>
+<td>Admin 전시코너관리</td><td><span class="badge P3">P3</span></td>
+<td>전시코너관리 목록 컬럼 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>107</td><td>TC_PD_139</td><td>전시</td><td>Admin전시템플릿관리</td>
+<td>Admin 전시템플릿관리</td><td><span class="badge P3">P3</span></td>
+<td>템플릿 유형 필터(전체/카테고리/페이지) 옵션 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>108</td><td>TC_PD_140</td><td>전시</td><td>Admin전시페이지관리</td>
+<td>Admin 전시페이지관리</td><td><span class="badge P2">P2</span></td>
+<td>전시페이지관리 페이지 트리 및 Front 노출 배너와의 연관성 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>109</td><td>TC_PD_141</td><td>전시</td><td>Admin전시페이지관리</td>
+<td>Admin 전시페이지관리</td><td><span class="badge P3">P3</span></td>
+<td>&quot;페이지 등록&quot; 버튼 클릭 시 신규 페이지 등록 폼 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>110</td><td>TC_PD_142</td><td>상품</td><td>Front-Admin정합성</td>
+<td></td><td><span class="badge P1">P1</span></td>
+<td>[확인필요] Admin 상품 가격·재고·전시여부 변경이 Front PDP·카테고리에 반영되는지 검증</td><td class="res-N/A">N/A</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>111</td><td>TC_PD_143</td><td>전시</td><td>Front-Admin정합성</td>
+<td></td><td><span class="badge P1">P1</span></td>
+<td>Admin 전시카테고리관리 설정값과 Front GNB·카테고리 목록 노출 일치 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>112</td><td>TC_PD_144</td><td>전시</td><td>Front-Admin정합성</td>
+<td></td><td><span class="badge P2">P2</span></td>
+<td>Admin 전시페이지관리 &quot;HOT DEAL&quot; 노드와 Front SALE 페이지 노출 일치 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>113</td><td>TC_PD_145</td><td>전시</td><td>Front-Admin정합성</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>Admin 전시페이지관리 &quot;BRANDS&gt;ZARA/H&amp;M&quot; 노드와 Front 브랜드관 노출 일치 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>146</td><td>TC_PD_146</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P1">P1</span></td>
+<td>옵션(색상/사이즈 등) 선택 시 선택 상태 반영 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>147</td><td>TC_PD_147</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P2">P2</span></td>
+<td>수량 &quot;+&quot; 버튼 클릭 시 수량 반영 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>148</td><td>TC_PD_148</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 수량 &quot;-&quot; 버튼 동작 및 최소값(1) 경계 처리 검증</td><td class="res-none">미실행</td>
+<td></td><td>결함으로 확정 등록됨 (관련 결함: DEF_데모사이트_033)</td>
+</tr>
+<tr>
+<td>149</td><td>TC_PD_149</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P1">P1</span></td>
+<td>&quot;장바구니 담기&quot; 버튼 클릭 시 장바구니 반영 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>150</td><td>TC_PD_150</td><td>상품</td><td>검색</td>
+<td>검색결과</td><td><span class="badge P1">P1</span></td>
+<td>검색어 입력 후 결과 목록 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>151</td><td>TC_PD_151</td><td>상품</td><td>검색</td>
+<td>검색결과</td><td><span class="badge P2">P2</span></td>
+<td>검색 결과 정렬(최신순/이름순/낮은가격순/높은가격순) 동작 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>152</td><td>TC_PD_152</td><td>상품</td><td>검색</td>
+<td>검색결과</td><td><span class="badge P2">P2</span></td>
+<td>[확인필요][결함] 검색 결과 0건 시 Empty State 안내 문구 미노출</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>153</td><td>TC_PD_153</td><td>상품</td><td>검색</td>
+<td>검색결과</td><td><span class="badge P2">P2</span></td>
+<td>검색 결과 내 필터(브랜드/가격/사이즈/평점) 적용 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>154</td><td>TC_PD_154</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P2">P2</span></td>
+<td>&quot;상세정보&quot; 탭 클릭 시 콘텐츠 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>155</td><td>TC_PD_155</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P2">P2</span></td>
+<td>&quot;추가 정보&quot; 탭 클릭 시 콘텐츠 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>156</td><td>TC_PD_156</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P2">P2</span></td>
+<td>&quot;사이즈 &amp; 가이드&quot; 탭 클릭 시 콘텐츠 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>157</td><td>TC_PD_157</td><td>상품</td><td>상품상세</td>
+<td>상품상세</td><td><span class="badge P2">P2</span></td>
+<td>&quot;리뷰&quot; 탭 클릭 시 리뷰 목록 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>158</td><td>TC_PD_158</td><td>상품</td><td>리뷰</td>
+<td>상품상세</td><td><span class="badge P3">P3</span></td>
+<td>리뷰 필터 &quot;전체&quot; 탭 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>159</td><td>TC_PD_159</td><td>상품</td><td>리뷰</td>
+<td>상품상세</td><td><span class="badge P3">P3</span></td>
+<td>리뷰 필터 &quot;사진 리뷰&quot; 선택 시 필터링 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>160</td><td>TC_PD_160</td><td>상품</td><td>리뷰</td>
+<td>상품상세</td><td><span class="badge P3">P3</span></td>
+<td>사이즈 만족도 배지 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>161</td><td>TC_PD_161</td><td>상품</td><td>리뷰</td>
+<td>상품상세</td><td><span class="badge P2">P2</span></td>
+<td>&quot;리뷰 작성&quot; 버튼 클릭 시 작성 화면 진입 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>162</td><td>TC_PD_162</td><td>상품</td><td>리뷰</td>
+<td>상품상세</td><td><span class="badge P3">P3</span></td>
+<td>리뷰 목록 &quot;더보기&quot; 버튼 클릭 시 추가 로드 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

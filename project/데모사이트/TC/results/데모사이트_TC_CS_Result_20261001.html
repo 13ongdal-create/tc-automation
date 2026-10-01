@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>데모사이트 고객센터/정책 실행결과 스냅샷 (2026-10-01)</title>
+<style>
+  :root{ --bg:#f6f8fa; --panel:#fff; --text:#1f2328; --muted:#656d76; --border:#d0d7de; --accent:#0969da;
+    --p1:#cf222e; --p2:#9a6700; --p3:#0969da; --pass:#1a7f37; --fail:#cf222e; }
+  body{font-family:"Pretendard",sans-serif;background:var(--bg);color:var(--text);margin:0;padding:24px;}
+  h1{font-size:17px;} .sub{font-size:12.5px;color:var(--muted);margin-bottom:16px;}
+  .kpis{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap;}
+  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;min-width:80px;}
+  .kpi .num{font-size:18px;font-weight:700;} .kpi .label{font-size:11.5px;color:var(--muted);}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--panel);}
+  th,td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top;}
+  th{background:var(--bg);text-align:center;}
+  .badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;color:#fff;}
+  .badge.P1{background:var(--p1);} .badge.P2{background:var(--p2);} .badge.P3{background:var(--p3);}
+  .res-Pass{color:var(--pass);font-weight:700;} .res-Fail{color:var(--fail);font-weight:700;}
+  a{color:var(--accent);}
+  .links{margin:10px 0 18px;font-size:12.5px;}
+</style>
+</head>
+<body>
+<h1>데모사이트 · 고객센터/정책(CS) 실행결과 스냅샷</h1>
+<div class="sub">실행일 2026-10-01 · 이 페이지는 그 시점의 읽기 전용 스냅샷입니다(수정 불가) — 최신 편집 가능한 뷰어는 아래 링크를 이용하세요.</div>
+<div class="links">
+  <a href="index.html">← 실행 이력 목록</a> ·
+  <a href="../데모사이트_TC_CS.html">최신 TC 뷰어(CS)</a>
+</div>
+<div class="kpis">
+  <div class="kpi"><div class="num">18</div><div class="label">전체</div></div>
+  <div class="kpi"><div class="num">7</div><div class="label">Pass</div></div>
+  <div class="kpi"><div class="num">2</div><div class="label">Fail</div></div>
+  <div class="kpi"><div class="num">0</div><div class="label">N/A</div></div>
+  <div class="kpi"><div class="num">0</div><div class="label">N/T</div></div>
+  <div class="kpi"><div class="num">9</div><div class="label">미실행</div></div>
+</div>
+<table>
+<thead><tr><th>No.</th><th>TC ID</th><th>대분류</th><th>중분류</th><th>화면명</th><th>우선순위</th><th>테스트항목</th><th>실행결과</th><th>이슈내용</th><th>비고</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td><td>TC_CS_001</td><td>고객센터</td><td>공지사항</td>
+<td>공지사항</td><td><span class="badge P3">P3</span></td>
+<td>공지사항 목록 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>2</td><td>TC_CS_002</td><td>고객센터</td><td>공지사항</td>
+<td>공지사항</td><td><span class="badge P3">P3</span></td>
+<td>공지사항 클릭 시 상세 내용 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>3</td><td>TC_CS_003</td><td>고객센터</td><td>FAQ</td>
+<td>FAQ</td><td><span class="badge P3">P3</span></td>
+<td>FAQ 카테고리 탭 전환 동작 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>4</td><td>TC_CS_004</td><td>고객센터</td><td>FAQ</td>
+<td>FAQ</td><td><span class="badge P3">P3</span></td>
+<td>FAQ 검색 기능 동작 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>5</td><td>TC_CS_005</td><td>고객센터</td><td>정책</td>
+<td>고객센터</td><td><span class="badge P1">P1</span></td>
+<td>[확인필요][결함] 개인정보처리방침 페이지 접근 시 404 에러 검증</td><td class="res-Fail">Fail</td>
+<td>고객센터 &gt; 개인정보처리방침(/policy) 접근 시 404 에러 발생</td><td>관련 결함: DEF_데모사이트_005</td>
+</tr>
+<tr>
+<td>6</td><td>TC_CS_006</td><td>고객센터</td><td>정책</td>
+<td>고객센터</td><td><span class="badge P1">P1</span></td>
+<td>[확인필요][결함] 이용약관 페이지 접근 시 404 에러 검증</td><td class="res-Fail">Fail</td>
+<td>고객센터 &gt; 이용약관(/service) 접근 시 404 에러 발생</td><td>관련 결함: DEF_데모사이트_006</td>
+</tr>
+<tr>
+<td>7</td><td>TC_CS_007</td><td>클레임</td><td>Admin클레임리스트</td>
+<td>Admin 클레임리스트</td><td><span class="badge P2">P2</span></td>
+<td>클레임 데이터 없음 시 Empty State 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)</td>
+</tr>
+<tr>
+<td>8</td><td>TC_CS_008</td><td>클레임</td><td>Admin클레임리스트</td>
+<td>Admin 클레임리스트</td><td><span class="badge P3">P3</span></td>
+<td>클레임리스트 목록 컬럼 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)</td>
+</tr>
+<tr>
+<td>9</td><td>TC_CS_009</td><td>클레임</td><td>Admin클레임리스트</td>
+<td>Admin 클레임리스트</td><td><span class="badge P3">P3</span></td>
+<td>클레임상태 필터 옵션(취소신청/취소완료/반품신청/반품완료/배송중지/교환신청/교환완료) 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)</td>
+</tr>
+<tr>
+<td>10</td><td>TC_CS_010</td><td>고객센터</td><td>1:1문의</td>
+<td>마이페이지 1:1문의</td><td><span class="badge P2">P2</span></td>
+<td>1:1문의 목록 진입 및 Empty State 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>11</td><td>TC_CS_011</td><td>고객센터</td><td>1:1문의</td>
+<td>마이페이지 1:1문의</td><td><span class="badge P3">P3</span></td>
+<td>1:1문의 목록 조회기간 필터(오늘/7일/1개월/3개월/6개월) 동작 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>12</td><td>TC_CS_012</td><td>고객센터</td><td>1:1문의</td>
+<td>마이페이지 1:1문의</td><td><span class="badge P2">P2</span></td>
+<td>&quot;문의하기&quot; 버튼 클릭 시 작성 화면 진입 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>13</td><td>TC_CS_013</td><td>고객센터</td><td>1:1문의</td>
+<td>마이페이지 1:1문의</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 1:1문의 작성 필수 항목 미입력 시 제출 차단 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>14</td><td>TC_CS_014</td><td>고객센터</td><td>1:1문의</td>
+<td>마이페이지 1:1문의</td><td><span class="badge P2">P2</span></td>
+<td>1:1문의 정상 작성 후 목록 반영 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>15</td><td>TC_CS_015</td><td>고객센터</td><td>1:1문의</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 1:1문의 답변 등록 후 Front 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>16</td><td>TC_CS_016</td><td>클레임</td><td>클레임신청</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 마이페이지 주문내역 &quot;취소&quot; 신청 버튼 및 플로우 존재 여부 확인</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>17</td><td>TC_CS_017</td><td>클레임</td><td>클레임신청</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 마이페이지 주문내역 &quot;반품&quot; 신청 버튼 및 플로우 존재 여부 확인</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>18</td><td>TC_CS_018</td><td>클레임</td><td>클레임신청</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 마이페이지 주문내역 &quot;교환&quot; 신청 버튼 및 플로우 존재 여부 확인</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

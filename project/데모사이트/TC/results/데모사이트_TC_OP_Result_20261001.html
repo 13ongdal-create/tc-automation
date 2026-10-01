@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>데모사이트 구매프로세스 실행결과 스냅샷 (2026-10-01)</title>
+<style>
+  :root{ --bg:#f6f8fa; --panel:#fff; --text:#1f2328; --muted:#656d76; --border:#d0d7de; --accent:#0969da;
+    --p1:#cf222e; --p2:#9a6700; --p3:#0969da; --pass:#1a7f37; --fail:#cf222e; }
+  body{font-family:"Pretendard",sans-serif;background:var(--bg);color:var(--text);margin:0;padding:24px;}
+  h1{font-size:17px;} .sub{font-size:12.5px;color:var(--muted);margin-bottom:16px;}
+  .kpis{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap;}
+  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;min-width:80px;}
+  .kpi .num{font-size:18px;font-weight:700;} .kpi .label{font-size:11.5px;color:var(--muted);}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--panel);}
+  th,td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top;}
+  th{background:var(--bg);text-align:center;}
+  .badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;color:#fff;}
+  .badge.P1{background:var(--p1);} .badge.P2{background:var(--p2);} .badge.P3{background:var(--p3);}
+  .res-Pass{color:var(--pass);font-weight:700;} .res-Fail{color:var(--fail);font-weight:700;}
+  a{color:var(--accent);}
+  .links{margin:10px 0 18px;font-size:12.5px;}
+</style>
+</head>
+<body>
+<h1>데모사이트 · 구매프로세스(OP) 실행결과 스냅샷</h1>
+<div class="sub">실행일 2026-10-01 · 이 페이지는 그 시점의 읽기 전용 스냅샷입니다(수정 불가) — 최신 편집 가능한 뷰어는 아래 링크를 이용하세요.</div>
+<div class="links">
+  <a href="index.html">← 실행 이력 목록</a> ·
+  <a href="../데모사이트_TC_OP.html">최신 TC 뷰어(OP)</a>
+</div>
+<div class="kpis">
+  <div class="kpi"><div class="num">36</div><div class="label">전체</div></div>
+  <div class="kpi"><div class="num">5</div><div class="label">Pass</div></div>
+  <div class="kpi"><div class="num">0</div><div class="label">Fail</div></div>
+  <div class="kpi"><div class="num">1</div><div class="label">N/A</div></div>
+  <div class="kpi"><div class="num">9</div><div class="label">N/T</div></div>
+  <div class="kpi"><div class="num">21</div><div class="label">미실행</div></div>
+</div>
+<table>
+<thead><tr><th>No.</th><th>TC ID</th><th>대분류</th><th>중분류</th><th>화면명</th><th>우선순위</th><th>테스트항목</th><th>실행결과</th><th>이슈내용</th><th>비고</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td><td>TC_OP_001</td><td>구매프로세스</td><td>장바구니</td>
+<td>장바구니</td><td><span class="badge P2">P2</span></td>
+<td>빈 장바구니 Empty State 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>2</td><td>TC_OP_002</td><td>구매프로세스</td><td>장바구니</td>
+<td>장바구니</td><td><span class="badge P3">P3</span></td>
+<td>빈 장바구니 &quot;계속 쇼핑하기&quot; 버튼 이동 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>3</td><td>TC_OP_003</td><td>구매프로세스</td><td>장바구니</td>
+<td></td><td><span class="badge P1">P1</span></td>
+<td>상품상세 담기 후 장바구니 반영 검증</td><td class="res-Pass">Pass</td>
+<td></td><td>특정 상품ID(/products/99)가 판매종료되어 임의의 상품 기준으로 일반화(2026-08-21)</td>
+</tr>
+<tr>
+<td>4</td><td>TC_OP_004</td><td>구매프로세스</td><td>장바구니</td>
+<td>장바구니</td><td><span class="badge P1">P1</span></td>
+<td>[확인필요] 수량 변경 시 합계 금액 재계산 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)</td>
+</tr>
+<tr>
+<td>5</td><td>TC_OP_005</td><td>구매프로세스</td><td>장바구니</td>
+<td>장바구니</td><td><span class="badge P2">P2</span></td>
+<td>[확인필요] 장바구니 개별 상품 삭제 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)</td>
+</tr>
+<tr>
+<td>6</td><td>TC_OP_006</td><td>구매프로세스</td><td>장바구니</td>
+<td>장바구니</td><td><span class="badge P2">P2</span></td>
+<td>[확인필요] 장바구니 전체 삭제 후 Empty State 복귀 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)</td>
+</tr>
+<tr>
+<td>7</td><td>TC_OP_007</td><td>구매프로세스</td><td>장바구니</td>
+<td>상품상세</td><td><span class="badge P2">P2</span></td>
+<td>[확인필요] 동일 옵션 상품 중복 담기 시 수량 합산 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)</td>
+</tr>
+<tr>
+<td>8</td><td>TC_OP_008</td><td>구매프로세스</td><td>장바구니</td>
+<td></td><td><span class="badge P2">P2</span></td>
+<td>[확인필요] 장바구니 담기 후 헤더 카트 아이콘 뱃지 수량 갱신 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018, DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>9</td><td>TC_OP_009</td><td>구매프로세스</td><td>장바구니</td>
+<td>장바구니</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 장바구니 내 상품 옵션(사이즈) 변경 가능 여부 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)</td>
+</tr>
+<tr>
+<td>10</td><td>TC_OP_010</td><td>구매프로세스</td><td>장바구니</td>
+<td>장바구니</td><td><span class="badge P1">P1</span></td>
+<td>[확인필요] 장바구니 → 주문/결제 진입 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>11</td><td>TC_OP_011</td><td>구매프로세스</td><td>장바구니</td>
+<td></td><td><span class="badge P2">P2</span></td>
+<td>[확인필요] 비회원 장바구니 세션/쿠키 유지 여부 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)</td>
+</tr>
+<tr>
+<td>12</td><td>TC_OP_012</td><td>품질·비기능</td><td>장바구니</td>
+<td>장바구니</td><td><span class="badge P2">P2</span></td>
+<td>장바구니 페이지 콘솔/네트워크 에러 없음 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>13</td><td>TC_OP_013</td><td>구매프로세스</td><td>장바구니</td>
+<td>장바구니</td><td><span class="badge P1">P1</span></td>
+<td>[확인필요] 장바구니 내 품절 상품 노출 및 결제 차단 검증</td><td class="res-N/A">N/A</td>
+<td></td><td>현재 카탈로그에 재현 가능한 품절 상품이 없어 사전조건을 만들 수 없음(2026-08-24) — automation/BACKFILL_ISSUES.md ## OP 참고, 수동 검증 권장</td>
+</tr>
+<tr>
+<td>14</td><td>TC_OP_014</td><td>구매프로세스</td><td>장바구니</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 장바구니 담기 최대 수량 초과 시도 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)</td>
+</tr>
+<tr>
+<td>15</td><td>TC_OP_015</td><td>구매프로세스</td><td>장바구니</td>
+<td>장바구니</td><td><span class="badge P2">P2</span></td>
+<td>[확인필요] 새로고침 후 장바구니 데이터 유지(영속성) 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_005, DEF_데모사이트_006, DEF_데모사이트_018)</td>
+</tr>
+<tr>
+<td>16</td><td>TC_OP_016</td><td>구매프로세스</td><td>Admin주문리스트</td>
+<td>Admin 주문리스트</td><td><span class="badge P1">P1</span></td>
+<td>Admin 주문리스트 목록 및 Front 주문 데이터 일치 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>17</td><td>TC_OP_017</td><td>구매프로세스</td><td>Admin주문리스트</td>
+<td>Admin 주문리스트</td><td><span class="badge P2">P2</span></td>
+<td>주문상태 필터 옵션이 Front 마이페이지 주문상태와 일치하는지 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>18</td><td>TC_OP_018</td><td>구매프로세스</td><td>Admin주문리스트</td>
+<td>Admin 주문리스트</td><td><span class="badge P3">P3</span></td>
+<td>결제수단 필터(카드/간편결제/계좌이체/가상계좌/휴대폰/포인트) 옵션 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>19</td><td>TC_OP_019</td><td>구매프로세스</td><td>Admin주문리스트</td>
+<td>Admin 주문리스트</td><td><span class="badge P3">P3</span></td>
+<td>&quot;초기화&quot; 버튼 클릭 시 검색 필터 초기화 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>20</td><td>TC_OP_020</td><td>구매프로세스</td><td>Admin배송지관리</td>
+<td>Admin 배송지관리</td><td><span class="badge P2">P2</span></td>
+<td>Admin 배송지관리 목록 컬럼 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>21</td><td>TC_OP_021</td><td>구매프로세스</td><td>Front-Admin정합성</td>
+<td></td><td><span class="badge P2">P2</span></td>
+<td>[확인필요] Front 마이페이지 배송지 등록 시 Admin 배송지관리에 반영되는지 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>22</td><td>TC_OP_022</td><td>구매프로세스</td><td>Front-Admin정합성</td>
+<td></td><td><span class="badge P1">P1</span></td>
+<td>[확인필요] Admin 주문상태 변경 시 Front 마이페이지 주문내역 상태 갱신 여부 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>23</td><td>TC_OP_023</td><td>구매프로세스</td><td>결제하기</td>
+<td>결제하기</td><td><span class="badge P1">P1</span></td>
+<td>장바구니 &quot;주문하기&quot; 클릭 시 결제하기 화면 진입 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>24</td><td>TC_OP_024</td><td>구매프로세스</td><td>결제하기</td>
+<td>결제하기</td><td><span class="badge P1">P1</span></td>
+<td>이름 미입력 상태로 &quot;결제하기&quot; 클릭 시 차단 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>25</td><td>TC_OP_025</td><td>구매프로세스</td><td>결제하기</td>
+<td>결제하기</td><td><span class="badge P1">P1</span></td>
+<td>이메일 미입력 상태로 &quot;결제하기&quot; 클릭 시 차단 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>26</td><td>TC_OP_026</td><td>구매프로세스</td><td>결제하기</td>
+<td>결제하기</td><td><span class="badge P1">P1</span></td>
+<td>전화번호 미입력 상태로 &quot;결제하기&quot; 클릭 시 차단 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>27</td><td>TC_OP_027</td><td>구매프로세스</td><td>결제하기</td>
+<td>결제하기</td><td><span class="badge P1">P1</span></td>
+<td>주소(우편번호/상세주소) 미입력 상태로 &quot;결제하기&quot; 클릭 시 차단 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>28</td><td>TC_OP_028</td><td>구매프로세스</td><td>결제하기</td>
+<td>결제하기</td><td><span class="badge P2">P2</span></td>
+<td>&quot;주소 찾기&quot; 버튼 클릭 시 우편번호 검색 팝업 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>29</td><td>TC_OP_029</td><td>구매프로세스</td><td>결제하기</td>
+<td>결제하기</td><td><span class="badge P2">P2</span></td>
+<td>배송요청사항 &quot;부재시 문앞에 놓아주세요&quot; 선택 시 반영 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>30</td><td>TC_OP_030</td><td>구매프로세스</td><td>결제하기</td>
+<td>결제하기</td><td><span class="badge P2">P2</span></td>
+<td>배송요청사항 &quot;배송 전 연락바랍니다&quot; 선택 시 반영 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>31</td><td>TC_OP_031</td><td>구매프로세스</td><td>결제하기</td>
+<td>결제하기</td><td><span class="badge P1">P1</span></td>
+<td>주문 요약 금액 계산 정합성 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>32</td><td>TC_OP_032</td><td>구매프로세스</td><td>결제하기</td>
+<td>결제하기</td><td><span class="badge P3">P3</span></td>
+<td>&quot;상품 보기 (N)&quot; 버튼 클릭 시 주문 상품 상세 펼치기 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>33</td><td>TC_OP_033</td><td>구매프로세스</td><td>결제하기</td>
+<td>결제하기</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 결제하기 화면 결제수단 선택 UI 부재 확인</td><td class="res-none">미실행</td>
+<td></td><td>결함으로 확정 등록됨 (관련 결함: DEF_데모사이트_034)</td>
+</tr>
+<tr>
+<td>34</td><td>TC_OP_034</td><td>구매프로세스</td><td>결제하기</td>
+<td>결제하기</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 필수값 정상 입력 후 결제 완료 처리 및 주문번호 생성 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>35</td><td>TC_OP_035</td><td>구매프로세스</td><td>결제하기</td>
+<td>결제하기</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 결제 완료 후 마이페이지 주문내역 반영 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>36</td><td>TC_OP_036</td><td>구매프로세스</td><td>결제하기</td>
+<td>장바구니</td><td><span class="badge P2">P2</span></td>
+<td>장바구니 전체 미선택 상태에서 &quot;주문하기&quot; 클릭 차단 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

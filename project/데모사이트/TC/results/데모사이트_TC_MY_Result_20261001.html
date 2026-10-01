@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>데모사이트 마이페이지 실행결과 스냅샷 (2026-10-01)</title>
+<style>
+  :root{ --bg:#f6f8fa; --panel:#fff; --text:#1f2328; --muted:#656d76; --border:#d0d7de; --accent:#0969da;
+    --p1:#cf222e; --p2:#9a6700; --p3:#0969da; --pass:#1a7f37; --fail:#cf222e; }
+  body{font-family:"Pretendard",sans-serif;background:var(--bg);color:var(--text);margin:0;padding:24px;}
+  h1{font-size:17px;} .sub{font-size:12.5px;color:var(--muted);margin-bottom:16px;}
+  .kpis{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap;}
+  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;min-width:80px;}
+  .kpi .num{font-size:18px;font-weight:700;} .kpi .label{font-size:11.5px;color:var(--muted);}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--panel);}
+  th,td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top;}
+  th{background:var(--bg);text-align:center;}
+  .badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;color:#fff;}
+  .badge.P1{background:var(--p1);} .badge.P2{background:var(--p2);} .badge.P3{background:var(--p3);}
+  .res-Pass{color:var(--pass);font-weight:700;} .res-Fail{color:var(--fail);font-weight:700;}
+  a{color:var(--accent);}
+  .links{margin:10px 0 18px;font-size:12.5px;}
+</style>
+</head>
+<body>
+<h1>데모사이트 · 마이페이지(MY) 실행결과 스냅샷</h1>
+<div class="sub">실행일 2026-10-01 · 이 페이지는 그 시점의 읽기 전용 스냅샷입니다(수정 불가) — 최신 편집 가능한 뷰어는 아래 링크를 이용하세요.</div>
+<div class="links">
+  <a href="index.html">← 실행 이력 목록</a> ·
+  <a href="../데모사이트_TC_MY.html">최신 TC 뷰어(MY)</a>
+</div>
+<div class="kpis">
+  <div class="kpi"><div class="num">29</div><div class="label">전체</div></div>
+  <div class="kpi"><div class="num">0</div><div class="label">Pass</div></div>
+  <div class="kpi"><div class="num">1</div><div class="label">Fail</div></div>
+  <div class="kpi"><div class="num">0</div><div class="label">N/A</div></div>
+  <div class="kpi"><div class="num">25</div><div class="label">N/T</div></div>
+  <div class="kpi"><div class="num">3</div><div class="label">미실행</div></div>
+</div>
+<table>
+<thead><tr><th>No.</th><th>TC ID</th><th>대분류</th><th>중분류</th><th>화면명</th><th>우선순위</th><th>테스트항목</th><th>실행결과</th><th>이슈내용</th><th>비고</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td><td>TC_MY_001</td><td>회원</td><td>주문내역</td>
+<td>마이페이지 주문내역</td><td><span class="badge P2">P2</span></td>
+<td>주문 내역 없음 시 Empty State 및 &quot;쇼핑하러 가기&quot; 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>2</td><td>TC_MY_002</td><td>회원</td><td>주문내역</td>
+<td>마이페이지 주문내역</td><td><span class="badge P3">P3</span></td>
+<td>조회기간 필터(오늘/7일/1개월/3개월/6개월/전체) 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>3</td><td>TC_MY_003</td><td>회원</td><td>주문내역</td>
+<td>마이페이지 주문내역</td><td><span class="badge P3">P3</span></td>
+<td>주문상태 드롭다운 전체 옵션 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>4</td><td>TC_MY_004</td><td>회원</td><td>주문내역</td>
+<td>마이페이지 주문내역</td><td><span class="badge P3">P3</span></td>
+<td>&quot;쇼핑하러 가기&quot; 버튼 클릭 시 메인 이동 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>5</td><td>TC_MY_005</td><td>회원</td><td>SNS연결설정</td>
+<td>마이페이지 SNS연결설정</td><td><span class="badge P1">P1</span></td>
+<td>[결함] SNS 연결설정 화면 진입 시 카카오/네이버 OAuth 요청 CORS 실패 검증</td><td class="res-Fail">Fail</td>
+<td></td><td>2026-08-21: 500 에러 결함이 재검증 과정에서 CORS 에러로 증상이 바뀐 것을 확인, 내용 갱신</td>
+</tr>
+<tr>
+<td>6</td><td>TC_MY_006</td><td>회원</td><td>위시리스트</td>
+<td>마이페이지 위시리스트</td><td><span class="badge P2">P2</span></td>
+<td>위시리스트 보유 상품 목록 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>7</td><td>TC_MY_007</td><td>회원</td><td>위시리스트</td>
+<td>마이페이지 위시리스트</td><td><span class="badge P2">P2</span></td>
+<td>&quot;전체 삭제&quot; 버튼 클릭 시 위시리스트 비움 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>8</td><td>TC_MY_008</td><td>회원</td><td>위시리스트</td>
+<td>마이페이지 위시리스트</td><td><span class="badge P3">P3</span></td>
+<td>위시리스트 최대 보유 개수(100개) 안내 문구 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>9</td><td>TC_MY_009</td><td>회원</td><td>배송주소록</td>
+<td>마이페이지 배송주소록관리</td><td><span class="badge P2">P2</span></td>
+<td>배송지 미등록 시 Empty State 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>10</td><td>TC_MY_010</td><td>회원</td><td>배송주소록</td>
+<td>마이페이지 배송주소록관리</td><td><span class="badge P2">P2</span></td>
+<td>&quot;새 배송지 등록&quot; 버튼 클릭 시 등록 폼 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>11</td><td>TC_MY_011</td><td>회원</td><td>배송주소록</td>
+<td>마이페이지 배송주소록관리</td><td><span class="badge P3">P3</span></td>
+<td>배송지 최대 등록 개수(5개) 및 기본배송지 자동입력 안내 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>12</td><td>TC_MY_012</td><td>회원</td><td>쿠폰</td>
+<td>마이페이지 쿠폰</td><td><span class="badge P2">P2</span></td>
+<td>보유 쿠폰 없음 시 Empty State 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>13</td><td>TC_MY_013</td><td>회원</td><td>쿠폰</td>
+<td>마이페이지 쿠폰</td><td><span class="badge P3">P3</span></td>
+<td>전체/사용가능/사용완료·만료 탭 전환 동작 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002, DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>14</td><td>TC_MY_014</td><td>회원</td><td>1:1문의</td>
+<td>마이페이지 1:1문의</td><td><span class="badge P2">P2</span></td>
+<td>문의 내역 없음 시 총 건수 및 Empty State 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>15</td><td>TC_MY_015</td><td>회원</td><td>1:1문의</td>
+<td>마이페이지 1:1문의</td><td><span class="badge P2">P2</span></td>
+<td>&quot;문의하기&quot; 버튼 클릭 시 작성 화면 이동 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>16</td><td>TC_MY_016</td><td>회원</td><td>리뷰목록</td>
+<td>마이페이지 리뷰목록</td><td><span class="badge P2">P2</span></td>
+<td>&quot;작성 가능한 리뷰&quot;/&quot;작성한 리뷰&quot; 탭 전환 동작 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>17</td><td>TC_MY_017</td><td>회원</td><td>리뷰목록</td>
+<td>마이페이지 리뷰목록</td><td><span class="badge P3">P3</span></td>
+<td>작성 가능한 리뷰 없음 시 Empty State 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>18</td><td>TC_MY_018</td><td>회원</td><td>개인정보수정</td>
+<td>마이페이지 개인정보수정</td><td><span class="badge P2">P2</span></td>
+<td>개인정보 수정 화면 기본정보 초기값 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>19</td><td>TC_MY_019</td><td>회원</td><td>개인정보수정</td>
+<td>마이페이지 개인정보수정</td><td><span class="badge P1">P1</span></td>
+<td>전화번호/이메일 수정 후 저장 동작 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>20</td><td>TC_MY_020</td><td>회원</td><td>개인정보수정</td>
+<td>마이페이지 개인정보수정</td><td><span class="badge P2">P2</span></td>
+<td>이메일/SMS/PUSH 수신동의 라디오 변경 후 저장 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>21</td><td>TC_MY_021</td><td>회원</td><td>개인정보수정</td>
+<td>마이페이지 개인정보수정</td><td><span class="badge P3">P3</span></td>
+<td>&quot;취소&quot; 버튼 클릭 시 변경사항 미반영 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>22</td><td>TC_MY_022</td><td>회원</td><td>개인정보수정</td>
+<td>마이페이지 개인정보수정</td><td><span class="badge P2">P2</span></td>
+<td>&quot;변경하기&quot; 버튼 클릭 시 비밀번호 변경 폼 노출 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>23</td><td>TC_MY_023</td><td>회원</td><td>회원탈퇴</td>
+<td>마이페이지 회원탈퇴</td><td><span class="badge P2">P2</span></td>
+<td>[확인필요] 비밀번호 미입력 시 &quot;확인&quot; 버튼 클릭 차단 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>24</td><td>TC_MY_024</td><td>회원</td><td>회원탈퇴</td>
+<td>마이페이지 회원탈퇴</td><td><span class="badge P1">P1</span></td>
+<td>[확인필요] 잘못된 비밀번호 입력 시 탈퇴 차단 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>25</td><td>TC_MY_025</td><td>회원</td><td>회원탈퇴</td>
+<td>마이페이지 회원탈퇴</td><td><span class="badge P3">P3</span></td>
+<td>&quot;취소&quot; 버튼 클릭 시 마이페이지 복귀 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>26</td><td>TC_MY_026</td><td>마이페이지</td><td>주문내역</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] Front 마이페이지 주문내역 실제 데이터 반영 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)</td>
+</tr>
+<tr>
+<td>27</td><td>TC_MY_027</td><td>회원</td><td>개인정보수정</td>
+<td>마이페이지 개인정보수정</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 개인정보수정 화면 이름/아이디/생년월일 원본값 노출 확인</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>28</td><td>TC_MY_028</td><td>회원</td><td>개인정보수정</td>
+<td>마이페이지 개인정보수정</td><td><span class="badge P3">P3</span></td>
+<td>개인정보수정 화면 비밀번호 마스킹(&quot;********&quot;) 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>29</td><td>TC_MY_029</td><td>회원</td><td>개인정보수정</td>
+<td>마이페이지 개인정보수정</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 전화번호/이메일 필드 값 미노출 현상 확인</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

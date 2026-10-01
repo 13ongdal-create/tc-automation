@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>데모사이트 시스템(공통) 실행결과 스냅샷 (2026-10-01)</title>
+<style>
+  :root{ --bg:#f6f8fa; --panel:#fff; --text:#1f2328; --muted:#656d76; --border:#d0d7de; --accent:#0969da;
+    --p1:#cf222e; --p2:#9a6700; --p3:#0969da; --pass:#1a7f37; --fail:#cf222e; }
+  body{font-family:"Pretendard",sans-serif;background:var(--bg);color:var(--text);margin:0;padding:24px;}
+  h1{font-size:17px;} .sub{font-size:12.5px;color:var(--muted);margin-bottom:16px;}
+  .kpis{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap;}
+  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;min-width:80px;}
+  .kpi .num{font-size:18px;font-weight:700;} .kpi .label{font-size:11.5px;color:var(--muted);}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--panel);}
+  th,td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top;}
+  th{background:var(--bg);text-align:center;}
+  .badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;color:#fff;}
+  .badge.P1{background:var(--p1);} .badge.P2{background:var(--p2);} .badge.P3{background:var(--p3);}
+  .res-Pass{color:var(--pass);font-weight:700;} .res-Fail{color:var(--fail);font-weight:700;}
+  a{color:var(--accent);}
+  .links{margin:10px 0 18px;font-size:12.5px;}
+</style>
+</head>
+<body>
+<h1>데모사이트 · 시스템(공통)(CO) 실행결과 스냅샷</h1>
+<div class="sub">실행일 2026-10-01 · 이 페이지는 그 시점의 읽기 전용 스냅샷입니다(수정 불가) — 최신 편집 가능한 뷰어는 아래 링크를 이용하세요.</div>
+<div class="links">
+  <a href="index.html">← 실행 이력 목록</a> ·
+  <a href="../데모사이트_TC_CO.html">최신 TC 뷰어(CO)</a>
+</div>
+<div class="kpis">
+  <div class="kpi"><div class="num">51</div><div class="label">전체</div></div>
+  <div class="kpi"><div class="num">7</div><div class="label">Pass</div></div>
+  <div class="kpi"><div class="num">12</div><div class="label">Fail</div></div>
+  <div class="kpi"><div class="num">0</div><div class="label">N/A</div></div>
+  <div class="kpi"><div class="num">1</div><div class="label">N/T</div></div>
+  <div class="kpi"><div class="num">31</div><div class="label">미실행</div></div>
+</div>
+<table>
+<thead><tr><th>No.</th><th>TC ID</th><th>대분류</th><th>중분류</th><th>화면명</th><th>우선순위</th><th>테스트항목</th><th>실행결과</th><th>이슈내용</th><th>비고</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td><td>TC_CO_001</td><td>시스템</td><td>언어선택</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>언어선택 버튼 클릭 시 드롭다운 노출 검증</td><td class="res-Pass">Pass</td>
+<td>시스템 &gt; Failed to load resource: the server responded with a status of 404 (No</td><td>2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_024는 완료 처리).</td>
+</tr>
+<tr>
+<td>2</td><td>TC_CO_002</td><td>시스템</td><td>언어선택</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 언어 전환 시 화면 언어 반영 검증</td><td class="res-Pass">Pass</td>
+<td>시스템 &gt; Failed to load resource: the server responded with a status of 404 (No</td><td>2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_025는 완료 처리).</td>
+</tr>
+<tr>
+<td>3</td><td>TC_CO_003</td><td>시스템</td><td>언어선택</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 언어 전환 후 새로고침 시 선택값 유지 검증</td><td class="res-Pass">Pass</td>
+<td>시스템 &gt; Failed to load resource: the server responded with a status of 404 (No</td><td>2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_026는 완료 처리).</td>
+</tr>
+<tr>
+<td>4</td><td>TC_CO_004</td><td>시스템</td><td>검색</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>헤더 검색 아이콘 클릭 시 검색창 포커스 검증</td><td class="res-Fail">Fail</td>
+<td></td><td>결함 확인용 TC (관련 결함: DEF_데모사이트_021)</td>
+</tr>
+<tr>
+<td>5</td><td>TC_CO_005</td><td>시스템</td><td>이미지검색</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 헤더 이미지검색 아이콘 클릭 시 파일선택 트리거 검증</td><td class="res-Fail">Fail</td>
+<td></td><td>결함 확인용 TC (관련 결함: DEF_데모사이트_020)</td>
+</tr>
+<tr>
+<td>6</td><td>TC_CO_006</td><td>시스템</td><td>이미지검색</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 지원하지 않는 파일 형식 업로드 시 에러 안내 검증</td><td class="res-Fail">Fail</td>
+<td></td><td>결함 확인용 TC (관련 결함: DEF_데모사이트_020)</td>
+</tr>
+<tr>
+<td>7</td><td>TC_CO_007</td><td>시스템</td><td>이미지검색</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 정상 이미지 업로드 후 검색 결과 노출 검증</td><td class="res-Fail">Fail</td>
+<td></td><td>결함 확인용 TC (관련 결함: DEF_데모사이트_020)</td>
+</tr>
+<tr>
+<td>8</td><td>TC_CO_008</td><td>시스템</td><td>헤더</td>
+<td></td><td><span class="badge P2">P2</span></td>
+<td>헤더 장바구니 아이콘 클릭 시 이동 검증</td><td class="res-N/T">N/T</td>
+<td></td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)</td>
+</tr>
+<tr>
+<td>9</td><td>TC_CO_009</td><td>시스템</td><td>헤더</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>헤더 주요 메뉴(카테고리/SALE/MD's PICK/BRAND) 노출 순서 검증</td><td class="res-Fail">Fail</td>
+<td>시스템 &gt; Failed to load resource: the server responded with a status of 404 (No</td><td>2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 헤더 메뉴 구성이 기대결과와 불일치 (관련 결함 DEF_데모사이트_027, 신규 유지).</td>
+</tr>
+<tr>
+<td>10</td><td>TC_CO_010</td><td>시스템</td><td>반응형</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 모바일 뷰포트 헤더 햄버거 메뉴 전환 검증</td><td class="res-Fail">Fail</td>
+<td>시스템 &gt; Failed to load resource: the server responded with a status of 404 (No</td><td>2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 모바일 뷰포트에서 반응형 헤더 전환 미구현 (관련 결함 DEF_데모사이트_028, 신규 유지).</td>
+</tr>
+<tr>
+<td>11</td><td>TC_CO_011</td><td>품질·비기능</td><td>크로스브라우저</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>Chrome 기준 헤더/푸터 레이아웃 검증</td><td class="res-Fail">Fail</td>
+<td>품질·비기능 &gt; Failed to load resource: the server responded with a status of 404 (No</td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_029</td>
+</tr>
+<tr>
+<td>12</td><td>TC_CO_012</td><td>품질·비기능</td><td>네트워크예외</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 네트워크 Offline 전환 시 처리 검증</td><td class="res-Fail">Fail</td>
+<td>품질·비기능 &gt; Failed to load resource: the server responded with a status of 404 (No</td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_030</td>
+</tr>
+<tr>
+<td>13</td><td>TC_CO_013</td><td>품질·비기능</td><td>네트워크예외</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] Slow 3G 환경 이미지 로딩 Skeleton UI 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>14</td><td>TC_CO_014</td><td>시스템</td><td>공통</td>
+<td></td><td><span class="badge P2">P2</span></td>
+<td>미존재 경로 접근 시 404 페이지 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>15</td><td>TC_CO_015</td><td>품질·비기능</td><td>접근성</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>헤더 주요 버튼 키보드 Tab 이동 및 포커스 표시 검증</td><td class="res-Pass">Pass</td>
+<td>품질·비기능 &gt; Failed to load resource: the server responded with a status of 404 (No</td><td>2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_031는 완료 처리).</td>
+</tr>
+<tr>
+<td>16</td><td>TC_CO_016</td><td>품질·비기능</td><td>접근성</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 상품 이미지 alt 속성 누락 여부 검증</td><td class="res-Fail">Fail</td>
+<td></td><td>결함 확인용 TC (관련 결함: DEF_데모사이트_022)</td>
+</tr>
+<tr>
+<td>17</td><td>TC_CO_017</td><td>품질·비기능</td><td>접근성</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요][결함] 배너 이미지 alt 텍스트가 파일명(UUID)으로 노출되는 결함 검증</td><td class="res-Fail">Fail</td>
+<td></td><td>결함 확인용 TC (관련 결함: DEF_데모사이트_022)</td>
+</tr>
+<tr>
+<td>18</td><td>TC_CO_018</td><td>품질·비기능</td><td>전시</td>
+<td>메인</td><td><span class="badge P2">P2</span></td>
+<td>[결함] 브랜드 로고 alt 텍스트 앰퍼샌드 다중 인코딩 오류 검증</td><td class="res-Fail">Fail</td>
+<td></td><td>결함 확인용 TC (관련 결함: DEF_데모사이트_023)</td>
+</tr>
+<tr>
+<td>19</td><td>TC_CO_019</td><td>시스템</td><td>공통</td>
+<td>로그인</td><td><span class="badge P3">P3</span></td>
+<td>로그인 에러 화면 페이지 타이틀 공란 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>20</td><td>TC_CO_020</td><td>시스템</td><td>UI</td>
+<td>메인</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 사이트 다크모드 지원 여부 검증</td><td class="res-Fail">Fail</td>
+<td>전시 &gt; Failed to load resource: the server responded with a status of 404 (No</td><td>2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 강제 다크 컬러스킴 적용해도 배경 미전환 (관련 결함 DEF_데모사이트_032, 신규 유지).</td>
+</tr>
+<tr>
+<td>21</td><td>TC_CO_021</td><td>시스템</td><td>워크플로우관리</td>
+<td>Admin 워크플로우관리</td><td><span class="badge P3">P3</span></td>
+<td>워크플로우 목록 컬럼(ID/명칭/유형코드/설명/사용여부/등록일) 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>22</td><td>TC_CO_022</td><td>시스템</td><td>워크플로우관리</td>
+<td>Admin 워크플로우관리</td><td><span class="badge P3">P3</span></td>
+<td>&quot;신규 등록&quot; 버튼 클릭 시 워크플로우 등록 화면 이동 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>23</td><td>TC_CO_023</td><td>시스템</td><td>모니터링</td>
+<td>Admin 모니터링</td><td><span class="badge P3">P3</span></td>
+<td>진행 중 PO 없음 시 Empty State 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>24</td><td>TC_CO_024</td><td>시스템</td><td>공통코드관리</td>
+<td>Admin 공통코드관리</td><td><span class="badge P3">P3</span></td>
+<td>공통코드유형/대분류코드 필터 조회 동작 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>25</td><td>TC_CO_025</td><td>시스템</td><td>공통코드관리</td>
+<td>Admin 공통코드관리</td><td><span class="badge P3">P3</span></td>
+<td>&quot;신규코드 등록&quot; 버튼 클릭 시 코드 등록 화면 이동 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>26</td><td>TC_CO_026</td><td>시스템</td><td>다국어관리</td>
+<td>Admin 다국어관리</td><td><span class="badge P3">P3</span></td>
+<td>다국어 메시지 목록 컬럼(메시지키/그룹코드/설명/사용여부/작성자/등록일시) 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>27</td><td>TC_CO_027</td><td>시스템</td><td>다국어관리</td>
+<td>Admin 다국어관리</td><td><span class="badge P3">P3</span></td>
+<td>그룹 코드 필터 조회 동작 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>28</td><td>TC_CO_028</td><td>시스템</td><td>프로그램관리</td>
+<td>Admin 프로그램관리</td><td><span class="badge P3">P3</span></td>
+<td>프로그램 목록 없음 시 Empty State 및 권한체크(조회/저장/엑셀/삭제/수정) 컬럼 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>29</td><td>TC_CO_029</td><td>시스템</td><td>메뉴관리</td>
+<td>Admin 메뉴관리</td><td><span class="badge P3">P3</span></td>
+<td>메뉴그룹 트리 및 프로그램 연결(메뉴코드/메뉴아이콘/폴더여부/권한코드) 필드 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>30</td><td>TC_CO_030</td><td>시스템</td><td>화면관리</td>
+<td>Admin 화면관리</td><td><span class="badge P2">P2</span></td>
+<td>Global Theme Customizer 프리셋(8종) 및 저장·적용 동작 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>31</td><td>TC_CO_031</td><td>시스템</td><td>화면관리</td>
+<td>Admin 화면관리</td><td><span class="badge P3">P3</span></td>
+<td>폰트 크기(12~16px)·버튼 스타일(UNDERLINED/CONTAINED/PILL) 등 세부 테마 옵션 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>32</td><td>TC_CO_032</td><td>시스템</td><td>대시보드관리</td>
+<td>Admin 대시보드관리</td><td><span class="badge P3">P3</span></td>
+<td>대시보드 위젯(총 25개) 표시/숨김 토글 및 순서 변경 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>33</td><td>TC_CO_033</td><td>시스템</td><td>대시보드관리</td>
+<td>Admin 대시보드관리</td><td><span class="badge P3">P3</span></td>
+<td>&quot;초기화&quot; 버튼 클릭 시 위젯 설정 기본값 복원 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>34</td><td>TC_CO_034</td><td>시스템</td><td>권한관리</td>
+<td>Admin 권한관리</td><td><span class="badge P1">P1</span></td>
+<td>권한그룹 목록(권한코드/권한명/기본권한여부/사용여부) 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>35</td><td>TC_CO_035</td><td>시스템</td><td>권한관리</td>
+<td>Admin 권한관리</td><td><span class="badge P2">P2</span></td>
+<td>&quot;신규 등록&quot; 버튼 클릭 시 권한그룹 등록 화면 이동 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>36</td><td>TC_CO_036</td><td>시스템</td><td>관리자관리</td>
+<td>Admin 관리자관리</td><td><span class="badge P1">P1</span></td>
+<td>관리자 계정 목록(LoginID/사용자명/직급/직위/Email/사용여부) 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>37</td><td>TC_CO_037</td><td>시스템</td><td>관리자관리</td>
+<td>Admin 관리자관리</td><td><span class="badge P1">P1</span></td>
+<td>&quot;신규 등록&quot; 버튼 클릭 시 관리자 계정 등록 화면 이동 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>38</td><td>TC_CO_038</td><td>시스템</td><td>권한별메뉴</td>
+<td>Admin 권한별메뉴</td><td><span class="badge P1">P1</span></td>
+<td>권한코드 선택 시 해당 권한의 메뉴별 접근권한(조회/저장/엑셀/삭제/수정) 매트릭스 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>39</td><td>TC_CO_039</td><td>시스템</td><td>메뉴별권한</td>
+<td>Admin 메뉴별권한</td><td><span class="badge P2">P2</span></td>
+<td>메뉴 선택 시 해당 메뉴에 접근 가능한 권한코드별 매트릭스 노출 검증(권한별메뉴의 역방향 뷰)</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>40</td><td>TC_CO_040</td><td>시스템</td><td>배치관리</td>
+<td>Admin 배치관리</td><td><span class="badge P2">P2</span></td>
+<td>배치 스케줄 목록(JOB Name/Group/Cron/Desc/Prev·Next Fire Time/State) 및 실행 로그 영역 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>41</td><td>TC_CO_041</td><td>시스템</td><td>배치관리</td>
+<td>Admin 배치관리</td><td><span class="badge P3">P3</span></td>
+<td>&quot;SCHEDULE 추가&quot; 버튼 클릭 시 신규 배치 등록 화면 이동 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>42</td><td>TC_CO_042</td><td>시스템</td><td>로그인내역조회</td>
+<td>Admin 로그인내역조회</td><td><span class="badge P2">P2</span></td>
+<td>로그인 로그 목록(ID/사용자명/Access IP/실패코드/등록일시) 노출 및 devel 로그인 이력 확인</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>43</td><td>TC_CO_043</td><td>시스템</td><td>관리자로그관리</td>
+<td>Admin 관리자로그관리</td><td><span class="badge P2">P2</span></td>
+<td>관리자 작업 로그(Login ID/사용자명/Access IP/api/프로그램명/등록일시) 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>44</td><td>TC_CO_044</td><td>시스템</td><td>검색엔진관리</td>
+<td>Admin 검색엔진관리</td><td><span class="badge P2">P2</span></td>
+<td>검색엔진 인덱스 목록(Health/Status/Index/Docs Count/Docs Deleted) 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>45</td><td>TC_CO_045</td><td>시스템</td><td>Agent 관리</td>
+<td>Admin Agent관리</td><td><span class="badge P3">P3</span></td>
+<td>Agent 목록(ID/Name/Type/Persona/Icon/Description/Active) 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>46</td><td>TC_CO_046</td><td>시스템</td><td>Agent 관리</td>
+<td>Admin Agent관리</td><td><span class="badge P3">P3</span></td>
+<td>&quot;등록&quot; 버튼 클릭 시 Agent 등록 화면 이동 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>47</td><td>TC_CO_047</td><td>시스템</td><td>Tool 관리</td>
+<td>Admin Tool관리</td><td><span class="badge P3">P3</span></td>
+<td>Tool 목록 없음 시 Empty State 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>48</td><td>TC_CO_048</td><td>시스템</td><td>Sample</td>
+<td>Admin Sample</td><td><span class="badge P3">P3</span></td>
+<td>Sample 화면의 폼/체크박스/데이터그리드 등 예제 컴포넌트 노출 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>49</td><td>TC_CO_049</td><td>시스템</td><td>PUSH관리</td>
+<td>Admin PUSH관리</td><td><span class="badge P2">P2</span></td>
+<td>발송대상구분/발송방식/발송유형/발송상태 필터 조회 동작 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>50</td><td>TC_CO_050</td><td>시스템</td><td>PUSH관리</td>
+<td>Admin PUSH관리</td><td><span class="badge P2">P2</span></td>
+<td>&quot;PUSH 등록&quot; 버튼 클릭 시 PUSH 발송 등록 화면 이동 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>51</td><td>TC_CO_051</td><td>시스템</td><td>언어선택</td>
+<td></td><td><span class="badge P3">P3</span></td>
+<td>언어선택 드롭다운의 지원 언어 전체 목록 검증</td><td class="res-none">미실행</td>
+<td></td><td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
