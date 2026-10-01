@@ -86,11 +86,11 @@
     </div>
     <div class="kpi-card kpi-accent-good">
       <div class="kpi-num" id="kpiPass">–</div>
-      <div class="kpi-label">최근 실행 Pass</div>
+      <div class="kpi-label">전체 Pass</div>
     </div>
     <div class="kpi-card kpi-accent-bad">
       <div class="kpi-num" id="kpiFail">–</div>
-      <div class="kpi-label">최근 실행 Fail</div>
+      <div class="kpi-label">전체 Fail</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-num" id="kpiExecRate">–</div>
@@ -109,17 +109,19 @@
   </section>
 
   <section class="panel panel-full panel-chat" id="chatPanel">
-    <button type="button" class="panel-head panel-head-toggle" id="chatPanelToggle" aria-expanded="true" aria-controls="chatPanelCollapse">
+    <div class="panel-head panel-head-chat">
       <h2>💬 사이트분석 · TC 생성</h2>
       <span class="panel-sub">진행상태 : <span id="chatStatus">연결 중…</span></span>
-      <span class="panel-toggle-arrow" aria-hidden="true"></span>
-    </button>
+      <div class="panel-head-actions">
+        <button id="btnChatReset" type="button" class="btn btn-outline btn-sm" title="이 프로젝트 대화를 새로 시작합니다">새 대화</button>
+        <button type="button" class="panel-toggle-btn" id="chatPanelToggle" aria-expanded="true" aria-controls="chatPanelCollapse" aria-label="펼치기/접기">
+          <span class="panel-toggle-arrow" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
     <div class="panel-collapse" id="chatPanelCollapse">
       <div class="panel-collapse-inner">
         <div class="panel-chat-body">
-          <div class="panel-chat-toolbar">
-            <button id="btnChatReset" type="button" class="btn btn-outline btn-sm" title="이 프로젝트 대화를 새로 시작합니다">새 대화</button>
-          </div>
           <div id="chatMessages" class="chat-messages">
             <div class="chat-hint">프로젝트를 선택하고 메시지를 입력해 시작하세요. (예: "메인 페이지 URL은 http://... 입니다. TC 생성해줘")</div>
           </div>

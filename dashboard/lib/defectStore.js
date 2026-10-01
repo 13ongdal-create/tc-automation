@@ -11,7 +11,8 @@ const TC_AUTOMATION_ROOT = process.env.TC_AUTOMATION_ROOT || path.resolve(__dirn
 // 프로젝트 폴더는 저장소 루트가 아니라 project/ 하위에 있음 (2026-08-25 디렉토리 구조 개편)
 const PROJECTS_ROOT = path.join(TC_AUTOMATION_ROOT, 'project');
 const STATUS_ORDER = ['신규', '처리중', '재검증대기', '완료', '보류', '재발생'];
-const SEVERITY_ORDER = ['P1', 'P2', 'P3'];
+const SEVERITY_ORDER = ['Critical', 'Major', 'Minor'];
+const LEGACY_SEV_MAP = { P1: 'Critical', P2: 'Major', P3: 'Minor' };
 
 function defectsPath(project) {
   return path.join(PROJECTS_ROOT, project, 'TC', 'defects.json');
@@ -19,7 +20,14 @@ function defectsPath(project) {
 
 function load(project) {
   try {
-    return JSON.parse(fs.readFileSync(defectsPath(project), 'utf8'));
+    const raw = JSON.parse(fs.readFileSync(defectsPath(project), 'utf8'));
+    // 과거 P1/P2/P3 값이 남아있으면 Critical/Major/Minor로 정규화
+    return raw.map((d) => {
+      if (d.severity && LEGACY_SEV_MAP[d.severity]) {
+        return { ...d, severity: LEGACY_SEV_MAP[d.severity] };
+      }
+      return d;
+    });
   } catch {
     // [수정 2026-08-27] defects.json이 없는 경우를 "프로젝트 자체가 없음"과 뭉뚱그려 항상 null을
     // 반환하던 버그 — TOPMALL처럼 Phase 5(테스트 실행)를 아예 진행하지 않아 defects.json이 한
@@ -67,7 +75,7 @@ function enqueueWrite(project, task) {
   return next;
 }
 
-/** 상태별/우선순위별/모듈별 집계. byModule은 "모듈별 결함 상세 현황" 표용 (대시보드 홈) */
+/** 상태별/심각도별/모듈별 집계. byModule은 "모듈별 결함 상세 현황" 표용 (대시보드 홈) */
 function summary(project) {
   const defects = load(project);
   if (defects === null) return null;
@@ -76,14 +84,15 @@ function summary(project) {
   const byModuleMap = {};
   for (const d of defects) {
     counts[d.status] = (counts[d.status] || 0) + 1;
-    if (d.severity) severityCounts[d.severity] = (severityCounts[d.severity] || 0) + 1;
+    const sev = LEGACY_SEV_MAP[d.severity] || d.severity;
+    if (sev && severityCounts[sev] !== undefined) severityCounts[sev] += 1;
 
     const mod = d.module || '(미지정)';
     if (!byModuleMap[mod]) {
-      byModuleMap[mod] = { module: mod, total: 0, P1: 0, P2: 0, P3: 0, 신규: 0, 처리중: 0, 완료: 0 };
+      byModuleMap[mod] = { module: mod, total: 0, Critical: 0, Major: 0, Minor: 0, 신규: 0, 처리중: 0, 완료: 0 };
     }
     byModuleMap[mod].total += 1;
-    if (d.severity && byModuleMap[mod][d.severity] !== undefined) byModuleMap[mod][d.severity] += 1;
+    if (sev && byModuleMap[mod][sev] !== undefined) byModuleMap[mod][sev] += 1;
     if (d.status === '신규' || d.status === '처리중' || d.status === '완료') byModuleMap[mod][d.status] += 1;
   }
   const byModule = Object.values(byModuleMap).sort((a, b) => b.total - a.total);

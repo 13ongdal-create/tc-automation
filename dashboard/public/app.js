@@ -217,11 +217,15 @@ window.addEventListener('popstate', (e) => {
   else renderHomeView();
 });
 
-// 우선순위(AGENTS.md 4항: P1=Critical, P2=Major, P3=Minor) 색상 — TC 우선순위/결함 심각도 공용
-// (같은 P1/P2/P3 정의를 공유하므로 결함테이블 sev-badge와 동일 팔레트를 그대로 재사용)
-const SEVERITY_ORDER = ['P1', 'P2', 'P3'];
-const SEVERITY_LABELS = { P1: 'Critical (P1)', P2: 'Major (P2)', P3: 'Minor (P3)' };
-const SEVERITY_COLORS = { P1: 'var(--bad)', P2: 'var(--warn)', P3: 'var(--primary)' };
+// TC 우선순위(AGENTS.md 4항: P1=핵심/필수, P2=주요, P3=일반/보조) — TC 중요도 및 실행 우선순위
+const TC_PRIORITY_ORDER = ['P1', 'P2', 'P3'];
+const TC_PRIORITY_LABELS = { P1: 'P1 (핵심)', P2: 'P2 (주요)', P3: 'P3 (일반)' };
+const TC_PRIORITY_COLORS = { P1: 'var(--bad)', P2: 'var(--warn)', P3: 'var(--primary)' };
+
+// 결함 심각도(Severity) — 결함 영향도 및 수정 치명도
+const SEVERITY_ORDER = ['Critical', 'Major', 'Minor'];
+const SEVERITY_LABELS = { Critical: 'Critical (치명)', Major: 'Major (주요)', Minor: 'Minor (경미)' };
+const SEVERITY_COLORS = { Critical: 'var(--bad)', Major: 'var(--warn)', Minor: 'var(--primary)' };
 
 // TC 실행결과(AGENTS.md 20-7항: Pass/Fail/N/A/N/T — Blocked는 2026-08-27부로 N/A에 통합) 색상.
 // "수행율"은 (전체-미실행)/전체 기준이며(실행이력 표와 동일 정의), Pass+Fail만이 아니라
@@ -449,18 +453,18 @@ function renderModuleDefectTable(byModule) {
     <tr>
       <td class="pb-module-name">${esc(m.module)}</td>
       <td>${m.total}</td>
-      <td>${m.P1}</td>
-      <td>${m.P2}</td>
-      <td>${m.P3}</td>
-      <td>${m.신규}</td>
-      <td>${m.처리중}</td>
-      <td>${m.완료}</td>
+      <td>${m.Critical ?? m.P1 ?? 0}</td>
+      <td>${m.Major ?? m.P2 ?? 0}</td>
+      <td>${m.Minor ?? m.P3 ?? 0}</td>
+      <td>${m.신규 || 0}</td>
+      <td>${m.처리중 || 0}</td>
+      <td>${m.완료 || 0}</td>
     </tr>`
     )
     .join('');
   return `
     <table class="pb-module-table">
-      <thead><tr><th>모듈</th><th>전체</th><th>P1</th><th>P2</th><th>P3</th><th>신규</th><th>처리중</th><th>완료</th></tr></thead>
+      <thead><tr><th>모듈</th><th>전체</th><th>Critical</th><th>Major</th><th>Minor</th><th>신규</th><th>처리중</th><th>완료</th></tr></thead>
       <tbody>${rowsHtml}</tbody>
     </table>`;
 }
@@ -815,12 +819,12 @@ function renderTcPriorityDonut(byModule) {
     totals.P3 += m.P3 || 0;
   });
   const total = totals.P1 + totals.P2 + totals.P3;
-  const segments = SEVERITY_ORDER.map((k) => ({ n: totals[k] || 0, color: SEVERITY_COLORS[k] }));
+  const segments = TC_PRIORITY_ORDER.map((k) => ({ n: totals[k] || 0, color: TC_PRIORITY_COLORS[k] }));
   const centerHtml = `<span class="donut-total">${total}</span><span class="donut-total-label">전체 TC</span>`;
   return `
     <div class="pb-chart-head"><span class="pb-chart-title">Full TC 우선순위 분포</span></div>
     <div class="pb-chart-body">${donutChart(segments, centerHtml, '등록된 TC 없음')}</div>
-    ${donutSummaryTable(SEVERITY_ORDER, SEVERITY_LABELS, SEVERITY_COLORS, totals)}`;
+    ${donutSummaryTable(TC_PRIORITY_ORDER, TC_PRIORITY_LABELS, TC_PRIORITY_COLORS, totals)}`;
 }
 
 /** 📋 TC 관리 하단 — 모듈별 TC 우선순위(P1/P2/P3) 분포 (변경 이력은 별도 페이지로 분리) */
@@ -1549,6 +1553,10 @@ el.btnChatReset.addEventListener('click', async () => {
   if (!confirm('이 프로젝트의 대화를 새로 시작할까요? (지금까지 나눈 대화 맥락이 초기화됩니다)')) return;
   await fetch(`/api/${encodeURIComponent(project)}/chat/reset`, { method: 'POST' });
   await loadChatHistory(project);
+  // 접힌 상태에서 "새 대화"를 누르면 결과를 바로 볼 수 있도록 채팅 패널을 자동으로 펼친다 (사용자 요청)
+  if (el.chatPanelToggle && el.chatPanelToggle.getAttribute('aria-expanded') !== 'true') {
+    setChatPanelExpanded(true);
+  }
 });
 
 // ── 🔗 Git 상태 · push (전역 — 저장소가 하나라 프로젝트 단위가 아님) ──────────────────────

@@ -152,9 +152,9 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 #defectTable td.pb-module-name{text-align:left;}
 
 .sev-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;}
-.sev-P1{background:var(--bad-bg);color:var(--bad);}
-.sev-P2{background:var(--warn-bg);color:var(--warn);}
-.sev-P3{background:#e8f0fa;color:var(--primary);}
+.sev-Critical, .sev-P1{background:var(--bad-bg);color:var(--bad);}
+.sev-Major, .sev-P2{background:var(--warn-bg);color:var(--warn);}
+.sev-Minor, .sev-P3{background:#e8f0fa;color:var(--primary);}
 
 .status-select, .assignee-input{
   width:100%;font-family:inherit;font-size:12.5px;padding:5px 6px;
@@ -178,23 +178,24 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 
 /* 💬 사이트분석 · TC 생성 채팅 패널 (접기/펼치기 가능)
    네이티브 <details>는 열고 닫힐 때 애니메이션이 없어 뚝뚝 끊겨 보인다는 피드백으로,
-   버튼(panel-head-toggle) + grid-template-rows 트랜지션 방식으로 교체 — 1fr↔0fr 트릭은
-   높이를 모르는 콘텐츠도 auto처럼 부드럽게 접고 펼 수 있다. */
+   버튼 + grid-template-rows 트랜지션 방식으로 교체 — 1fr↔0fr 트릭은 높이를 모르는 콘텐츠도
+   auto처럼 부드럽게 접고 펼 수 있다. "새 대화"는 접기/펼치기 버튼과 같은 헤더 안에 두되
+   별도 버튼으로 둬서(버튼 안에 버튼을 중첩하면 안 되므로) 헤더 전체를 누르면 토글되는 대신
+   접기/펼치기 버튼 하나만 토글을 담당한다(사용자 요청). */
 .panel-full{margin-top:18px;}
-.panel-head-toggle{
-  width:100%;background:none;border:none;border-bottom:1px solid var(--divider);
-  display:flex;align-items:baseline;justify-content:flex-start;flex-wrap:wrap;gap:6px;
-  margin-bottom:14px;padding:0 0 10px;cursor:pointer;font:inherit;text-align:left;color:inherit;
+.panel-head-chat{justify-content:flex-start;}
+.panel-head-chat .panel-head-actions{margin-left:auto;align-items:center;}
+.panel-toggle-btn{
+  background:none;border:none;padding:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;
 }
-.panel-head-toggle:hover{opacity:.82;}
-.panel-head-toggle h2{font-size:16px;margin:0;color:var(--text-dark);letter-spacing:-0.3px;}
+.panel-toggle-btn:hover{opacity:.7;}
 .panel-toggle-arrow{
-  margin-left:auto;align-self:center;flex-shrink:0;width:0;height:0;
+  flex-shrink:0;width:0;height:0;
   border-style:solid;border-width:5px 4px 0 4px;
   border-color:var(--text-secondary) transparent transparent transparent;
   transition:transform .18s ease;
 }
-.panel-head-toggle[aria-expanded="false"] .panel-toggle-arrow{transform:rotate(-90deg);}
+.panel-toggle-btn[aria-expanded="false"] .panel-toggle-arrow{transform:rotate(-90deg);}
 .panel-collapse{display:grid;grid-template-rows:1fr;transition:grid-template-rows .22s ease;}
 .panel-collapse.collapsed{grid-template-rows:0fr;}
 .panel-collapse-inner{overflow:hidden;min-height:0;}
@@ -213,7 +214,6 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 .tq-field-wide{flex:1.6 1 260px;min-width:260px;}
 .tq-field .field-label{margin-top:0;}
 .tq-field select{width:100%;}
-.panel-chat-toolbar{display:flex;justify-content:flex-end;margin-bottom:8px;}
 .chat-messages{
   display:flex;flex-direction:column;gap:10px;
   max-height:440px;min-height:160px;overflow-y:auto;
