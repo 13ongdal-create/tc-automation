@@ -192,58 +192,70 @@
       </div>
     </div>
 
-    <div class="panel panel-wide">
-      <div class="panel-head">
-        <h2>▶ 테스트 실행 큐</h2>
-        <span class="panel-sub" id="tqStatus">대기 중</span>
-      </div>
+  </section>
 
-      <label class="field-label" for="tqModule">모듈</label>
-      <select id="tqModule"><option value="">전체 모듈</option></select>
-
-      <label class="field-label" for="tqSystem">시스템</label>
-      <select id="tqSystem">
-        <option value="">전체 시스템</option>
-        <option value="FO">FO</option>
-        <option value="BO">BO</option>
-      </select>
-
-      <label class="field-label">우선순위</label>
-      <div class="tq-pill-group" id="tqPriorityPills">
-        <button type="button" class="tq-pill-btn active" data-value="">전체</button>
-        <button type="button" class="tq-pill-btn" data-value="P1">P1</button>
-        <button type="button" class="tq-pill-btn" data-value="P2">P2</button>
-        <button type="button" class="tq-pill-btn" data-value="P3">P3</button>
-      </div>
-
-      <label class="field-label">수행상태</label>
-      <div class="tq-pill-group" id="tqStatusPills">
-        <button type="button" class="tq-pill-btn active" data-value="">전체</button>
-        <button type="button" class="tq-pill-btn" data-value="none">미수행</button>
-        <button type="button" class="tq-pill-btn" data-value="Pass">Pass</button>
-        <button type="button" class="tq-pill-btn" data-value="Fail">Fail</button>
-        <button type="button" class="tq-pill-btn" data-value="N/A">N/A</button>
-        <button type="button" class="tq-pill-btn" data-value="N/T">N/T</button>
-      </div>
-
-      <label class="field-label" for="tqHeaded">브라우저 실행 화면 (Playwright)</label>
-      <select id="tqHeaded">
-        <option value="0">⚡ 백그라운드 실행 (화면 숨김 / 고속)</option>
-        <option value="1">🎞 단계 재생 (창 없이 녹화 → 실행 후 팝업에서 영상 재생)</option>
-      </select>
-
-      <div class="tq-preview" id="tqPreview">프로젝트를 선택하면 실행 대상 현황이 표시됩니다.</div>
-
-      <div class="tq-actions">
-        <button type="button" id="btnTqStart" class="btn btn-primary" disabled>▶ 테스트 실행 시작</button>
-        <button type="button" id="btnTqCancel" class="btn btn-outline" hidden>■ 중단</button>
-        <button type="button" id="btnTqReplay" class="btn btn-outline" hidden>🎞 실행 재생 보기</button>
-      </div>
-
-      <div id="tqModuleQueue" class="tq-module-queue"></div>
-      <pre id="tqLog" class="tq-log" hidden></pre>
+  <section class="panel panel-full panel-tq">
+    <div class="panel-head">
+      <h2>▶ 테스트 실행 큐</h2>
+      <span class="panel-sub" id="tqStatus">대기 중</span>
     </div>
 
+    <div class="tq-filters-row">
+      <div class="tq-field">
+        <label class="field-label" for="tqModule">모듈</label>
+        <select id="tqModule"><option value="">전체 모듈</option></select>
+      </div>
+
+      <div class="tq-field">
+        <label class="field-label" for="tqSystem">시스템</label>
+        <select id="tqSystem">
+          <option value="">전체 시스템</option>
+          <option value="FO">FO</option>
+          <option value="BO">BO</option>
+        </select>
+      </div>
+
+      <div class="tq-field">
+        <label class="field-label">우선순위</label>
+        <div class="tq-pill-group" id="tqPriorityPills">
+          <button type="button" class="tq-pill-btn active" data-value="">전체</button>
+          <button type="button" class="tq-pill-btn" data-value="P1">P1</button>
+          <button type="button" class="tq-pill-btn" data-value="P2">P2</button>
+          <button type="button" class="tq-pill-btn" data-value="P3">P3</button>
+        </div>
+      </div>
+
+      <div class="tq-field">
+        <label class="field-label">수행상태</label>
+        <div class="tq-pill-group" id="tqStatusPills">
+          <button type="button" class="tq-pill-btn active" data-value="">전체</button>
+          <button type="button" class="tq-pill-btn" data-value="none">미수행</button>
+          <button type="button" class="tq-pill-btn" data-value="Pass">Pass</button>
+          <button type="button" class="tq-pill-btn" data-value="Fail">Fail</button>
+          <button type="button" class="tq-pill-btn" data-value="N/A">N/A</button>
+          <button type="button" class="tq-pill-btn" data-value="N/T">N/T</button>
+        </div>
+      </div>
+
+      <div class="tq-field tq-field-wide">
+        <label class="field-label" for="tqHeaded">브라우저 실행 화면 (Playwright)</label>
+        <select id="tqHeaded">
+          <option value="0">⚡ 백그라운드 실행 (화면 숨김 / 고속)</option>
+          <option value="1">🎞 단계 재생 (창 없이 녹화 → 실행 후 팝업에서 영상 재생)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="tq-preview" id="tqPreview">프로젝트를 선택하면 실행 대상 현황이 표시됩니다.</div>
+
+    <div class="tq-actions">
+      <button type="button" id="btnTqStart" class="btn btn-primary" disabled>▶ 테스트 실행 시작</button>
+      <button type="button" id="btnTqCancel" class="btn btn-outline" hidden>■ 중단</button>
+      <button type="button" id="btnTqReplay" class="btn btn-outline" hidden>🎞 실행 재생 보기</button>
+    </div>
+
+    <div id="tqModuleQueue" class="tq-module-queue"></div>
+    <pre id="tqLog" class="tq-log" hidden></pre>
   </section>
 
 </main>
