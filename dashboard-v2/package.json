@@ -1,0 +1,16 @@
+{
+  "name": "qa-dashboard-v2",
+  "version": "0.1.0",
+  "private": true,
+  "description": "QA Automation 대시보드 v2 (port 4001) — 4000 대시보드의 백엔드 lib를 재사용하는 새 UI",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "ws": "^8.18.0"
+  },
+  "engines": { "node": ">=18" }
+}

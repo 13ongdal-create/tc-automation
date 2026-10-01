@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TC Automation (v2 · 4001)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/project-detail.css">
+</head>
+<body>
+<header class="topbar">
+  <button id="btnHome" class="brand brand-btn" title="홈으로">
+    <span class="brand-badge">T</span>
+    <span class="brand-name">TC Automation</span>
+  </button>
+  <div class="topbar-controls">
+    <label for="projectSelect" class="visually-hidden">프로젝트</label>
+    <select id="projectSelect"></select>
+    <button id="btnGitStatus" class="btn btn-outline" title="git 상태 · push">🔗 Git</button>
+    <button id="btnRefresh" class="btn btn-outline">새로고침</button>
+    <button id="btnLogout" class="btn btn-outline">로그아웃</button>
+  </div>
+</header>
+
+<!-- 🏠 홈 — 전체 프로젝트 대시보드(개요 KPI + 차트 + 표) + 신규 생성 -->
+<section id="homeView" class="container home-view">
+  <div class="home-head">
+    <h1>Dashboard</h1>
+    <button id="btnNewProject" class="btn btn-primary">+ 새 프로젝트</button>
+  </div>
+
+  <div id="homeEmpty" class="home-empty" hidden>
+    <p>등록된 프로젝트가 없습니다.</p>
+    <button type="button" id="btnNewProjectEmpty" class="btn btn-primary">+ 새 프로젝트 만들기</button>
+  </div>
+
+  <div id="homeDashboard" hidden>
+    <div class="kpi-grid home-kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-num" id="homeKpiProjects">–</div>
+        <div class="kpi-label">프로젝트</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num" id="homeKpiDefects">–</div>
+        <div class="kpi-label">전체 결함</div>
+      </div>
+      <div class="kpi-card kpi-accent-warn">
+        <div class="kpi-num" id="homeKpiNew">–</div>
+        <div class="kpi-label">신규 결함</div>
+      </div>
+      <div class="kpi-card kpi-accent-good">
+        <div class="kpi-num" id="homeKpiPass">–</div>
+        <div class="kpi-label">전체 Pass</div>
+      </div>
+      <div class="kpi-card kpi-accent-bad">
+        <div class="kpi-num" id="homeKpiFail">–</div>
+        <div class="kpi-label">전체 Fail</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num" id="homeKpiExecRate">–</div>
+        <div class="kpi-label">평균 수행율</div>
+      </div>
+    </div>
+
+    <div id="projectBlocks"></div>
+  </div>
+</section>
+
+<!-- 📁 프로젝트 상세 (v2 신규 디자인 — 렌더링은 project-detail.js) -->
+<main id="projectView" class="container pd-view">
+<div class="pd-shell">
+  <nav class="pd-rail" id="pdRail" aria-label="프로젝트 섹션" hidden>
+    <button type="button" data-pd-go="pdTop" class="active"><span class="pd-rail-ico" data-ico="home"></span><span>대시보드</span></button>
+    <button type="button" data-pd-go="pdModules"><span class="pd-rail-ico" data-ico="file"></span><span>테스트케이스</span></button>
+    <button type="button" data-pd-go="run"><span class="pd-rail-ico" data-ico="play"></span><span>테스트 실행</span></button>
+    <button type="button" data-pd-go="pdDefects"><span class="pd-rail-ico" data-ico="bug"></span><span>결함 관리</span></button>
+    <button type="button" data-pd-go="pdRuns"><span class="pd-rail-ico" data-ico="report"></span><span>리포트</span></button>
+    <button type="button" data-pd-go="manage"><span class="pd-rail-ico" data-ico="gear"></span><span>설정</span></button>
+  </nav>
+
+  <div class="pd-main">
+    <header class="pd-head" id="pdTop">
+      <div class="pd-title-row">
+        <h1 id="projectDetailTitle">–</h1>
+        <span class="pd-status" id="pdStatusBadge"></span>
+        <button type="button" id="btnManageProjectDetail" class="pd-icon-btn" title="프로젝트 관리 (URL·테스트 유형 수정/삭제)" aria-label="프로젝트 관리"><span data-ico="gear"></span></button>
+        <div class="pd-head-actions">
+          <button type="button" id="pdBtnTcCreate" class="pd-btn pd-btn-outline"><span data-ico="plus"></span>TC 생성</button>
+          <button type="button" id="pdBtnRun" class="pd-btn pd-btn-primary"><span data-ico="play"></span><span id="pdBtnRunLabel">테스트 실행</span></button>
+        </div>
+      </div>
+      <div class="pd-meta" id="pdMeta"></div>
+    </header>
+
+    <section class="pd-kpis" id="pdKpis" aria-label="핵심 지표"></section>
+    <section class="pd-card pd-onboard" id="pdOnboard" hidden></section>
+    <section class="pd-card pd-attention" id="pdAttention" hidden></section>
+
+    <section class="pd-card pd-filters" id="pdFilters" aria-label="필터">
+      <label class="pd-field"><span>모듈</span><select id="pdFModule"><option value="">전체 모듈</option></select></label>
+      <div class="pd-field"><span>TC 중요도</span>
+        <div class="pd-pills" id="pdFPrio" role="group" aria-label="TC 중요도">
+          <button type="button" data-v="" class="active">전체</button><button type="button" data-v="P1" title="P1 핵심 — 결제/재고/데이터 정합성 등 서비스 핵심 플로우">P1 핵심</button><button type="button" data-v="P2" title="P2 주요 — 주요 기능 및 주요 사용자 경험 검증">P2 주요</button><button type="button" data-v="P3" title="P3 일반 — 보조 기능, UI 세부 검증, 미확정 케이스">P3 일반</button>
+        </div>
+      </div>
+      <label class="pd-field"><span>수행 상태</span>
+        <select id="pdFRunStatus">
+          <option value="">전체 수행 상태</option><option value="done">수행 완료</option><option value="progress">진행 중</option><option value="none">미수행</option>
+        </select>
+      </label>
+      <div class="pd-field"><span>실행 결과</span>
+        <div class="pd-pills pd-pills-result" id="pdFResult" role="group" aria-label="실행 결과">
+          <button type="button" data-v="" class="active">전체</button><button type="button" data-v="pass" class="r-pass">Pass</button><button type="button" data-v="fail" class="r-fail">Fail</button><button type="button" data-v="none" class="r-none">미수행</button>
+        </div>
+      </div>
+      <label class="pd-search"><span data-ico="search"></span><input type="search" id="pdFSearch" placeholder="모듈명, 결함명, 키워드로 검색하세요." autocomplete="off"></label>
+      <button type="button" id="pdFReset" class="pd-link-btn" hidden>필터 초기화</button>
+      <button type="button" id="pdFHelpBtn" class="pd-link-btn pd-help-btn" aria-expanded="false" aria-controls="pdFHelp"><span data-ico="help"></span>필터 정의</button>
+      <div class="pd-filter-help" id="pdFHelp" hidden>
+        <table class="pd-table">
+          <thead><tr><th>필터</th><th>판정 기준</th><th>적용 영역</th></tr></thead>
+          <tbody>
+            <tr><td><b>모듈</b></td><td>선택한 모듈 1개만 대상</td><td>모듈별 수행현황 · 우선순위 분포 · 결함 · 실행 이력</td></tr>
+            <tr><td><b>TC 중요도</b></td><td>TC의 중요도가 P1 / P2 / P3인 것<br><small>P1 핵심 · P2 주요 · P3 일반</small></td><td>TC 분포 도넛(선택 외 구간 흐리게)<br><small>※ 모듈 표·결함·실행 이력은 중요도별 집계가 없거나 결함에는 해당하지 않아 미적용</small></td></tr>
+            <tr><td><b>결함 심각도</b><br><small>결함 카드의 자체 필터</small></td><td>결함의 심각도가 Critical / Major / Minor인 것<br><small>Critical 치명 · Major 주요 · Minor 경미</small></td><td>결함 목록</td></tr>
+            <tr><td><b>수행 상태</b></td><td>모듈 단위로 판정<br><b>수행 완료</b>: 수행 건수 = 전체 TC<br><b>진행 중</b>: 1건 이상 수행했지만 전체 TC보다 적음<br><b>미수행</b>: 수행 건수 0<br><small>괄호 숫자 = 현재 다른 필터 기준 모듈 수 (0이면 선택 불가)</small></td><td>모듈별 수행현황</td></tr>
+            <tr><td><b>실행 결과</b></td><td>해당 결과가 1건 이상 있는 모듈 / 이력<br><b>Pass · Fail</b>: 각 결과 TC가 1건 이상<br><b>미수행</b>: 아직 실행하지 않은 TC가 1건 이상</td><td>모듈별 수행현황 · 실행 이력</td></tr>
+            <tr><td><b>검색</b></td><td>입력어가 포함된 항목 (대소문자 무시)<br><small>모듈·이력: 모듈명/코드 · 결함: ID, 결함명, 모듈, TC ID</small></td><td>모듈별 수행현황 · 결함 · 실행 이력</td></tr>
+          </tbody>
+        </table>
+        <div class="pd-help-sub">용어 정의 <small>두 코드는 서로 다른 개념입니다 — TC 중요도는 P1~P3, 결함 심각도는 Critical/Major/Minor</small></div>
+        <div class="pd-terms">
+          <div>
+            <b>TC 중요도</b> <small>(TC 관리 영역 · 저장값 P1/P2/P3)</small>
+            <ul>
+              <li><b>P1 핵심</b> — 결제/재고/데이터 정합성 등 서비스 핵심 플로우</li>
+              <li><b>P2 주요</b> — 주요 기능 및 주요 사용자 경험 검증</li>
+              <li><b>P3 일반</b> — 보조 기능, UI 세부 검증, 미확정 케이스</li>
+            </ul>
+          </div>
+          <div>
+            <b>결함 심각도</b> <small>(결함 관리 영역 · 저장값 Critical/Major/Minor)</small>
+            <ul>
+              <li><b>Critical 치명</b> — 서비스 중단, 결제 오류 등 치명적 결함</li>
+              <li><b>Major 주요</b> — 핵심 기능 오동작, 데이터 유실 위험 결함</li>
+              <li><b>Minor 경미</b> — 단순 UI 틀어짐, 텍스트 오탈자 등 경미한 결함</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pd-help-sub">영역별 적용표 <small>○ 적용 · △ 일부 적용 · – 미적용</small></div>
+        <table class="pd-table pd-matrix">
+          <thead><tr><th>영역</th><th>모듈</th><th>TC 중요도</th><th>수행 상태</th><th>실행 결과</th><th>검색</th><th>적용 방식</th></tr></thead>
+          <tbody>
+            <tr><td><b>KPI 카드 · 확인이 필요한 항목</b></td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>항상 프로젝트 전체 기준 (필터로 바뀌지 않음)</td></tr>
+            <tr><td><b>모듈별 TC 수행현황</b></td><td>○</td><td>–</td><td>○</td><td>○</td><td>○</td><td>조건을 모두 만족하는 <b>모듈 행만</b> 표시 (행 단위로 걸러냄). 검색은 모듈명·코드</td></tr>
+            <tr><td><b>TC 우선순위 / 분포</b></td><td>○</td><td>△</td><td>–</td><td>–</td><td>–</td><td>모듈 선택 시 <b>도넛 합계와 수행/미수행 타일</b>이 그 모듈 기준으로 재계산. TC 중요도는 숫자를 바꾸지 않고 선택 외 구간만 흐리게</td></tr>
+            <tr><td><b>결함 관리</b></td><td>○</td><td>–</td><td>–</td><td>–</td><td>○</td><td>조건에 맞는 <b>결함만</b> 목록에 표시. 모듈은 결함의 TC ID(TC_<b>모듈코드</b>_번호)로 판정. 결함 <b>심각도</b>는 카드 안 자체 필터에서 선택하며 상단 필터와 AND. "총 N건"은 필터와 무관한 전체 건수</td></tr>
+            <tr><td><b>최근 실행 이력</b></td><td>○</td><td>–</td><td>–</td><td>○</td><td>○</td><td>모듈 선택 시 그 모듈의 이력만. 실행 결과는 <b>그 실행에서 해당 결과가 1건 이상</b> 있었던 이력만 (Fail → Fail이 있었던 실행)</td></tr>
+            <tr><td><b>바로가기 · AI Assistant</b></td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>필터와 무관</td></tr>
+          </tbody>
+        </table>
+        <ul class="pd-help-notes">
+          <li><b>"수행됨"</b> = Pass + Fail + N/A + N/T (미실행만 제외) — 4000 대시보드의 수행율 정의와 같습니다.</li>
+          <li>수행 건수·결과(Pass/Fail/N/A/N/T/미수행)는 모듈별 <b>TC 정본의 현재 실행결과</b> 기준이며, TC 뷰어(HTML)의 통계표와 같은 값입니다. <b>실행 이력</b>과 <b>날짜별 진척율</b>만 그 실행 시점의 기록(스냅샷)입니다.</li>
+          <li>결함 관리 카드의 자체 필터는 위 필터와 <b>모두 만족(AND)</b>해야 표시됩니다. 상태의 <b>미해결</b> = '완료'를 제외한 모든 상태.</li>
+          <li>상단 KPI 카드와 "지금 확인이 필요한 항목"은 필터와 무관하게 <b>프로젝트 전체</b> 기준입니다. Critical 결함 = 상태가 '완료'가 아닌 <b>심각도 Critical</b> 결함.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="pd-grid pd-grid-main">
+      <section class="pd-card" id="pdModules">
+        <div class="pd-card-head">
+          <span class="pd-card-ico pd-ico-purple" data-ico="bars"></span>
+          <div class="pd-card-title"><h2>모듈별 TC 수행현황</h2><p>각 모듈의 테스트 수행 현황과 결과를 한눈에 확인할 수 있습니다.</p></div>
+          <div class="pd-card-actions">
+            <button type="button" id="btnTcUpload" class="pd-btn pd-btn-outline pd-btn-sm"><span data-ico="plus"></span>TC 업로드</button>
+            <a id="tcDetailLink" class="pd-btn pd-btn-outline pd-btn-sm" href="#" target="_blank" rel="noopener" hidden>상세 보기<span data-ico="arrow"></span></a>
+          </div>
+        </div>
+        <div id="pdModuleBody"></div>
+        <div class="pd-card-foot" id="pdModuleFoot"></div>
+      </section>
+
+      <section class="pd-card" id="pdPriority">
+        <div class="pd-card-head">
+          <span class="pd-card-ico pd-ico-teal" data-ico="layers"></span>
+          <div class="pd-card-title"><h2>TC 중요도 분포</h2></div>
+        </div>
+        <div id="pdPriorityBody"></div>
+      </section>
+    </div>
+
+    <div class="pd-grid pd-grid-main">
+      <section class="pd-card" id="pdDefects">
+        <div class="pd-card-head">
+          <span class="pd-card-ico pd-ico-red" data-ico="bug"></span>
+          <div class="pd-card-title"><h2>결함 관리 <span class="pd-count" id="pdDefectCount">총 0건</span></h2><p>상태·담당자를 바꾸면 즉시 defects.json에 저장됩니다.</p></div>
+          <div class="pd-card-actions"><a id="defectDetailLink" class="pd-btn pd-btn-outline pd-btn-sm" href="#" target="_blank" rel="noopener" hidden>전체 보기<span data-ico="arrow"></span></a></div>
+        </div>
+        <div class="pd-defect-filters">
+          <select id="pdDModule" aria-label="결함 모듈"><option value="">전체 모듈</option></select>
+          <select id="pdDSeverity" aria-label="결함 심각도"><option value="">전체 심각도</option><option value="Critical">Critical (치명)</option><option value="Major">Major (주요)</option><option value="Minor">Minor (경미)</option></select>
+          <select id="pdDStatus" aria-label="결함 상태"><option value="">전체 상태</option></select>
+          <label class="pd-search"><span data-ico="search"></span><input type="search" id="pdDSearch" placeholder="결함명 또는 내용을 검색하세요." autocomplete="off"></label>
+        </div>
+        <div id="pdDefectBody"></div>
+      </section>
+
+      <section class="pd-card" id="pdRuns">
+        <div class="pd-card-head">
+          <span class="pd-card-ico pd-ico-violet" data-ico="report"></span>
+          <div class="pd-card-title"><h2>최근 실행 이력</h2></div>
+          <div class="pd-card-actions"><a id="pdAllRuns" class="pd-btn pd-btn-outline pd-btn-sm" href="#" target="_blank" rel="noopener" hidden>전체 이력 보기<span data-ico="arrow"></span></a></div>
+        </div>
+        <div id="pdRunsBody"></div>
+      </section>
+    </div>
+
+    <div class="pd-grid pd-grid-main">
+      <section class="pd-card" id="pdLinks">
+        <div class="pd-card-head">
+          <span class="pd-card-ico pd-ico-blue" data-ico="link"></span>
+          <div class="pd-card-title"><h2>사이트 / 문서 바로가기</h2><p>프로젝트 관련 사이트 및 문서를 바로 열 수 있습니다.</p></div>
+        </div>
+        <div class="pd-links" id="pdLinksBody"></div>
+      </section>
+
+      <section class="pd-card pd-assistant" id="chatPanel">
+        <div class="pd-card-head">
+          <span class="pd-card-ico pd-ico-blue" data-ico="sparkle"></span>
+          <div class="pd-card-title"><h2>AI TC Assistant <span class="pd-beta">BETA</span></h2>
+            <p>요구사항을 입력하면 AI가 사이트를 분석하고 테스트 케이스를 생성해드립니다.</p></div>
+          <div class="pd-card-actions">
+            <span class="pd-chat-state">진행상태 : <span id="chatStatus">연결 중…</span></span>
+            <button type="button" id="pdBtnExamples" class="pd-btn pd-btn-outline pd-btn-sm" aria-expanded="false"><span data-ico="help"></span>예시 질문 보기</button>
+            <button type="button" id="btnChatReset" class="pd-btn pd-btn-outline pd-btn-sm" title="이 프로젝트 대화를 새로 시작합니다">새 대화</button>
+          </div>
+        </div>
+        <div class="pd-examples" id="pdExamples" hidden></div>
+        <div id="chatMessages" class="chat-messages pd-chat-messages">
+          <div class="chat-hint">프로젝트를 선택하고 메시지를 입력해 시작하세요. (예: "메인 페이지 URL은 http://... 입니다. TC 생성해줘")</div>
+        </div>
+        <form id="chatForm" class="pd-chat-form">
+          <div id="chatAttachList" class="chat-attach-list" hidden></div>
+          <textarea id="chatInput" rows="2" placeholder="예) 로그인 기능에 대한 TC를 생성해줘 (Shift+Enter로 줄바꿈)"></textarea>
+          <input type="file" id="chatAttachInput" hidden accept=".docx,.doc,.pdf,.xlsx,.xls,.png,.jpg,.jpeg">
+          <div class="pd-chat-actions">
+            <button type="button" id="btnChatAttach" class="pd-btn pd-btn-outline" title="정책서·SB 문서 첨부 (docx/pdf/xlsx)"><span data-ico="clip"></span>문서 첨부</button>
+            <button type="button" id="pdBtnExampleInsert" class="pd-btn pd-btn-outline"><span data-ico="bulb"></span>요구사항 예시</button>
+            <span class="pd-spacer"></span>
+            <button type="button" id="btnChatCancel" class="pd-btn pd-btn-outline" hidden>중단</button>
+            <button type="submit" id="btnChatSend" class="pd-btn pd-btn-primary"><span data-ico="sparkle"></span>TC 자동 생성</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- ▶ 테스트 실행 큐 모달 (zero-token — Playwright 직접 실행) -->
+<div id="runModal" class="modal-overlay" hidden>
+  <div class="modal-box modal-box-lg pd-runbox">
+    <div class="pd-modal-head">
+      <h2>▶ 테스트 실행 큐</h2>
+      <span class="panel-sub">진행상태 : <span id="tqStatus">대기 중</span></span>
+    </div>
+    <div class="pd-notice">같은 프로젝트를 4000 대시보드에서 동시에 실행하지 마세요 — 결과 파일(results.json)을 서로 덮어쓸 수 있습니다.</div>
+    <div class="tq-filters-row">
+      <div class="tq-field"><label class="field-label" for="tqModule">모듈</label><select id="tqModule"><option value="">전체 모듈</option></select></div>
+      <div class="tq-field"><label class="field-label" for="tqSystem">시스템</label>
+        <select id="tqSystem"><option value="">전체 시스템</option><option value="FO">FO</option><option value="BO">BO</option></select></div>
+      <div class="tq-field"><label class="field-label" for="tqPriority">TC 중요도</label>
+        <select id="tqPriority"><option value="">전체</option><option value="P1">P1 (핵심)</option><option value="P2">P2 (주요)</option><option value="P3">P3 (일반)</option></select></div>
+      <div class="tq-field"><label class="field-label" for="tqStatusFilter">수행상태</label>
+        <select id="tqStatusFilter"><option value="">전체</option><option value="none">미수행</option><option value="Pass">Pass</option><option value="Fail">Fail</option><option value="N/A">N/A</option><option value="N/T">N/T</option></select></div>
+      <div class="tq-field tq-field-wide"><label class="field-label" for="tqHeaded">브라우저 실행 화면 (Playwright)</label>
+        <select id="tqHeaded"><option value="0">⚡ 백그라운드 실행 (화면 숨김 / 고속)</option><option value="1">🎞 단계 재생 (창 없이 녹화 → 실행 후 팝업에서 영상 재생)</option></select></div>
+    </div>
+    <div class="tq-preview" id="tqPreview">프로젝트를 선택하면 실행 대상 현황이 표시됩니다.</div>
+    <div class="tq-actions">
+      <button type="button" id="btnTqStart" class="btn btn-primary" disabled>▶ 테스트 실행 시작</button>
+      <button type="button" id="btnTqCancel" class="btn btn-outline" hidden>■ 중단</button>
+      <button type="button" id="btnTqReplay" class="btn btn-outline" hidden>🎞 실행 재생 보기</button>
+    </div>
+    <div id="tqModuleQueue" class="tq-module-queue"></div>
+    <pre id="tqLog" class="tq-log" hidden></pre>
+    <div class="modal-actions"><button type="button" id="btnCloseRun" class="btn btn-outline">닫기</button></div>
+  </div>
+</div>
+
+<!-- TC 목록 모달 ("실패 TC 보기" · "미수행 TC" — TC 정본의 현재 실행결과 기준) -->
+<div id="tcListModal" class="modal-overlay" hidden>
+  <div class="modal-box modal-box-lg pd-tclist">
+    <div class="pd-modal-head">
+      <h2 id="tcListTitle">실패 TC</h2>
+      <span class="pd-count" id="tcListCount"></span>
+    </div>
+    <p class="pd-tclist-desc" id="tcListDesc"></p>
+    <div class="pd-tclist-filters">
+      <label class="pd-field"><span>실행 결과</span>
+        <select id="tcListResult">
+          <option value="Fail">실패 (Fail)</option><option value="none">미수행</option><option value="Pass">Pass</option><option value="N/T">N/T</option><option value="N/A">N/A</option>
+        </select>
+      </label>
+      <label class="pd-field"><span>모듈</span><select id="tcListModule"><option value="">전체 모듈</option></select></label>
+      <label class="pd-field"><span>TC 중요도</span>
+        <select id="tcListPrio"><option value="">전체</option><option value="P1">P1 (핵심)</option><option value="P2">P2 (주요)</option><option value="P3">P3 (일반)</option></select>
+      </label>
+      <label class="pd-search"><span data-ico="search"></span><input type="search" id="tcListSearch" placeholder="TC ID, 테스트 항목, 분류로 검색하세요." autocomplete="off"></label>
+    </div>
+    <div id="tcListBody"></div>
+    <div class="modal-actions"><button type="button" id="btnCloseTcList" class="btn btn-outline">닫기</button></div>
+  </div>
+</div>
+
+<!-- + 새 프로젝트 모달 -->
+<div id="newProjectModal" class="modal-overlay" hidden>
+  <div class="modal-box">
+    <h2>새 프로젝트 생성</h2>
+    <p class="placeholder-text">_template 폴더를 복사해 시작합니다. 사이트 URL·단위/통합 테스트 여부 등은 생성 후 채팅 패널에서 알려주시면 이어서 진행합니다.</p>
+    <form id="newProjectForm">
+      <label for="newProjectName" class="visually-hidden">프로젝트명</label>
+      <input type="text" id="newProjectName" placeholder="프로젝트명 (예: ABC마트)" autocomplete="off" required>
+      <div class="modal-error" id="newProjectError"></div>
+      <div class="modal-actions">
+        <button type="button" id="btnCancelNewProject" class="btn btn-outline">취소</button>
+        <button type="submit" class="btn btn-primary">생성</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ⚙ 프로젝트 관리 모달 (project.json 수정 + 삭제) -->
+<div id="manageProjectModal" class="modal-overlay" hidden>
+  <div class="modal-box modal-box-lg">
+    <h2>프로젝트 관리 — <span id="manageProjectName"></span></h2>
+    <form id="manageProjectForm">
+      <label class="field-label" for="mpDisplayName">프로젝트 표시 이름</label>
+      <input type="text" id="mpDisplayName" maxlength="50" autocomplete="off" placeholder="화면에 보일 이름 (비우면 원래 이름)">
+      <div class="mp-hint">실제 프로젝트명(폴더·파일명·결함 ID): <b id="mpRealName"></b> — 표시 이름만 바뀌며 이 이름과 데이터는 그대로입니다. 4000 대시보드에서는 원래 이름으로 보입니다.</div>
+      <label class="field-label" for="mpUrl">사이트 URL</label>
+      <input type="text" id="mpUrl" autocomplete="off">
+      <label class="field-label" for="mpAdminUrl">관리자(Admin) URL</label>
+      <input type="text" id="mpAdminUrl" autocomplete="off">
+      <label class="field-label" for="mpTestType">단위/통합</label>
+      <select id="mpTestType">
+        <option value="">(미지정)</option>
+        <option value="단위">단위</option>
+        <option value="통합">통합</option>
+      </select>
+      <label class="field-label" for="mpAnalysisBasis">근거 확보 방식</label>
+      <select id="mpAnalysisBasis">
+        <option value="">(미지정)</option>
+        <option value="코드기반">코드기반</option>
+        <option value="정책기반">정책기반</option>
+        <option value="둘다">둘다</option>
+      </select>
+      <label class="mp-checkbox-row"><input type="checkbox" id="mpHasTestAccounts"> 테스트 계정 보유 (testAccounts.json)</label>
+      <div class="modal-error" id="manageProjectError"></div>
+      <div class="modal-actions">
+        <button type="button" id="btnCancelManageProject" class="btn btn-outline">닫기</button>
+        <button type="submit" class="btn btn-primary">저장</button>
+      </div>
+    </form>
+
+    <hr class="mp-divider">
+
+    <div class="mp-danger-zone">
+      <div class="mp-danger-title">⚠️ 프로젝트 삭제</div>
+      <p class="placeholder-text">삭제 전 <code>backup\deleted-projects\</code>에 전체 사본이 자동 보관되지만, 되돌리려면 수동 복구가 필요합니다 — 테스트/오등록 프로젝트 정리 용도로만 사용하세요. 삭제 후 git 커밋·push는 별도로 진행해야 합니다.</p>
+      <label class="field-label" for="mpDeleteConfirm">확인을 위해 <u>실제</u> 프로젝트명(<b id="mpDeleteConfirmName"></b>)을 정확히 입력하세요</label>
+      <input type="text" id="mpDeleteConfirm" autocomplete="off">
+      <div class="modal-error" id="mpDeleteError"></div>
+      <div class="modal-actions">
+        <button type="button" id="btnDeleteProject" class="btn btn-danger" disabled>이 프로젝트 영구 삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- + TC 업로드 모달 -->
+<div id="tcUploadModal" class="modal-overlay" hidden>
+  <div class="modal-box modal-box-lg">
+    <h2>TC 업로드</h2>
+    <p class="placeholder-text">
+      <b>.xlsx</b> — AGENTS.md 2항 컬럼(TC ID/system/대분류/중분류/소분류/화면명/플랫폼/유형/
+      테스트항목(시나리오)/기준문서/우선순위/테스트 데이터/사전조건/테스트 수행 절차/기대결과/
+      실행결과/담당자/이슈내용 요약/이슈링크/비고) 헤더를 그대로 쓴 시트. 여러 시트/여러 모듈이
+      섞여 있어도 됩니다.<br>
+      <b>.json</b> — TC 항목 배열(<code>[{"tcId":"...", "majorCategory":"...", ...}, ...]</code>)
+      또는 캐노니컬 파일 전체(<code>{"meta":{...},"items":[...]}</code>, TC 뷰어의 "JSON 저장"이
+      만드는 형식 그대로) — 필드명은 엑셀 헤더가 아니라 tcId/majorCategory/steps/expected 같은
+      캐노니컬 스키마 이름을 그대로 씁니다.<br>
+      두 형식 모두 <b>TC ID가 이미 등록된 값이면 수정, 비어있으면 대분류를 기준으로 신규 추가</b>되며,
+      값이 채워진 칸/필드만 반영되고 나머지는 기존 값을 그대로 둡니다.<br>
+      <b>단, TC ID가 같아도 대/중/소분류·테스트항목 중 값이 있는 게 서로 다르면</b> 같은 TC의 수정이
+      아니라 우연히 ID만 겹친 별개 케이스로 보고, 기존 TC는 그대로 둔 채 새 TC ID로 분리 생성합니다
+      (결과 화면에 어떤 항목이 분리 생성됐는지 안내됩니다).
+    </p>
+    <label class="field-label" for="tcUploadFile">파일 (.xlsx 또는 .json)</label>
+    <input type="file" id="tcUploadFile" accept=".xlsx,.json">
+    <div class="modal-error" id="tcUploadError"></div>
+    <div id="tcUploadResult" class="tc-upload-result" hidden></div>
+    <div class="modal-actions">
+      <button type="button" id="btnCancelTcUpload" class="btn btn-outline">닫기</button>
+      <button type="button" id="btnTcUploadSubmit" class="btn btn-primary" disabled>업로드 및 반영</button>
+    </div>
+  </div>
+</div>
+
+<!-- 테스트 실행 재생 모달 (단계 재생 모드로 녹화한 영상/스크린샷) -->
+<div id="replayModal" class="modal-overlay" hidden>
+  <div class="modal-box modal-box-replay">
+    <h2>테스트 실행 재생</h2>
+    <div class="replay-filters">
+      <div class="tq-pill-group" id="replayStatusPills"></div>
+      <input type="text" id="replayTcSearch" class="replay-search" placeholder="TC ID 검색 (예: TC_PD_146)">
+    </div>
+    <div id="replayList" class="replay-list"></div>
+    <div class="modal-actions">
+      <button type="button" id="btnCloseReplay" class="btn btn-outline">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 🔗 Git 상태 · push 모달 -->
+<div id="gitStatusModal" class="modal-overlay" hidden>
+  <div class="modal-box">
+    <h2>Git 상태</h2>
+    <div id="gitStatusBody" class="placeholder-text">불러오는 중…</div>
+    <div class="modal-error" id="gitStatusError"></div>
+    <div class="modal-actions">
+      <button type="button" id="btnCloseGitStatus" class="btn btn-outline">닫기</button>
+      <button type="button" id="btnGitPush" class="btn btn-primary" disabled>origin으로 push</button>
+    </div>
+  </div>
+</div>
+
+<script src="/app.js"></script>
+<script src="/project-detail.js"></script>
+<script src="/project-detail-tclist.js"></script>
+</body>
+</html>
