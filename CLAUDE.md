@@ -154,6 +154,10 @@ dependency) — do not conflate this with "resuming the Slack bot." Check/modify
 ## Key conventions (detail in AGENTS.md)
 
 - TC IDs: `TC_{모듈코드}_{3자리숫자}` (module codes: PD, MB, CO, PR, OP, CS, MY, etc. — AGENTS.md/SKILL.md §5).
+- **TC Priority vs Defect Severity**:
+  - **TC Priority (TC 중요도)**: `P1 (핵심)` / `P2 (주요)` / `P3 (일반)` — TC 실행 우선순위 (`items[].priority` 필드)
+  - **Defect Severity (결함 심각도)**: `Critical (치명)` / `Major (주요)` / `Minor (경미)` — 결함 영향도 (`defects[].severity` 필드)
+  - 두 코드는 서로 독립적이며 혼용하지 않습니다 (AGENTS.md §4, §20).
 <!-- [수정 전 2026-08-27] "Result values: `Pass / Fail / Blocked / N/A / N/T` — `N/T` means blocked by an
 already-known defect, not a failure of the TC itself (AGENTS.md §20-7)." Blocked retired 2026-08-27 —
 its definition overlapped with N/A closely enough to cause confusion, so it was folded into N/A
