@@ -99,8 +99,8 @@ function projectExists(name) {
  * project.json이 아직 없으면(Phase 0 진행 전 신규 프로젝트) 이 호출로 최초 생성됩니다.
  * 프로젝트명(project 필드)·생성일(createdAt)은 이 함수로 바꾸지 않습니다 — project.json의 project
  * 값은 TC ID/파일명 등 저장소 전반에 이미 박혀있는 실제 폴더명과 반드시 일치해야 하므로, 폴더/파일명
- * 리네이밍 없이 이 값만 따로 바꾸면 불일치가 생깁니다(폴더 리네이밍은 이 기능의 범위 밖 — 필요 시
- * 프로젝트를 새로 만들고 내용을 옮기는 방식으로 처리).
+ * 리네이밍 없이 이 값만 따로 바꾸면 불일치가 생깁니다. 프로젝트명 변경 자체는 아래 renameProject()가
+ * 전담합니다(2026-10-01 추가).
  */
 function updateProjectMeta(name, fields) {
   if (!projectExists(name)) throw new Error(`"${name}" 프로젝트를 찾을 수 없습니다.`);
@@ -132,6 +132,82 @@ function updateProjectMeta(name, fields) {
 }
 
 /**
+ * 프로젝트명을 변경합니다 (2026-10-01 추가 — 기존엔 "폴더/파일명 리네이밍은 범위 밖"이라 명시만
+ * 해뒀던 기능). 아래 범위까지만 자동으로 맞춥니다:
+ *   1) project\{oldName}\ 폴더 자체를 project\{newName}\ 으로 rename
+ *   2) project.json의 "project" 필드
+ *   3) 폴더 내부(하위 전체, TC/legacy·results 포함)에서 파일명이 "{oldName}_"로 시작하는 모든
+ *      파일(TC 캐노니컬/전체/legacy/results, Analysis의 PRD 등 — AGENTS.md 10항 명명 규칙)을
+ *      "{newName}_"로 rename하고, 그 중 JSON 파일은 meta.project 필드도 함께 갱신
+ * 의도적으로 손대지 않는 범위: defects.json의 결함ID(DEF_{oldName}_NNN)와 TC/defects/ 스크린샷
+ * 파일명, 이미 생성된 HTML 뷰어 안에 문구로 박혀있는 프로젝트명(제목 등)은 그대로 둡니다 — 전자는
+ * 폴더명과 무관하게 동작하는 과거 시점 식별자라 바꾸면 오히려 과거 이슈링크 등과의 추적성을 깨뜨리고,
+ * 후자는 AGENTS.md 10항에 따라 legacy 아카이브 후 버전을 올려 재생성해야 하는 통제된 산출물이라
+ * (Claude가 Phase 4 흐름대로 다시 만들어야 함) 이 함수가 임의로 텍스트를 치환하지 않습니다.
+ */
+function renameProject(oldName, newName) {
+  if (!projectExists(oldName)) throw new Error(`"${oldName}" 프로젝트를 찾을 수 없습니다.`);
+  const trimmed = (newName || '').trim();
+  if (trimmed === oldName) throw new Error('현재 이름과 동일합니다.');
+  const reason = validateProjectName(trimmed);
+  if (reason) throw new Error(reason);
+
+  const oldDir = path.join(PROJECTS_ROOT, oldName);
+  const newDir = path.join(PROJECTS_ROOT, trimmed);
+  fs.renameSync(oldDir, newDir);
+
+  const metaPath = path.join(newDir, 'project.json');
+  try {
+    const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+    meta.project = trimmed;
+    fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2) + '\n', 'utf8');
+  } catch {
+    // project.json이 없는(Phase 0 이전) 프로젝트는 건너뜀
+  }
+
+  const prefix = `${oldName}_`;
+  const renamedFiles = [];
+  const failedFiles = [];
+  function walk(dir) {
+    let entries;
+    try {
+      entries = fs.readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(full);
+        continue;
+      }
+      if (!entry.name.startsWith(prefix)) continue;
+      const newFull = path.join(dir, trimmed + '_' + entry.name.slice(prefix.length));
+      try {
+        fs.renameSync(full, newFull);
+        renamedFiles.push(path.relative(newDir, newFull));
+        if (newFull.endsWith('.json')) {
+          try {
+            const content = JSON.parse(fs.readFileSync(newFull, 'utf8'));
+            if (content && content.meta && content.meta.project === oldName) {
+              content.meta.project = trimmed;
+              fs.writeFileSync(newFull, JSON.stringify(content, null, 2), 'utf8');
+            }
+          } catch {
+            // TC 항목 배열 등 meta가 없는 JSON — 건너뜀
+          }
+        }
+      } catch (err) {
+        failedFiles.push({ file: path.relative(newDir, full), error: err.message });
+      }
+    }
+  }
+  walk(newDir);
+
+  return { project: trimmed, renamedFiles, failedFiles };
+}
+
+/**
  * 프로젝트 폴더를 삭제합니다 (테스트용/오등록 프로젝트 정리 용도). 되돌릴 수 없는 작업이므로:
  * 1) confirmName이 실제 프로젝트명과 정확히(대소문자 포함) 일치할 때만 진행하고,
  * 2) 삭제 전 backup\deleted-projects\{프로젝트명}_{타임스탬프}\ 에 전체 사본을 먼저 남깁니다.
@@ -154,5 +230,5 @@ function deleteProject(name, confirmName) {
 
 module.exports = {
   listProjects, createProject, validateProjectName, loadMeta,
-  projectExists, updateProjectMeta, deleteProject,
+  projectExists, updateProjectMeta, renameProject, deleteProject,
 };

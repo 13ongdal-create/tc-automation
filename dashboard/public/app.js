@@ -39,6 +39,9 @@ const el = {
   mpDeleteConfirm: document.getElementById('mpDeleteConfirm'),
   mpDeleteError: document.getElementById('mpDeleteError'),
   btnDeleteProject: document.getElementById('btnDeleteProject'),
+  mpRenameInput: document.getElementById('mpRenameInput'),
+  mpRenameError: document.getElementById('mpRenameError'),
+  btnRenameProject: document.getElementById('btnRenameProject'),
   kpiTotalDefects: document.getElementById('kpiTotalDefects'),
   kpiNewDefects: document.getElementById('kpiNewDefects'),
   kpiPass: document.getElementById('kpiPass'),
@@ -66,6 +69,8 @@ const el = {
   defectDetailLink: document.getElementById('defectDetailLink'),
   defectTableBody: document.getElementById('defectTableBody'),
   defectListMore: document.getElementById('defectListMore'),
+  defectSeverityChart: document.getElementById('defectSeverityChart'),
+  defectSeverityTable: document.getElementById('defectSeverityTable'),
   resultsList: document.getElementById('resultsList'),
   tqStatus: document.getElementById('tqStatus'),
   tqModule: document.getElementById('tqModule'),
@@ -654,6 +659,9 @@ async function openManageProjectModal(project) {
   el.mpDeleteConfirmName.textContent = project;
   el.mpDeleteConfirm.value = '';
   el.btnDeleteProject.disabled = true;
+  el.mpRenameError.textContent = '';
+  el.mpRenameInput.value = project;
+  el.btnRenameProject.disabled = true;
   // 폼을 비운 채로 먼저 열고, project.json을 읽어와 채웁니다 (project.json이 아직 없는
   // 프로젝트는 loadMeta가 null 필드로 응답 — 그대로 빈 값으로 둡니다).
   el.mpUrl.value = '';
@@ -736,6 +744,34 @@ el.manageProjectForm.addEventListener('submit', async (e) => {
 
 el.mpDeleteConfirm.addEventListener('input', () => {
   el.btnDeleteProject.disabled = el.mpDeleteConfirm.value !== manageProjectTarget;
+});
+
+el.mpRenameInput.addEventListener('input', () => {
+  const v = el.mpRenameInput.value.trim();
+  el.btnRenameProject.disabled = !v || v === manageProjectTarget;
+});
+
+el.btnRenameProject.addEventListener('click', async () => {
+  if (!manageProjectTarget) return;
+  const newName = el.mpRenameInput.value.trim();
+  el.mpRenameError.textContent = '';
+  if (!newName || newName === manageProjectTarget) return;
+  if (!confirm(`"${manageProjectTarget}" → "${newName}"(으)로 이름을 변경합니다.\nTC/결함/실행이력 산출물 파일명도 함께 바뀝니다. 계속할까요?`)) return;
+  const res = await fetch(`/api/projects/${encodeURIComponent(manageProjectTarget)}/rename`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ newName }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    el.mpRenameError.textContent = data.error || '이름 변경에 실패했습니다.';
+    return;
+  }
+  const wasCurrent = el.projectSelect.value === manageProjectTarget;
+  closeManageProjectModal();
+  await loadProjects();
+  if (wasCurrent) showProject(data.project);
+  else renderHomeDashboard();
 });
 
 el.btnDeleteProject.addEventListener('click', async () => {
@@ -827,6 +863,17 @@ function renderTcPriorityDonut(byModule) {
     ${donutSummaryTable(TC_PRIORITY_ORDER, TC_PRIORITY_LABELS, TC_PRIORITY_COLORS, totals)}`;
 }
 
+/** 🐞 결함 관리 — 표 리스트 왼쪽에 붙는 결함 심각도(Critical/Major/Minor) 분포 도넛
+ * (2026-10-01 추가, 📊 모듈별 TC 현황의 renderTcPriorityDonut과 동일한 카드 구성) */
+function renderDefectSeverityCard(kpi) {
+  const d = kpi ? kpi.defects : null;
+  const counts = d ? d.severityCounts || {} : {};
+  return `
+    <div class="pb-chart-head"><span class="pb-chart-title">결함 심각도 분포</span></div>
+    <div class="pb-chart-body">${renderSeverityDonut(kpi)}</div>
+    ${donutSummaryTable(SEVERITY_ORDER, SEVERITY_LABELS, SEVERITY_COLORS, counts)}`;
+}
+
 /** 📋 TC 관리 하단 — 모듈별 TC 우선순위(P1/P2/P3) 분포 (변경 이력은 별도 페이지로 분리) */
 function renderTcPriorityTable(byModule) {
   if (!byModule || !byModule.length) return '<div class="empty-row">등록된 TC가 없습니다</div>';
@@ -855,6 +902,8 @@ async function loadKpi(project) {
   registerPaginatedList('moduleExec', results.byModule || [], (items) => renderModuleExecTable(items), el.detailModuleExecTable);
   el.tcPriorityChart.innerHTML = renderTcPriorityDonut(tcPriorityByModule);
   registerPaginatedList('tcPriority', tcPriorityByModule || [], (items) => renderTcPriorityTable(items), el.tcPriorityBody);
+  el.defectSeverityChart.innerHTML = renderDefectSeverityCard({ defects });
+  registerPaginatedList('defectSeverityModule', defects.byModule || [], (items) => renderModuleDefectTable(items), el.defectSeverityTable);
 
   if (viewerFile) {
     const url = `/project-files/${encodeURIComponent(project)}/TC/${encodeURIComponent(viewerFile)}`;

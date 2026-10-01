@@ -176,6 +176,20 @@ app.patch('/api/projects/:project/meta', (req, res) => {
   }
 });
 
+// 프로젝트명 변경 — 폴더 자체와 TC/legacy/results 등 "{project}_"로 시작하는 산출물 파일명,
+// project.json/meta.project 필드까지 함께 맞춘다 (projectStore.renameProject 참조). 결함ID·
+// 스크린샷 파일명·HTML 뷰어 내 표시 문구는 의도적으로 손대지 않으며(위 함수 주석 참조), git
+// 커밋/push는 이 라우트가 하지 않는다 — 삭제(/api/projects/:project DELETE)와 동일한 원칙.
+app.post('/api/projects/:project/rename', (req, res) => {
+  const { newName } = req.body || {};
+  try {
+    const result = projectStore.renameProject(req.params.project, newName);
+    res.json({ ok: true, ...result });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 // 프로젝트 폴더 전체 삭제(테스트/오등록 프로젝트 정리용). body.confirmName이 프로젝트명과 정확히
 // 일치해야만 진행되며, 삭제 전 backup\deleted-projects\ 에 전체 사본을 남깁니다. git 커밋/push는
 // 이 라우트가 하지 않습니다 — 별도로 진행해야 합니다.

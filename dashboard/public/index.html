@@ -140,14 +140,9 @@
     </div>
   </section>
 
-  <section class="panel panel-full">
-    <div class="panel-head"><h2>📊 모듈별 TC 수행현황</h2></div>
-    <div class="table-wrap" id="detailModuleExecTable"><span class="placeholder-text">프로젝트를 선택하세요</span></div>
-  </section>
-
   <section class="panel panel-full panel-tc">
     <div class="panel-head">
-      <h2>📋 TC 관리</h2>
+      <h2>📊 모듈별 TC 현황</h2>
       <button type="button" id="btnTcUpload" class="btn btn-outline btn-sm">+ TC 업로드</button>
       <div class="panel-head-actions">
         <a id="tcDetailLink" class="project-block-link" href="#" target="_blank" rel="noopener" hidden>Full TC 상세 보기 →</a>
@@ -156,42 +151,120 @@
     <div class="tc-priority-layout">
       <div class="pb-chart-card" id="tcPriorityChart"><span class="placeholder-text">프로젝트를 선택하세요</span></div>
       <div class="tc-priority-table-col">
-        <div class="pb-section-title">모듈별 우선순위 현황</div>
-        <div class="table-wrap" id="tcPriorityBody"><span class="placeholder-text">프로젝트를 선택하세요</span></div>
+        <div class="table-wrap" id="detailModuleExecTable"><span class="placeholder-text">프로젝트를 선택하세요</span></div>
       </div>
     </div>
+    <details class="pb-chart-card pb-chart-card-wide pb-table-row pb-collapsible" open>
+      <summary class="pb-chart-head"><span class="pb-chart-title">모듈별 우선순위 현황</span></summary>
+      <div class="table-wrap" id="tcPriorityBody"><span class="placeholder-text">프로젝트를 선택하세요</span></div>
+    </details>
     <div class="tc-history-link-row">
       <a id="tcHistoryLink" class="project-block-link" href="#" target="_blank" rel="noopener" hidden>Full TC 변경 이력 상세 →</a>
     </div>
   </section>
 
-  <section class="panel-grid">
-
-    <div class="panel panel-wide">
-      <div class="panel-head">
-        <h2>🐞 결함 관리</h2>
-        <span class="panel-sub">상태·담당자 편집 시 즉시 defects.json에 저장됩니다 (Claude 미사용)</span>
+  <section class="panel panel-full panel-tc">
+    <div class="panel-head">
+      <h2>🐞 결함 관리</h2>
+      <span class="panel-sub">상태·담당자 편집 시 즉시 defects.json에 저장됩니다 (Claude 미사용)</span>
+      <div class="panel-head-actions">
         <a id="defectDetailLink" class="project-block-link" href="#" target="_blank" rel="noopener" hidden>결함목록 상세 보기 →</a>
       </div>
-      <div class="table-wrap">
-        <table id="defectTable">
-          <thead>
-            <tr>
-              <th style="width:14%">결함ID</th>
-              <th style="width:10%">모듈</th>
-              <th style="width:6%">심각도</th>
-              <th style="width:11%">상태</th>
-              <th style="width:11%">담당자</th>
-              <th>요약</th>
-              <th style="width:8%">발견일</th>
-            </tr>
-          </thead>
-          <tbody id="defectTableBody">
-            <tr><td colspan="7" class="empty-row">프로젝트를 선택하세요</td></tr>
-          </tbody>
-        </table>
+    </div>
+    <div class="tc-priority-layout">
+      <div class="pb-chart-card" id="defectSeverityChart"><span class="placeholder-text">프로젝트를 선택하세요</span></div>
+      <div class="tc-priority-table-col">
+        <div class="table-wrap">
+          <table id="defectTable">
+            <thead>
+              <tr>
+                <th style="width:14%">결함ID</th>
+                <th style="width:10%">모듈</th>
+                <th style="width:6%">심각도</th>
+                <th style="width:11%">상태</th>
+                <th style="width:11%">담당자</th>
+                <th>요약</th>
+                <th style="width:8%">발견일</th>
+              </tr>
+            </thead>
+            <tbody id="defectTableBody">
+              <tr><td colspan="7" class="empty-row">프로젝트를 선택하세요</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="defectListMore"></div>
       </div>
-      <div id="defectListMore"></div>
+    </div>
+    <details class="pb-chart-card pb-chart-card-wide pb-table-row pb-collapsible" open>
+      <summary class="pb-chart-head"><span class="pb-chart-title">모듈별 심각도 현황</span></summary>
+      <div class="table-wrap" id="defectSeverityTable"><span class="placeholder-text">프로젝트를 선택하세요</span></div>
+    </details>
+  </section>
+
+  <section class="panel-grid">
+
+    <div class="panel panel-wide panel-tq">
+      <div class="panel-head">
+        <h2>▶ 테스트 실행 큐</h2>
+        <span class="panel-sub">진행상태 : <span id="tqStatus">대기 중</span></span>
+      </div>
+
+      <div class="tq-filters-row">
+        <div class="tq-field">
+          <label class="field-label" for="tqModule">모듈</label>
+          <select id="tqModule"><option value="">전체 모듈</option></select>
+        </div>
+
+        <div class="tq-field">
+          <label class="field-label" for="tqSystem">시스템</label>
+          <select id="tqSystem">
+            <option value="">전체 시스템</option>
+            <option value="FO">FO</option>
+            <option value="BO">BO</option>
+          </select>
+        </div>
+
+        <div class="tq-field">
+          <label class="field-label" for="tqPriority">우선순위</label>
+          <select id="tqPriority">
+            <option value="">전체</option>
+            <option value="P1">P1</option>
+            <option value="P2">P2</option>
+            <option value="P3">P3</option>
+          </select>
+        </div>
+
+        <div class="tq-field">
+          <label class="field-label" for="tqStatusFilter">수행상태</label>
+          <select id="tqStatusFilter">
+            <option value="">전체</option>
+            <option value="none">미수행</option>
+            <option value="Pass">Pass</option>
+            <option value="Fail">Fail</option>
+            <option value="N/A">N/A</option>
+            <option value="N/T">N/T</option>
+          </select>
+        </div>
+
+        <div class="tq-field tq-field-wide">
+          <label class="field-label" for="tqHeaded">브라우저 실행 화면 (Playwright)</label>
+          <select id="tqHeaded">
+            <option value="0">⚡ 백그라운드 실행 (화면 숨김 / 고속)</option>
+            <option value="1">🎞 단계 재생 (창 없이 녹화 → 실행 후 팝업에서 영상 재생)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="tq-preview" id="tqPreview">프로젝트를 선택하면 실행 대상 현황이 표시됩니다.</div>
+
+      <div class="tq-actions">
+        <button type="button" id="btnTqStart" class="btn btn-primary" disabled>▶ 테스트 실행 시작</button>
+        <button type="button" id="btnTqCancel" class="btn btn-outline" hidden>■ 중단</button>
+        <button type="button" id="btnTqReplay" class="btn btn-outline" hidden>🎞 실행 재생 보기</button>
+      </div>
+
+      <div id="tqModuleQueue" class="tq-module-queue"></div>
+      <pre id="tqLog" class="tq-log" hidden></pre>
     </div>
 
     <div class="panel">
@@ -204,70 +277,6 @@
       </div>
     </div>
 
-  </section>
-
-  <section class="panel panel-full panel-tq">
-    <div class="panel-head">
-      <h2>▶ 테스트 실행 큐</h2>
-      <span class="panel-sub">진행상태 : <span id="tqStatus">대기 중</span></span>
-    </div>
-
-    <div class="tq-filters-row">
-      <div class="tq-field">
-        <label class="field-label" for="tqModule">모듈</label>
-        <select id="tqModule"><option value="">전체 모듈</option></select>
-      </div>
-
-      <div class="tq-field">
-        <label class="field-label" for="tqSystem">시스템</label>
-        <select id="tqSystem">
-          <option value="">전체 시스템</option>
-          <option value="FO">FO</option>
-          <option value="BO">BO</option>
-        </select>
-      </div>
-
-      <div class="tq-field">
-        <label class="field-label" for="tqPriority">우선순위</label>
-        <select id="tqPriority">
-          <option value="">전체</option>
-          <option value="P1">P1</option>
-          <option value="P2">P2</option>
-          <option value="P3">P3</option>
-        </select>
-      </div>
-
-      <div class="tq-field">
-        <label class="field-label" for="tqStatusFilter">수행상태</label>
-        <select id="tqStatusFilter">
-          <option value="">전체</option>
-          <option value="none">미수행</option>
-          <option value="Pass">Pass</option>
-          <option value="Fail">Fail</option>
-          <option value="N/A">N/A</option>
-          <option value="N/T">N/T</option>
-        </select>
-      </div>
-
-      <div class="tq-field tq-field-wide">
-        <label class="field-label" for="tqHeaded">브라우저 실행 화면 (Playwright)</label>
-        <select id="tqHeaded">
-          <option value="0">⚡ 백그라운드 실행 (화면 숨김 / 고속)</option>
-          <option value="1">🎞 단계 재생 (창 없이 녹화 → 실행 후 팝업에서 영상 재생)</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="tq-preview" id="tqPreview">프로젝트를 선택하면 실행 대상 현황이 표시됩니다.</div>
-
-    <div class="tq-actions">
-      <button type="button" id="btnTqStart" class="btn btn-primary" disabled>▶ 테스트 실행 시작</button>
-      <button type="button" id="btnTqCancel" class="btn btn-outline" hidden>■ 중단</button>
-      <button type="button" id="btnTqReplay" class="btn btn-outline" hidden>🎞 실행 재생 보기</button>
-    </div>
-
-    <div id="tqModuleQueue" class="tq-module-queue"></div>
-    <pre id="tqLog" class="tq-log" hidden></pre>
   </section>
 
 </main>
@@ -318,6 +327,24 @@
         <button type="submit" class="btn btn-primary">저장</button>
       </div>
     </form>
+
+    <hr class="mp-divider">
+
+    <div class="mp-rename-zone">
+      <div class="mp-rename-title">✏️ 프로젝트명 변경</div>
+      <p class="placeholder-text">
+        폴더명과 TC/legacy/results 등 산출물 파일명(<code>{프로젝트명}_TC_...</code>)이 함께 바뀌고,
+        project.json과 각 TC 파일의 <code>meta.project</code>도 함께 갱신됩니다. 결함 ID(<code>DEF_{기존이름}_NNN</code>)와
+        스크린샷 파일명, 이미 생성된 HTML 뷰어 안의 표시 문구(제목 등)는 바뀌지 않습니다 — 뷰어는
+        변경 후 채팅에서 "뷰어 다시 생성해줘"로 요청하면 반영됩니다. 변경 후 git 커밋·push는 별도로 진행해주세요.
+      </p>
+      <label class="field-label" for="mpRenameInput">새 프로젝트명</label>
+      <input type="text" id="mpRenameInput" autocomplete="off">
+      <div class="modal-error" id="mpRenameError"></div>
+      <div class="modal-actions">
+        <button type="button" id="btnRenameProject" class="btn btn-outline" disabled>이름 변경</button>
+      </div>
+    </div>
 
     <hr class="mp-divider">
 
