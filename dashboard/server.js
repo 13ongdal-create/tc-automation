@@ -566,6 +566,30 @@ app.post('/api/:project/tc-upload', async (req, res) => {
   }
 });
 
+// 채팅 패널 "+" 첨부 버튼 — 정책서/SB 문서를 project/{프로젝트}/Policy/에 저장하고 경로를
+// 돌려줍니다. 실제 분석은 하지 않습니다(Claude 미사용, zero-token) — 채팅 메시지에 이 경로를
+// 함께 적어 보내면, 그 다음 claude 헤드리스 세션이 자기 Read 도구로 직접 열어봅니다.
+app.post('/api/:project/chat-attachment', (req, res) => {
+  const { project } = req.params;
+  const { fileName, dataBase64 } = req.body || {};
+  if (!dataBase64) return res.status(400).json({ error: '첨부할 파일 데이터가 없습니다.' });
+  try {
+    const base = path.basename(fileName || 'attachment').replace(/[\\/]/g, '_');
+    const dir = path.join(defectStore.PROJECTS_ROOT, project, 'Policy');
+    fs.mkdirSync(dir, { recursive: true });
+    let finalName = base;
+    if (fs.existsSync(path.join(dir, finalName))) {
+      const ts = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
+      const ext = path.extname(base);
+      finalName = `${path.basename(base, ext)}_${ts}${ext}`;
+    }
+    fs.writeFileSync(path.join(dir, finalName), Buffer.from(dataBase64, 'base64'));
+    res.json({ path: `project/${project}/Policy/${finalName}`, fileName: finalName });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 app.get('/api/:project/test-queue/preview', (req, res) => {
   const { scope, moduleCodes, tcIds, priority, system, status } = req.query;
   try {

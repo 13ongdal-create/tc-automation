@@ -92,17 +92,30 @@ const el = {
   btnChatCancel: document.getElementById('btnChatCancel'),
   btnChatReset: document.getElementById('btnChatReset'),
   chatPanel: document.getElementById('chatPanel'),
+  chatPanelToggle: document.getElementById('chatPanelToggle'),
+  chatPanelCollapse: document.getElementById('chatPanelCollapse'),
+  btnChatAttach: document.getElementById('btnChatAttach'),
+  chatAttachInput: document.getElementById('chatAttachInput'),
+  chatAttachList: document.getElementById('chatAttachList'),
 };
 
-// 채팅 패널 접기/펼치기 상태를 기억 (프로젝트 전환/새로고침에도 유지)
-try {
-  if (el.chatPanel) {
-    el.chatPanel.open = localStorage.getItem('chatPanelCollapsed') !== '1';
-    el.chatPanel.addEventListener('toggle', () => {
-      try { localStorage.setItem('chatPanelCollapsed', el.chatPanel.open ? '0' : '1'); } catch {}
-    });
-  }
-} catch {}
+// 채팅 패널 접기/펼치기 — 네이티브 <details>는 애니메이션이 없어 전환이 뚝뚝 끊겨 보인다는
+// 피드백으로, 버튼 + CSS grid-template-rows 트랜지션 방식으로 교체(부드러운 슬라이드).
+// 상태는 localStorage에 저장해 새로고침해도 유지.
+function setChatPanelExpanded(expanded) {
+  if (!el.chatPanelToggle || !el.chatPanelCollapse) return;
+  el.chatPanelToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  el.chatPanelCollapse.classList.toggle('collapsed', !expanded);
+  try { localStorage.setItem('chatPanelCollapsed', expanded ? '0' : '1'); } catch {}
+}
+if (el.chatPanelToggle) {
+  let startExpanded = true;
+  try { startExpanded = localStorage.getItem('chatPanelCollapsed') !== '1'; } catch {}
+  setChatPanelExpanded(startExpanded);
+  el.chatPanelToggle.addEventListener('click', () => {
+    setChatPanelExpanded(el.chatPanelToggle.getAttribute('aria-expanded') !== 'true');
+  });
+}
 
 let allProjects = [];
 
@@ -1435,20 +1448,85 @@ el.btnTqCancel.addEventListener('click', () => {
   el.tqStatus.textContent = '중단 요청을 보냈습니다…';
 });
 
+// ── 채팅 첨부(정책서/SB 문서) — Claude/Slack처럼 "+" 버튼으로 올리면 project/Policy/에 저장되고,
+// 보내기 시 메시지에 그 경로가 함께 실려 큐돌이가 자기 Read 도구로 직접 열어봅니다 ──────────
+let pendingAttachments = []; // [{ fileName, path }]
+
+function renderChatAttachList() {
+  if (!pendingAttachments.length) {
+    el.chatAttachList.hidden = true;
+    el.chatAttachList.innerHTML = '';
+    return;
+  }
+  el.chatAttachList.hidden = false;
+  el.chatAttachList.innerHTML = pendingAttachments
+    .map((a, i) => `<span class="chat-attach-chip">📎 ${esc(a.fileName)}<button type="button" class="chat-attach-remove" data-idx="${i}" title="첨부 취소">×</button></span>`)
+    .join('');
+}
+
+el.chatAttachList.addEventListener('click', (e) => {
+  const btn = e.target.closest('.chat-attach-remove');
+  if (!btn) return;
+  pendingAttachments.splice(Number(btn.dataset.idx), 1);
+  renderChatAttachList();
+});
+
+el.btnChatAttach.addEventListener('click', () => {
+  if (!el.projectSelect.value) {
+    setChatStatus('먼저 프로젝트를 선택해주세요.', 'ws-error');
+    return;
+  }
+  el.chatAttachInput.click();
+});
+
+el.chatAttachInput.addEventListener('change', async () => {
+  const file = el.chatAttachInput.files[0];
+  el.chatAttachInput.value = '';
+  const project = el.projectSelect.value;
+  if (!file || !project) return;
+  const originalLabel = el.btnChatAttach.textContent;
+  el.btnChatAttach.disabled = true;
+  el.btnChatAttach.textContent = '…';
+  try {
+    const buf = await file.arrayBuffer();
+    const dataBase64 = arrayBufferToBase64(buf);
+    const res = await fetch(`/api/${encodeURIComponent(project)}/chat-attachment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fileName: file.name, dataBase64 }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || '첨부 업로드 실패');
+    pendingAttachments.push({ fileName: data.fileName, path: data.path });
+    renderChatAttachList();
+  } catch (err) {
+    setChatStatus(`첨부 실패: ${err.message}`, 'ws-error');
+  } finally {
+    el.btnChatAttach.disabled = false;
+    el.btnChatAttach.textContent = originalLabel;
+  }
+});
+
 el.chatForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const project = el.projectSelect.value;
   const text = el.chatInput.value.trim();
-  if (!project || !text || wsBusy) return;
+  if (!project || (!text && !pendingAttachments.length) || wsBusy) return;
   if (!ws || ws.readyState !== WebSocket.OPEN) {
     setChatStatus('아직 연결되지 않았습니다 — 잠시 후 다시 시도해주세요.', 'ws-error');
     return;
   }
+  const attachNote = pendingAttachments.length
+    ? `[첨부파일: ${pendingAttachments.map((a) => a.path).join(', ')}]\n`
+    : '';
+  const fullText = attachNote + text;
   clearChatHint();
-  appendChatBubble('user', text);
+  appendChatBubble('user', fullText);
   el.chatInput.value = '';
+  pendingAttachments = [];
+  renderChatAttachList();
   setChatBusy(true);
-  ws.send(JSON.stringify({ type: 'message', project, text }));
+  ws.send(JSON.stringify({ type: 'message', project, text: fullText }));
 });
 
 el.chatInput.addEventListener('keydown', (e) => {
