@@ -1,0 +1,10 @@
+{
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin",
+    "Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "Failed to load resource: net::ERR_FAILED",
+    "Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "Failed to load resource: net::ERR_FAILED"
+  ],
+  "failedRequests": []
+}
