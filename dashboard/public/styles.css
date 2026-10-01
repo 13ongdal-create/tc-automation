@@ -174,7 +174,11 @@ th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:u
 
 /* 💬 사이트분석 · TC 생성 채팅 패널 (접기/펼치기 가능, <details>/<summary>) */
 .panel-full{margin-top:18px;}
-.panel-chat.pb-collapsible > summary.panel-head{justify-content:space-between !important;}
+/* summary는 ::before 삼각형 마커도 flex 아이템이라 justify-content:space-between을 쓰면
+   제목(h2)이 가운데로 밀림 — flex-start로 왼쪽 그룹(마커+제목)을 유지하고, 상태 뱃지만
+   margin-left:auto로 오른쪽에 붙인다. */
+.panel-chat.pb-collapsible > summary.panel-head{justify-content:flex-start;}
+.panel-chat.pb-collapsible > summary.panel-head #chatStatus{margin-left:auto;}
 .panel-chat-body{padding-top:4px;}
 .panel-chat-toolbar{display:flex;justify-content:flex-end;margin-bottom:8px;}
 .panel-chat-toolbar .btn-sm{padding:5px 12px;font-size:12px;}
