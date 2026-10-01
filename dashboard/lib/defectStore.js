@@ -89,11 +89,15 @@ function summary(project) {
 
     const mod = d.module || '(미지정)';
     if (!byModuleMap[mod]) {
-      byModuleMap[mod] = { module: mod, total: 0, Critical: 0, Major: 0, Minor: 0, 신규: 0, 처리중: 0, 완료: 0 };
+      byModuleMap[mod] = { module: mod, total: 0, Critical: 0, Major: 0, Minor: 0, 신규: 0, 처리중: 0, 완료: 0, 기타: 0 };
     }
     byModuleMap[mod].total += 1;
     if (sev && byModuleMap[mod][sev] !== undefined) byModuleMap[mod][sev] += 1;
+    // [수정 2026-10-01] 신규/처리중/완료 3개 열만 더해 "모듈별 결함 상세" 표의 합이 전체와
+    // 어긋나던 문제(사용자 리포트로 발견) — STATUS_ORDER 6개 값 중 나머지(재검증대기/보류/재발생)는
+    // "기타" 열로 모아 열 합계가 항상 모듈 전체 건수와 일치하도록 함.
     if (d.status === '신규' || d.status === '처리중' || d.status === '완료') byModuleMap[mod][d.status] += 1;
+    else byModuleMap[mod].기타 += 1;
   }
   const byModule = Object.values(byModuleMap).sort((a, b) => b.total - a.total);
   return { total: defects.length, counts, severityCounts, byModule };
