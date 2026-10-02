@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oliveyoung Global PRD (사이트분석 &amp; TC계획)</title>
+<style>
+  :root{--bg:#f6f8fa;--panel:#fff;--text:#1f2328;--muted:#656d76;--border:#d0d7de;--accent:#0969da;--warn:#9a6700;--ok:#1a7f37;--bad:#cf222e;--head:#f6f8fa;}
+  @media (prefers-color-scheme: dark){:root{--bg:#0d1117;--panel:#161b22;--text:#e6edf3;--muted:#8b949e;--border:#30363d;--accent:#58a6ff;--warn:#d29922;--ok:#3fb950;--bad:#f85149;--head:#161b22;}}
+  *{box-sizing:border-box;} body{margin:0;background:var(--bg);color:var(--text);font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;line-height:1.65;}
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px;}
+  h1{font-size:22px;margin:0 0 4px;} h2{font-size:17px;margin:34px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--border);} h3{font-size:14px;margin:18px 0 6px;}
+  .sub{color:var(--muted);font-size:13px;}
+  .notice{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--warn);border-radius:8px;padding:12px 16px;margin:16px 0;font-size:13.5px;}
+  table{width:100%;border-collapse:collapse;background:var(--panel);font-size:13px;margin:8px 0;}
+  th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top;} th{background:var(--head);white-space:nowrap;} td.c{text-align:center;}
+  .ok{color:var(--ok);font-weight:600;} .tbd{color:var(--warn);font-weight:600;} .bad{color:var(--bad);font-weight:600;}
+  code{background:var(--head);border:1px solid var(--border);border-radius:4px;padding:0 5px;font-size:12px;}
+  ul{margin:6px 0 6px 20px;padding:0;} li{margin:3px 0;}
+  .links a{color:var(--accent);margin-right:14px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Oliveyoung Global PRD <span class="sub">(사이트분석 &amp; TC계획)</span></h1>
+  <div class="sub">v1 · 작성일 2026-10-02 · 대상 모듈 PD(상품) 중 "검색" · 근거 관찰일 2026-10-01 (18:01~18:09 KST)</div>
+
+  <div class="notice">
+    <b>공식 문서가 아닙니다 — Playwright 관찰 기반 요약입니다.</b> 정책서/화면설계서 없이 실제 사이트(<code>https://global.oliveyoung.com/</code>)를 비로그인·영문(en-US) 환경에서 관찰한 결과만 근거로 작성했으며,
+    관찰하지 못한 내용은 추측으로 채우지 않고 <span class="tbd">[확인필요]</span>로 표시했습니다(AGENTS.md 7항). 사이트가 바뀌면 내용도 달라질 수 있습니다.
+  </div>
+
+  <h2>1. 대상과 범위</h2>
+  <table>
+    <tr><th style="width:140px">대상 사이트</th><td>Olive Young Global Mall — <code>https://global.oliveyoung.com/</code> (Front). Admin 사이트 정보는 제공되지 않음</td></tr>
+    <tr><th>테스트 유형</th><td>단위 테스트 · 코드기반(URL 관찰) + 정책기반 병행(정책서 없음 → 관찰이 근거)</td></tr>
+    <tr><th>이번 범위</th><td><b>메인 페이지 헤더 검색 UI</b> — 검색창·Search 버튼, 포커스 시 검색 레이어(최근/인기 검색어), 자동완성, 검색 실행 시 이동(URL)까지. 대시보드 기능 검증 목적의 1개 모듈입니다.</td></tr>
+    <tr><th>제외 범위</th><td>
+      <ul>
+        <li><b>검색 결과 페이지</b> — Cloudflare 봇 방어로 자동화 접근이 차단되어 관찰 불가 <span class="tbd">[확인필요]</span></li>
+        <li><b>로그인이 필요한 기능</b> — 테스트 계정 없음(<code>hasTestAccounts: false</code>)</li>
+        <li><b>한글 검색어</b> — 글로벌몰은 한글을 지원하지 않음(<b>사용자 확인 2026-10-02</b>). 관련 TC(TC_PD_026)는 삭제함</li>
+      </ul>
+    </td></tr>
+  </table>
+
+  <h2>2. 관찰 환경과 방법</h2>
+  <table>
+    <tr><th style="width:140px">도구/방식</th><td>Playwright(Chromium) 스크립트로 DOM·URL·콘솔을 관찰. 원자료는 <code>_scratch\Oliveyoung Global\</code>의 <code>search_observation.json</code>, <code>header_observation.json</code>, <code>header_observation2.json</code> 및 스크린샷</td></tr>
+    <tr><th>환경</th><td>비로그인 · 브라우저 언어 en-US · 데스크톱 뷰포트(일부 항목은 모바일 390×844) · 새 브라우저 세션(최근 검색어 이력 없음에서 시작)</td></tr>
+    <tr><th>관찰 시각</th><td>2026-10-01 18:01 ~ 18:09 (KST)</td></tr>
+  </table>
+
+  <h2>3. 관찰된 기능 (헤더 검색)</h2>
+  <table>
+    <thead><tr><th style="width:150px">영역</th><th>관찰 내용</th><th style="width:130px">연결 TC</th><th style="width:90px">상태</th></tr></thead>
+    <tbody>
+      <tr><td>검색창 / 검색 버튼</td><td>헤더에 검색 입력창(<code>#searchIptPcV2</code>, placeholder "Search for a product or brand...")과 "Search" 버튼이 노출됨. 데스크톱 입력창에는 <code>maxlength</code> 속성이 없음. 모바일용 입력창(<code>searchIptMo</code>, <code>searchIptMoView</code>)은 <code>maxlength=165</code></td><td>TC_PD_001~002</td><td class="ok">관찰 확인</td></tr>
+      <tr><td>포커스 시 검색 레이어</td><td>최근 검색어가 없으면 "Popular Searches"(인기 검색어 1~10위 + 기준 시각 표기)만 노출. 인기 검색어 예: Lador, Anua, sanrio, 345, torriden, Cushion, Shampoo, Retinol, celimax, fwee(관찰 시점 값이며 수시로 변동)</td><td>TC_PD_003~004</td><td class="ok">관찰 확인</td></tr>
+      <tr><td>인기 검색어 선택</td><td>인기 검색어(예: Lador)를 클릭하면 <code>/kr/search/results?query=Lador</code> 로 이동</td><td>TC_PD_003~004</td><td class="ok">관찰 확인</td></tr>
+      <tr><td>검색어 제출</td><td>Enter 또는 Search 버튼 → <code>/kr/search/results?query={검색어}</code> 로 이동. 앞뒤 공백은 제거되어 이동(<code>query=mask</code>), 특수문자는 URL 인코딩(<code>' OR 1=1 --</code> → <code>%27%20OR%201%3D1%20--</code>). 빈/공백만 입력하면 이동하지 않고 메인에 머무름. 200자 입력 시에도 메인에 머무름(원인 미확정)</td><td>TC_PD_005~013</td><td class="ok">이동까지 관찰 확인 · 200자는 <span class="tbd">[확인필요]</span></td></tr>
+      <tr><td>자동완성</td><td>영문 검색어 입력 시 브랜드(예: masklab, MASK KING)·상품명 자동완성이 구분되어 노출. 대소문자를 구분하지 않고(<code>mask</code> / <code>MASK</code> 동일 결과), 1~2글자에서도 브랜드·카테고리·상품이 노출됨. 결과가 없는 검색어는 자동완성이 노출되지 않고 인기 검색어 레이어가 유지됨. 입력값을 지우면 인기 검색어 레이어로 복귀. 브랜드 항목 클릭 시 브랜드 페이지(<code>/kr/brands/masklab</code>)로 이동</td><td>TC_PD_020~027</td><td class="ok">관찰 확인</td></tr>
+      <tr><td>최근 검색어</td><td>검색을 실행하면 "Recent Searches"에 최신순으로 쌓이며, 같은 검색어를 다시 검색하면 맨 위로 이동. 항목별 삭제와 "Clear All"이 동작하고 새로고침 후에도 유지됨(Clear All 후에는 최근 검색어 영역이 사라지고 인기 검색어만 노출). <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> 같은 입력도 텍스트로만 표시되고 실행되지 않음</td><td>TC_PD_014~019</td><td class="ok">관찰 확인</td></tr>
+      <tr><td>레이어 닫기</td><td>Esc 키 입력 시 검색 레이어가 닫힘. 레이어 바깥 영역을 클릭해도 닫히지 않는 것으로 관찰됨(의도 여부 불명)</td><td>TC_PD_027(Esc)</td><td class="ok">Esc 관찰 확인 · 바깥 클릭은 <span class="tbd">[확인필요]</span></td></tr>
+      <tr><td>위치 안내 팝업</td><td>메인 진입 시 "Choose Your Location" 팝업이 노출되어 헤더 클릭을 가로막을 수 있음. 닫기(X) 후 진행. (TC 수행절차 1단계에 반영)</td><td>전 TC 공통</td><td class="ok">관찰 확인</td></tr>
+      <tr><td>한글 검색어</td><td>글로벌몰은 한글을 지원하지 않음 — <b>사용자 확인(2026-10-02)</b>. 관찰에서도 한글 입력 시 자동완성이 노출되지 않았음</td><td>(해당 TC 없음)</td><td class="ok">범위 제외</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. 관찰 불가 / 제약</h2>
+  <ul>
+    <li><b>검색 결과 페이지</b>: 검색을 실행하면 <code>/kr/search/results?query=…</code> 로 이동하지만, Cloudflare 봇 방어("Just a moment…", "Unusual activity detected / Access temporarily restricted", 403)에 막혀 결과 목록·정렬/필터·페이지네이션·결과 없음 문구를 관찰하지 못했습니다. 우회는 시도하지 않았습니다. <span class="tbd">[확인필요]</span> — 결과 화면 스크린샷 또는 접근 가능한 환경이 확보되면 TC를 추가합니다.</li>
+    <li><b>일부 API 403</b>: 자동완성 API(<code>/display/search/search-word</code>)가 일부 호출에서 403을 반환했습니다(봇 방어의 영향일 가능성 — 원인 미확정).</li>
+    <li><b>콘솔 에러</b>: 관찰 중 <code>net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin</code> 및 외부 도메인(<code>fbapi.oliveyoung.com</code>) 요청의 CORS 차단 에러가 반복 관찰되었습니다.</li>
+  </ul>
+
+  <h2>5. [확인필요] 목록</h2>
+  <table>
+    <thead><tr><th style="width:60px">#</th><th>항목</th><th style="width:240px">필요한 것</th></tr></thead>
+    <tbody>
+      <tr><td class="c">1</td><td>검색 결과 페이지 전체(목록·정렬·필터·페이지네이션·결과 없음)</td><td>봇 방어 우회 없이 접근 가능한 환경 또는 화면 스크린샷</td></tr>
+      <tr><td class="c">2</td><td>200자 장문 검색어 제출 시 이동하지 않는 이유(길이 제한인지 차단인지) — TC_PD_012</td><td>스펙 확인</td></tr>
+      <tr><td class="c">3</td><td>자동완성/검색 레이어 바깥 클릭 시 닫힘 여부(관찰: 닫히지 않음)</td><td>스펙 확인</td></tr>
+      <tr><td class="c">4</td><td>콘솔 에러(<code>ERR_BLOCKED_BY_RESPONSE</code> 등)가 사이트 결함인지 자동화 환경/봇 방어의 영향인지</td><td>일반 브라우저와의 비교 또는 사이트 담당자 확인</td></tr>
+    </tbody>
+  </table>
+
+  <h2>6. TC 계획</h2>
+  <p>모듈 <b>PD(상품) · 중분류 "검색"</b> — 총 <b>26건</b> (P1 4 / P2 12 / P3 10). Playwright 자동화 코드 26건 포함. 소분류별 구성:</p>
+  <table>
+    <thead><tr><th>소분류</th><th style="width:70px">건수</th><th style="width:60px">P1</th><th style="width:60px">P2</th><th style="width:60px">P3</th><th style="width:150px">TC ID</th></tr></thead>
+    <tbody>
+<tr><td>검색창</td><td class="c">2</td><td class="c">0</td><td class="c">1</td><td class="c">1</td><td>TC_PD_001~002</td></tr>
+<tr><td>인기검색어</td><td class="c">2</td><td class="c">0</td><td class="c">1</td><td class="c">1</td><td>TC_PD_003~004</td></tr>
+<tr><td>검색어제출</td><td class="c">9</td><td class="c">4</td><td class="c">2</td><td class="c">3</td><td>TC_PD_005~013</td></tr>
+<tr><td>최근검색어</td><td class="c">6</td><td class="c">0</td><td class="c">5</td><td class="c">1</td><td>TC_PD_014~019</td></tr>
+<tr><td>자동완성</td><td class="c">7</td><td class="c">0</td><td class="c">3</td><td class="c">4</td><td>TC_PD_020~027</td></tr>
+    </tbody>
+  </table>
+  <p class="sub">TC 설계 기준: 입력창/버튼 노출 → 레이어 → 제출/이동 → 최근 검색어 관리 → 자동완성 순으로, 관찰로 확인된 동작만 기대결과로 사용했습니다. 확인되지 않은 동작은 <code>[확인필요]</code> TC(P3)로 분리했습니다(현재 TC_PD_012 1건).</p>
+
+  <h2>7. 실행 결과 현황 <span class="sub">(2026-10-01 실행 기준 스냅샷 — 최신 값은 대시보드 참조)</span></h2>
+  <table>
+    <tr><th style="width:140px">실행 결과</th><td>26건 중 Pass 1 / Fail 25</td></tr>
+    <tr><th>등록된 결함</th><td>2건 —
+      <b>DEF_Oliveyoung Global_001</b> (Critical, 관련 TC 24건): 메인 헤더 검색 &gt; Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin ·
+      <b>DEF_Oliveyoung Global_016</b> (Major, TC_PD_018): 메인 헤더 검색 &gt; 테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)</td></tr>
+    <tr><th>해석 주의</th><td>Fail의 대부분은 자동화의 "콘솔/네트워크 에러 감지 시 실패 처리" 규칙에 의한 것으로, 위 §4의 외부 요청 차단 에러가 원인입니다. 이것이 사이트 결함인지 환경 제약인지는 <span class="tbd">[확인필요]</span>(§5-4)이므로 결함으로 단정하지 않습니다.</td></tr>
+  </table>
+
+  <h2>8. 산출물 링크</h2>
+  <p class="links">
+    <a href="../TC/Oliveyoung%20Global_TC_PD.html">TC 뷰어</a>
+    <a href="../TC/results/index.html">실행결과 이력</a>
+  </p>
+
+  <h2>9. 변경 이력</h2>
+  <table>
+    <thead><tr><th style="width:70px">버전</th><th style="width:110px">일자</th><th>내용</th></tr></thead>
+    <tbody><tr><td>v1</td><td>2026-10-02</td><td>최초 작성 — 2026-10-01 헤더 검색 관찰 결과 정리. 글로벌몰 한글 미지원(사용자 확인) 반영, 한글 검색어 TC(TC_PD_026) 제외</td></tr></tbody>
+  </table>
+</div>
+</body>
+</html>

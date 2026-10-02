@@ -287,14 +287,6 @@ test('[TC_PD_025][자동완성] 입력값 삭제 시 인기 검색어 레이어 
   await expect(page.locator(POPULAR)).toBeVisible();
 });
 
-test('[TC_PD_026][자동완성] [확인필요] 한글 검색어 자동완성 노출 검증', async ({ page }) => {
-  await gotoMain(page);
-  await focusSearch(page);
-  await page.locator(INPUT).fill('마스크');
-  await page.waitForTimeout(1500);
-  await expect(page.locator(AUTO_ITEM)).toHaveCount(0);
-});
-
 test('[TC_PD_027][자동완성] Esc 키 입력 시 검색 레이어 닫힘 검증', async ({ page }) => {
   await gotoMain(page);
   await focusSearch(page);

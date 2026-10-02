@@ -3,17 +3,12 @@
     "project": "Oliveyoung Global",
     "module": "PD",
     "moduleName": "상품(검색)",
-    "version": 2,
+    "version": 1,
     "changeHistory": [
       {
         "version": 1,
         "date": "2026-10-01",
         "summary": "최초 생성, 27건 (메인 헤더 검색 UI 범위 — 검색결과 페이지는 Cloudflare 봇 차단으로 관찰 불가하여 제외)"
-      },
-      {
-        "version": 2,
-        "date": "2026-10-02",
-        "summary": "TC_PD_026 삭제 (글로벌몰은 한글 미지원 — 사용자 확인), 27→26건. 표시 번호(No.) 재부여(TC ID 불변). 연결 결함 DEF_Oliveyoung Global_024 삭제"
       }
     ]
   },
@@ -89,7 +84,7 @@
       "origin": "신규",
       "displayNo": 3,
       "system": "FO",
-      "remark": "관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "관련 결함: DEF_Oliveyoung Global_002",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -114,7 +109,7 @@
       "origin": "신규",
       "displayNo": 4,
       "system": "FO",
-      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_003",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -139,7 +134,7 @@
       "origin": "신규",
       "displayNo": 5,
       "system": "FO",
-      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_004",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -164,7 +159,7 @@
       "origin": "신규",
       "displayNo": 6,
       "system": "FO",
-      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_005",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -189,7 +184,7 @@
       "origin": "신규",
       "displayNo": 7,
       "system": "FO",
-      "remark": "관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "관련 결함: DEF_Oliveyoung Global_006",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -214,7 +209,7 @@
       "origin": "신규",
       "displayNo": 8,
       "system": "FO",
-      "remark": "관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "관련 결함: DEF_Oliveyoung Global_007",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -239,7 +234,7 @@
       "origin": "신규",
       "displayNo": 9,
       "system": "FO",
-      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_008",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -264,7 +259,7 @@
       "origin": "신규",
       "displayNo": 10,
       "system": "FO",
-      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_009",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -289,7 +284,7 @@
       "origin": "신규",
       "displayNo": 11,
       "system": "FO",
-      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_010",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -314,7 +309,7 @@
       "origin": "신규",
       "displayNo": 12,
       "system": "FO",
-      "remark": "모바일 입력창 maxlength=165와의 관계 포함 확인 필요; 관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "모바일 입력창 maxlength=165와의 관계 포함 확인 필요; 관련 결함: DEF_Oliveyoung Global_011",
       "verifyNote": "관찰 시 PC 검색창에는 maxlength가 없어 200자가 입력되나 제출 시 이동하지 않음 — 의도된 길이 제한 정책인지 스펙 확정 필요",
       "screenName": "메인 헤더 검색"
     },
@@ -339,7 +334,7 @@
       "origin": "신규",
       "displayNo": 13,
       "system": "FO",
-      "remark": "개발자도구 Elements 탭에서 입력창 maxlength 속성 확인 (F12); 관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "개발자도구 Elements 탭에서 입력창 maxlength 속성 확인 (F12); 관련 결함: DEF_Oliveyoung Global_026",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -364,7 +359,7 @@
       "origin": "신규",
       "displayNo": 14,
       "system": "FO",
-      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_012",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -389,7 +384,7 @@
       "origin": "신규",
       "displayNo": 15,
       "system": "FO",
-      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_013",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -414,7 +409,7 @@
       "origin": "신규",
       "displayNo": 16,
       "system": "FO",
-      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_014",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -439,7 +434,7 @@
       "origin": "신규",
       "displayNo": 17,
       "system": "FO",
-      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_015",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -489,7 +484,7 @@
       "origin": "신규",
       "displayNo": 19,
       "system": "FO",
-      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_017",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -514,7 +509,7 @@
       "origin": "신규",
       "displayNo": 20,
       "system": "FO",
-      "remark": "관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "관련 결함: DEF_Oliveyoung Global_018",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -539,7 +534,7 @@
       "origin": "신규",
       "displayNo": 21,
       "system": "FO",
-      "remark": "관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "관련 결함: DEF_Oliveyoung Global_019",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -564,7 +559,7 @@
       "origin": "신규",
       "displayNo": 22,
       "system": "FO",
-      "remark": "관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "관련 결함: DEF_Oliveyoung Global_020",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -589,7 +584,7 @@
       "origin": "신규",
       "displayNo": 23,
       "system": "FO",
-      "remark": "관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "관련 결함: DEF_Oliveyoung Global_021",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -614,7 +609,7 @@
       "origin": "신규",
       "displayNo": 24,
       "system": "FO",
-      "remark": "관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "관련 결함: DEF_Oliveyoung Global_022",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     },
@@ -639,8 +634,33 @@
       "origin": "신규",
       "displayNo": 25,
       "system": "FO",
-      "remark": "관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "관련 결함: DEF_Oliveyoung Global_023",
       "verifyNote": "",
+      "screenName": "메인 헤더 검색"
+    },
+    {
+      "tcId": "TC_PD_026",
+      "majorCategory": "상품",
+      "midCategory": "검색",
+      "minorCategory": "자동완성",
+      "platform": "Web",
+      "type": "기능",
+      "item": "[확인필요] 한글 검색어 자동완성 노출 검증",
+      "baseDoc": "-",
+      "priority": "P3",
+      "precondition": "브라우저 언어 en-US",
+      "steps": "1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 한글 검색어 입력(Enter 입력 없음)",
+      "expected": "자동완성 레이어가 노출되지 않음",
+      "testData": "검색어=마스크",
+      "result": "Fail",
+      "assignee": "",
+      "issueSummary": "메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin",
+      "issueLink": "",
+      "origin": "신규",
+      "displayNo": 26,
+      "system": "FO",
+      "remark": "관련 결함: DEF_Oliveyoung Global_024",
+      "verifyNote": "관찰 시 영문(en-US) 환경에서 한글 입력 시 자동완성이 노출되지 않음 — 한글 검색어 자동완성 지원 여부 스펙 확정 필요",
       "screenName": "메인 헤더 검색"
     },
     {
@@ -662,9 +682,9 @@
       "issueSummary": "메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin",
       "issueLink": "",
       "origin": "신규",
-      "displayNo": 26,
+      "displayNo": 27,
       "system": "FO",
-      "remark": "관련 결함: DEF_Oliveyoung Global_001",
+      "remark": "관련 결함: DEF_Oliveyoung Global_025",
       "verifyNote": "",
       "screenName": "메인 헤더 검색"
     }
