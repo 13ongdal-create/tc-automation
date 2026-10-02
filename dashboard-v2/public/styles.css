@@ -1,0 +1,513 @@
+:root{
+  /* 색상 팔레트 — 채도/명도를 높인 밝은 톤 (2026-08-26, 사용자 피드백으로 기존 저채도
+     팔레트에서 전환. 기존 저채도 값: primary #157dbc/#0c4e88/#4b94bf, accent2 #47b1bb,
+     good #1a7f37, bad #c0392b, warn #b8860b) */
+  --primary: #0ea5e9;
+  --primary-dark: #0369a1;
+  --primary-light: #38bdf8;
+  --accent2: #14b8a6;
+  --accent3: #6366f1;
+
+  --text-primary: #333;
+  --text-dark: #222;
+  --text-secondary: #666;
+
+  --border: #d4d7db;
+  --divider: #e7eaee;
+  --bg-light: #f1f5f9;
+  --bg-hover: #f4f4f4;
+  --white: #fff;
+
+  --good: #16a34a;
+  --good-bg: #dcfce7;
+  --bad: #ef4444;
+  --bad-bg: #fee2e2;
+  --warn: #f59e0b;
+  --warn-bg: #fef3c7;
+
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(20,30,40,0.06);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg-light);
+  color:var(--text-primary);
+  font-family:"Noto Sans KR","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  font-size:15px;
+  line-height:1.5;
+}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
+
+/* 상단바 */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--white);border-bottom:1px solid var(--border);
+  padding:14px 24px;
+}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-btn{background:none;border:none;padding:2px;cursor:pointer;border-radius:6px;}
+.brand-btn:hover{background:var(--bg-hover);}
+.brand-badge{
+  width:32px;height:32px;border-radius:8px;background:var(--primary);
+  color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;
+}
+.brand-name{font-size:18px;font-weight:700;color:var(--text-dark);letter-spacing:-0.5px;}
+.topbar-controls{display:flex;align-items:center;gap:10px;}
+
+select{
+  font-family:inherit;font-size:14px;color:var(--text-primary);
+  border:1px solid var(--border);border-radius:6px;padding:7px 10px;background:#fff;
+}
+
+.btn{
+  font-family:inherit;font-size:13.5px;font-weight:500;cursor:pointer;
+  border-radius:6px;padding:8px 16px;border:1px solid transparent;
+}
+.btn-outline{
+  border:1px solid var(--text-dark);background:#fff;color:var(--text-dark);
+}
+.btn-outline:hover{background:var(--bg-hover);}
+.btn-primary{
+  background:var(--primary);color:#fff;
+}
+.btn-primary:hover{background:var(--primary-dark);}
+.btn-danger{
+  background:var(--bad);color:#fff;
+}
+.btn-danger:hover{filter:brightness(0.92);}
+.btn-danger:disabled{background:var(--divider);color:var(--text-secondary);cursor:not-allowed;}
+/* 패널 헤더 안의 보조 액션 버튼(⚙ 관리, + TC 업로드, 새 대화 등)에 공통으로 쓰는 작은 사이즈.
+   전에는 .panel-head-actions .btn / .panel-chat-toolbar .btn-sm 두 군데서 서로 다른 값을
+   썼었는데(사용자가 TC업로드 버튼만 커 보인다고 지적), 하나로 통일 — 패널 헤더 보조 버튼은
+   항상 이 클래스를 명시적으로 붙인다. */
+.btn-sm{padding:4px 10px;font-size:12.5px;}
+
+/* 메인 컨테이너 */
+.container{max-width:1280px;margin:0 auto;padding:24px;}
+#projectView{display:none;} /* 최초 진입은 항상 홈(프로젝트 카드) 화면 — app.js가 토글 */
+
+/* 프로젝트 상세 화면 상단 — 우측 select만으로는 어느 프로젝트인지 헷갈리기 쉬워 큰 제목으로 강조 */
+.project-detail-header{margin:4px 0 20px;}
+.project-detail-header h1{
+  margin:0;font-size:28px;font-weight:800;color:var(--text-dark);letter-spacing:-0.4px;
+  padding-left:14px;border-left:5px solid var(--primary);line-height:1.3;
+}
+
+/* KPI 카드 */
+.kpi-grid{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px;
+}
+.kpi-card{
+  background:#fff;border:1px solid var(--divider);border-radius:var(--radius);
+  padding:18px 16px;text-align:center;box-shadow:var(--shadow);
+  border-top:3px solid var(--primary-light);
+}
+.kpi-num{font-size:28px;font-weight:900;color:var(--text-dark);font-variant-numeric:tabular-nums;}
+.kpi-label{font-size:12.5px;color:var(--text-secondary);margin-top:4px;}
+.kpi-accent-warn{border-top-color:var(--warn);}
+.kpi-accent-warn .kpi-num{color:var(--warn);}
+.kpi-accent-good{border-top-color:var(--good);}
+.kpi-accent-good .kpi-num{color:var(--good);}
+.kpi-accent-bad{border-top-color:var(--bad);}
+.kpi-accent-bad .kpi-num{color:var(--bad);}
+
+/* 패널 그리드 — 다른 .panel-full 섹션들과 동일한 위 여백(18px)으로 통일(2026-08-27) */
+.panel-grid{
+  display:grid;grid-template-columns:1.6fr 1fr;gap:18px;margin-top:18px;
+}
+.panel{
+  background:#fff;border:1px solid var(--divider);border-radius:var(--radius);
+  padding:18px 20px;box-shadow:var(--shadow);
+}
+.panel-wide{grid-column:1 / 2;}
+.panel-placeholder{
+  background:var(--bg-hover);border:1px dashed var(--border);box-shadow:none;
+}
+.panel-head{
+  display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;
+  margin-bottom:14px;border-bottom:1px solid var(--divider);padding-bottom:10px;
+}
+.panel-head h2{font-size:16px;margin:0;color:var(--text-dark);letter-spacing:-0.3px;}
+.panel-head-actions{display:flex;align-items:center;gap:12px;}
+.panel-sub{font-size:12px;color:var(--text-secondary);}
+.badge-soon{
+  background:var(--bg-light);border:1px solid var(--border);border-radius:12px;
+  padding:2px 10px;color:var(--text-secondary);
+}
+.placeholder-text{color:var(--text-secondary);font-size:13.5px;}
+
+/* 결함 테이블 */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th,td{padding:9px 8px;border-bottom:1px solid var(--divider);text-align:left;vertical-align:top;}
+th{color:var(--text-secondary);font-weight:500;font-size:11.5px;text-transform:uppercase;letter-spacing:0.02em;}
+.empty-row{padding:24px;text-align:center;color:var(--text-secondary);}
+
+/* [추가 2026-08-27] 사이트 전체 리스트형 표 정렬 공통 규칙(위 .pb-module-table 참조)을
+   결함 테이블에도 동일 적용: 헤더=가운데, 모듈=왼쪽, 그 외 데이터=가운데(%열 없음) */
+#defectTable th{text-align:center;}
+#defectTable td{text-align:center;}
+#defectTable td.pb-module-name{text-align:left;}
+
+.sev-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;}
+.sev-P1{background:var(--bad-bg);color:var(--bad);}
+.sev-P2{background:var(--warn-bg);color:var(--warn);}
+.sev-P3{background:#e8f0fa;color:var(--primary);}
+
+.status-select, .assignee-input{
+  width:100%;font-family:inherit;font-size:12.5px;padding:5px 6px;
+  border:1px solid var(--border);border-radius:5px;background:#fff;color:var(--text-primary);
+}
+.status-select:focus, .assignee-input:focus{outline:2px solid var(--primary-light);outline-offset:1px;}
+.save-flash{background:var(--good-bg) !important;transition:background 1.2s ease;}
+
+/* 실행 이력 */
+.results-list{display:flex;flex-direction:column;gap:8px;max-height:520px;overflow-y:auto;}
+.result-item{
+  border:1px solid var(--divider);border-radius:8px;padding:10px 12px;font-size:12.5px;
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+}
+.result-item .r-main{display:flex;flex-direction:column;gap:2px;}
+.result-item .r-date{color:var(--text-secondary);font-size:11px;}
+.result-item .r-mod{font-weight:700;color:var(--text-dark);}
+.result-item .r-stats{font-size:11.5px;color:var(--text-secondary);}
+.result-item a{color:var(--primary-light);text-decoration:none;font-weight:600;font-size:12px;white-space:nowrap;}
+.result-item a:hover{text-decoration:underline;}
+
+/* 💬 사이트분석 · TC 생성 채팅 패널 (접기/펼치기 가능)
+   네이티브 <details>는 열고 닫힐 때 애니메이션이 없어 뚝뚝 끊겨 보인다는 피드백으로,
+   버튼(panel-head-toggle) + grid-template-rows 트랜지션 방식으로 교체 — 1fr↔0fr 트릭은
+   높이를 모르는 콘텐츠도 auto처럼 부드럽게 접고 펼 수 있다. */
+.panel-full{margin-top:18px;}
+.panel-head-toggle{
+  width:100%;background:none;border:none;border-bottom:1px solid var(--divider);
+  display:flex;align-items:baseline;justify-content:flex-start;flex-wrap:wrap;gap:6px;
+  margin-bottom:14px;padding:0 0 10px;cursor:pointer;font:inherit;text-align:left;color:inherit;
+}
+.panel-head-toggle:hover{opacity:.82;}
+.panel-head-toggle h2{font-size:16px;margin:0;color:var(--text-dark);letter-spacing:-0.3px;}
+.panel-toggle-arrow{
+  margin-left:auto;align-self:center;flex-shrink:0;width:0;height:0;
+  border-style:solid;border-width:5px 4px 0 4px;
+  border-color:var(--text-secondary) transparent transparent transparent;
+  transition:transform .18s ease;
+}
+.panel-head-toggle[aria-expanded="false"] .panel-toggle-arrow{transform:rotate(-90deg);}
+.panel-collapse{display:grid;grid-template-rows:1fr;transition:grid-template-rows .22s ease;}
+.panel-collapse.collapsed{grid-template-rows:0fr;}
+.panel-collapse-inner{overflow:hidden;min-height:0;}
+.panel-chat-body{padding-top:4px;}
+
+/* 📋 TC 관리: "+ TC 업로드" 버튼을 제목 바로 옆(좌측 그룹)에 붙이고, 나머지 액션(Full TC 상세
+   보기 등)만 오른쪽 끝으로 민다 (사용자 요청, 채팅 패널과 동일한 배치 패턴). */
+.panel-tc .panel-head{justify-content:flex-start;}
+.panel-tc .panel-head-actions{margin-left:auto;}
+
+/* ▶ 테스트 실행 큐: 결함관리/실행이력 2단 그리드에서 빼내 채팅 패널처럼 전체 폭을 쓰고
+   (사용자 요청), 넓어진 가로 폭을 활용해 필터 5개를 한 줄로 배치한다. 좁은 화면에서는
+   자동으로 줄바꿈(flex-wrap)된다. */
+.tq-filters-row{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px;}
+.tq-field{flex:1 1 180px;min-width:180px;}
+.tq-field-wide{flex:1.6 1 260px;min-width:260px;}
+.tq-field .field-label{margin-top:0;}
+.tq-field select{width:100%;}
+.panel-chat-toolbar{display:flex;justify-content:flex-end;margin-bottom:8px;}
+.chat-messages{
+  display:flex;flex-direction:column;gap:10px;
+  max-height:440px;min-height:160px;overflow-y:auto;
+  padding:4px 2px;margin-bottom:12px;
+}
+.chat-hint{color:var(--text-secondary);font-size:13px;padding:20px 4px;text-align:center;}
+.chat-msg{max-width:80%;padding:10px 13px;border-radius:12px;font-size:13.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word;}
+.chat-msg.user{align-self:flex-end;background:var(--primary);color:#fff;border-bottom-right-radius:3px;}
+.chat-msg.assistant{align-self:flex-start;background:var(--bg-light);color:var(--text-primary);border-bottom-left-radius:3px;}
+.chat-msg.assistant.is-error{background:var(--bad-bg);color:var(--bad);}
+.chat-msg.status{align-self:flex-start;background:none;color:var(--text-secondary);font-size:12px;padding:2px 4px;font-style:italic;}
+.chat-msg.issue{align-self:stretch;background:var(--warn-bg);color:var(--warn);border:1px solid #eddca0;font-weight:600;}
+.chat-msg .chat-role{display:block;font-size:10.5px;font-weight:700;letter-spacing:0.03em;opacity:0.65;margin-bottom:3px;}
+.chat-input-row{display:flex;gap:10px;align-items:flex-end;}
+.chat-input-col{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0;}
+.chat-input-col textarea{
+  width:100%;font-family:inherit;font-size:13.5px;padding:10px 12px;
+  border:1px solid var(--border);border-radius:8px;resize:vertical;min-height:44px;
+}
+.chat-input-col textarea:focus{outline:2px solid var(--primary-light);outline-offset:1px;}
+.chat-input-row button{white-space:nowrap;}
+.chat-input-row button:disabled{opacity:0.5;cursor:not-allowed;}
+.chat-attach-btn{
+  font-size:18px;line-height:1;font-weight:700;padding:0;width:40px;height:40px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.chat-attach-list{display:flex;flex-wrap:wrap;gap:6px;}
+.chat-attach-chip{
+  display:inline-flex;align-items:center;gap:6px;background:var(--bg-hover);
+  border:1px solid var(--border);border-radius:14px;padding:3px 6px 3px 10px;font-size:12px;
+}
+.chat-attach-remove{
+  border:none;background:none;cursor:pointer;color:var(--text-secondary);font-size:14px;
+  line-height:1;padding:2px 4px;border-radius:50%;
+}
+.chat-attach-remove:hover{background:var(--divider);color:var(--text-dark);}
+#chatStatus.ws-connected{color:var(--good);}
+#chatStatus.ws-error{color:var(--bad);}
+#chatStatus.ws-busy{color:var(--warn);}
+
+/* 🏠 홈 — 전체 프로젝트 대시보드 (개요 KPI + 차트 + 표) */
+.home-head{display:flex;align-items:center;justify-content:space-between;margin:6px 0 18px;}
+.home-head h1{font-size:20px;margin:0;color:var(--text-dark);letter-spacing:-0.3px;}
+
+.home-empty{text-align:center;padding:64px 20px;color:var(--text-secondary);}
+.home-empty p{margin:0 0 16px;font-size:14px;}
+
+.home-kpi-grid{grid-template-columns:repeat(6,1fr);}
+
+.legend-swatch{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+
+/* 🏠 프로젝트 블록 — 프로젝트 하나당 [수행현황: 도넛+추이] [결함현황: 도넛+표] 섹션 */
+.project-block{cursor:pointer;margin-bottom:18px;}
+.project-block:hover{border-color:var(--primary-light);}
+.project-block-link{color:var(--primary-light);font-weight:600;font-size:12px;text-decoration:none;white-space:nowrap;}
+.project-block-link:hover{text-decoration:underline;}
+.pb-section-title{font-size:12.5px;font-weight:700;color:var(--text-dark);margin:18px 0 10px;}
+.pb-section-title:first-of-type{margin-top:4px;}
+.pb-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.pb-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.pb-table-row{margin-top:16px;}
+.pb-chart-card{background:var(--bg-light);border-radius:8px;padding:14px 16px;}
+
+/* 📋 TC 관리 — 모듈별 우선순위 표 왼쪽 도넛 + 표, 하단 우측 변경이력 링크 (2026-08-27 추가) */
+.tc-priority-layout{display:grid;grid-template-columns:minmax(220px,300px) 1fr;gap:16px;align-items:start;}
+.tc-priority-table-col{min-width:0;}
+.tc-priority-table-col .pb-section-title{margin-top:0;}
+.tc-history-link-row{display:flex;justify-content:flex-end;margin-top:14px;}
+.pb-chart-card-wide{display:flex;flex-direction:column;}
+.pb-chart-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 10px;margin-bottom:10px;}
+
+/* 접기/펼치기 가능한 표 (실행 이력/모듈별 TC/모듈별 결함 상세) */
+.pb-collapsible{padding:0;overflow:hidden;}
+.pb-collapsible > summary{
+  list-style:none;cursor:pointer;user-select:none;
+  padding:14px 16px;margin-bottom:0;
+  justify-content:flex-start !important;
+}
+.pb-collapsible > summary:hover{background:rgba(0,0,0,0.03);}
+.pb-collapsible > summary::-webkit-details-marker{display:none;}
+.pb-collapsible > summary::before{
+  content:'';display:inline-block;margin-right:8px;flex-shrink:0;
+  border-style:solid;border-width:5px 4px 0 4px;
+  border-color:var(--text-secondary) transparent transparent transparent;
+  transition:transform .15s ease;
+}
+.pb-collapsible:not([open]) > summary::before{transform:rotate(-90deg);}
+.pb-collapsible > .table-wrap{padding:0 16px 14px;}
+.pb-chart-title{font-size:11.5px;font-weight:700;color:var(--text-secondary);}
+.result-def-info{
+  display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;
+  border-radius:50%;border:1px solid var(--border);color:var(--text-secondary);
+  font-size:10px;line-height:1;cursor:help;flex-shrink:0;
+}
+.result-def-info:hover,.result-def-info:focus{color:var(--primary-light);border-color:var(--primary-light);outline:none;}
+.pb-chart-body{display:flex;justify-content:center;align-items:center;min-height:150px;}
+.pb-chart-body-trend{flex-direction:column;align-items:stretch;min-height:auto;}
+
+/* 도넛 차트 (CSS conic-gradient + mask, 라이브러리 없음) */
+.donut-wrap{position:relative;width:130px;height:130px;flex-shrink:0;}
+.donut{
+  width:100%;height:100%;border-radius:50%;
+  -webkit-mask:radial-gradient(closest-side, transparent 62%, #000 63%);
+  mask:radial-gradient(closest-side, transparent 62%, #000 63%);
+}
+.donut-empty{background:var(--divider);}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;text-align:center;padding:0 10px;}
+.donut-total{font-size:19px;font-weight:800;color:var(--primary-light);font-variant-numeric:tabular-nums;}
+.donut-total-label{
+  font-size:10px;color:var(--text-secondary);max-width:92px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.donut-empty-label{font-size:11px;color:var(--text-secondary);}
+
+/* 전체 TC 수행률 현황 카드 (완료율 배지 + 범례 + 진행바 + Pass/Fail/미실행 요약) */
+
+/* 도넛 아래 요약 표 (색상 범례 + 정확한 건수/비율)
+   [추가 2026-08-27] 사이트 전체 리스트형 표 정렬 공통 규칙: 모듈/행 라벨=왼쪽, 헤더=가운데,
+   %수치=왼쪽, 그 외 데이터=가운데. 이 표는 헤더가 없고 라벨(ds-label) 열이 행을 식별하는
+   역할이라 왼쪽 정렬 유지, 건수(ds-count)는 "그 외 데이터"로 가운데, 비율(ds-pct)은 왼쪽. */
+.donut-summary-table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:12px;}
+.donut-summary-table td{padding:3px 0;}
+.donut-summary-table .ds-label{display:flex;align-items:center;gap:6px;color:var(--text-primary);}
+.donut-summary-table .ds-count{text-align:center;font-weight:700;color:var(--text-dark);font-variant-numeric:tabular-nums;width:15%;}
+.donut-summary-table .ds-pct{text-align:left;color:var(--text-secondary);font-variant-numeric:tabular-nums;width:18%;}
+
+/* 날짜별 진척율 추이 (순수 SVG 라인/영역 차트) */
+.trend-svg{width:100%;height:110px;display:block;}
+.trend-grid{stroke:var(--divider);stroke-width:1;vector-effect:non-scaling-stroke;}
+.trend-area{fill:rgba(21,125,188,0.12);stroke:none;}
+.trend-line{fill:none;stroke:var(--primary);stroke-width:2;vector-effect:non-scaling-stroke;}
+.trend-dot{fill:var(--primary);}
+.trend-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text-secondary);margin-top:4px;}
+.trend-empty{display:flex;align-items:center;justify-content:center;min-height:110px;color:var(--text-secondary);font-size:12.5px;}
+.trend-single{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:110px;}
+.trend-single-dot{width:10px;height:10px;border-radius:50%;background:var(--primary);}
+.trend-single-label{font-size:12.5px;color:var(--text-secondary);font-variant-numeric:tabular-nums;}
+
+/* 모듈별 결함 상세 표
+   [추가 2026-08-27] 사이트 전체 리스트형 표 정렬 공통 규칙: 모듈정보=왼쪽, 헤더=가운데,
+   %수치=왼쪽, 그 외 데이터=가운데. 열 위치(:first-child)가 아니라 의미(class)로 판정한다 —
+   실행 이력 표처럼 1열이 날짜이고 모듈이 2열인 경우도 정확히 맞아야 하기 때문. */
+.pb-module-table{width:100%;border-collapse:collapse;font-size:12px;}
+.pb-module-table th,.pb-module-table td{padding:6px 8px;border-bottom:1px solid var(--divider);text-align:center;}
+.pb-module-table th{color:var(--text-secondary);font-weight:500;font-size:10.5px;}
+.pb-module-table td.pb-module-name{text-align:left;}
+.pb-module-table td.pb-pct{text-align:left;}
+.pb-module-table a{color:var(--primary-light);text-decoration:none;font-weight:600;}
+.pb-module-table a:hover{text-decoration:underline;}
+
+/* 🔎 사이트 분석 패널 */
+.site-meta-table{border-collapse:collapse;font-size:13px;max-width:560px;}
+.site-meta-table th{
+  text-align:left;font-weight:500;color:var(--text-secondary);padding:5px 16px 5px 0;
+  white-space:nowrap;vertical-align:top;
+}
+.site-meta-table td{text-align:left;font-weight:600;color:var(--text-dark);padding:5px 0;word-break:break-all;}
+.site-meta-table a{color:var(--primary-light);text-decoration:none;}
+.site-meta-table a:hover{text-decoration:underline;}
+.site-links-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+.site-link-card{
+  display:flex;align-items:center;gap:10px;padding:9px 16px 9px 9px;border-radius:10px;
+  text-decoration:none;font-weight:700;font-size:13px;color:var(--text-dark);
+  background:var(--bg-light);border:1px solid var(--divider);
+  transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease;
+}
+.site-link-card:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(20,30,40,0.12);border-color:transparent;}
+.site-link-icon{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;
+}
+.site-link-primary .site-link-icon{background:var(--primary);}
+.site-link-teal .site-link-icon{background:var(--accent2);}
+.site-link-indigo .site-link-icon{background:var(--accent3);}
+.pb-module-name{font-weight:700;color:var(--text-dark);}
+
+/* 프로젝트 상세 리스트 페이지네이션 [더보기] 버튼 */
+.list-more-row{display:flex;justify-content:center;padding:12px 0 2px;}
+
+/* 모달 (새 프로젝트 등) */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(20,30,40,0.45);
+  display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;
+}
+.modal-overlay[hidden]{display:none;}
+.modal-box{background:#fff;border-radius:var(--radius);padding:24px 26px;width:100%;max-width:400px;box-shadow:0 8px 28px rgba(20,30,40,0.22);}
+.modal-box h2{font-size:16px;margin:0 0 8px;color:var(--text-dark);}
+.modal-box input[type=text]{
+  width:100%;font-family:inherit;font-size:14px;padding:10px 12px;margin-top:14px;
+  border:1px solid var(--border);border-radius:6px;
+}
+.modal-box input[type=text]:focus{outline:2px solid var(--primary-light);outline-offset:1px;}
+.modal-error{color:var(--bad);font-size:12.5px;min-height:1.2em;margin-top:6px;}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:6px;}
+.modal-box-lg{max-width:480px;max-height:88vh;overflow-y:auto;}
+.modal-box-replay{max-width:920px;max-height:90vh;overflow-y:auto;}
+.replay-filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px;}
+.replay-search{flex:1;min-width:160px;font-family:inherit;font-size:13px;padding:6px 10px;border:1px solid var(--border,#d0d7de);border-radius:6px;}
+.replay-item{border:1px solid var(--border,#d0d7de);border-radius:8px;padding:10px 12px;margin-bottom:12px;}
+.replay-item-head{display:flex;gap:8px;align-items:center;font-size:13.5px;font-weight:600;margin-bottom:8px;}
+.replay-item video{width:100%;max-height:60vh;background:#000;border-radius:6px;}
+.replay-status-passed{color:#1a7f37;}
+.replay-status-failed,.replay-status-timedOut{color:#cf222e;}
+.replay-status-skipped,.replay-status-interrupted{color:#9a6700;}
+.replay-shots{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.replay-shots img{height:80px;border:1px solid var(--border,#d0d7de);border-radius:4px;cursor:zoom-in;}
+.replay-links{font-size:12.5px;margin-top:6px;}
+.modal-box select{
+  width:100%;font-family:inherit;font-size:14px;padding:10px 12px;margin-top:6px;
+  border:1px solid var(--border);border-radius:6px;background:#fff;
+}
+.field-label{display:block;font-size:12.5px;font-weight:600;color:var(--text-secondary);margin:14px 0 0;}
+.field-label + input[type=text],.field-label + select{margin-top:6px;}
+.mp-checkbox-row{display:flex;align-items:center;gap:8px;margin-top:16px;font-size:13.5px;color:var(--text-primary);}
+.mp-divider{border:none;border-top:1px solid var(--divider);margin:22px 0 16px;}
+.mp-danger-zone{border:1px solid var(--bad);border-radius:8px;padding:14px 16px;}
+.mp-danger-title{font-weight:700;color:var(--bad);margin-bottom:6px;}
+.mp-danger-zone .modal-actions{justify-content:flex-start;}
+
+/* ── ▶ 테스트 실행 큐 ─────────────────────────────────────────────────── */
+#tqModule,#tqSystem,#tqHeaded{width:100%;margin-top:6px;}
+.tq-pill-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+.tq-pill-btn{
+  border:1px solid var(--border);background:#fff;color:var(--text-primary);
+  border-radius:20px;padding:6px 14px;font-size:12.5px;font-weight:600;cursor:pointer;
+}
+.tq-pill-btn:hover{background:var(--bg-hover);}
+.tq-pill-btn.active{background:var(--primary);border-color:var(--primary);color:#fff;}
+.tq-pill-btn:disabled{opacity:.35;cursor:not-allowed;}
+.tq-pill-btn:disabled:hover{background:#fff;}
+#tqModule option:disabled,#tqSystem option:disabled{color:var(--text-secondary);}
+
+/* ── + TC 업로드 모달 ─────────────────────────────────────────────────── */
+#tcUploadFile{width:100%;margin-top:6px;}
+.tc-upload-result{
+  margin-top:14px;padding:12px 14px;border-radius:8px;background:var(--bg-light);
+  border:1px solid var(--divider);font-size:12.5px;line-height:1.6;max-height:280px;overflow-y:auto;
+}
+.tc-upload-result .tur-summary{font-weight:700;color:var(--text-dark);margin-bottom:8px;}
+.tc-upload-result ul{margin:4px 0 10px;padding-left:18px;}
+.tc-upload-result li{margin-bottom:3px;}
+.tc-upload-result .tur-warn{color:var(--warn);}
+.tc-upload-result .tur-skip{color:var(--bad);}
+.tq-preview{
+  margin-top:14px;padding:10px 12px;border-radius:8px;background:var(--bg-light);
+  border:1px solid var(--divider);font-size:13px;color:var(--text-secondary);line-height:1.6;
+}
+.tq-preview.tq-preview-error{color:var(--bad);border-color:var(--bad);}
+.tq-preview b{color:var(--text-dark);}
+.tq-actions{display:flex;gap:10px;margin-top:14px;}
+.tq-module-queue{display:flex;flex-direction:column;gap:6px;margin-top:16px;}
+.tq-module-row{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:8px 12px;border:1px solid var(--divider);border-radius:8px;font-size:13px;
+}
+.tq-module-row .tq-mod-name{font-weight:600;color:var(--text-dark);}
+.tq-module-row .tq-mod-result{color:var(--text-secondary);}
+.tq-pill{
+  display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;
+  background:var(--divider);color:var(--text-secondary);
+}
+.tq-pill-running{background:#fff7e0;color:#9a6700;}
+.tq-pill-done{background:#dafbe1;color:#116329;}
+.tq-pill-fail{background:#ffe6e6;color:var(--bad);}
+.tq-pill-cancelled{background:var(--divider);color:var(--text-secondary);}
+.tq-log{
+  margin-top:14px;max-height:220px;overflow-y:auto;background:#0d1117;color:#c9d1d9;
+  border-radius:8px;padding:12px 14px;font-size:12px;line-height:1.5;
+  font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;white-space:pre-wrap;word-break:break-all;
+}
+
+/* ── 🔗 Git 상태 모달 ─────────────────────────────────────────────────── */
+#gitStatusBody{font-size:13px;line-height:1.6;}
+#gitStatusBody .gs-branch{font-weight:700;color:var(--text-dark);margin-bottom:6px;}
+#gitStatusBody .gs-ahead{color:var(--primary);}
+#gitStatusBody .gs-clean{color:var(--good);}
+#gitStatusBody ul{margin:8px 0 0;padding-left:18px;font-size:12.5px;color:var(--text-secondary);}
+#gitStatusBody li{margin-bottom:3px;font-family:'SFMono-Regular',Consolas,monospace;}
+
+@media (max-width: 1200px){
+  .pb-grid-3{grid-template-columns:1fr 1fr;}
+}
+
+@media (max-width: 900px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr);}
+  .home-kpi-grid{grid-template-columns:repeat(3,1fr);}
+  .panel-grid{grid-template-columns:1fr;}
+  .panel-wide{grid-column:1;}
+  .chat-msg{max-width:92%;}
+  .pb-grid-2{grid-template-columns:1fr;}
+  .pb-grid-3{grid-template-columns:1fr;}
+  .tc-priority-layout{grid-template-columns:1fr;}
+}
+
+/* 프로젝트 표시 이름 안내(4001) */
+.mp-hint { font-size: 12px; color: var(--text-secondary); margin: -4px 0 12px; line-height: 1.5; }
+.mp-hint b { color: var(--text-dark); }
