@@ -443,6 +443,9 @@ TC 수행에 필요한 구체적 입력값을 별도 컬럼으로 분리하여 �
 
 ## 14. Phase 4 — HTML Interactive Viewer 스펙
 
+<!-- [추가 2026-10-02] 뷰어를 매번 직접 작성하던 방식을 공용 템플릿 방식으로 전환(AGENTS.md 10항). 이 절의 스펙은 아래 템플릿이 구현하며 기존 스펙 문구는 변경하지 않음. -->
+> **뷰어는 직접 작성하지 않고 공용 템플릿으로 생성합니다** — `node _shared/viewer/render-viewer.js "project/{프로젝트명}" {모듈코드} "<출력 HTML>"` (AGENTS.md 10항, `_shared\viewer\README.md`). 이 절의 스펙은 `_shared\viewer\viewer.template.html`에 구현되어 있으며, 프로젝트별 차이는 데이터(META/EXTRA_MODALS)로만 표현합니다.
+
 ### 디자인 테마 (GitHub Dark — 옵션A)
 ```css
 /* Light Mode */
@@ -545,7 +548,10 @@ TC 세트 생성 후 반드시 아래를 자가 검증합니다:
 - [ ] `[확인필요]` 항목이 적절히 표기 (P3 고정)
 - [ ] 정상 40% / 예외 35% / 유효성(경계값+필수·선택 입력값 검증) 25% 균형
 - [ ] **TC 확장 기법** (상태값전개/경계값/조합/예외/회귀) 적용 확인
-- [ ] HTML 뷰어: GitHub Dark 테마 적용, 버튼 세트(CSV/JSON 저장·불러오기) 포함
+<!-- [수정 전 2026-10-02] - [ ] HTML 뷰어: GitHub Dark 테마 적용, 버튼 세트(CSV/JSON 저장·불러오기) 포함 -->
+- [ ] HTML 뷰어: GitHub Dark 테마 적용, 버튼 세트(XLSX/JSON 저장·불러오기) 포함 — 변경 이력은 하단 각주
+<!-- [추가 2026-10-02] 필수 산출물 3종 체크 항목 신설(AGENTS.md 13항). 기존 항목은 변경 없음. -->
+- [ ] **필수 산출물 3종 완비**: PRD(`Analysis\{프로젝트명}_PRD.html`) · 테스트 계정 매트릭스(`testAccounts.json` 또는 `hasTestAccounts:false`+사유) · User Flow Map(`viewer-extra-modals.json`의 `flowMapModal`) — 뷰어를 `--strict`로 생성해 통과해야 Phase 4 완료
 
 ---
 

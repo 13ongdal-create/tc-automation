@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<!--
+  공용 TC 뷰어 템플릿 v1 (2026-10-02) — 프로젝트 콘텐츠 없음. AGENTS.md 10항, _shared/viewer/README.md 참조.
+  사용법: 아래 JS 상단 5개 주입 지점(META / TC_DATA / DEFECT_DATA / DEFECT_CONSOLE / EXTRA_MODALS)의 `/*__NAME__*/` 뒤 기본값을
+  JSON으로 교체하기만 한다. 주입 시 반드시 JSON.stringify(...).replace(/</g, '\\u003c') 로 '<'를 이스케이프한다(AGENTS.md 10항) — render-viewer.js가 자동 처리.
+  CSS/HTML/JS 로직은 수정하지 않는다 — 프로젝트별 차이는 전부 데이터(META, EXTRA_MODALS)로 표현한다.
+-->
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA TC 뷰어</title>
+<style>
+  :root{
+    --bg:#f6f8fa; --panel:#ffffff; --text:#1f2328; --muted:#656d76;
+    --border:#d0d7de; --accent:#0969da; --accent2:#0550ae;
+    --p1:#cf222e; --p2:#9a6700; --p3:#0969da;
+    --pass:#1a7f37; --fail:#cf222e; --na:#8c959f; --none:#d0d7de;
+    --headbg:#f6f8fa;
+  }
+  html[data-theme="dark"]{
+    --bg:#0d1117; --panel:#161b22; --text:#e6edf3; --muted:#8b949e;
+    --border:#30363d; --accent:#58a6ff; --accent2:#79c0ff;
+    --p1:#f85149; --p2:#d29922; --p3:#58a6ff;
+    --headbg:#161b22;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--bg);color:var(--text);}
+  header{position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .header-title{display:flex;align-items:center;gap:12px;}
+  .header-badge{width:34px;height:34px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  header h1{font-size:16px;margin:0;line-height:1.3;}
+  header .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+  .header-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  button{cursor:pointer;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:20px;padding:7px 14px;font-size:12.5px;font-weight:600;white-space:nowrap;}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+  button.primary:hover{background:var(--accent2);}
+  button:hover{filter:brightness(0.97);}
+  button:disabled{opacity:.45;cursor:not-allowed;filter:none;}
+  .container{padding:16px 20px 60px;max-width:1600px;margin:0 auto;}
+
+  .kpis{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0;}
+  .kpi{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px 16px;}
+  .kpi .num{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .kpi .label{font-size:12px;color:var(--muted);}
+  .kpi.p1 .num{color:var(--p1);} .kpi.p2 .num{color:var(--p2);} .kpi.p3 .num{color:var(--p3);}
+  .kpi.def-new .num{color:var(--p1);} .kpi.def-progress .num{color:var(--accent);} .kpi.def-done .num{color:var(--pass);}
+
+  .stats-wrap{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:16px;overflow-x:auto;}
+  .stats-wrap h3{margin:0 0 10px;font-size:14px;}
+  table.stats{width:100%;border-collapse:collapse;font-size:12px;}
+  table.stats th,table.stats td{border:1px solid var(--border);padding:6px 8px;text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums;}
+  table.stats th{background:var(--headbg);}
+  table.stats td.modname{text-align:left;}
+  table.stats tr.stats-total td{font-weight:700;background:var(--headbg);border-top:2px solid var(--text);}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+  .tab-btn{border-radius:20px;font-size:12px;padding:6px 12px;}
+  .tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .tab-btn.tab-defect{border-color:var(--fail);color:var(--fail);}
+  .tab-btn.tab-defect.active{background:var(--fail);border-color:var(--fail);color:#fff;}
+
+  .toolbar{display:flex;justify-content:flex-start;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:12px;}
+  .toolbar .count{font-size:13px;color:var(--muted);}
+  .toolbar.toolbar-split{justify-content:space-between;}
+
+  .filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .filter-bar input[type="text"]{flex:1;min-width:200px;padding:8px 10px;font-size:13px;border-radius:8px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+  .filter-bar select{padding:8px 10px;font-size:13px;border-radius:8px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+
+  /* 표준 "고정 헤더 스프레드시트" 패턴: 테이블 영역 자체를 독립 스크롤 박스(max-height + overflow:auto)로 만들고,
+     그 박스 기준(top:0)으로 헤더를 고정한다. ※ .table-wrap에 overflow:hidden을 쓰거나 th의 top에 외부 헤더 높이를
+     넣으면 헤더가 첫 행 위로 밀려 겹친다 — 이 두 줄은 바꾸지 말 것. */
+  .table-wrap{background:var(--panel);border:1px solid var(--border);border-radius:10px;max-height:70vh;overflow:auto;}
+  table.tc{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:12px;}
+  table.tc th,table.tc td{border-bottom:1px solid var(--border);border-right:1px solid var(--border);padding:6px 7px;vertical-align:top;word-break:break-word;overflow-wrap:break-word;white-space:pre-wrap;}
+  table.tc th:first-child,table.tc td:first-child{border-left:1px solid var(--border);}
+  table.tc thead th{border-top:1px solid var(--border);}
+  table.tc th{background:var(--headbg);position:sticky;top:0;z-index:10;font-size:11.5px;}
+  table.tc td.center{text-align:center;}
+  .badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:11px;color:#fff;}
+  /* TC 중요도(P1~P3)와 결함 심각도(Critical/Major/Minor)는 서로 다른 코드 체계 — 색만 공유 */
+  .badge.P1,.badge.Critical{background:var(--p1);} .badge.P2,.badge.Major{background:var(--p2);} .badge.P3,.badge.Minor{background:var(--p3);}
+  mark{background:#fff3a3;color:inherit;padding:0 1px;border-radius:2px;}
+  html[data-theme="dark"] mark{background:#6e5a00;}
+  .verify-note{color:var(--fail);font-weight:700;margin-bottom:4px;}
+  .defect-section{margin-bottom:8px;} .defect-section:last-child{margin-bottom:0;}
+  .defect-section-label{display:block;font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:0.03em;margin-bottom:2px;}
+  .defect-section-body{white-space:pre-wrap;}
+  select.result-select{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+  select.result-select[data-val="Pass"]{color:var(--pass);font-weight:600;}
+  select.result-select[data-val="Fail"]{color:var(--fail);font-weight:600;}
+  input.free-input{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+
+  .col-chk{width:2%} .col-no{width:2.5%} .col-id{width:5.5%} .col-system{width:2.5%} .col-cat{width:3%} .col-mod{width:3.5%} .col-sub{width:3.5%}
+  .col-platform{width:2.5%} .col-type{width:2.5%} .col-title{width:10%} .col-ref{width:3.5%}
+  .col-priority{width:2.5%} .col-testdata{width:5%} .col-precond{width:5.5%} .col-proc{width:8.5%} .col-expected{width:8.5%}
+  .col-result{width:4.5%} .col-assignee{width:3.5%} .col-issue{width:8%} .col-issuelink{width:8%} .col-remark{width:8%}
+
+  .col-def-id{width:9%} .col-def-mod{width:6%} .col-def-sev{width:5%} .col-def-status{width:8%}
+  .col-def-summary{width:18%} .col-def-detail{width:24%} .col-def-thumb{width:8%} .col-def-date{width:7%} .col-def-tc{width:7%} .col-def-link{width:8%}
+  img.def-thumb{width:100%;max-height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer;display:block;}
+  a.defect-tc-link{color:var(--accent);text-decoration:underline;cursor:pointer;}
+  details.defect-tcs summary{cursor:pointer;color:var(--accent);font-weight:600;white-space:nowrap;}
+  details.defect-tcs[open] summary{margin-bottom:4px;}
+  pre.con-log{white-space:pre-wrap;word-break:break-all;background:#0d1117;color:#e6edf3;border-radius:8px;padding:10px;font:11.5px/1.5 Consolas,monospace;max-height:220px;overflow:auto;margin:6px 0 0;}
+  select.defect-status-select{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+  select.defect-status-select[data-val="신규"]{color:var(--p1);font-weight:600;}
+  select.defect-status-select[data-val="처리중"]{color:var(--accent);font-weight:600;}
+  select.defect-status-select[data-val="재검증대기"]{color:var(--p2);font-weight:600;}
+  select.defect-status-select[data-val="완료"]{color:var(--pass);font-weight:600;}
+  select.defect-status-select[data-val="보류"]{color:var(--muted);font-weight:600;}
+  select.defect-status-select[data-val="재발생"]{color:var(--fail);font-weight:700;}
+  #defectTable tbody tr{cursor:pointer;}
+  #defectTable tbody tr:hover{background:var(--headbg);}
+  #defectModalImg{max-width:100%;border-radius:8px;border:1px solid var(--border);display:block;margin-top:10px;}
+  #defectModalHistory{margin:8px 0 0;padding-left:18px;font-size:12px;color:var(--muted);line-height:1.7;}
+
+  /* 선택 TC 테스트 실행 (대시보드 연동) */
+  #runPanel{display:none;background:#0d1117;color:#e6edf3;font-family:Consolas,monospace;font-size:12px;padding:12px;border-radius:10px;margin:10px 0;max-height:260px;overflow:auto;white-space:pre-wrap;}
+  #runNotice{display:none;font-size:12px;color:var(--p2);margin:6px 0;}
+
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--panel);border-radius:12px;max-width:720px;width:92%;max-height:80vh;overflow-y:auto;padding:20px;}
+  .modal h2{margin-top:0;font-size:16px;}
+  .modal table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px;}
+  .modal table th,.modal table td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top;}
+  .modal table th{background:var(--headbg);}
+  .modal .modal-note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6;}
+  .modal-close{float:right;}
+
+  .footnote{font-size:11.5px;color:var(--muted);margin-top:14px;line-height:1.6;}
+  .version-note{font-size:11px;color:var(--muted);}
+  .status-confirmed{color:var(--pass);font-weight:600;}
+  .status-unconfirmed{color:var(--muted);}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-title">
+    <div class="header-badge">🧪</div>
+    <div>
+      <h1 id="pageTitle"></h1>
+      <div class="sub" id="pageSub"></div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <span id="extraButtons" style="display:contents;"></span>
+    <a id="linkPrd" hidden><button type="button">📄 PRD (사이트분석 & TC계획)</button></a>
+    <a id="linkSite" target="_blank" rel="noopener" hidden><button type="button" id="btnSite">🔗 Front 바로가기</button></a>
+    <a id="linkAdmin" target="_blank" rel="noopener" hidden><button type="button">🔗 Admin 바로가기</button></a>
+    <a id="linkResults" href="results/index.html" hidden><button type="button">📜 실행결과 이력</button></a>
+    <button id="btnXlsx" class="primary">📊 XLSX 다운로드</button>
+    <button id="btnJsonSave" class="primary">💾 JSON 저장</button>
+    <button id="btnJsonLoad">📂 JSON 파일 연결/불러오기</button>
+    <input type="file" id="jsonFileInput" accept="application/json" style="display:none;">
+    <span id="tcFileStatus" style="font-size:11px;color:var(--muted);">미연결 (저장 시 다운로드)</span>
+    <button id="btnTheme">🌙 다크모드</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="stats-wrap" id="statsWrapBlock">
+    <h3 id="statsToggle" style="cursor:pointer;user-select:none;display:flex;align-items:center;gap:6px;">
+      <span id="statsToggleIcon">▶</span><span><span id="statsLabel">소분류</span>별 실행현황 통계</span>
+    </h3>
+    <div style="overflow-x:auto;display:none;" id="statsTableWrap">
+    <table class="stats" id="statsTable">
+      <thead>
+        <tr><th id="statsColLabel">소분류</th><th>전체</th><th>Pass</th><th>Fail</th><th>N/A</th><th>N/T</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>Fail율</th></tr>
+      </thead>
+      <tbody id="statsBody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis">
+    <div class="kpi"><div class="num" id="kpiTotal">0</div><div class="label">전체 TC</div></div>
+    <div class="kpi p1"><div class="num" id="kpiP1">0</div><div class="label">P1</div></div>
+    <div class="kpi p2"><div class="num" id="kpiP2">0</div><div class="label">P2</div></div>
+    <div class="kpi p3"><div class="num" id="kpiP3">0</div><div class="label">P3</div></div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="filter-bar" id="filterBarBlock">
+    <input id="searchInput" type="text" placeholder="TC ID / 테스트 항목 키워드 검색">
+    <select id="filterPriority"><option value="">우선순위 전체</option></select>
+    <select id="filterType"><option value="">유형 전체</option></select>
+    <select id="filterOrigin" hidden><option value="">구분 전체</option></select>
+    <button id="btnResetFilter">초기화</button>
+  </div>
+
+  <div class="toolbar" id="toolbarBlock">
+    <button id="btnRun" class="primary" disabled>▶ 선택 TC 테스트 실행</button>
+    <div class="count" id="filteredCount"></div>
+  </div>
+  <div id="runNotice">TC/defects.json과 results는 갱신됐지만 이 HTML(생성 시점 스냅샷)은 자동 반영되지 않습니다 — 채팅에 '뷰어 갱신해줘'로 재생성을 요청하세요.</div>
+  <div id="runPanel"></div>
+
+  <div class="table-wrap" id="tcTableWrap">
+    <table class="tc">
+      <thead>
+        <tr>
+          <th class="col-chk"><input type="checkbox" id="chkAll" title="현재 목록 전체 선택"></th>
+          <th class="col-no">No.</th>
+          <th class="col-id">TC ID</th>
+          <th class="col-system">system</th>
+          <th class="col-cat">대분류</th>
+          <th class="col-mod">중분류</th>
+          <th class="col-sub">소분류</th>
+          <th class="col-platform">플랫폼</th>
+          <th class="col-type">유형</th>
+          <th class="col-title">테스트 항목</th>
+          <th class="col-ref">기준문서</th>
+          <th class="col-priority">우선순위</th>
+          <th class="col-testdata">테스트 데이터</th>
+          <th class="col-precond">사전조건</th>
+          <th class="col-proc">테스트 수행 절차</th>
+          <th class="col-expected">기대 결과</th>
+          <th class="col-result">실행결과</th>
+          <th class="col-assignee">담당자</th>
+          <th class="col-issue">이슈내용</th>
+          <th class="col-issuelink">이슈링크</th>
+          <th class="col-remark">비고</th>
+        </tr>
+      </thead>
+      <tbody id="tcBody"></tbody>
+    </table>
+  </div>
+
+  <div id="defectPanel" style="display:none;">
+    <div class="kpis" id="defectKpis">
+      <div class="kpi"><div class="num" id="defKpiTotal">0</div><div class="label">전체 결함</div></div>
+      <div class="kpi def-new"><div class="num" id="defKpiNew">0</div><div class="label">신규</div></div>
+      <div class="kpi def-progress"><div class="num" id="defKpiProgress">0</div><div class="label">처리중</div></div>
+      <div class="kpi def-done"><div class="num" id="defKpiDone">0</div><div class="label">완료</div></div>
+    </div>
+
+    <div class="tabs" id="defectFilterPills"></div>
+
+    <div class="toolbar" style="gap:8px;">
+      <button id="btnDefectSave" class="primary">💾 결함 저장</button>
+      <button id="btnDefectFileConnect">📂 defects.json 파일 연결/불러오기</button>
+      <span id="defectFileStatus" style="font-size:11px;color:var(--muted);">미연결 (저장 시 다운로드)</span>
+    </div>
+
+    <div class="toolbar toolbar-split">
+      <div class="count" id="defectFilteredCount"></div>
+    </div>
+
+    <div class="table-wrap" id="defectTableWrapOuter">
+      <table class="tc" id="defectTable">
+        <thead>
+          <tr>
+            <th class="col-def-id">결함ID</th>
+            <th class="col-def-mod">모듈</th>
+            <th class="col-def-sev">심각도</th>
+            <th class="col-def-status">상태</th>
+            <th class="col-def-summary">요약</th>
+            <th class="col-def-detail">상세내용</th>
+            <th class="col-def-thumb">스크린샷</th>
+            <th class="col-def-date">발견일</th>
+            <th class="col-def-tc">관련 TC ID</th>
+            <th class="col-def-link">비고</th>
+          </tr>
+        </thead>
+        <tbody id="defectBody"></tbody>
+      </table>
+    </div>
+    <div class="footnote">※ 결함 행 클릭 시 스크린샷을 확인할 수 있습니다 (상태/이슈링크 입력란 클릭 시에는 열리지 않습니다). "관련 TC ID"를 클릭하면 해당 TC 목록 위치로 이동합니다.</div>
+  </div>
+
+  <div class="footnote">
+    ※ 실행결과/담당자/이슈내용/이슈링크/결함 상태는 기본적으로 브라우저 메모리에만 저장되어 새로고침 시 초기화됩니다. "JSON 파일 연결/불러오기"로 원본 파일을 한 번 연결하면, 이후 "저장" 클릭 시 다운로드 없이 그 파일에 바로 반영됩니다(Chrome/Edge 등 File System Access API 지원 브라우저 한정 — 미지원 브라우저는 다운로드로 대체).<br>
+    ※ [확인필요] 태그가 붙은 TC는 근거 문서/화면이 아직 확보되지 않은 항목입니다 (AGENTS.md 7항). 스펙 확정 시 재검증이 필요합니다.<br>
+    <span class="version-note" id="versionNote"></span>
+  </div>
+</div>
+
+<div class="modal-overlay" id="defectModalOverlay">
+  <div class="modal">
+    <button class="modal-close" data-close="defect">닫기</button>
+    <h2 id="defectModalTitle"></h2>
+    <div id="defectModalSummary" style="font-size:13px;"></div>
+    <div class="modal-note" id="defectModalTcs"></div>
+    <img id="defectModalImg" alt="결함 스크린샷" onerror="this.style.display='none'; document.getElementById('defectModalImgMissing').style.display='block';">
+    <div class="modal-note" id="defectModalImgMissing" style="display:none;">※ 스크린샷 파일을 찾을 수 없습니다.</div>
+    <div class="modal-note">이력</div>
+    <ul id="defectModalHistory"></ul>
+    <div id="defectModalConsole"></div>
+  </div>
+</div>
+
+<div id="extraModals"></div>
+
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script>
+// ── 주입 지점 4곳 (렌더러가 `/*__NAME__*/` 뒤 기본값을 JSON으로 교체) ──
+// META: { project, module, moduleName, version, changeHistory:[{version,date,summary}], siteUrl?, adminUrl?, prdFile?, resultsIndex?, missingRequired? }
+// EXTRA_MODALS: 프로젝트별 참고표 버튼 [{ id, label, title, html }] — html은 신뢰된 정적 표 마크업만 (예: 테스트 계정 매트릭스, User Flow Map)
+const META = /*__META__*/{ project: '', module: '', moduleName: '', version: 1, changeHistory: [] };
+const TC_DATA = /*__TC_DATA__*/[];
+const DEFECT_DATA = /*__DEFECT_DATA__*/[];
+// DEFECT_CONSOLE: { 결함ID: { consoleErrors:[...], failedRequests:[...] } } — TC/defects/{결함ID}.console.json 내용(표시 전용, "결함 저장" 시 defects.json에 쓰지 않음)
+const DEFECT_CONSOLE = /*__DEFECT_CONSOLE__*/{};
+const EXTRA_MODALS = /*__EXTRA_MODALS__*/[];
+
+const PROJECT = META.project;
+const FILE_BASE = `${META.project}_TC_${META.module}`;
+const DEFECT_TAB = '🐞 결함현황';
+// 탭/통계표 분류 기준: 중분류가 2개 이상이면 중분류, 1개뿐이면 소분류로 나눈다(탭이 '전체'+1개로 무의미해지는 것 방지)
+const TAB_KEY = new Set(TC_DATA.map((t) => t.midCategory)).size >= 2 ? 'midCategory' : 'minorCategory';
+const TAB_LABEL = TAB_KEY === 'midCategory' ? '중분류' : '소분류';
+const TC_RESULTS = ['', 'Pass', 'Fail', 'N/A', 'N/T'];
+let currentTab = '전체';
+let filterState = { keyword: '', priority: '', type: '', origin: '' };
+let defectFilterStatus = '전체';
+const selected = new Set();
+let lastFiltered = [];
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// 검색어를 하이라이트(배경 마킹) 처리. esc() 이후 텍스트에 <mark>를 삽입.
+function hl(s, kw) {
+  const escaped = esc(s);
+  if (!kw) return escaped;
+  const idx = escaped.toLowerCase().indexOf(kw.toLowerCase());
+  if (idx === -1) return escaped;
+  return escaped.slice(0, idx) + '<mark>' + escaped.slice(idx, idx + kw.length) + '</mark>' + escaped.slice(idx + kw.length);
+}
+
+// 기대결과 셀: verifyNote가 있으면 RED 폰트로 "[확인필요-...]" 를 결과 위에 표시
+function expectedCell(t) {
+  if (!t.verifyNote) return esc(t.expected);
+  return `<div class="verify-note">[확인필요-${esc(t.verifyNote)}]</div>${esc(t.expected)}`;
+}
+
+// "비"+검색어(예: 검색어="회원" → "비회원")로 매칭된 항목은 일반 매칭보다 후순위로 정렬.
+function isSecondaryMatch(t, kw) {
+  const text = (t.tcId + ' ' + t.item).toLowerCase();
+  const k = kw.toLowerCase();
+  let idx = text.indexOf(k);
+  let hasPrimary = false, hasSecondary = false;
+  while (idx !== -1) {
+    if (idx > 0 && text[idx - 1] === '비') hasSecondary = true;
+    else hasPrimary = true;
+    idx = text.indexOf(k, idx + 1);
+  }
+  return hasSecondary && !hasPrimary;
+}
+
+function statRow(label, items, cls) {
+  const total = items.length;
+  const c = (r) => items.filter((t) => t.result === r).length;
+  const pass = c('Pass'), fail = c('Fail'), na = c('N/A'), nt = c('N/T');
+  const none = items.filter((t) => !t.result).length;
+  const executed = total - none;
+  const pct = (a, b) => (b ? ((a / b) * 100).toFixed(0) : 0) + '%';
+  return `<tr class="${cls || ''}"><td class="modname">${esc(label)}</td><td>${total}</td><td>${pass}</td><td>${fail}</td><td>${na}</td><td>${nt}</td><td>${none}</td><td>${pct(executed, total)}</td><td>${pct(pass, executed)}</td><td>${pct(fail, executed)}</td></tr>`;
+}
+
+function setupFilterBar() {
+  const prioritySel = document.getElementById('filterPriority');
+  const typeSel = document.getElementById('filterType');
+  const originSel = document.getElementById('filterOrigin');
+  [...new Set(TC_DATA.map((t) => t.priority))].sort().forEach((v) => {
+    prioritySel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`);
+  });
+  [...new Set(TC_DATA.map((t) => t.type))].sort().forEach((v) => {
+    typeSel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`);
+  });
+  const origins = [...new Set(TC_DATA.map((t) => t.origin).filter(Boolean))];
+  origins.forEach((v) => originSel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`));
+  originSel.hidden = origins.length === 0; // 레거시 이전 프로젝트(기존/신규 구분)에서만 노출
+
+  document.getElementById('searchInput').addEventListener('input', (e) => { filterState.keyword = e.target.value.trim().toLowerCase(); render(); });
+  prioritySel.addEventListener('change', (e) => { filterState.priority = e.target.value; render(); });
+  typeSel.addEventListener('change', (e) => { filterState.type = e.target.value; render(); });
+  originSel.addEventListener('change', (e) => { filterState.origin = e.target.value; render(); });
+  document.getElementById('btnResetFilter').addEventListener('click', () => {
+    filterState = { keyword: '', priority: '', type: '', origin: '' };
+    document.getElementById('searchInput').value = '';
+    prioritySel.value = ''; typeSel.value = ''; originSel.value = '';
+    render();
+  });
+}
+
+function render() {
+  const tabsEl = document.getElementById('tabs');
+  const subs = ['전체', ...new Set(TC_DATA.map((t) => t[TAB_KEY])), DEFECT_TAB];
+  tabsEl.innerHTML = subs.map((s) => `<button class="tab-btn ${s === currentTab ? 'active' : ''} ${s === DEFECT_TAB ? 'tab-defect' : ''}" data-tab="${esc(s)}">${esc(s)}</button>`).join('');
+  tabsEl.querySelectorAll('.tab-btn').forEach((b) => b.onclick = () => { currentTab = b.dataset.tab; render(); });
+
+  const defectMode = currentTab === DEFECT_TAB;
+  ['statsWrapBlock', 'kpis', 'filterBarBlock', 'toolbarBlock', 'tcTableWrap', 'runNotice', 'runPanel'].forEach((id) => {
+    const n = document.getElementById(id);
+    if (defectMode) n.dataset.prevDisplay = n.style.display, n.style.display = 'none';
+    else n.style.display = (id === 'runNotice' || id === 'runPanel') ? (n.dataset.keep || '') : '';
+  });
+  document.getElementById('defectPanel').style.display = defectMode ? '' : 'none';
+  if (defectMode) { renderDefects(); return; }
+
+  let filtered = currentTab === '전체' ? TC_DATA : TC_DATA.filter((t) => t[TAB_KEY] === currentTab);
+  if (filterState.keyword) {
+    const kw = filterState.keyword;
+    filtered = filtered.filter((t) => (t.tcId + ' ' + t.item).toLowerCase().includes(kw));
+    filtered = [...filtered].sort((a, b) => isSecondaryMatch(a, kw) - isSecondaryMatch(b, kw));
+  }
+  if (filterState.priority) filtered = filtered.filter((t) => t.priority === filterState.priority);
+  if (filterState.type) filtered = filtered.filter((t) => t.type === filterState.type);
+  if (filterState.origin) filtered = filtered.filter((t) => t.origin === filterState.origin);
+  lastFiltered = filtered;
+  document.getElementById('filteredCount').textContent = `${filtered.length}건 표시 중 (전체 ${TC_DATA.length}건) · 선택 ${selected.size}건`;
+
+  document.getElementById('kpiTotal').textContent = TC_DATA.length;
+  ['P1', 'P2', 'P3'].forEach((p) => { document.getElementById('kpi' + p).textContent = TC_DATA.filter((t) => t.priority === p).length; });
+
+  const mids = [...new Set(TC_DATA.map((t) => t[TAB_KEY]))];
+  document.getElementById('statsBody').innerHTML =
+    mids.map((m) => statRow(m, TC_DATA.filter((t) => t[TAB_KEY] === m))).join('') + statRow('합계', TC_DATA, 'stats-total');
+
+  const kw = filterState.keyword;
+  document.getElementById('tcBody').innerHTML = filtered.map((t) => `
+    <tr data-id="${esc(t.tcId)}">
+      <td class="center"><input type="checkbox" class="chk" ${selected.has(t.tcId) ? 'checked' : ''}></td>
+      <td class="center">${esc(t.displayNo)}</td>
+      <td>${hl(t.tcId, kw)}</td>
+      <td class="center"><span class="badge ${t.system === 'BO' ? 'P1' : 'P3'}">${esc(t.system || 'FO')}</span></td>
+      <td>${esc(t.majorCategory)}</td>
+      <td>${esc(t.midCategory)}</td>
+      <td>${esc(t.minorCategory || '')}</td>
+      <td class="center">${esc(t.platform)}</td>
+      <td class="center">${esc(t.type)}</td>
+      <td>${hl(t.item, kw)}</td>
+      <td>${esc(t.baseDoc || '-')}</td>
+      <td class="center"><span class="badge ${esc(t.priority)}">${esc(t.priority)}</span></td>
+      <td>${esc(t.testData || '')}</td>
+      <td>${esc(t.precondition === '특이 사전조건 없음' ? '' : t.precondition)}</td>
+      <td>${esc(t.steps)}</td>
+      <td>${expectedCell(t)}</td>
+      <td>${resultSelect(t)}</td>
+      <td><input class="free-input assignee" value="${esc(t.assignee || '')}"></td>
+      <td>${esc(t.issueSummary || '')}</td>
+      <td><input class="free-input issuelink" value="${esc(t.issueLink || '')}"></td>
+      <td><input class="free-input remark" value="${esc(t.remark || '')}"></td>
+    </tr>
+  `).join('');
+  const byId = (tr) => TC_DATA.find((t) => t.tcId === tr.dataset.id);
+  const tbody = document.getElementById('tcBody');
+  tbody.querySelectorAll('input.chk').forEach((c) => c.onchange = () => {
+    const id = c.closest('tr').dataset.id;
+    c.checked ? selected.add(id) : selected.delete(id);
+    updateRunState();
+  });
+  tbody.querySelectorAll('input.remark').forEach((inp) => inp.onchange = () => { byId(inp.closest('tr')).remark = inp.value; });
+  tbody.querySelectorAll('input.assignee').forEach((inp) => inp.onchange = () => { byId(inp.closest('tr')).assignee = inp.value; });
+  tbody.querySelectorAll('input.issuelink').forEach((inp) => inp.onchange = () => { byId(inp.closest('tr')).issueLink = inp.value; });
+  tbody.querySelectorAll('select.result-select').forEach((sel) => {
+    sel.onchange = () => {
+      const item = byId(sel.closest('tr'));
+      item.result = sel.value;
+      sel.dataset.val = sel.value;
+      render();
+    };
+  });
+  updateRunState();
+}
+
+function updateRunState() {
+  const btn = document.getElementById('btnRun');
+  btn.disabled = selected.size === 0;
+  btn.textContent = selected.size ? `▶ 선택 TC 테스트 실행 (${selected.size}건)` : '▶ 선택 TC 테스트 실행';
+  const all = document.getElementById('chkAll');
+  all.checked = lastFiltered.length > 0 && lastFiltered.every((t) => selected.has(t.tcId));
+  const cnt = document.getElementById('filteredCount');
+  cnt.textContent = cnt.textContent.replace(/ · 선택 \d+건/, '') + ` · 선택 ${selected.size}건`;
+}
+
+function resultSelect(t) {
+  return `<select class="result-select" data-val="${esc(t.result || '')}">${TC_RESULTS.map((o) => `<option value="${o}" ${t.result === o ? 'selected' : ''}>${o || '미실행'}</option>`).join('')}</select>`;
+}
+
+function handleThumbError(img) {
+  img.outerHTML = '<span style="color:var(--muted);font-size:11px;">스크린샷 없음</span>';
+}
+
+// 결함 1건에 관련 TC가 여러 개(tcIds)일 수 있음 — tcIds가 없는 기존 레코드는 [tcId]로 간주
+const defectTcIds = (d) => (Array.isArray(d.tcIds) && d.tcIds.length ? d.tcIds : [d.tcId]).filter(Boolean);
+
+function defectTcCell(def) {
+  const ids = defectTcIds(def);
+  const links = ids.map((id) => `<a href="#" class="defect-tc-link" data-tcid="${esc(id)}">${esc(id)}</a>`);
+  if (ids.length <= 3) return links.join('<br>');
+  return `<details class="defect-tcs"><summary>TC ${ids.length}건</summary>${links.join('<br>')}</details>`;
+}
+
+function defectConsoleHtml(def) {
+  const c = DEFECT_CONSOLE[def.defectId];
+  if (!c) return def.consoleLog ? `<div class="modal-note">※ 콘솔 로그(${esc(def.consoleLog)})를 불러오지 못했습니다.</div>` : '';
+  const list = (arr) => (arr && arr.length ? `<pre class="con-log">${arr.map(esc).join('\n')}</pre>` : '<div class="modal-note">없음</div>');
+  return `<div class="modal-note">콘솔 에러 (${(c.consoleErrors || []).length}건)</div>${list(c.consoleErrors)}` +
+    `<div class="modal-note">실패한 네트워크 요청 (${(c.failedRequests || []).length}건)</div>${list(c.failedRequests)}`;
+}
+
+function defectDetailCell(def) {
+  const sections = [];
+  if (def.testEnv) sections.push(['환경', def.testEnv]);
+  if (def.testSteps) sections.push(['절차', def.testSteps]);
+  if (def.actualResult) sections.push(['실제결과', def.actualResult]);
+  if (def.expectedResult) sections.push(['기대결과', def.expectedResult]);
+  const con = DEFECT_CONSOLE[def.defectId];
+  if (con) sections.push(['콘솔/네트워크', `콘솔 에러 ${(con.consoleErrors || []).length}건 · 실패 요청 ${(con.failedRequests || []).length}건 (행을 클릭하면 상세 표시)`]);
+  return sections.map(([label, text]) =>
+    `<div class="defect-section"><span class="defect-section-label">[${esc(label)}]</span><div class="defect-section-body">${esc(text)}</div></div>`
+  ).join('');
+}
+
+function defectStatusSelect(def) {
+  const opts = ['신규', '처리중', '재검증대기', '완료', '보류', '재발생'];
+  return `<select class="defect-status-select" data-val="${esc(def.status)}">${opts.map((o) => `<option value="${o}" ${def.status === o ? 'selected' : ''}>${o}</option>`).join('')}</select>`;
+}
+
+function renderDefects() {
+  const total = DEFECT_DATA.length;
+  const byStatus = (s) => DEFECT_DATA.filter((d) => d.status === s).length;
+  document.getElementById('defKpiTotal').textContent = total;
+  document.getElementById('defKpiNew').textContent = byStatus('신규');
+  document.getElementById('defKpiProgress').textContent = byStatus('처리중');
+  document.getElementById('defKpiDone').textContent = byStatus('완료');
+
+  const pillsEl = document.getElementById('defectFilterPills');
+  const statuses = ['전체', '신규', '처리중', '재검증대기', '완료', '보류', '재발생'];
+  pillsEl.innerHTML = statuses.map((s) => `<button class="tab-btn ${s === defectFilterStatus ? 'active' : ''}" data-status="${esc(s)}">${esc(s)} (${s === '전체' ? total : byStatus(s)})</button>`).join('');
+  pillsEl.querySelectorAll('.tab-btn').forEach((b) => b.onclick = () => { defectFilterStatus = b.dataset.status; renderDefects(); });
+
+  const filtered = defectFilterStatus === '전체' ? DEFECT_DATA : DEFECT_DATA.filter((d) => d.status === defectFilterStatus);
+  document.getElementById('defectFilteredCount').textContent = `${filtered.length}건 표시 중 (전체 ${total}건)`;
+
+  const tbody = document.getElementById('defectBody');
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px;">등록된 결함이 없습니다.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = filtered.map((def) => `
+    <tr data-defid="${esc(def.defectId)}">
+      <td>${esc(def.defectId)}</td>
+      <td class="center">${esc(def.module)}</td>
+      <td class="center"><span class="badge ${esc(def.severity)}">${esc(def.severity)}</span></td>
+      <td>${defectStatusSelect(def)}</td>
+      <td>${esc(def.summary)}</td>
+      <td>${defectDetailCell(def)}</td>
+      <td>${def.screenshot ? `<img class="def-thumb" src="defects/${esc(def.defectId)}.png" alt="${esc(def.defectId)} 스크린샷" onerror="handleThumbError(this)">` : ''}</td>
+      <td class="center">${esc(def.detectedAt || '')}</td>
+      <td>${defectTcCell(def)}</td>
+      <td><input class="free-input def-issuelink" value="${esc(def.issueLink || '')}"></td>
+    </tr>
+  `).join('');
+
+  tbody.querySelectorAll('select.defect-status-select').forEach((sel) => {
+    sel.onclick = (e) => e.stopPropagation();
+    sel.onchange = (e) => {
+      e.stopPropagation();
+      DEFECT_DATA.find((dd) => dd.defectId === sel.closest('tr').dataset.defid).status = sel.value;
+      renderDefects();
+    };
+  });
+  tbody.querySelectorAll('input.def-issuelink').forEach((inp) => {
+    inp.onclick = (e) => e.stopPropagation();
+    inp.onchange = (e) => { e.stopPropagation(); DEFECT_DATA.find((dd) => dd.defectId === inp.closest('tr').dataset.defid).issueLink = inp.value; };
+  });
+  tbody.querySelectorAll('details.defect-tcs').forEach((dt) => { dt.onclick = (e) => e.stopPropagation(); });
+  tbody.querySelectorAll('a.defect-tc-link').forEach((a) => {
+    a.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const tcId = a.dataset.tcid;
+      const tc = TC_DATA.find((t) => t.tcId === tcId);
+      if (!tc) { alert(tcId + ' 항목을 TC 목록에서 찾을 수 없습니다.'); return; }
+      currentTab = tc[TAB_KEY];
+      filterState.keyword = tcId.toLowerCase();
+      render();
+      document.getElementById('searchInput').value = tcId;
+      setTimeout(() => {
+        const row = document.querySelector('#tcBody tr[data-id="' + tcId + '"]');
+        if (row) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    };
+  });
+  tbody.querySelectorAll('tr[data-defid]').forEach((tr) => {
+    tr.onclick = () => openDefectModal(DEFECT_DATA.find((dd) => dd.defectId === tr.dataset.defid));
+  });
+}
+
+function openDefectModal(def) {
+  const tcIds = defectTcIds(def);
+  document.getElementById('defectModalTitle').textContent = `${def.defectId} — ${tcIds.length > 1 ? `관련 TC ${tcIds.length}건` : tcIds[0]}`;
+  document.getElementById('defectModalTcs').textContent = tcIds.length > 1 ? `관련 TC ${tcIds.length}건: ${tcIds.join(', ')}` : '';
+  document.getElementById('defectModalConsole').innerHTML = defectConsoleHtml(def);
+  document.getElementById('defectModalSummary').textContent = def.summary;
+  const img = document.getElementById('defectModalImg');
+  img.style.display = '';
+  document.getElementById('defectModalImgMissing').style.display = 'none';
+  img.src = 'defects/' + def.defectId + '.png';
+  document.getElementById('defectModalHistory').innerHTML = (def.history || []).map((h) => `<li>[${esc(h.at)}] ${esc(h.status)} — ${esc(h.note)}</li>`).join('');
+  document.getElementById('defectModalOverlay').classList.add('open');
+}
+
+// ── 헤더/모달 구성 (META·EXTRA_MODALS 기반) ──
+function buildChrome() {
+  const last = (META.changeHistory || []).slice(-1)[0];
+  document.title = `${META.project} QA TC 뷰어 - ${META.moduleName} ${META.module}`;
+  document.getElementById('pageTitle').innerHTML =
+    `${esc(META.project)} QA TC 뷰어 <span style="color:var(--accent);">v${esc(META.version)}</span> — ${esc(META.moduleName)} · ${esc(META.module)}`;
+  document.getElementById('pageSub').textContent =
+    `Interactive TC Viewer · 총 ${TC_DATA.length}건 · v${META.version}` + (last ? ` · 최근 변경: ${last.summary}` : '');
+  // 필수 산출물 누락 경고(렌더러가 META.missingRequired 로 전달) — 헤더 부제 옆에 빨간 글씨로 표시
+  if ((META.missingRequired || []).length) {
+    const warn = document.createElement('span');
+    warn.style.cssText = 'color:var(--fail);font-weight:700;margin-left:8px;';
+    warn.textContent = '⚠ 필수 산출물 누락: ' + META.missingRequired.join(', ');
+    document.getElementById('pageSub').appendChild(warn);
+  }
+  document.getElementById('statsLabel').textContent = TAB_LABEL;
+  document.getElementById('statsColLabel').textContent = TAB_LABEL;
+  if (META.siteUrl) {
+    const a = document.getElementById('linkSite'); a.href = META.siteUrl; a.hidden = false;
+    if (!META.adminUrl) document.getElementById('btnSite').textContent = '🔗 테스트사이트 바로가기';
+  }
+  if (META.adminUrl) { const a = document.getElementById('linkAdmin'); a.href = META.adminUrl; a.hidden = false; }
+  if (META.prdFile) { const a = document.getElementById('linkPrd'); a.href = '../Analysis/' + encodeURIComponent(META.prdFile); a.hidden = false; }
+  if (META.resultsIndex) document.getElementById('linkResults').hidden = false;
+
+  // 변경 이력: 데모사이트 뷰어와 같이 하단 각주에 한 줄로 표시(오래된 순)
+  document.getElementById('versionNote').textContent = 'meta.changeHistory: ' +
+    (META.changeHistory || []).map((h) => `v${h.version}(${h.date}) ${h.summary}`).join(' / ');
+
+  const btns = document.getElementById('extraButtons');
+  const mods = document.getElementById('extraModals');
+  EXTRA_MODALS.forEach((m) => {
+    btns.insertAdjacentHTML('beforeend', `<button data-open-modal="${esc(m.id)}">${esc(m.label)}</button>`);
+    mods.insertAdjacentHTML('beforeend',
+      `<div class="modal-overlay" id="${esc(m.id)}"><div class="modal"><button class="modal-close">닫기</button><h2>${esc(m.title || m.label)}</h2>${m.html || ''}</div></div>`);
+  });
+}
+
+buildChrome();
+document.getElementById('btnTheme').onclick = () => {
+  const html = document.documentElement;
+  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+};
+document.getElementById('statsToggle').onclick = () => {
+  const wrap = document.getElementById('statsTableWrap');
+  const open = wrap.style.display !== 'none';
+  wrap.style.display = open ? 'none' : '';
+  document.getElementById('statsToggleIcon').textContent = open ? '▶' : '▼';
+};
+document.querySelectorAll('[data-open-modal]').forEach((b) => b.onclick = () => document.getElementById(b.dataset.openModal).classList.add('open'));
+document.querySelectorAll('.modal-close').forEach((btn) => btn.onclick = (e) => e.target.closest('.modal-overlay').classList.remove('open'));
+document.querySelectorAll('.modal-overlay').forEach((ov) => ov.onclick = (e) => { if (e.target === ov) ov.classList.remove('open'); });
+
+document.getElementById('chkAll').onchange = (e) => {
+  lastFiltered.forEach((t) => e.target.checked ? selected.add(t.tcId) : selected.delete(t.tcId));
+  render();
+};
+
+// ── 선택 TC 테스트 실행 (대시보드 WebSocket runTests, scope=custom) ──
+// 대시보드(4000/4001 등)를 통해 열었을 때만 동작한다. 파일(file://)로 열면 안내 문구만 표시한다.
+document.getElementById('btnRun').addEventListener('click', () => {
+  if (!selected.size) return;
+  const panel = document.getElementById('runPanel');
+  panel.style.display = 'block'; panel.dataset.keep = 'block'; panel.textContent = '';
+  const log = (s) => { panel.textContent += s + '\n'; panel.scrollTop = panel.scrollHeight; };
+  if (location.protocol === 'file:') { log('[오류] 대시보드를 통해 이 뷰어를 열어야 실행할 수 있습니다 (파일로 직접 연 상태에서는 실행 불가).'); return; }
+  const ws = new WebSocket((location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/ws/chat');
+  ws.onopen = () => ws.send(JSON.stringify({ type: 'runTests', project: PROJECT, scope: 'custom', tcIds: [...selected] }));
+  ws.onmessage = (ev) => {
+    const m = JSON.parse(ev.data);
+    if (m.type === 'queueAck') log('[시작] ' + m.plan.map((p) => p.moduleCode + '(' + p.count + '건)').join(', '));
+    else if (m.type === 'queueModuleStart') log('[모듈 시작] ' + m.moduleCode);
+    else if (m.type === 'queueLog') log(m.line);
+    else if (m.type === 'queueModuleDone') log('[모듈 완료] ' + m.moduleCode);
+    else if (m.type === 'queueError') { log('[오류] ' + m.error); ws.close(); }
+    else if (m.type === 'queueDone') { log('[전체 완료]'); const n = document.getElementById('runNotice'); n.dataset.keep = 'block'; n.style.display = 'block'; ws.close(); }
+  };
+  ws.onerror = () => log('[오류] WebSocket 연결 실패');
+});
+
+// ── 다운로드 / 저장 ──
+function buildSummaryRows() {
+  const mids = [...new Set(TC_DATA.map((t) => t[TAB_KEY]))];
+  return mids.map((m) => {
+    const items = TC_DATA.filter((t) => t[TAB_KEY] === m);
+    const total = items.length;
+    const c = (r) => items.filter((t) => t.result === r).length;
+    const none = items.filter((t) => !t.result).length;
+    const executed = total - none;
+    const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0) + '%';
+    return { [TAB_LABEL]: m, '전체': total, 'Pass': c('Pass'), 'Fail': c('Fail'), 'N/A': c('N/A'), 'N/T': c('N/T'), '미실행': none,
+      '수행율': pct(executed, total), 'Pass율': pct(c('Pass'), executed), 'Fail율': pct(c('Fail'), executed) };
+  });
+}
+function tcExportRows() {
+  return TC_DATA.map((t) => ({
+    'No.': t.displayNo, 'TC ID': t.tcId, 'system': t.system, '대분류': t.majorCategory, '중분류': t.midCategory,
+    '소분류': t.minorCategory, '플랫폼': t.platform, '유형': t.type, '테스트 항목': t.item, '기준문서': t.baseDoc,
+    '우선순위': t.priority, '테스트 데이터': t.testData, '사전조건': t.precondition, '테스트 수행 절차': t.steps,
+    '기대 결과': t.expected, '실행결과': t.result, '담당자': t.assignee, '이슈내용': t.issueSummary,
+    '이슈링크': t.issueLink, '비고': t.remark,
+  }));
+}
+function downloadBlob(blob, filename) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+function downloadJson(content, filename) { downloadBlob(new Blob([content], { type: 'application/json' }), filename); }
+
+
+document.getElementById('btnXlsx').onclick = () => {
+  if (typeof XLSX === 'undefined') { alert('XLSX 라이브러리를 불러오지 못했습니다(인터넷 연결 필요). CSV 다운로드를 이용하세요.'); return; }
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(buildSummaryRows()), 'Summary');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(tcExportRows()), 'TC');
+  const defectRows = DEFECT_DATA.map((d) => ({
+    '결함ID': d.defectId, '모듈': d.module, '심각도': d.severity, '상태': d.status, '요약': d.summary,
+    '환경': d.testEnv, '절차': d.testSteps, '실제결과': d.actualResult, '기대결과': d.expectedResult,
+    '발견일': d.detectedAt, '관련TC': defectTcIds(d).join(', '), '이슈링크': d.issueLink,
+  }));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(defectRows), 'Defect');
+  XLSX.writeFile(wb, FILE_BASE + '.xlsx');
+};
+
+const FS_ACCESS_SUPPORTED = 'showOpenFilePicker' in window;
+let tcFileHandle = null;
+let defectFileHandle = null;
+const JSON_PICKER_OPTS = { types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }] };
+
+async function writeToHandle(handle, content) {
+  const writable = await handle.createWritable();
+  await writable.write(content);
+  await writable.close();
+}
+
+function applyLoadedTcItems(items) {
+  let n = 0;
+  items.forEach((li) => {
+    const t = TC_DATA.find((x) => x.tcId === li.tcId);
+    if (t) { t.result = li.result; t.assignee = li.assignee; t.issueSummary = li.issueSummary; t.issueLink = li.issueLink; t.remark = li.remark; n++; }
+  });
+  render();
+  return n;
+}
+
+document.getElementById('btnJsonSave').onclick = async () => {
+  const out = { meta: { project: META.project, module: META.module, moduleName: META.moduleName, version: META.version, changeHistory: META.changeHistory }, items: TC_DATA };
+  const content = JSON.stringify(out, null, 2);
+  if (tcFileHandle) {
+    try { await writeToHandle(tcFileHandle, content); alert('저장 완료: ' + tcFileHandle.name); return; }
+    catch (err) { alert('직접 저장 실패, 다운로드로 대체합니다: ' + err.message); }
+  }
+  downloadJson(content, FILE_BASE + '.json');
+};
+
+document.getElementById('btnJsonLoad').onclick = async () => {
+  if (!FS_ACCESS_SUPPORTED) { document.getElementById('jsonFileInput').click(); return; }
+  try {
+    const [handle] = await window.showOpenFilePicker(JSON_PICKER_OPTS);
+    const perm = await handle.requestPermission({ mode: 'readwrite' });
+    const file = await handle.getFile();
+    const loaded = JSON.parse(await file.text());
+    const n = applyLoadedTcItems(loaded.items || loaded);
+    if (perm === 'granted') {
+      tcFileHandle = handle;
+      document.getElementById('tcFileStatus').textContent = '🔗 연결됨: ' + handle.name;
+      alert('연결 완료 (' + handle.name + ') · ' + n + '건 불러옴 — 이제 "JSON 저장" 클릭 시 이 파일에 바로 저장됩니다.');
+    } else {
+      alert('읽기 전용으로 ' + n + '건 불러왔습니다 (쓰기 권한 거부 — 저장은 다운로드로 대체됩니다).');
+    }
+  } catch (err) {
+    if (err.name !== 'AbortError') alert('파일 연결/불러오기 실패: ' + err.message);
+  }
+};
+document.getElementById('jsonFileInput').onchange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const n = applyLoadedTcItems((JSON.parse(reader.result)).items || JSON.parse(reader.result));
+      alert(n + '건 불러옴 (이 브라우저는 직접 저장을 지원하지 않아 저장은 다운로드로 진행됩니다)');
+    } catch (err) { alert('JSON 파싱 실패: ' + err.message); }
+  };
+  reader.readAsText(file);
+};
+
+document.getElementById('btnDefectSave').onclick = async () => {
+  const content = JSON.stringify(DEFECT_DATA, null, 2);
+  if (defectFileHandle) {
+    try { await writeToHandle(defectFileHandle, content); alert('저장 완료: ' + defectFileHandle.name); return; }
+    catch (err) { alert('직접 저장 실패, 다운로드로 대체합니다: ' + err.message); }
+  }
+  downloadJson(content, 'defects.json');
+};
+
+document.getElementById('btnDefectFileConnect').onclick = async () => {
+  if (!FS_ACCESS_SUPPORTED) { alert('이 브라우저는 파일 직접 연결을 지원하지 않습니다 (Chrome/Edge 최신 버전 권장). 저장은 다운로드로 진행됩니다.'); return; }
+  try {
+    const [handle] = await window.showOpenFilePicker(JSON_PICKER_OPTS);
+    const perm = await handle.requestPermission({ mode: 'readwrite' });
+    const file = await handle.getFile();
+    const loaded = JSON.parse(await file.text());
+    DEFECT_DATA.length = 0;
+    DEFECT_DATA.push(...loaded);
+    renderDefects();
+    if (perm === 'granted') {
+      defectFileHandle = handle;
+      document.getElementById('defectFileStatus').textContent = '🔗 연결됨: ' + handle.name;
+      alert('연결 완료 (' + handle.name + ') · ' + loaded.length + '건 불러옴 — 이제 "결함 저장" 클릭 시 이 파일에 바로 저장됩니다.');
+    } else {
+      alert('읽기 전용으로 ' + loaded.length + '건 불러왔습니다 (쓰기 권한 거부 — 저장은 다운로드로 대체됩니다).');
+    }
+  } catch (err) {
+    if (err.name !== 'AbortError') alert('파일 연결/불러오기 실패: ' + err.message);
+  }
+};
+
+setupFilterBar();
+render();
+</script>
+</body>
+</html>

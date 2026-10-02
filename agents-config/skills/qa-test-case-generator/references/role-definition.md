@@ -155,7 +155,9 @@
 | **P3** | `#0969da` | `#58a6ff` |
 
 **헤더 버튼 세트** (mediheal 기준):
-`테스트 계정 매트릭스` · `User Flow Map` · `CSV 다운로드(primary)` · `JSON 저장(primary)` · `JSON 불러오기` · `🌙 다크모드`
+<!-- [수정 전 2026-10-02] `테스트 계정 매트릭스` · `User Flow Map` · `CSV 다운로드(primary)` · `JSON 저장(primary)` · `JSON 불러오기` · `🌙 다크모드`
+사유: 데모사이트 뷰어 기준으로 버튼 세트 정정(CSV 제거→XLSX, PRD/Front/Admin/실행결과 이력 추가, 변경 이력은 각주). -->
+`테스트 계정 매트릭스` · `User Flow Map` · `PRD` · `Front 바로가기` · `Admin 바로가기` · `실행결과 이력` · `XLSX 다운로드(primary)` · `JSON 저장(primary)` · `JSON 불러오기` · `🌙 다크모드`
 
 ---
 
@@ -172,7 +174,9 @@
 - **버튼 세트 참조**: [mediheal_pdp_qa_tc_viewer.html](file:///d:/tc-automation/_reference/mediheal_pdp_qa_tc_viewer.html)
 -->
 - **버튼 세트 참조**: [mediheal_pdp_qa_tc_viewer.html](file:///d:/QA/tc-automation/_reference/mediheal_pdp_qa_tc_viewer.html)
-- 뷰어 표준 스타일(색상/테마/버튼셋)은 위 "HTML 뷰어 표준" 절에 명문화된 값을 기준으로 하며, 별도 외부 템플릿 파일을 조건으로 참조하지 않습니다.
+<!-- [수정 전 2026-10-02] - 뷰어 표준 스타일(색상/테마/버튼셋)은 위 "HTML 뷰어 표준" 절에 명문화된 값을 기준으로 하며, 별도 외부 템플릿 파일을 조건으로 참조하지 않습니다.
+사유: 뷰어를 규칙 문장만으로 매번 새로 작성하던 방식을 공용 템플릿 방식으로 전환(AGENTS.md 10항). -->
+- 뷰어 표준 스타일(색상/테마/버튼셋)은 공용 템플릿(`_shared\viewer\viewer.template.html`)에 구현되어 있으며, 뷰어는 직접 작성하지 않고 `_shared\viewer\render-viewer.js`로 생성합니다. 특정 프로젝트의 뷰어 파일을 템플릿/조건으로 참조하지 않는 원칙은 그대로입니다.
 
 ---
 
@@ -201,6 +205,8 @@
 - **화면설계서 위치**: `tc-automation\project\{프로젝트명}\SB\`
 - **요구사항 위치**: `tc-automation\project\{프로젝트명}\Requirements\`
 - **어시스턴트 관찰 기반 산출물 위치**: `tc-automation\project\{프로젝트명}\Analysis\` (고객 제공 문서가 아니라 Phase 1~3에서 직접 관찰·정리한 PRD 등)
+<!-- [추가 2026-10-02] 필수 산출물 3종 안내 신설(AGENTS.md 13항). 기존 항목은 변경 없음. -->
+- **필수 산출물 3종**(TC 생성 시 반드시 함께 산출, AGENTS.md 13항): PRD(`Analysis\{프로젝트명}_PRD.html`) · 테스트 계정 매트릭스(`TC\testAccounts.json`, 없으면 `hasTestAccounts:false`+사유) · User Flow Map(`TC\viewer-extra-modals.json`의 `flowMapModal`)
 - **기존 TC 위치**: `tc-automation\project\{프로젝트명}\TC\legacy\`
 
 현재 어떤 프로젝트들이 존재하는지는 `tc-automation\` 폴더를 직접 조회해서 확인합니다 (이 문서에 특정 프로젝트를 고정 기재하지 않습니다 — 프로젝트는 생성/삭제될 수 있으므로).
