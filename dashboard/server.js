@@ -412,8 +412,13 @@ wss.on('connection', (ws, req) => {
         }
         try {
           resultsProcessor.writeResultsIndex(project);
-        } catch {
-          // index.html 갱신 실패는 치명적이지 않음(데이터 자체는 이미 반영됨) — 조용히 넘어감
+        } catch (err) {
+          // [수정 2026-10-02] index.html 갱신 실패는 치명적이지 않지만(데이터 자체는 이미 반영됨),
+          // 완전히 조용히 넘어가던 것을 로그로 남기도록 수정 — 실행 자체는 정상 완료됐는데
+          // results/index.html(GitHub Pages 공개 이력 목록)만 갱신 안 된 채 아무 흔적도 안 남는
+          // 사례가 실측 발견됨(원인 미상 — 재현 시도 시에는 에러 없이 재생성됨). 다음에 재발하면
+          // 이 로그로 실제 에러를 확인할 수 있음.
+          wsSend(ws, { type: 'queueLog', project, line: `[안내] results/index.html 갱신 실패(데이터 자체는 반영됨): ${err.message}` });
         }
         let git;
         if (totals.executed > 0) {
@@ -494,6 +499,14 @@ app.post('/api/:project/chat/reset', (req, res) => {
 // ── ▶ 테스트 실행 큐 (zero-token — claude 미사용, Playwright를 직접 spawn) ──────────────
 app.get('/api/:project/test-queue/modules', (req, res) => {
   res.json({ modules: testQueue.listRunnableModules(req.params.project) });
+});
+
+// [추가 2026-10-02] 화면 새로고침으로 WebSocket이 끊겼다 재연결돼도, 서버의 testQueueRuns는
+// 완료 전까지 그대로 유지됩니다 — 그 사이 프런트는 "유휴" 상태로 그려져 진행 중인 실행을 전혀
+// 모르게 되는 문제(사용자 리포트, chat/history의 busy 플래그와 동일한 패턴)에 대응합니다.
+// 대시보드 본체(app.js)와 TC 뷰어(공용 템플릿) 양쪽이 재연결 시 이 엔드포인트로 상태를 확인합니다.
+app.get('/api/:project/test-queue/status', (req, res) => {
+  res.json({ running: testQueueRuns.has(req.params.project) });
 });
 
 /** userKey(로그인 세션 토큰)가 일치하는 모든 열린 WS 연결(그 사람이 연 다른 탭 포함)에 보냅니다 —

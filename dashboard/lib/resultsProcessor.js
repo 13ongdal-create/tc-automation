@@ -164,7 +164,21 @@ function applyModuleResults(project, moduleCode, flatResults, opts = {}) {
     summary.executed += 1;
 
     const status = mapStatus(flat.status);
+    // [추가 2026-10-02] 재검증(2차 이상) 결과가 이전 회차를 덮어쓰기만 하고 흔적이 사라지던 문제
+    // (사용자 리포트) — 새 결과를 쓰기 전, 기존 result가 있으면(=이전에 한 번 이상 실행됨) 그 값을
+    // resultHistory에 회차 번호와 함께 보관합니다. resultHistory가 없는(이 필드 도입 이전) 기존
+    // 항목도 최초 재실행 시점에 그때까지의 값을 1회차로 자동 편입되어 하위 호환됩니다.
+    if (item.result) {
+      item.resultHistory = item.resultHistory || [];
+      item.resultHistory.push({
+        round: item.resultHistory.length + 1,
+        date: item.resultDate || '(날짜 미상)',
+        result: item.result,
+        remark: item.remark || '',
+      });
+    }
     item.result = status;
+    item.resultDate = today;
 
     if (status === 'Pass') {
       summary.pass += 1;
