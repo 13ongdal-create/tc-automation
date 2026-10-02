@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PR",
     "moduleName": "이벤트/기획전/쿠폰행사",
-    "version": 16,
+    "version": 15,
     "changeHistory": [
       {
         "version": 1,
@@ -79,11 +79,6 @@
         "version": 15,
         "date": "2026-09-30",
         "summary": "TC_PR_001, TC_PR_002, TC_PR_010: DEF_데모사이트_011(Admin 로그인 ko-KR 결함)에 막혀 N/T였던 UI/데이터 유형 TC를 미실행으로 초기화 — ko-KR 격리 조치(전역 locale 고정 해제) 이후 더 이상 이 결함에 막히지 않으므로 재실행 대상으로 전환(직전 배치의 기능 유형 23건과 동일 사유, 사용자 요청으로 범위 확대). 실제 Pass/Fail은 다음 테스트 실행 큐 수행 시 반영."
-      },
-      {
-        "version": 16,
-        "date": "2026-10-02",
-        "summary": "TC_PR_001의 resultHistory 노이즈 정리 — 뷰어 신규 기능(재검증 회차 추적)을 검증하는 과정에서 동일 TC를 6회 반복 실행해 생긴 흔적(1~5차 전부 동일 Pass)을 제거. 현재 result=Pass(최신 실행 기준 실제 결과, DEF_데모사이트_011 ko-KR 격리 조치 이후 정상 통과 확인됨)는 유지."
       }
     ]
   },
@@ -112,7 +107,39 @@
       "remark": "",
       "verifyNote": "",
       "screenName": "Admin 쿠폰관리",
-      "resultDate": "2026-10-02"
+      "resultDate": "2026-10-02",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-02",
+          "result": "Pass",
+          "remark": ""
+        },
+        {
+          "round": 2,
+          "date": "2026-10-02",
+          "result": "Pass",
+          "remark": ""
+        },
+        {
+          "round": 3,
+          "date": "2026-10-02",
+          "result": "Pass",
+          "remark": ""
+        },
+        {
+          "round": 4,
+          "date": "2026-10-02",
+          "result": "Pass",
+          "remark": ""
+        },
+        {
+          "round": 5,
+          "date": "2026-10-02",
+          "result": "Pass",
+          "remark": ""
+        }
+      ]
     },
     {
       "majorCategory": "구매프로세스",
