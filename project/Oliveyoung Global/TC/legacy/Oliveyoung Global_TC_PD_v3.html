@@ -90,7 +90,6 @@
   select.result-select{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
   select.result-select[data-val="Pass"]{color:var(--pass);font-weight:600;}
   select.result-select[data-val="Fail"]{color:var(--fail);font-weight:600;}
-  .result-round{display:block;margin-top:3px;font-size:9.5px;color:var(--muted);cursor:help;border:1px solid var(--border);border-radius:8px;padding:0 5px;text-align:center;white-space:nowrap;}
   input.free-input{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
 
   .col-chk{width:2%} .col-no{width:2.5%} .col-id{width:5.5%} .col-system{width:2.5%} .col-cat{width:3%} .col-mod{width:3.5%} .col-sub{width:3.5%}
@@ -199,7 +198,6 @@
 
   <div class="toolbar" id="toolbarBlock">
     <button id="btnRun" class="primary" disabled>▶ 선택 TC 테스트 실행</button>
-    <button id="btnRunCancel" hidden>■ 중단</button>
     <div class="count" id="filteredCount"></div>
   </div>
   <div id="runNotice">TC/defects.json과 results는 갱신됐지만 이 HTML(생성 시점 스냅샷)은 자동 반영되지 않습니다 — 채팅에 '뷰어 갱신해줘'로 재생성을 요청하세요.</div>
@@ -497,10 +495,9 @@ function render() {
   updateRunState();
 }
 
-let runInProgress = false;
 function updateRunState() {
   const btn = document.getElementById('btnRun');
-  btn.disabled = selected.size === 0 || runInProgress;
+  btn.disabled = selected.size === 0;
   btn.textContent = selected.size ? `▶ 선택 TC 테스트 실행 (${selected.size}건)` : '▶ 선택 TC 테스트 실행';
   const all = document.getElementById('chkAll');
   all.checked = lastFiltered.length > 0 && lastFiltered.every((t) => selected.has(t.tcId));
@@ -509,14 +506,7 @@ function updateRunState() {
 }
 
 function resultSelect(t) {
-  const sel = `<select class="result-select" data-val="${esc(t.result || '')}">${TC_RESULTS.map((o) => `<option value="${o}" ${t.result === o ? 'selected' : ''}>${o || '미실행'}</option>`).join('')}</select>`;
-  // [추가 2026-10-02] 재검증(2차 이상) 회차 표시 — resultHistory가 있으면(과거 회차가 보관돼 있으면)
-  // 현재 결과가 몇 차 결과인지 배지로 보여주고, hover 시 과거 회차 이력을 확인할 수 있습니다.
-  const hist = t.resultHistory || [];
-  if (!hist.length) return sel;
-  const round = hist.length + 1;
-  const tooltip = hist.map((h) => `${h.round}차(${h.date}): ${h.result || '미실행'}${h.remark ? ' — ' + h.remark : ''}`).join('\n');
-  return `${sel}<span class="result-round" title="${esc(tooltip)}">${round}차</span>`;
+  return `<select class="result-select" data-val="${esc(t.result || '')}">${TC_RESULTS.map((o) => `<option value="${o}" ${t.result === o ? 'selected' : ''}>${o || '미실행'}</option>`).join('')}</select>`;
 }
 
 function handleThumbError(img) {
@@ -721,13 +711,6 @@ document.getElementById('chkAll').onchange = (e) => {
 
 // ── 선택 TC 테스트 실행 (대시보드 WebSocket runTests, scope=custom) ──
 // 대시보드(4000/4001 등)를 통해 열었을 때만 동작한다. 파일(file://)로 열면 안내 문구만 표시한다.
-let activeRunWs = null;
-const btnRunCancel = document.getElementById('btnRunCancel');
-function setRunActive(active) {
-  runInProgress = active;
-  btnRunCancel.hidden = !active;
-  updateRunState();
-}
 document.getElementById('btnRun').addEventListener('click', () => {
   if (!selected.size) return;
   const panel = document.getElementById('runPanel');
@@ -735,8 +718,6 @@ document.getElementById('btnRun').addEventListener('click', () => {
   const log = (s) => { panel.textContent += s + '\n'; panel.scrollTop = panel.scrollHeight; };
   if (location.protocol === 'file:') { log('[오류] 대시보드를 통해 이 뷰어를 열어야 실행할 수 있습니다 (파일로 직접 연 상태에서는 실행 불가).'); return; }
   const ws = new WebSocket((location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/ws/chat');
-  activeRunWs = ws;
-  setRunActive(true);
   ws.onopen = () => ws.send(JSON.stringify({ type: 'runTests', project: PROJECT, scope: 'custom', tcIds: [...selected] }));
   ws.onmessage = (ev) => {
     const m = JSON.parse(ev.data);
@@ -744,56 +725,11 @@ document.getElementById('btnRun').addEventListener('click', () => {
     else if (m.type === 'queueModuleStart') log('[모듈 시작] ' + m.moduleCode);
     else if (m.type === 'queueLog') log(m.line);
     else if (m.type === 'queueModuleDone') log('[모듈 완료] ' + m.moduleCode);
-    else if (m.type === 'queueError') { log('[오류] ' + m.error); ws.close(); activeRunWs = null; setRunActive(false); }
-    else if (m.type === 'queueDone') { log(m.cancelled ? '[중단됨]' : '[전체 완료]'); const n = document.getElementById('runNotice'); n.dataset.keep = 'block'; n.style.display = 'block'; ws.close(); activeRunWs = null; setRunActive(false); }
+    else if (m.type === 'queueError') { log('[오류] ' + m.error); ws.close(); }
+    else if (m.type === 'queueDone') { log('[전체 완료]'); const n = document.getElementById('runNotice'); n.dataset.keep = 'block'; n.style.display = 'block'; ws.close(); }
   };
-  ws.onerror = () => { log('[오류] WebSocket 연결 실패'); activeRunWs = null; setRunActive(false); };
+  ws.onerror = () => log('[오류] WebSocket 연결 실패');
 });
-btnRunCancel.addEventListener('click', () => {
-  document.getElementById('runPanel').textContent += '[중단 요청을 보냈습니다…]\n';
-  if (activeRunWs && activeRunWs.readyState === WebSocket.OPEN) {
-    activeRunWs.send(JSON.stringify({ type: 'cancelTests', project: PROJECT }));
-    return;
-  }
-  // [추가 2026-10-02] 새로고침으로 재연결된 뒤에는(아래 복원 로직) 이 페이지가 연 WebSocket이
-  // 없으므로, 취소 메시지 한 번 보내기 위한 짧은 연결을 새로 엽니다(서버는 project 기준으로
-  // 실행을 찾으므로 실행을 시작한 소켓과 같을 필요가 없습니다).
-  const cancelWs = new WebSocket((location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/ws/chat');
-  cancelWs.onopen = () => { cancelWs.send(JSON.stringify({ type: 'cancelTests', project: PROJECT })); cancelWs.close(); };
-});
-
-// ── 새로고침 재연결 시 진행 중이던 실행 상태 복원 (2026-10-02 추가) ──
-// testQueueRuns는 서버 쪽 전역 상태라 WebSocket 연결과 무관하게 완료 전까지 유지됩니다 —
-// 새로고침해도 테스트 자체는 계속 돌지만, 이 페이지는 그 사실을 몰라 "유휴" 상태로 보였습니다
-// (사용자 리포트). 로드 시 한 번 확인하고, 진행 중이면 완료될 때까지 주기적으로 재확인합니다.
-let runRecoveryTimer = null;
-function pollRunRecovery() {
-  runRecoveryTimer = setTimeout(async () => {
-    runRecoveryTimer = null;
-    let running = false;
-    try {
-      const res = await fetch(`/api/${encodeURIComponent(PROJECT)}/test-queue/status`);
-      running = !!(await res.json()).running;
-    } catch { /* 네트워크 일시 오류 — 다음 주기에 재시도 */ }
-    if (running) { pollRunRecovery(); return; }
-    document.getElementById('runPanel').textContent += '[완료] 새로고침 전 시작된 실행이 끝났습니다 — 최신 결과는 TC/defects.json에 반영되어 있습니다.\n';
-    const n = document.getElementById('runNotice'); n.dataset.keep = 'block'; n.style.display = 'block';
-    setRunActive(false);
-  }, 4000);
-}
-if (location.protocol !== 'file:') {
-  fetch(`/api/${encodeURIComponent(PROJECT)}/test-queue/status`)
-    .then((r) => r.json())
-    .then((data) => {
-      if (!data.running) return;
-      const panel = document.getElementById('runPanel');
-      panel.style.display = 'block'; panel.dataset.keep = 'block';
-      panel.textContent += '[진행 중] 새로고침 전 시작된 실행이 아직 진행 중입니다 — 과거 로그는 다시 볼 수 없지만, 완료되면 이 창에 자동으로 표시됩니다.\n';
-      setRunActive(true);
-      pollRunRecovery();
-    })
-    .catch(() => {});
-}
 
 // ── 다운로드 / 저장 ──
 function buildSummaryRows() {
@@ -856,7 +792,7 @@ function applyLoadedTcItems(items) {
   let n = 0;
   items.forEach((li) => {
     const t = TC_DATA.find((x) => x.tcId === li.tcId);
-    if (t) { t.result = li.result; t.assignee = li.assignee; t.issueSummary = li.issueSummary; t.issueLink = li.issueLink; t.remark = li.remark; t.resultHistory = li.resultHistory; t.resultDate = li.resultDate; n++; }
+    if (t) { t.result = li.result; t.assignee = li.assignee; t.issueSummary = li.issueSummary; t.issueLink = li.issueLink; t.remark = li.remark; n++; }
   });
   render();
   return n;
