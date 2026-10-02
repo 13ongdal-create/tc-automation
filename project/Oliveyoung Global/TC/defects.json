@@ -4,7 +4,7 @@
     "tcId": "TC_PD_002",
     "module": "상품",
     "screenName": "메인 헤더 검색",
-    "severity": "Critical",
+    "severity": "Minor",
     "status": "신규",
     "summary": "메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin",
     "testEnv": "",
@@ -47,6 +47,21 @@
         "at": "2026-10-02",
         "status": "신규",
         "note": "동일 원인 결함 23건을 1건으로 통합(관련 TC 24건, 심각도는 관련 TC 중 최고 우선순위 적용): DEF_Oliveyoung Global_002(TC_PD_003), DEF_Oliveyoung Global_003(TC_PD_004), DEF_Oliveyoung Global_004(TC_PD_005), DEF_Oliveyoung Global_005(TC_PD_006), DEF_Oliveyoung Global_006(TC_PD_007), DEF_Oliveyoung Global_007(TC_PD_008), DEF_Oliveyoung Global_008(TC_PD_009), DEF_Oliveyoung Global_009(TC_PD_010), DEF_Oliveyoung Global_010(TC_PD_011), DEF_Oliveyoung Global_011(TC_PD_012), DEF_Oliveyoung Global_012(TC_PD_014), DEF_Oliveyoung Global_013(TC_PD_015), DEF_Oliveyoung Global_014(TC_PD_016), DEF_Oliveyoung Global_015(TC_PD_017), DEF_Oliveyoung Global_017(TC_PD_019), DEF_Oliveyoung Global_018(TC_PD_020), DEF_Oliveyoung Global_019(TC_PD_021), DEF_Oliveyoung Global_020(TC_PD_022), DEF_Oliveyoung Global_021(TC_PD_023), DEF_Oliveyoung Global_022(TC_PD_024), DEF_Oliveyoung Global_023(TC_PD_025), DEF_Oliveyoung Global_025(TC_PD_027), DEF_Oliveyoung Global_026(TC_PD_013)"
+      },
+      {
+        "at": "2026-10-02",
+        "status": "신규",
+        "note": "TC_PD_026 연결 누락 보완 — 동일 원인(CORS 분석 스크립트 에러)으로 Fail 처리됐으나 tcIds에서 빠져 있던 것을 발견해 추가"
+      },
+      {
+        "at": "2026-10-02",
+        "status": "신규",
+        "note": "심각도 재조정: Critical → Minor — 실제 원인이 자사 analytics(fbapi.oliveyoung.com) CORS 헤더 누락이며 검색 등 핵심 기능 자체는 정상 동작함을 확인, 서비스 중단/핵심 플로우 차단에 해당하지 않음"
+      },
+      {
+        "at": "2026-10-02",
+        "status": "신규",
+        "note": "정정: 바로 위 TC_PD_026 연결 추가는 오류였음 — 해당 TC는 v2(2026-10-02)에서 이미 삭제된 TC(글로벌몰 한글 미지원, 사용자 확인)였고, 오래된 10-01 results 스냅샷만 보고 현재 TC 정의와 대조하지 않아 발생한 실수. tcIds에서 제거함"
       }
     ],
     "tcIds": [
