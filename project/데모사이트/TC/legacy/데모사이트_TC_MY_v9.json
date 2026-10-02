@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "MY",
     "moduleName": "마이페이지",
-    "version": 10,
+    "version": 9,
     "changeHistory": [
       {
         "version": 1,
@@ -49,11 +49,6 @@
         "version": 9,
         "date": "2026-09-30",
         "summary": "케이스 고도화 3단계(Priority 3): 마이페이지 개인정보수정 화면 마스킹 관련 신규 TC 3건 추가(TC_MY_27~29). 원본값 노출/연락처 공란 현상은 정책·원인 미확인이라 [확인필요]로 등록."
-      },
-      {
-        "version": 10,
-        "date": "2026-10-02",
-        "summary": "results/ 날짜별 스냅샷(2026-08-21, 2026-10-01)에서 과거 실행 이력을 소급 반영 — TC별 resultHistory 재구성(26건, 사용자 요청)"
       }
     ]
   },
@@ -81,16 +76,7 @@
       "displayNo": 1,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 주문내역",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 주문내역"
     },
     {
       "tcId": "TC_MY_002",
@@ -115,16 +101,7 @@
       "displayNo": 2,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 주문내역",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 주문내역"
     },
     {
       "tcId": "TC_MY_003",
@@ -149,16 +126,7 @@
       "displayNo": 3,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 주문내역",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 주문내역"
     },
     {
       "tcId": "TC_MY_004",
@@ -183,16 +151,7 @@
       "displayNo": 4,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 주문내역",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 주문내역"
     },
     {
       "tcId": "TC_MY_005",
@@ -217,16 +176,7 @@
       "displayNo": 5,
       "remark": "2026-08-21: 500 에러 결함이 재검증 과정에서 CORS 에러로 증상이 바뀐 것을 확인, 내용 갱신",
       "verifyNote": "2026-08-21 재검증: 최초 발견 시(2026-08-20) 500 Internal Server Error였으나 현재는 200으로 페이지 자체는 정상 렌더링됨. 다만 페이지 진입 시 카카오(kauth.kakao.com)/네이버(nid.naver.com) OAuth 인증 요청이 자동으로 발생하며 CORS 정책으로 실패(net::ERR_FAILED) — 콘솔 에러 감지 규칙에 의해 여전히 결함으로 분류됨. 이 데모 환경이 지속적으로 변경되고 있어(봇 트래픽/개발 반영) 증상이 달라진 것으로 추정",
-      "screenName": "마이페이지 SNS연결설정",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": "2026-08-21: 500 에러 결함이 재검증 과정에서 CORS 에러로 증상이 바뀐 것을 확인, 내용 갱신"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 SNS연결설정"
     },
     {
       "tcId": "TC_MY_006",
@@ -251,16 +201,7 @@
       "displayNo": 6,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 위시리스트",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 위시리스트"
     },
     {
       "tcId": "TC_MY_007",
@@ -285,16 +226,7 @@
       "displayNo": 7,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 위시리스트",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 위시리스트"
     },
     {
       "tcId": "TC_MY_008",
@@ -319,16 +251,7 @@
       "displayNo": 8,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 위시리스트",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 위시리스트"
     },
     {
       "tcId": "TC_MY_009",
@@ -353,16 +276,7 @@
       "displayNo": 9,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 배송주소록관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 배송주소록관리"
     },
     {
       "tcId": "TC_MY_010",
@@ -387,16 +301,7 @@
       "displayNo": 10,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 배송주소록관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 배송주소록관리"
     },
     {
       "tcId": "TC_MY_011",
@@ -421,16 +326,7 @@
       "displayNo": 11,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 배송주소록관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 배송주소록관리"
     },
     {
       "tcId": "TC_MY_012",
@@ -455,16 +351,7 @@
       "displayNo": 12,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 쿠폰",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 쿠폰"
     },
     {
       "tcId": "TC_MY_013",
@@ -489,16 +376,7 @@
       "displayNo": 13,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002, DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "마이페이지 쿠폰",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002, DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 쿠폰"
     },
     {
       "tcId": "TC_MY_014",
@@ -523,16 +401,7 @@
       "displayNo": 14,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 1:1문의",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 1:1문의"
     },
     {
       "tcId": "TC_MY_015",
@@ -557,16 +426,7 @@
       "displayNo": 15,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 1:1문의",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 1:1문의"
     },
     {
       "tcId": "TC_MY_016",
@@ -591,16 +451,7 @@
       "displayNo": 16,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 리뷰목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 리뷰목록"
     },
     {
       "tcId": "TC_MY_017",
@@ -625,16 +476,7 @@
       "displayNo": 17,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 리뷰목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 리뷰목록"
     },
     {
       "tcId": "TC_MY_018",
@@ -659,16 +501,7 @@
       "displayNo": 18,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "아이디 필드의 실제 수정 가능 여부 미확인",
-      "screenName": "마이페이지 개인정보수정",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 개인정보수정"
     },
     {
       "tcId": "TC_MY_019",
@@ -693,16 +526,7 @@
       "displayNo": 19,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 개인정보수정",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 개인정보수정"
     },
     {
       "tcId": "TC_MY_020",
@@ -727,16 +551,7 @@
       "displayNo": 20,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 개인정보수정",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 개인정보수정"
     },
     {
       "tcId": "TC_MY_021",
@@ -761,16 +576,7 @@
       "displayNo": 21,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 개인정보수정",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 개인정보수정"
     },
     {
       "tcId": "TC_MY_022",
@@ -795,16 +601,7 @@
       "displayNo": 22,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 개인정보수정",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 개인정보수정"
     },
     {
       "tcId": "TC_MY_023",
@@ -829,16 +626,7 @@
       "displayNo": 23,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "실제 안내 문구 및 차단 여부 확인 필요",
-      "screenName": "마이페이지 회원탈퇴",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 회원탈퇴"
     },
     {
       "tcId": "TC_MY_024",
@@ -863,16 +651,7 @@
       "displayNo": 24,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "실제 안내 문구 확인 필요",
-      "screenName": "마이페이지 회원탈퇴",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 회원탈퇴"
     },
     {
       "tcId": "TC_MY_025",
@@ -897,16 +676,7 @@
       "displayNo": 25,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "마이페이지 회원탈퇴",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "마이페이지 회원탈퇴"
     },
     {
       "majorCategory": "마이페이지",
@@ -931,16 +701,7 @@
       "displayNo": 26,
       "tcId": "TC_MY_026",
       "verifyNote": "재검증 시 Admin 주문리스트의 주문(O260820790055)을 jspark81 소유로 오인했으나, 실제 조회 결과 해당 주문은 봇 계정(mbrId=406, 봇_186324) 소유로 확인됨(오늘 생성된 주문 4건 모두 봇 계정). jspark81로 실제 신규 주문을 생성해 Front-Admin 동기화를 재검증하려 했으나 TossPayments 결제위젯 연동 단계에서 Playwright 자동화가 어려워 완료하지 못함 — 결제위젯을 우회하지 않는 별도 테스트 데이터 준비 방안 필요",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": ""
     },
     {
       "tcId": "TC_MY_027",

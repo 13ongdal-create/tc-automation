@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PR",
     "moduleName": "이벤트/기획전/쿠폰행사",
-    "version": 17,
+    "version": 16,
     "changeHistory": [
       {
         "version": 1,
@@ -84,11 +84,6 @@
         "version": 16,
         "date": "2026-10-02",
         "summary": "TC_PR_001의 resultHistory 노이즈 정리 — 뷰어 신규 기능(재검증 회차 추적)을 검증하는 과정에서 동일 TC를 6회 반복 실행해 생긴 흔적(1~5차 전부 동일 Pass)을 제거. 현재 result=Pass(최신 실행 기준 실제 결과, DEF_데모사이트_011 ko-KR 격리 조치 이후 정상 통과 확인됨)는 유지."
-      },
-      {
-        "version": 17,
-        "date": "2026-10-02",
-        "summary": "results/ 날짜별 스냅샷(2026-08-21, 2026-08-25, 2026-09-30, 2026-10-01, 2026-10-02)에서 과거 실행 이력을 소급 반영 — TC별 resultHistory 재구성(10건, 사용자 요청)"
       }
     ]
   },
@@ -117,27 +112,7 @@
       "remark": "",
       "verifyNote": "",
       "screenName": "Admin 쿠폰관리",
-      "resultDate": "2026-10-02",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-25",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 3,
-          "date": "2026-09-30",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ]
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "구매프로세스",
@@ -162,28 +137,7 @@
       "tcId": "TC_PR_002",
       "remark": "",
       "verifyNote": "",
-      "screenName": "Admin 쿠폰관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-25",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 3,
-          "date": "2026-09-30",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ],
-      "resultDate": "2026-10-02"
+      "screenName": "Admin 쿠폰관리"
     },
     {
       "majorCategory": "구매프로세스",
@@ -208,28 +162,7 @@
       "tcId": "TC_PR_003",
       "remark": "",
       "verifyNote": "",
-      "screenName": "Admin 쿠폰관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-25",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 3,
-          "date": "2026-09-30",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ],
-      "resultDate": "2026-10-02"
+      "screenName": "Admin 쿠폰관리"
     },
     {
       "majorCategory": "구매프로세스",
@@ -254,28 +187,7 @@
       "tcId": "TC_PR_004",
       "remark": "",
       "verifyNote": "",
-      "screenName": "Admin 쿠폰관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-25",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 3,
-          "date": "2026-09-30",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ],
-      "resultDate": "2026-10-02"
+      "screenName": "Admin 쿠폰관리"
     },
     {
       "majorCategory": "구매프로세스",
@@ -300,34 +212,7 @@
       "tcId": "TC_PR_005",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002); 관련 결함: DEF_데모사이트_044",
       "verifyNote": "쿠폰 발급이 자동인지 수동 다운로드/응모(PR 모듈) 방식인지, 발급 조건 미충족인지 확인 필요",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-25",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        },
-        {
-          "round": 3,
-          "date": "2026-09-30",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        },
-        {
-          "round": 4,
-          "date": "2026-10-01",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-02"
+      "screenName": ""
     },
     {
       "tcId": "TC_PR_006",
@@ -352,34 +237,7 @@
       "displayNo": 6,
       "remark": "관련 결함: DEF_데모사이트_007",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-25",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 3,
-          "date": "2026-09-30",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 4,
-          "date": "2026-10-01",
-          "result": "Fail",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-02"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PR_007",
@@ -404,34 +262,7 @@
       "displayNo": 7,
       "remark": "관련 결함: DEF_데모사이트_036",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-25",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 3,
-          "date": "2026-09-30",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 4,
-          "date": "2026-10-01",
-          "result": "Fail",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-02"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PR_008",
@@ -456,34 +287,7 @@
       "displayNo": 8,
       "remark": "관련 결함: DEF_데모사이트_036",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-25",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 3,
-          "date": "2026-09-30",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 4,
-          "date": "2026-10-01",
-          "result": "Fail",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-02"
+      "screenName": "메인"
     },
     {
       "majorCategory": "구매프로세스",
@@ -508,34 +312,7 @@
       "displayNo": 9,
       "tcId": "TC_PR_009",
       "verifyNote": "",
-      "screenName": "Admin 대행사관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-25",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 3,
-          "date": "2026-09-30",
-          "result": "Fail",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011); 관련 결함: DEF_데모사이트_035"
-        },
-        {
-          "round": 4,
-          "date": "2026-10-01",
-          "result": "Pass",
-          "remark": "2026-09-30 ko-KR 로케일 격리(전역 locale 고정 해제) 적용 후 재실행 — DEF_데모사이트_011에 막히지 않고 5.1초 만에 정상 Pass 확인"
-        }
-      ],
-      "resultDate": "2026-10-02"
+      "screenName": "Admin 대행사관리"
     },
     {
       "majorCategory": "구매프로세스",
@@ -560,22 +337,7 @@
       "displayNo": 10,
       "tcId": "TC_PR_010",
       "verifyNote": "실제 등록 테스트 미실행 — 현재 Front에 노출 중인 할인 상품들이 이 Admin 화면을 통해 설정된 것인지 배경 확인 필요",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-25",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-09-30",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ],
-      "resultDate": "2026-10-02"
+      "screenName": ""
     },
     {
       "tcId": "TC_PR_011",

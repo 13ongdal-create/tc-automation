@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "PD",
     "moduleName": "상품전시(+전시)",
-    "version": 23,
+    "version": 22,
     "changeHistory": [
       {
         "version": 1,
@@ -114,11 +114,6 @@
         "version": 22,
         "date": "2026-09-30",
         "summary": "TC_PD_132, TC_PD_134, TC_PD_136, TC_PD_138, TC_PD_139, TC_PD_140, TC_PD_143, TC_PD_144, TC_PD_145: DEF_데모사이트_011(Admin 로그인 ko-KR 결함)에 막혀 N/T였던 UI/데이터 유형 TC를 미실행으로 초기화 — ko-KR 격리 조치(전역 locale 고정 해제) 이후 더 이상 이 결함에 막히지 않으므로 재실행 대상으로 전환(직전 배치의 기능 유형 23건과 동일 사유, 사용자 요청으로 범위 확대). 실제 Pass/Fail은 다음 테스트 실행 큐 수행 시 반영."
-      },
-      {
-        "version": 23,
-        "date": "2026-10-02",
-        "summary": "results/ 날짜별 스냅샷(2026-08-19, 2026-08-21, 2026-08-24, 2026-10-01)에서 과거 실행 이력을 소급 반영 — TC별 resultHistory 재구성(113건, 사용자 요청)"
       }
     ]
   },
@@ -146,28 +141,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-19",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 3,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "상품상세"
     },
     {
       "tcId": "TC_PD_002",
@@ -192,28 +166,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-19",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 3,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "상품상세"
     },
     {
       "tcId": "TC_PD_003",
@@ -238,28 +191,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-19",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 3,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "상품상세"
     },
     {
       "tcId": "TC_PD_028",
@@ -284,28 +216,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-19",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 3,
-          "date": "2026-08-24",
-          "result": "Fail",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "상품상세"
     },
     {
       "tcId": "TC_PD_029",
@@ -330,28 +241,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-19",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 3,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "상품상세"
     },
     {
       "tcId": "TC_PD_030",
@@ -376,28 +266,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-19",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 3,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "상품상세"
     },
     {
       "tcId": "TC_PD_031",
@@ -422,22 +291,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_032",
@@ -462,16 +316,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_033",
@@ -496,16 +341,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_034",
@@ -530,16 +366,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_035",
@@ -564,16 +391,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_036",
@@ -598,16 +416,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_037",
@@ -632,16 +441,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_038",
@@ -666,22 +466,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_039",
@@ -706,22 +491,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_040",
@@ -746,16 +516,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_041",
@@ -780,16 +541,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "Fail",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_042",
@@ -814,22 +566,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_043",
@@ -854,16 +591,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "필터·정렬 조합 처리 방식 확정 필요",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_044",
@@ -888,22 +616,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_045",
@@ -928,16 +641,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_046",
@@ -962,22 +666,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_047",
@@ -1002,22 +691,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_048",
@@ -1042,16 +716,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "로그인 유도 여부 미확정",
-      "screenName": "남성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "남성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_049",
@@ -1076,22 +741,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "tcId": "TC_PD_050",
@@ -1116,22 +766,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "액세서리 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "액세서리 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1156,22 +791,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1196,22 +816,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1236,22 +841,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Fail",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1276,22 +866,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Fail",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1316,22 +891,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1356,22 +916,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1396,22 +941,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1436,22 +966,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "스펙 확정 시 재검증 필요 (현재는 제목만 노출되고 옵션 컨테이너가 비어있음이 관측됨: <div class=\"space-y-3\"></div>)",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1476,22 +991,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1516,22 +1016,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1556,22 +1041,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1596,22 +1066,7 @@
       "system": "FO",
       "remark": " 필터링 결과 건수가 라이브 카탈로그에 따라 변동되어 2페이지 존재를 전제하지 않도록 수정(2026-08-21)",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": " 필터링 결과 건수가 라이브 카탈로그에 따라 변동되어 2페이지 존재를 전제하지 않도록 수정(2026-08-21)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Fail",
-          "remark": " 필터링 결과 건수가 라이브 카탈로그에 따라 변동되어 2페이지 존재를 전제하지 않도록 수정(2026-08-21)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1636,22 +1091,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1676,22 +1116,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1716,22 +1141,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1756,22 +1166,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1796,22 +1191,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1836,22 +1216,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1876,22 +1241,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1916,22 +1266,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1956,22 +1291,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -1996,22 +1316,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -2036,22 +1341,7 @@
       "system": "FO",
       "remark": "2026-08-24: 자동화 코드가 오늘 관측 범위(/categories/111)에 품절 상품이 없어 test.skip()으로 건너뛴 것을 이전 배치7에서 Fail로 잘못 기록했던 데이터 오류를 N/A로 정정. 결함이 아니라 현재 라이브 카탈로그에 검증 대상(품절 상품)이 없어 판정 불가한 상태 — 품절 상품이 있는 카테고리를 찾으면 재작성 필요.",
       "verifyNote": "스펙 확정 시 재검증 필요 (오늘 관측 범위에는 품절 상품 없음)",
-      "screenName": "품절 상품이 포함된 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/A",
-          "remark": "2026-08-24: 자동화 코드가 오늘 관측 범위(/categories/111)에 품절 상품이 없어 test.skip()으로 건너뛴 것을 이전 배치7에서 Fail로 잘못 기록했던 데이터 오류를 N/A로 정정. 결함이 아니라 현재 라이브 카탈로그에 검증 대상(품절 상품)이 없어 판정 불가한 상태 — 품절 상품이 있는 카테고리를 찾으면 재작성 필요."
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "품절 상품이 포함된 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -2076,22 +1366,7 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "여성 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "여성 카테고리 목록"
     },
     {
       "platform": "Web",
@@ -2116,22 +1391,7 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)",
       "verifyNote": "",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": ""
     },
     {
       "platform": "Web",
@@ -2156,28 +1416,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-19",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 3,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "상품상세"
     },
     {
       "platform": "Web",
@@ -2202,28 +1441,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "리뷰 없는 상품의 기본 별점 표기 기준(별점 미노출/0점 표시 등)이 의도된 것인지 정책 확인 필요",
-      "screenName": "상품상세",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-19",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 3,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "상품상세"
     },
     {
       "platform": "Web",
@@ -2248,28 +1466,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-19",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 3,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "상품상세"
     },
     {
       "platform": "Web",
@@ -2294,28 +1491,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-19",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 3,
-          "date": "2026-08-24",
-          "result": "Fail",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "상품상세"
     },
     {
       "platform": "Web",
@@ -2340,28 +1516,7 @@
       "system": "FO",
       "remark": "",
       "verifyNote": "",
-      "screenName": "상품상세",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-19",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 3,
-          "date": "2026-08-24",
-          "result": "Fail",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "상품상세"
     },
     {
       "tcId": "TC_PD_086",
@@ -2386,16 +1541,7 @@
       "displayNo": 57,
       "remark": "",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "Fail",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_087",
@@ -2420,16 +1566,7 @@
       "displayNo": 58,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_088",
@@ -2454,16 +1591,7 @@
       "displayNo": 59,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "순환 정책 확정 필요",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_092",
@@ -2488,22 +1616,7 @@
       "displayNo": 60,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_093",
@@ -2528,22 +1641,7 @@
       "displayNo": 61,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_094",
@@ -2568,22 +1666,7 @@
       "displayNo": 62,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_095",
@@ -2608,16 +1691,7 @@
       "displayNo": 63,
       "remark": "",
       "verifyNote": "현재는 데이터가 항상 존재해 실측 불가, 관리자 데이터 제거 후 재검증 필요",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/A",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_096",
@@ -2642,16 +1716,7 @@
       "displayNo": 64,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_097",
@@ -2676,16 +1741,7 @@
       "displayNo": 65,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_098",
@@ -2710,16 +1766,7 @@
       "displayNo": 66,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_099",
@@ -2744,16 +1791,7 @@
       "displayNo": 67,
       "remark": "",
       "verifyNote": "[확인필요] 실제 소량 데이터 상태 재현 후 검증 필요",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/A",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_100",
@@ -2778,16 +1816,7 @@
       "displayNo": 68,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "정가 단독 노출 시 취소선 잔여 여백 발생 여부 재검증 필요",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_101",
@@ -2812,16 +1841,7 @@
       "displayNo": 69,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_001)",
       "verifyNote": "로그인 페이지(/login)로 유도되는지, 비로그인 위시리스트가 임시 저장되는지 스펙 확정 후 재검증. 현재 /login 자체가 500 에러 상태라 유도 시나리오 검증이 차단됨",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_001)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_102",
@@ -2846,22 +1866,7 @@
       "displayNo": 70,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_103",
@@ -2886,16 +1891,7 @@
       "displayNo": 71,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "새 탭으로 열리는지, 현재 탭 이탈 방식인지 기획 의도 확인 필요 (관측 결과 target 속성 없어 현재 탭 이동)",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_104",
@@ -2920,22 +1916,7 @@
       "displayNo": 72,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "브랜드관",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "브랜드관"
     },
     {
       "tcId": "TC_PD_105",
@@ -2960,22 +1941,7 @@
       "displayNo": 73,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "브랜드관",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "브랜드관"
     },
     {
       "tcId": "TC_PD_106",
@@ -3000,22 +1966,7 @@
       "displayNo": 74,
       "remark": "",
       "verifyNote": "",
-      "screenName": "SALE(HotDeal)",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Fail",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "SALE(HotDeal)"
     },
     {
       "tcId": "TC_PD_107",
@@ -3040,16 +1991,7 @@
       "displayNo": 75,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "데이터 미등록(운영 이슈)인지 기능 결함인지 확인 필요",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_108",
@@ -3074,16 +2016,7 @@
       "displayNo": 76,
       "remark": "",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "Fail",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_109",
@@ -3108,16 +2041,7 @@
       "displayNo": 77,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": ""
     },
     {
       "tcId": "TC_PD_110",
@@ -3142,16 +2066,7 @@
       "displayNo": 78,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": ""
     },
     {
       "tcId": "TC_PD_111",
@@ -3176,16 +2091,7 @@
       "displayNo": 79,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": ""
     },
     {
       "tcId": "TC_PD_112",
@@ -3210,16 +2116,7 @@
       "displayNo": 80,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": ""
     },
     {
       "tcId": "TC_PD_113",
@@ -3244,16 +2141,7 @@
       "displayNo": 81,
       "remark": "",
       "verifyNote": "관측 결과 href=\"\", \"#\"로 설정된 placeholder 상태 — 실제 배치 콘텐츠로 교체 필요",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "Fail",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": ""
     },
     {
       "tcId": "TC_PD_114",
@@ -3278,22 +2166,7 @@
       "displayNo": 82,
       "remark": "",
       "verifyNote": "",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": ""
     },
     {
       "tcId": "TC_PD_115",
@@ -3318,16 +2191,7 @@
       "displayNo": 83,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "국문 서비스(3TOP)에 영문 placeholder 타이틀/설명이 그대로 노출 — 실서비스 문구로 교체 필요",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_116",
@@ -3352,16 +2216,7 @@
       "displayNo": 84,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_005)",
       "verifyNote": "실제 목적지 경로 및 콘텐츠 존재 여부 미확인",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_005)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_117",
@@ -3386,16 +2241,7 @@
       "displayNo": 85,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_006)",
       "verifyNote": "실제 목적지 경로 및 콘텐츠 존재 여부 미확인",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007, DEF_데모사이트_006)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_118",
@@ -3420,16 +2266,7 @@
       "displayNo": 86,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "실제 목적지 경로 미확인",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_119",
@@ -3454,16 +2291,7 @@
       "displayNo": 87,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "실제 목적지 경로 미확인",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_120",
@@ -3488,22 +2316,7 @@
       "displayNo": 88,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "실서비스 문구로 교체 필요",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_121",
@@ -3528,16 +2341,7 @@
       "displayNo": 89,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_122",
@@ -3562,16 +2366,7 @@
       "displayNo": 90,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "Figma 모바일 시안 없어 실측 기준값 확정 필요",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": ""
     },
     {
       "tcId": "TC_PD_123",
@@ -3596,16 +2391,7 @@
       "displayNo": 91,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_124",
@@ -3630,16 +2416,7 @@
       "displayNo": 92,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "",
-      "screenName": "메인",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "메인"
     },
     {
       "tcId": "TC_PD_125",
@@ -3664,16 +2441,7 @@
       "displayNo": 93,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
       "verifyNote": "실제 적용 여부 미확인",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": ""
     },
     {
       "tcId": "TC_PD_126",
@@ -3698,22 +2466,7 @@
       "displayNo": 94,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
       "verifyNote": "",
-      "screenName": "아우터 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음)."
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "아우터 카테고리 목록"
     },
     {
       "tcId": "TC_PD_127",
@@ -3738,22 +2491,7 @@
       "displayNo": 95,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
       "verifyNote": "",
-      "screenName": "상의(남성) 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음)."
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "상의(남성) 카테고리 목록"
     },
     {
       "tcId": "TC_PD_128",
@@ -3778,22 +2516,7 @@
       "displayNo": 96,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
       "verifyNote": "",
-      "screenName": "드레스 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음)."
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "드레스 카테고리 목록"
     },
     {
       "tcId": "TC_PD_129",
@@ -3818,22 +2541,7 @@
       "displayNo": 97,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
       "verifyNote": "점퍼는 GNB상 아우터/상의와 같은 레벨로 보이나 실제로는 아우터 하위 카테고리 — 이 3단계 구조가 의도된 설계인지 확인 필요",
-      "screenName": "점퍼 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음)."
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "점퍼 카테고리 목록"
     },
     {
       "tcId": "TC_PD_130",
@@ -3858,22 +2566,7 @@
       "displayNo": 98,
       "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음).",
       "verifyNote": "",
-      "screenName": "상의(여성) 카테고리 목록",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": "2026-08-24: 결함 아님으로 확인 — 페이지 전역에 같은 텍스트의 숨김 중복 요소(SEO용 hidden 링크 추정)가 있어 자동화 locator가 그 요소를 먼저 집어 실패했던 자동화 코드 버그. 브레드크럼 컨테이너로 범위를 좁힌 locator로 수정 후 재실행하여 Pass 확인(실제 화면에는 처음부터 정상 노출되어 있었음)."
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "상의(여성) 카테고리 목록"
     },
     {
       "tcId": "TC_PD_131",
@@ -3898,22 +2591,7 @@
       "displayNo": 99,
       "remark": "",
       "verifyNote": "",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": ""
     },
     {
       "majorCategory": "상품",
@@ -3938,21 +2616,7 @@
       "tcId": "TC_PD_132",
       "remark": "",
       "verifyNote": "",
-      "screenName": "Admin 상품관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ]
+      "screenName": "Admin 상품관리"
     },
     {
       "majorCategory": "상품",
@@ -3977,15 +2641,7 @@
       "tcId": "TC_PD_133",
       "remark": "",
       "verifyNote": "",
-      "screenName": "Admin 상품관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ]
+      "screenName": "Admin 상품관리"
     },
     {
       "majorCategory": "상품",
@@ -4010,21 +2666,7 @@
       "tcId": "TC_PD_134",
       "remark": "",
       "verifyNote": "",
-      "screenName": "Admin 상품관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ]
+      "screenName": "Admin 상품관리"
     },
     {
       "majorCategory": "상품",
@@ -4049,21 +2691,7 @@
       "tcId": "TC_PD_135",
       "remark": "",
       "verifyNote": "",
-      "screenName": "Admin 상품관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ]
+      "screenName": "Admin 상품관리"
     },
     {
       "majorCategory": "전시",
@@ -4088,21 +2716,7 @@
       "tcId": "TC_PD_136",
       "remark": "",
       "verifyNote": "",
-      "screenName": "Admin 전시카테고리관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ]
+      "screenName": "Admin 전시카테고리관리"
     },
     {
       "majorCategory": "전시",
@@ -4127,15 +2741,7 @@
       "tcId": "TC_PD_137",
       "remark": "",
       "verifyNote": "",
-      "screenName": "Admin 전시카테고리관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ]
+      "screenName": "Admin 전시카테고리관리"
     },
     {
       "majorCategory": "전시",
@@ -4160,21 +2766,7 @@
       "tcId": "TC_PD_138",
       "remark": "",
       "verifyNote": "",
-      "screenName": "Admin 전시코너관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ]
+      "screenName": "Admin 전시코너관리"
     },
     {
       "majorCategory": "전시",
@@ -4199,21 +2791,7 @@
       "tcId": "TC_PD_139",
       "remark": "",
       "verifyNote": "",
-      "screenName": "Admin 전시템플릿관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ]
+      "screenName": "Admin 전시템플릿관리"
     },
     {
       "majorCategory": "전시",
@@ -4238,21 +2816,7 @@
       "tcId": "TC_PD_140",
       "remark": "",
       "verifyNote": "각 페이지 노드와 Front 실제 화면 간 1:1 매핑 관계는 상세 확인 필요",
-      "screenName": "Admin 전시페이지관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ]
+      "screenName": "Admin 전시페이지관리"
     },
     {
       "majorCategory": "전시",
@@ -4277,21 +2841,7 @@
       "tcId": "TC_PD_141",
       "remark": "",
       "verifyNote": "",
-      "screenName": "Admin 전시페이지관리",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ]
+      "screenName": "Admin 전시페이지관리"
     },
     {
       "majorCategory": "상품",
@@ -4316,16 +2866,7 @@
       "displayNo": 110,
       "tcId": "TC_PD_142",
       "verifyNote": "[확인필요] 실제 변경 테스트는 운영 데이터 훼손 방지를 위해 미실행 — TC_PD_102에서 정적 데이터 일치는 이미 확인됨(동적 변경 반영 여부만 미검증)",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/A",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": ""
     },
     {
       "majorCategory": "전시",
@@ -4350,15 +2891,7 @@
       "displayNo": 111,
       "tcId": "TC_PD_143",
       "verifyNote": "",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ]
+      "screenName": ""
     },
     {
       "majorCategory": "전시",
@@ -4383,15 +2916,7 @@
       "displayNo": 112,
       "tcId": "TC_PD_144",
       "verifyNote": "현재 Front SALE 페이지는 \"등록된 컨텐츠가 없습니다\" Empty State로 노출(TC_PD_106) — Admin 측에도 등록된 컨텐츠가 없는 것이 원인인지 대조 확인 필요 [확인필요]",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ]
+      "screenName": ""
     },
     {
       "majorCategory": "전시",
@@ -4416,15 +2941,7 @@
       "displayNo": 113,
       "tcId": "TC_PD_145",
       "verifyNote": "",
-      "screenName": "",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-24",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ]
+      "screenName": ""
     },
     {
       "tcId": "TC_PD_146",

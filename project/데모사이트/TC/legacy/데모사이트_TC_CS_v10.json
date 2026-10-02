@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "CS",
     "moduleName": "고객센터/정책",
-    "version": 11,
+    "version": 10,
     "changeHistory": [
       {
         "version": 1,
@@ -54,11 +54,6 @@
         "version": 10,
         "date": "2026-09-30",
         "summary": "케이스 고도화 3단계(Priority 3): 1:1문의(TC_CS_10~15) 6건 + 클레임 신청 플로우(TC_CS_16~18) 3건 신규 추가. 클레임 3건은 jspark81 계정에 유효 주문이 없어(DEF_008) [확인필요]로 등록 — 유효 주문 보유 테스트 계정 확보 시 재관찰 예정."
-      },
-      {
-        "version": 11,
-        "date": "2026-10-02",
-        "summary": "results/ 날짜별 스냅샷(2026-08-21, 2026-09-29, 2026-10-01)에서 과거 실행 이력을 소급 반영 — TC별 resultHistory 재구성(9건, 사용자 요청)"
       }
     ]
   },
@@ -86,22 +81,7 @@
       "displayNo": 1,
       "remark": "",
       "verifyNote": "",
-      "screenName": "공지사항",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-09-29",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "공지사항"
     },
     {
       "tcId": "TC_CS_002",
@@ -126,22 +106,7 @@
       "displayNo": 2,
       "remark": "",
       "verifyNote": "",
-      "screenName": "공지사항",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-09-29",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "공지사항"
     },
     {
       "tcId": "TC_CS_003",
@@ -166,22 +131,7 @@
       "displayNo": 3,
       "remark": "",
       "verifyNote": "",
-      "screenName": "FAQ",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-09-29",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "FAQ"
     },
     {
       "tcId": "TC_CS_004",
@@ -206,22 +156,7 @@
       "displayNo": 4,
       "remark": "",
       "verifyNote": "",
-      "screenName": "FAQ",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Pass",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-09-29",
-          "result": "Pass",
-          "remark": ""
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "FAQ"
     },
     {
       "tcId": "TC_CS_005",
@@ -246,22 +181,7 @@
       "displayNo": 5,
       "remark": "관련 결함: DEF_데모사이트_005",
       "verifyNote": "[확인필요] 페이지 미구현 또는 라우팅 오류로 추정 — DEF 결함 등록 대상",
-      "screenName": "고객센터",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-09-29",
-          "result": "Fail",
-          "remark": "관련 결함: DEF_데모사이트_005"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "고객센터"
     },
     {
       "tcId": "TC_CS_006",
@@ -286,22 +206,7 @@
       "displayNo": 6,
       "remark": "관련 결함: DEF_데모사이트_006",
       "verifyNote": "[확인필요] 페이지 미구현 또는 라우팅 오류로 추정 — DEF 결함 등록 대상",
-      "screenName": "고객센터",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "Fail",
-          "remark": ""
-        },
-        {
-          "round": 2,
-          "date": "2026-09-29",
-          "result": "Fail",
-          "remark": "관련 결함: DEF_데모사이트_006"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "고객센터"
     },
     {
       "majorCategory": "클레임",
@@ -326,22 +231,7 @@
       "tcId": "TC_CS_007",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 클레임리스트",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-09-29",
-          "result": "Pass",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "Admin 클레임리스트"
     },
     {
       "majorCategory": "클레임",
@@ -366,22 +256,7 @@
       "tcId": "TC_CS_008",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 클레임리스트",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-09-29",
-          "result": "Pass",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "Admin 클레임리스트"
     },
     {
       "majorCategory": "클레임",
@@ -406,22 +281,7 @@
       "tcId": "TC_CS_009",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)",
       "verifyNote": "",
-      "screenName": "Admin 클레임리스트",
-      "resultHistory": [
-        {
-          "round": 1,
-          "date": "2026-08-21",
-          "result": "N/T",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        },
-        {
-          "round": 2,
-          "date": "2026-09-29",
-          "result": "Pass",
-          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
-        }
-      ],
-      "resultDate": "2026-10-01"
+      "screenName": "Admin 클레임리스트"
     },
     {
       "tcId": "TC_CS_010",
