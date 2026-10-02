@@ -607,11 +607,14 @@ app.get('/api/:project/tcs', (req, res) => {
   const match = TC_RESULT_MATCH[result];
   if (!match) return res.status(400).json({ error: 'result는 Fail / Pass / N/A / N/T / none 중 하나여야 합니다.' });
 
+  // 같은 원인의 결함은 1건이고 관련 TC가 여러 개(tcIds)일 수 있음 — tcIds가 없는 기존 레코드는 [tcId]로 간주
   const defectsByTc = new Map();
   (defectStore.load(project) || []).forEach((d) => {
-    if (!d.tcId) return;
-    if (!defectsByTc.has(d.tcId)) defectsByTc.set(d.tcId, []);
-    defectsByTc.get(d.tcId).push({ defectId: d.defectId, severity: LEGACY_SEVERITY[d.severity] || d.severity, status: d.status });
+    const info = { defectId: d.defectId, severity: LEGACY_SEVERITY[d.severity] || d.severity, status: d.status };
+    (Array.isArray(d.tcIds) && d.tcIds.length ? d.tcIds : [d.tcId]).filter(Boolean).forEach((tcId) => {
+      if (!defectsByTc.has(tcId)) defectsByTc.set(tcId, []);
+      defectsByTc.get(tcId).push(info);
+    });
   });
   const lastRun = result === 'none' ? new Map() : lastRunByTc(project);
   const tcDir = path.join(defectStore.PROJECTS_ROOT, project, 'TC');

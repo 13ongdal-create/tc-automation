@@ -27,6 +27,17 @@
     var m = /^TC_([A-Za-z]+)_/.exec(d.tcId || '');
     return m ? m[1].toUpperCase() : '';
   }
+  // 결함 1건에 관련 TC가 여러 개(tcIds)일 수 있음 — 관련 TC가 속한 모든 모듈 코드(tcIds 없으면 [tcId])
+  function codesOf(d) {
+    var ids = Array.isArray(d.tcIds) && d.tcIds.length ? d.tcIds : [d.tcId];
+    var out = [];
+    ids.forEach(function (id) {
+      var m = /^TC_([A-Za-z]+)_/.exec(id || '');
+      var c = m ? m[1].toUpperCase() : '';
+      if (c && out.indexOf(c) < 0) out.push(c);
+    });
+    return out;
+  }
   function escHtml(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
@@ -45,7 +56,10 @@
   document.head.appendChild(style);
 
   // ── 컨트롤: "N건 표시 중" 줄(툴바)에 배치 ──
-  var toolbar = panel.querySelector('.toolbar');
+  // "N건 표시 중" 줄의 툴바에 붙입니다(기준 뷰어와 같은 위치). 결함 저장 버튼 줄이 따로 있는 뷰어에서도 필터가 그 줄로 가지 않게,
+  // 건수 표시(#defectFilteredCount)가 있는 툴바를 먼저 찾고, 없으면 첫 툴바를 씁니다.
+  var countEl = document.getElementById('defectFilteredCount');
+  var toolbar = (countEl && countEl.closest('.toolbar')) || panel.querySelector('.toolbar');
   var box = document.createElement('div');
   box.className = 'def-filters';
   box.innerHTML =
@@ -66,7 +80,7 @@
 
   function fillModules() {
     var codes = [];
-    DEFECT_DATA.forEach(function (d) { var c = codeOf(d); if (c && codes.indexOf(c) < 0) codes.push(c); });
+    DEFECT_DATA.forEach(function (d) { codesOf(d).forEach(function (c) { if (codes.indexOf(c) < 0) codes.push(c); }); });
     codes.sort();
     var cur = state.module;
     elModule.innerHTML = '<option value="">전체 모듈</option>' + codes.map(function (c) {
@@ -92,11 +106,11 @@
   })();
 
   function matches(d) {
-    if (state.module && codeOf(d) !== state.module) return false;
+    if (state.module && codesOf(d).indexOf(state.module) < 0) return false;
     if (state.severity && sevOf(d) !== state.severity) return false;
     var q = state.q.trim().toLowerCase();
     if (q) {
-      var hay = [d.defectId, d.summary, d.module, d.tcId, d.testEnv, d.testSteps, d.actualResult, d.expectedResult].join(' ').toLowerCase();
+      var hay = [d.defectId, d.summary, d.module, d.tcId, (d.tcIds || []).join(' '), d.testEnv, d.testSteps, d.actualResult, d.expectedResult].join(' ').toLowerCase();
       if (hay.indexOf(q) < 0) return false;
     }
     return true;

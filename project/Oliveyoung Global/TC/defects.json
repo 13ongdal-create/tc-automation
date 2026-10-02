@@ -1,0 +1,105 @@
+[
+  {
+    "defectId": "DEF_Oliveyoung Global_001",
+    "tcId": "TC_PD_002",
+    "module": "상품",
+    "screenName": "메인 헤더 검색",
+    "severity": "Critical",
+    "status": "신규",
+    "summary": "메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin",
+    "testEnv": "",
+    "testSteps": "1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창 클릭(포커스)",
+    "actualResult": "콘솔 에러:\n  Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\nError: 콘솔/네트워크 에러가 감지되어 실패 처리합니다.\n- 콘솔 에러:\n  Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n- 스크린샷: D:\\QA\\tc-automation\\_scratch\\test-results\\Oliveyoung Global\\project-Oliveyoung Global--d284d--검색창-포커스-시-인기-검색어-레이어-노출-검증-chromium\\console-error-screenshot.png",
+    "expectedResult": "\"Popular Searches\" 제목의 인기 검색어 레이어 노출, \"Recent Searches\" 영역은 노출되지 않음",
+    "detectedAt": "2026-10-01",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_Oliveyoung Global_001.png",
+    "consoleLog": "TC/defects/DEF_Oliveyoung Global_001.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-10-01",
+        "status": "신규",
+        "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      },
+      {
+        "at": "2026-10-01",
+        "status": "처리중",
+        "note": "상태 변경: 신규 → 처리중 (대시보드에서 직접 수정)"
+      },
+      {
+        "at": "2026-10-01",
+        "status": "신규",
+        "note": "상태 변경: 처리중 → 신규 (대시보드에서 직접 수정)"
+      },
+      {
+        "at": "2026-10-01",
+        "status": "처리중",
+        "note": "상태 변경: 신규 → 처리중 (대시보드에서 직접 수정)"
+      },
+      {
+        "at": "2026-10-01",
+        "status": "신규",
+        "note": "상태 변경: 처리중 → 신규 (대시보드에서 직접 수정)"
+      },
+      {
+        "at": "2026-10-02",
+        "status": "신규",
+        "note": "동일 원인 결함 23건을 1건으로 통합(관련 TC 24건, 심각도는 관련 TC 중 최고 우선순위 적용): DEF_Oliveyoung Global_002(TC_PD_003), DEF_Oliveyoung Global_003(TC_PD_004), DEF_Oliveyoung Global_004(TC_PD_005), DEF_Oliveyoung Global_005(TC_PD_006), DEF_Oliveyoung Global_006(TC_PD_007), DEF_Oliveyoung Global_007(TC_PD_008), DEF_Oliveyoung Global_008(TC_PD_009), DEF_Oliveyoung Global_009(TC_PD_010), DEF_Oliveyoung Global_010(TC_PD_011), DEF_Oliveyoung Global_011(TC_PD_012), DEF_Oliveyoung Global_012(TC_PD_014), DEF_Oliveyoung Global_013(TC_PD_015), DEF_Oliveyoung Global_014(TC_PD_016), DEF_Oliveyoung Global_015(TC_PD_017), DEF_Oliveyoung Global_017(TC_PD_019), DEF_Oliveyoung Global_018(TC_PD_020), DEF_Oliveyoung Global_019(TC_PD_021), DEF_Oliveyoung Global_020(TC_PD_022), DEF_Oliveyoung Global_021(TC_PD_023), DEF_Oliveyoung Global_022(TC_PD_024), DEF_Oliveyoung Global_023(TC_PD_025), DEF_Oliveyoung Global_025(TC_PD_027), DEF_Oliveyoung Global_026(TC_PD_013)"
+      }
+    ],
+    "tcIds": [
+      "TC_PD_002",
+      "TC_PD_003",
+      "TC_PD_004",
+      "TC_PD_005",
+      "TC_PD_006",
+      "TC_PD_007",
+      "TC_PD_008",
+      "TC_PD_009",
+      "TC_PD_010",
+      "TC_PD_011",
+      "TC_PD_012",
+      "TC_PD_014",
+      "TC_PD_015",
+      "TC_PD_016",
+      "TC_PD_017",
+      "TC_PD_019",
+      "TC_PD_020",
+      "TC_PD_021",
+      "TC_PD_022",
+      "TC_PD_023",
+      "TC_PD_024",
+      "TC_PD_025",
+      "TC_PD_027",
+      "TC_PD_013"
+    ]
+  },
+  {
+    "defectId": "DEF_Oliveyoung Global_016",
+    "tcId": "TC_PD_018",
+    "module": "상품",
+    "screenName": "메인 헤더 검색",
+    "severity": "Major",
+    "status": "신규",
+    "summary": "메인 헤더 검색 > 테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)",
+    "testEnv": "",
+    "testSteps": "1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 검색어 \"mask\", \"serum\", \"toner\" 순서로 검색 후 글로벌 메인 복귀\n3) 헤더 검색창 클릭(포커스) 후 두 번째 항목(serum)의 삭제(X) 버튼 클릭\n4) 페이지 새로고침 후 헤더 검색창 클릭(포커스)",
+    "actualResult": "테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)\n콘솔 에러:\n  Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin\n  Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\nTest timeout of 30000ms exceeded.",
+    "expectedResult": "3) \"Recent Searches\"에서 serum만 사라지고 toner, mask가 순서대로 남음\n4) 삭제 상태가 유지되어 toner, mask만 노출",
+    "detectedAt": "2026-10-01",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_Oliveyoung Global_016.png",
+    "consoleLog": "TC/defects/DEF_Oliveyoung Global_016.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-10-01",
+        "status": "신규",
+        "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      }
+    ]
+  }
+]

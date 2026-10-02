@@ -1,0 +1,9 @@
+{
+  "project": "Oliveyoung Global",
+  "createdAt": "2026-10-01",
+  "url": "https://global.oliveyoung.com/",
+  "testType": "단위",
+  "analysisBasis": "둘다",
+  "hasTestAccounts": false,
+  "scope": "검색 모듈 1개 (대시보드 기능 검증 목적, 로그인 불필요 공개 페이지만)"
+}

@@ -613,8 +613,13 @@ async function openManageProjectModal(project) {
   el.mpAnalysisBasis.value = '';
   el.mpHasTestAccounts.checked = false;
   el.manageProjectModal.hidden = false;
+  // 사이트 정보를 다 불러오기 전에는 저장을 막습니다 — 빈 폼 값이 project.json에 저장돼 URL·테스트 유형 등이
+  // 지워지는 사고를 방지(2026-10-01, 로딩 중 저장으로 실제 데이터가 비워진 사례).
+  const submitBtn = el.manageProjectForm.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
   try {
     const res = await fetch(`/api/${encodeURIComponent(project)}/meta`);
+    if (manageProjectTarget !== project) return; // 그 사이 모달을 닫았거나 다른 프로젝트로 다시 열림
     if (res.ok) {
       const meta = await res.json();
       el.mpUrl.value = meta.url || '';
@@ -623,9 +628,14 @@ async function openManageProjectModal(project) {
       el.mpAnalysisBasis.value = meta.analysisBasis || '';
       el.mpHasTestAccounts.checked = !!meta.hasTestAccounts;
       manageMetaOriginal = manageMetaFormValues();
+    } else {
+      el.manageProjectError.textContent = '사이트 정보를 불러오지 못했습니다 — 표시 이름만 저장할 수 있습니다.';
     }
   } catch {
-    // 조회 실패 시 빈 폼 그대로 유지 — 저장 시 다시 실패하면 그때 에러를 보여줌
+    // 조회 실패 시: 사이트 정보는 저장하지 않음(manageMetaOriginal이 null이면 저장 시 건너뜀)
+    el.manageProjectError.textContent = '사이트 정보를 불러오지 못했습니다 — 표시 이름만 저장할 수 있습니다.';
+  } finally {
+    if (manageProjectTarget === project) submitBtn.disabled = false;
   }
 }
 
@@ -673,7 +683,8 @@ el.manageProjectForm.addEventListener('submit', async (e) => {
   // 사이트 정보(URL·테스트 유형 등)는 실제로 바뀐 경우에만 project.json에 저장 — 표시 이름만 바꾼 저장이
   // 4000과 공유하는 QA 데이터를 건드리지 않도록 합니다.
   const nowValues = manageMetaFormValues();
-  const metaChanged = !manageMetaOriginal || JSON.stringify(nowValues) !== JSON.stringify(manageMetaOriginal);
+  // 불러오기에 성공해 원본 값이 있고, 그 값과 다를 때만 저장 (원본을 모르면 폼 값을 신뢰할 수 없으므로 저장하지 않음)
+  const metaChanged = !!manageMetaOriginal && JSON.stringify(nowValues) !== JSON.stringify(manageMetaOriginal);
   if (metaChanged) {
     const res = await fetch(`/api/projects/${encodeURIComponent(manageProjectTarget)}/meta`, {
       method: 'PATCH',

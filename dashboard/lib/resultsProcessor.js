@@ -91,6 +91,33 @@ function buildSummaryText(screenName, actualResult) {
   return screenName ? `${screenName} > ${oneLine}` : oneLine;
 }
 
+// [추가 2026-10-02] 같은 원인으로 여러 TC가 실패하면 결함은 1건으로 두고 관련 TC만 늘립니다(사용자 확정).
+// `tcId`는 대표 TC(최초 발견)로 그대로 두고, `tcIds`(관련 TC 전체)를 신설했습니다 — `tcIds`가 없는 기존
+// 레코드는 [tcId]로 간주하므로 하위 호환됩니다. 같은 원인 판정 = screenName + summary(원인 요약)가 같고
+// 아직 '완료'되지 않은 결함.
+function relatedTcIds(d) {
+  const ids = Array.isArray(d.tcIds) && d.tcIds.length ? d.tcIds : [d.tcId];
+  return ids.filter(Boolean);
+}
+
+// 심각도 비교용 순위(P1/Critical > P2/Major > P3/Minor). 관련 TC가 늘면 가장 높은 값을 따릅니다.
+const SEVERITY_RANK = { P1: 3, Critical: 3, P2: 2, Major: 2, P3: 1, Minor: 1 };
+
+/** 증거 파일을 덮어쓰기 전, 기존 파일과 내용이 다르면 defects/_prev/ 로 보관합니다(AGENTS.md 10-2항). */
+function writeEvidence(defectsDir, defectId, ext, buf, overwrite, today) {
+  const target = path.join(defectsDir, `${defectId}.${ext}`);
+  if (fs.existsSync(target)) {
+    if (!overwrite) return true; // 통합(관련 TC 추가) 경로는 기존 증거를 유지(파일은 있으므로 레코드 필드만 연결)
+    const prev = fs.readFileSync(target);
+    if (prev.equals(buf)) return true;
+    const prevDir = path.join(defectsDir, '_prev');
+    fs.mkdirSync(prevDir, { recursive: true });
+    fs.copyFileSync(target, path.join(prevDir, `${defectId}.${today.replace(/-/g, '')}-${Date.now()}.${ext}`));
+  }
+  fs.writeFileSync(target, buf);
+  return true;
+}
+
 function nextDefectId(project, defects) {
   let max = 0;
   for (const d of defects) {
@@ -105,7 +132,7 @@ function nextDefectId(project, defects) {
  * 캐노니컬 TC json / defects.json / results 스냅샷에 반영합니다.
  * @returns {{moduleCode:string, executed:number, pass:number, fail:number, na:number,
  *            newDefects:string[], reopenedDefects:string[], stillFailingDefects:string[],
- *            passedWithOpenDefect:string[]}}
+ *            passedWithOpenDefect:string[], linkedToExisting:{defectId:string,tcId:string}[]}}
  */
 function applyModuleResults(project, moduleCode, flatResults, opts = {}) {
   const dir = tcDir(project);
@@ -125,6 +152,7 @@ function applyModuleResults(project, moduleCode, flatResults, opts = {}) {
     reopenedDefects: [],
     stillFailingDefects: [],
     passedWithOpenDefect: [],
+    linkedToExisting: [], // 같은 원인의 기존 결함에 관련 TC로 연결된 건 [{defectId, tcId}]
   };
 
   const defectsDir = path.join(dir, 'defects');
@@ -142,8 +170,8 @@ function applyModuleResults(project, moduleCode, flatResults, opts = {}) {
       summary.pass += 1;
       // 20-3-2: 과거 실패로 열린 결함이 있는데 이번엔 통과했다고 자동으로 완료 처리하지 않습니다 —
       // 우연한 1회성 통과로 결함을 놓치지 않기 위해, 사용자 확인 대상으로만 표시합니다.
-      const openDefect = defects.find((d) => d.tcId === flat.tcId && d.status !== '완료');
-      if (openDefect) summary.passedWithOpenDefect.push(openDefect.defectId);
+      const openDefect = defects.find((d) => relatedTcIds(d).includes(flat.tcId) && d.status !== '완료');
+      if (openDefect && !summary.passedWithOpenDefect.includes(openDefect.defectId)) summary.passedWithOpenDefect.push(openDefect.defectId);
       continue;
     }
     if (status === 'N/A') {
@@ -158,10 +186,15 @@ function applyModuleResults(project, moduleCode, flatResults, opts = {}) {
     const screenName = item.screenName || '';
     const summaryText = buildSummaryText(screenName || item.majorCategory || '', actualResult);
 
-    const openRecord = defects.find((d) => d.tcId === flat.tcId && d.status !== '완료');
-    const closedRecord = !openRecord && defects.find((d) => d.tcId === flat.tcId && d.status === '완료');
+    const openRecord = defects.find((d) => relatedTcIds(d).includes(flat.tcId) && d.status !== '완료');
+    const closedRecord = !openRecord && defects.find((d) => relatedTcIds(d).includes(flat.tcId) && d.status === '완료');
+    // 이 TC로는 아직 결함이 없지만, 같은 원인(화면명 + 원인 요약)의 미완료 결함이 있으면 새로 만들지 않고 TC만 연결
+    const sameCauseRecord = !openRecord && !closedRecord &&
+      defects.find((d) => d.status !== '완료' && (d.screenName || '') === screenName && d.summary === summaryText);
 
+    // 통합(관련 TC 추가) 경로는 기존 증거를 유지하고, 그 외(신규/재실패/재발생)는 최신 증거로 갱신(이전 증거는 _prev/ 보관)
     let record;
+    let overwriteEvidence = true;
     if (openRecord) {
       record = openRecord;
       record.history = record.history || [];
@@ -178,11 +211,20 @@ function applyModuleResults(project, moduleCode, flatResults, opts = {}) {
         note: '완료 처리된 결함이 테스트 실행 큐 재실행에서 다시 실패해 재발생으로 전환',
       });
       summary.reopenedDefects.push(record.defectId);
+    } else if (sameCauseRecord) {
+      record = sameCauseRecord;
+      overwriteEvidence = false;
+      record.tcIds = [...relatedTcIds(record), flat.tcId];
+      if ((SEVERITY_RANK[item.priority] || 0) > (SEVERITY_RANK[record.severity] || 0)) record.severity = item.priority;
+      record.history = record.history || [];
+      record.history.push({ at: today, status: record.status, note: `동일 원인으로 관련 TC 추가: ${flat.tcId} (자동 통합)` });
+      summary.linkedToExisting.push({ defectId: record.defectId, tcId: flat.tcId });
     } else {
       const defectId = nextDefectId(project, defects);
       record = {
         defectId,
         tcId: flat.tcId,
+        tcIds: [flat.tcId],
         module: item.majorCategory || '',
         screenName,
         severity: item.priority || 'P3',
@@ -204,8 +246,13 @@ function applyModuleResults(project, moduleCode, flatResults, opts = {}) {
       summary.newDefects.push(defectId);
     }
 
-    if (screenshotBuf) fs.writeFileSync(path.join(defectsDir, `${record.defectId}.png`), screenshotBuf);
-    if (consoleBuf) fs.writeFileSync(path.join(defectsDir, `${record.defectId}.console.json`), consoleBuf);
+    // 증거 파일 저장 + 레코드의 screenshot/consoleLog 필드 동기화(재실패/통합으로 처음 생긴 증거도 레코드에 연결)
+    if (screenshotBuf && writeEvidence(defectsDir, record.defectId, 'png', screenshotBuf, overwriteEvidence, today)) {
+      record.screenshot = `TC/defects/${record.defectId}.png`;
+    }
+    if (consoleBuf && writeEvidence(defectsDir, record.defectId, 'console.json', consoleBuf, overwriteEvidence, today)) {
+      record.consoleLog = `TC/defects/${record.defectId}.console.json`;
+    }
 
     item.issueSummary = record.summary;
     if (!(item.remark || '').includes(record.defectId)) {

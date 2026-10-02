@@ -150,10 +150,12 @@ function pdTotals() {
   return { ...t, defectsTotal, openCritical };
 }
 
-const pdDefectModuleCode = (d) => {
-  const m = /^TC_([A-Za-z]+)_/.exec(d.tcId || '');
+// 결함 1건에 관련 TC가 여러 개(tcIds)일 수 있음 — tcIds가 없는 기존 레코드는 [tcId]로 간주
+const pdDefectTcIds = (d) => (Array.isArray(d.tcIds) && d.tcIds.length ? d.tcIds : [d.tcId]).filter(Boolean);
+const pdDefectModuleCodes = (d) => [...new Set(pdDefectTcIds(d).map((id) => {
+  const m = /^TC_([A-Za-z]+)_/.exec(id || '');
   return m ? m[1].toUpperCase() : '';
-};
+}).filter(Boolean))];
 
 // ── 렌더링 ───────────────────────────────────────────────────────────────
 function pdRenderAll() {
@@ -430,13 +432,13 @@ function pdRenderPriority() {
 function pdDefectMatches(d) {
   const f = PD.f;
   const x = PD.d;
-  const code = pdDefectModuleCode(d);
-  const modName = (PD.rows.find((r) => r.code === code) || {}).name;
-  const mod = (sel) => !sel || code === sel || (!code && modName === sel);
+  const codes = pdDefectModuleCodes(d);
+  const modName = (PD.rows.find((r) => r.code === codes[0]) || {}).name;
+  const mod = (sel) => !sel || codes.includes(sel) || (!codes.length && modName === sel);
   if (!mod(f.module) || !mod(x.module)) return false;
   if (x.severity && normSeverity(d.severity) !== x.severity) return false;
   if (x.status === '__open' ? d.status === '완료' : x.status && d.status !== x.status) return false;
-  const hay = `${d.defectId} ${d.summary} ${d.module} ${d.tcId || ''}`.toLowerCase();
+  const hay = `${d.defectId} ${d.summary} ${d.module} ${pdDefectTcIds(d).join(' ')}`.toLowerCase();
   const q1 = f.q.trim().toLowerCase();
   const q2 = x.q.trim().toLowerCase();
   if (q1 && !hay.includes(q1)) return false;
@@ -451,7 +453,7 @@ function pdDefectRow(d) {
   const sev = normSeverity(d.severity) || '-';
   return `<tr data-id="${esc(d.defectId)}">
     <td class="pd-mono pd-id" title="${esc(d.defectId)}">${esc(pdShortId(d.defectId))}</td>
-    <td class="pd-summary" title="${esc(d.summary)}">${esc(d.summary)}</td>
+    <td class="pd-summary" title="${esc(d.summary)}">${esc(d.summary)}${pdDefectTcIds(d).length > 1 ? ` <span class="pd-tcn" title="관련 TC: ${esc(pdDefectTcIds(d).join(', '))}">TC ${pdDefectTcIds(d).length}건</span>` : ''}</td>
     <td>${esc(d.module)}</td>
     <td><span class="pd-sev pd-sev-${esc(sev)}" title="${esc(SEVERITY_LABELS[sev] || '')}">${esc(sev)}</span></td>
     <td><select class="pd-st-select" data-field="status" data-status="${esc(d.status)}" aria-label="상태">${STATUS_ORDER.map((s) => `<option value="${s}"${s === d.status ? ' selected' : ''}>${s}</option>`).join('')}</select></td>

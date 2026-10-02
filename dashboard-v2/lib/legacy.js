@@ -8,7 +8,13 @@
 const fs = require('fs');
 const path = require('path');
 
-const LEGACY_DIR = path.resolve(process.env.LEGACY_DASHBOARD_DIR || 'D:/QA/tc-automation/dashboard');
+// 찾는 순서: ① 환경변수 LEGACY_DASHBOARD_DIR ② 이 폴더(dashboard-v2)의 옆 폴더 ../dashboard
+// (D:\QA\tc-automation\dashboard-v2 위치에서 그대로 동작) ③ 기본 경로 D:/QA/tc-automation/dashboard
+const SIBLING_DIR = path.resolve(__dirname, '..', '..', 'dashboard');
+const LEGACY_DIR = path.resolve(
+  process.env.LEGACY_DASHBOARD_DIR ||
+    (fs.existsSync(path.join(SIBLING_DIR, 'lib', 'defectStore.js')) ? SIBLING_DIR : 'D:/QA/tc-automation/dashboard')
+);
 const LIB_DIR = path.join(LEGACY_DIR, 'lib');
 
 if (!fs.existsSync(path.join(LIB_DIR, 'defectStore.js'))) {
