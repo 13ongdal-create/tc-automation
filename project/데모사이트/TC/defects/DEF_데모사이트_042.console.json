@@ -1,0 +1,10 @@
+{
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "AxiosError: Request failed with status code 500\n    at G4 (http://192.168.10.116:30280/assets/vendor-De01y5Cz.js:14:10064)\n    at XMLHttpRequest.E (http://192.168.10.116:30280/assets/vendor-De01y5Cz.js:14:15578)\n    at nl.request (http://192.168.10.116:30280/assets/vendor-De01y5Cz.js:16:2228)\n    at async i (http://192.168.10.116:30280/assets/tool-Bf72D3lC.js:1:161)\n    at async searchClick (http://192.168.10.116:30280/assets/tools-eXsyXvPr.js:1:1481)\n    at async http://192.168.10.116:30280/assets/ActionButton-WT9D6WY7.js:1:3934",
+    "Error Boundary caught an error AxiosError: Request failed with status code 500\n    at G4 (http://192.168.10.116:30280/assets/vendor-De01y5Cz.js:14:10064)\n    at XMLHttpRequest.E (http://192.168.10.116:30280/assets/vendor-De01y5Cz.js:14:15578)\n    at nl.request (http://192.168.10.116:30280/assets/vendor-De01y5Cz.js:16:2228)\n    at async i (http://192.168.10.116:30280/assets/tool-Bf72D3lC.js:1:161)\n    at async searchClick (http://192.168.10.116:30280/assets/tools-eXsyXvPr.js:1:1481)\n    at async http://192.168.10.116:30280/assets/ActionButton-WT9D6WY7.js:1:3934 {componentStack: \n    at http://192.168.10.116:30280/assets/ActionB…dor-De01y5Cz.js:12:7782)\n    at cee (<anonymous>)}"
+  ],
+  "failedRequests": [
+    "500 http://192.168.10.116:30280/api/v1.0/agent/manage/tools?pageNum=1&rowsPerPage=30"
+  ]
+}

@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<!--
+  공용 TC 뷰어 템플릿 v1 (2026-10-02) — 프로젝트 콘텐츠 없음. AGENTS.md 10항, _shared/viewer/README.md 참조.
+  사용법: 아래 JS 상단 5개 주입 지점(META / TC_DATA / DEFECT_DATA / DEFECT_CONSOLE / EXTRA_MODALS)의 `/*__NAME__*/` 뒤 기본값을
+  JSON으로 교체하기만 한다. 주입 시 반드시 JSON.stringify(...).replace(/</g, '\\u003c') 로 '<'를 이스케이프한다(AGENTS.md 10항) — render-viewer.js가 자동 처리.
+  CSS/HTML/JS 로직은 수정하지 않는다 — 프로젝트별 차이는 전부 데이터(META, EXTRA_MODALS)로 표현한다.
+-->
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA TC 뷰어</title>
+<style>
+  :root{
+    --bg:#f6f8fa; --panel:#ffffff; --text:#1f2328; --muted:#656d76;
+    --border:#d0d7de; --accent:#0969da; --accent2:#0550ae;
+    --p1:#cf222e; --p2:#9a6700; --p3:#0969da;
+    --pass:#1a7f37; --fail:#cf222e; --na:#8c959f; --none:#d0d7de;
+    --headbg:#f6f8fa;
+  }
+  html[data-theme="dark"]{
+    --bg:#0d1117; --panel:#161b22; --text:#e6edf3; --muted:#8b949e;
+    --border:#30363d; --accent:#58a6ff; --accent2:#79c0ff;
+    --p1:#f85149; --p2:#d29922; --p3:#58a6ff;
+    --headbg:#161b22;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--bg);color:var(--text);}
+  header{position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .header-title{display:flex;align-items:center;gap:12px;}
+  .header-badge{width:34px;height:34px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  header h1{font-size:16px;margin:0;line-height:1.3;}
+  header .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+  .header-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  button{cursor:pointer;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:20px;padding:7px 14px;font-size:12.5px;font-weight:600;white-space:nowrap;}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+  button.primary:hover{background:var(--accent2);}
+  button:hover{filter:brightness(0.97);}
+  button:disabled{opacity:.45;cursor:not-allowed;filter:none;}
+  .container{padding:16px 20px 60px;max-width:1600px;margin:0 auto;}
+
+  .kpis{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0;}
+  .kpi{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px 16px;}
+  .kpi .num{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .kpi .label{font-size:12px;color:var(--muted);}
+  .kpi.p1 .num{color:var(--p1);} .kpi.p2 .num{color:var(--p2);} .kpi.p3 .num{color:var(--p3);}
+  .kpi.def-new .num{color:var(--p1);} .kpi.def-progress .num{color:var(--accent);} .kpi.def-done .num{color:var(--pass);}
+
+  .stats-wrap{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:16px;overflow-x:auto;}
+  .stats-wrap h3{margin:0 0 10px;font-size:14px;}
+  table.stats{width:100%;border-collapse:collapse;font-size:12px;}
+  table.stats th,table.stats td{border:1px solid var(--border);padding:6px 8px;text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums;}
+  table.stats th{background:var(--headbg);}
+  table.stats td.modname{text-align:left;}
+  table.stats tr.stats-total td{font-weight:700;background:var(--headbg);border-top:2px solid var(--text);}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+  .tab-btn{border-radius:20px;font-size:12px;padding:6px 12px;}
+  .tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .tab-btn.tab-defect{border-color:var(--fail);color:var(--fail);}
+  .tab-btn.tab-defect.active{background:var(--fail);border-color:var(--fail);color:#fff;}
+
+  .toolbar{display:flex;justify-content:flex-start;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:12px;}
+  .toolbar .count{font-size:13px;color:var(--muted);}
+  .toolbar.toolbar-split{justify-content:space-between;}
+
+  .filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .filter-bar input[type="text"]{flex:1;min-width:200px;padding:8px 10px;font-size:13px;border-radius:8px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+  .filter-bar select{padding:8px 10px;font-size:13px;border-radius:8px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+
+  /* 표준 "고정 헤더 스프레드시트" 패턴: 테이블 영역 자체를 독립 스크롤 박스(max-height + overflow:auto)로 만들고,
+     그 박스 기준(top:0)으로 헤더를 고정한다. ※ .table-wrap에 overflow:hidden을 쓰거나 th의 top에 외부 헤더 높이를
+     넣으면 헤더가 첫 행 위로 밀려 겹친다 — 이 두 줄은 바꾸지 말 것. */
+  .table-wrap{background:var(--panel);border:1px solid var(--border);border-radius:10px;max-height:70vh;overflow:auto;}
+  table.tc{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:12px;}
+  table.tc th,table.tc td{border-bottom:1px solid var(--border);border-right:1px solid var(--border);padding:6px 7px;vertical-align:top;word-break:break-word;overflow-wrap:break-word;white-space:pre-wrap;}
+  table.tc th:first-child,table.tc td:first-child{border-left:1px solid var(--border);}
+  table.tc thead th{border-top:1px solid var(--border);}
+  table.tc th{background:var(--headbg);position:sticky;top:0;z-index:10;font-size:11.5px;}
+  table.tc td.center{text-align:center;}
+  .badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:11px;color:#fff;}
+  /* TC 중요도(P1~P3)와 결함 심각도(Critical/Major/Minor)는 서로 다른 코드 체계 — 색만 공유 */
+  .badge.P1,.badge.Critical{background:var(--p1);} .badge.P2,.badge.Major{background:var(--p2);} .badge.P3,.badge.Minor{background:var(--p3);}
+  mark{background:#fff3a3;color:inherit;padding:0 1px;border-radius:2px;}
+  html[data-theme="dark"] mark{background:#6e5a00;}
+  .verify-note{color:var(--fail);font-weight:700;margin-bottom:4px;}
+  .defect-section{margin-bottom:8px;} .defect-section:last-child{margin-bottom:0;}
+  .defect-section-label{display:block;font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:0.03em;margin-bottom:2px;}
+  .defect-section-body{white-space:pre-wrap;}
+  select.result-select{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+  select.result-select[data-val="Pass"]{color:var(--pass);font-weight:600;}
+  select.result-select[data-val="Fail"]{color:var(--fail);font-weight:600;}
+  .result-round{display:block;margin-top:3px;font-size:9.5px;color:var(--muted);cursor:help;border:1px solid var(--border);border-radius:8px;padding:0 5px;text-align:center;white-space:nowrap;}
+  input.free-input{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+
+  .col-chk{width:2%} .col-no{width:2.5%} .col-id{width:5.5%} .col-system{width:2.5%} .col-cat{width:3%} .col-mod{width:3.5%} .col-sub{width:3.5%}
+  .col-platform{width:2.5%} .col-type{width:2.5%} .col-title{width:10%} .col-ref{width:3.5%}
+  .col-priority{width:2.5%} .col-testdata{width:5%} .col-precond{width:5.5%} .col-proc{width:8.5%} .col-expected{width:8.5%}
+  .col-result{width:4.5%} .col-assignee{width:3.5%} .col-issue{width:8%} .col-issuelink{width:8%} .col-remark{width:8%}
+
+  .col-module{width:2.8%}
+  .badge.mod{background:var(--accent);}
+  .col-def-id{width:9%} .col-def-mod{width:6%} .col-def-sev{width:5%} .col-def-status{width:8%}
+  .col-def-summary{width:18%} .col-def-detail{width:24%} .col-def-thumb{width:8%} .col-def-date{width:7%} .col-def-tc{width:7%} .col-def-link{width:8%}
+  img.def-thumb{width:100%;max-height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer;display:block;}
+  a.defect-tc-link{color:var(--accent);text-decoration:underline;cursor:pointer;}
+  details.defect-tcs summary{cursor:pointer;color:var(--accent);font-weight:600;white-space:nowrap;}
+  details.defect-tcs[open] summary{margin-bottom:4px;}
+  pre.con-log{white-space:pre-wrap;word-break:break-all;background:#0d1117;color:#e6edf3;border-radius:8px;padding:10px;font:11.5px/1.5 Consolas,monospace;max-height:220px;overflow:auto;margin:6px 0 0;}
+  select.defect-status-select{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
+  select.defect-status-select[data-val="신규"]{color:var(--p1);font-weight:600;}
+  select.defect-status-select[data-val="처리중"]{color:var(--accent);font-weight:600;}
+  select.defect-status-select[data-val="재검증대기"]{color:var(--p2);font-weight:600;}
+  select.defect-status-select[data-val="완료"]{color:var(--pass);font-weight:600;}
+  select.defect-status-select[data-val="보류"]{color:var(--muted);font-weight:600;}
+  select.defect-status-select[data-val="재발생"]{color:var(--fail);font-weight:700;}
+  #defectTable tbody tr{cursor:pointer;}
+  #defectTable tbody tr:hover{background:var(--headbg);}
+  #defectModalImg{max-width:100%;border-radius:8px;border:1px solid var(--border);display:block;margin-top:10px;}
+  #defectModalHistory{margin:8px 0 0;padding-left:18px;font-size:12px;color:var(--muted);line-height:1.7;}
+
+  /* 선택 TC 테스트 실행 (대시보드 연동) */
+  #runPanel{display:none;background:#0d1117;color:#e6edf3;font-family:Consolas,monospace;font-size:12px;padding:12px;border-radius:10px;margin:10px 0;max-height:260px;overflow:auto;white-space:pre-wrap;}
+  #runNotice{display:none;font-size:12px;color:var(--p2);margin:6px 0;}
+
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--panel);border-radius:12px;max-width:720px;width:92%;max-height:80vh;overflow-y:auto;padding:20px;}
+  .modal h2{margin-top:0;font-size:16px;}
+  .modal table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px;}
+  .modal table th,.modal table td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top;}
+  .modal table th{background:var(--headbg);}
+  .modal .modal-note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6;}
+  .modal-close{float:right;}
+
+  .footnote{font-size:11.5px;color:var(--muted);margin-top:14px;line-height:1.6;}
+  .version-note{font-size:11px;color:var(--muted);}
+  .status-confirmed{color:var(--pass);font-weight:600;}
+  .status-unconfirmed{color:var(--muted);}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-title">
+    <div class="header-badge" id="headerBadge">🧪</div>
+    <div>
+      <h1 id="pageTitle"></h1>
+      <div class="sub" id="pageSub"></div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <span id="extraButtons" style="display:contents;"></span>
+    <a id="linkPrd" hidden><button type="button">📄 PRD (사이트분석 & TC계획)</button></a>
+    <a id="linkSite" target="_blank" rel="noopener" hidden><button type="button" id="btnSite">🔗 Front 바로가기</button></a>
+    <a id="linkAdmin" target="_blank" rel="noopener" hidden><button type="button">🔗 Admin 바로가기</button></a>
+    <a id="linkResults" href="results/index.html" hidden><button type="button">📜 실행결과 이력</button></a>
+    <button id="btnXlsx" class="primary">📊 XLSX 다운로드</button>
+    <button id="btnJsonSave" class="primary">💾 JSON 저장</button>
+    <button id="btnJsonLoad">📂 JSON 파일 연결/불러오기</button>
+    <input type="file" id="jsonFileInput" accept="application/json" style="display:none;">
+    <span id="tcFileStatus" style="font-size:11px;color:var(--muted);">미연결 (저장 시 다운로드)</span>
+    <button id="btnTheme">🌙 다크모드</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="stats-wrap" id="statsWrapBlock">
+    <h3 id="statsToggle" style="cursor:pointer;user-select:none;display:flex;align-items:center;gap:6px;">
+      <span id="statsToggleIcon">▶</span><span><span id="statsLabel">소분류</span>별 실행현황 통계</span>
+    </h3>
+    <div style="overflow-x:auto;display:none;" id="statsTableWrap">
+    <table class="stats" id="statsTable">
+      <thead>
+        <tr><th id="statsColLabel">소분류</th><th>전체</th><th>Pass</th><th>Fail</th><th>N/A</th><th>N/T</th><th>미실행</th><th>수행율</th><th>Pass율</th><th>Fail율</th></tr>
+      </thead>
+      <tbody id="statsBody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis">
+    <div class="kpi"><div class="num" id="kpiTotal">0</div><div class="label">전체 TC</div></div>
+    <div class="kpi p1"><div class="num" id="kpiP1">0</div><div class="label">P1</div></div>
+    <div class="kpi p2"><div class="num" id="kpiP2">0</div><div class="label">P2</div></div>
+    <div class="kpi p3"><div class="num" id="kpiP3">0</div><div class="label">P3</div></div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="filter-bar" id="filterBarBlock">
+    <input id="searchInput" type="text" placeholder="TC ID / 테스트 항목 키워드 검색">
+    <select id="filterSystem" hidden><option value="">system 전체</option></select>
+    <select id="filterPriority"><option value="">우선순위 전체</option></select>
+    <select id="filterType"><option value="">유형 전체</option></select>
+    <select id="filterOrigin" hidden><option value="">구분 전체</option></select>
+    <button id="btnResetFilter">초기화</button>
+  </div>
+
+  <div class="toolbar" id="toolbarBlock">
+    <button id="btnRun" class="primary" disabled>▶ 선택 TC 테스트 실행</button>
+    <button id="btnRunCancel" hidden>■ 중단</button>
+    <div class="count" id="filteredCount"></div>
+  </div>
+  <div id="runNotice">TC/defects.json과 results는 갱신됐지만 이 HTML(생성 시점 스냅샷)은 자동 반영되지 않습니다 — 채팅에 '뷰어 갱신해줘'로 재생성을 요청하세요.</div>
+  <div id="runPanel"></div>
+
+  <div class="table-wrap" id="tcTableWrap">
+    <table class="tc">
+      <thead>
+        <tr>
+          <th class="col-chk"><input type="checkbox" id="chkAll" title="현재 목록 전체 선택"></th>
+          <th class="col-no">No.</th>
+          <th class="col-id">TC ID</th>
+          <th class="col-system">system</th>
+          <th class="col-module" id="thModule">모듈</th>
+          <th class="col-cat">대분류</th>
+          <th class="col-mod">중분류</th>
+          <th class="col-sub">소분류</th>
+          <th class="col-platform">플랫폼</th>
+          <th class="col-type">유형</th>
+          <th class="col-title">테스트 항목</th>
+          <th class="col-ref">기준문서</th>
+          <th class="col-priority">우선순위</th>
+          <th class="col-testdata">테스트 데이터</th>
+          <th class="col-precond">사전조건</th>
+          <th class="col-proc">테스트 수행 절차</th>
+          <th class="col-expected">기대 결과</th>
+          <th class="col-result">실행결과</th>
+          <th class="col-assignee">담당자</th>
+          <th class="col-issue">이슈내용</th>
+          <th class="col-issuelink">이슈링크</th>
+          <th class="col-remark">비고</th>
+        </tr>
+      </thead>
+      <tbody id="tcBody"></tbody>
+    </table>
+  </div>
+
+  <div id="defectPanel" style="display:none;">
+    <div class="kpis" id="defectKpis">
+      <div class="kpi"><div class="num" id="defKpiTotal">0</div><div class="label">전체 결함</div></div>
+      <div class="kpi def-new"><div class="num" id="defKpiNew">0</div><div class="label">신규</div></div>
+      <div class="kpi def-progress"><div class="num" id="defKpiProgress">0</div><div class="label">처리중</div></div>
+      <div class="kpi def-done"><div class="num" id="defKpiDone">0</div><div class="label">완료</div></div>
+    </div>
+
+    <div class="tabs" id="defectFilterPills"></div>
+
+    <div class="toolbar" id="defectFileToolbar" style="gap:8px;">
+      <button id="btnDefectSave" class="primary">💾 결함 저장</button>
+      <button id="btnDefectFileConnect">📂 defects.json 파일 연결/불러오기</button>
+      <span id="defectFileStatus" style="font-size:11px;color:var(--muted);">미연결 (저장 시 다운로드)</span>
+    </div>
+
+    <div class="toolbar toolbar-split">
+      <div class="count" id="defectFilteredCount"></div>
+    </div>
+
+    <div class="table-wrap" id="defectTableWrapOuter">
+      <table class="tc" id="defectTable">
+        <thead>
+          <tr>
+            <th class="col-def-id">결함ID</th>
+            <th class="col-def-mod">모듈</th>
+            <th class="col-def-sev">심각도</th>
+            <th class="col-def-status">상태</th>
+            <th class="col-def-summary">요약</th>
+            <th class="col-def-detail">상세내용</th>
+            <th class="col-def-thumb">스크린샷</th>
+            <th class="col-def-date">발견일</th>
+            <th class="col-def-tc">관련 TC ID</th>
+            <th class="col-def-link">비고</th>
+          </tr>
+        </thead>
+        <tbody id="defectBody"></tbody>
+      </table>
+    </div>
+    <div class="footnote" id="defectFootnote">※ 결함 행 클릭 시 스크린샷을 확인할 수 있습니다 (상태/이슈링크 입력란 클릭 시에는 열리지 않습니다). "관련 TC ID"를 클릭하면 해당 TC 목록 위치로 이동합니다.</div>
+  </div>
+
+  <div class="footnote">
+    <span id="fullNote" hidden></span>
+    ※ 실행결과/담당자/이슈내용/이슈링크/결함 상태는 기본적으로 브라우저 메모리에만 저장되어 새로고침 시 초기화됩니다. "JSON 파일 연결/불러오기"로 원본 파일을 한 번 연결하면, 이후 "저장" 클릭 시 다운로드 없이 그 파일에 바로 반영됩니다(Chrome/Edge 등 File System Access API 지원 브라우저 한정 — 미지원 브라우저는 다운로드로 대체).<br>
+    ※ [확인필요] 태그가 붙은 TC는 근거 문서/화면이 아직 확보되지 않은 항목입니다 (AGENTS.md 7항). 스펙 확정 시 재검증이 필요합니다.<br>
+    <span class="version-note" id="versionNote"></span>
+  </div>
+</div>
+
+<div class="modal-overlay" id="defectModalOverlay">
+  <div class="modal">
+    <button class="modal-close" data-close="defect">닫기</button>
+    <h2 id="defectModalTitle"></h2>
+    <div id="defectModalSummary" style="font-size:13px;"></div>
+    <div class="modal-note" id="defectModalTcs"></div>
+    <img id="defectModalImg" alt="결함 스크린샷" onerror="this.style.display='none'; document.getElementById('defectModalImgMissing').style.display='block';">
+    <div class="modal-note" id="defectModalImgMissing" style="display:none;">※ 스크린샷 파일을 찾을 수 없습니다.</div>
+    <div class="modal-note">이력</div>
+    <ul id="defectModalHistory"></ul>
+    <div id="defectModalConsole"></div>
+  </div>
+</div>
+
+<div id="extraModals"></div>
+
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script>
+// ── 주입 지점 4곳 (렌더러가 `/*__NAME__*/` 뒤 기본값을 JSON으로 교체) ──
+// META: { project, module, moduleName, version, changeHistory:[{version,date,summary}], siteUrl?, adminUrl?, prdFile?, resultsIndex?, missingRequired? }
+//   통합(Full) 뷰어는 추가로 { mode:'full', modules:[{code,name,version,total}], sourceModules:['PD v22(130건)',…], generatedAt, note } 를 가지며,
+//   TC_DATA 각 항목에 module / moduleName 필드가 있다(렌더러가 모듈 파일들을 합쳐 주입).
+// EXTRA_MODALS: 프로젝트별 참고표 버튼 [{ id, label, title, html }] — html은 신뢰된 정적 표 마크업만 (예: 테스트 계정 매트릭스, User Flow Map)
+const META = /*__META__*/{"project":"Oliveyoung Global","module":"PD","moduleName":"상품(검색)","version":4,"changeHistory":[{"version":1,"date":"2026-10-01","summary":"최초 생성, 27건 (메인 헤더 검색 UI 범위 — 검색결과 페이지는 Cloudflare 봇 차단으로 관찰 불가하여 제외)"},{"version":2,"date":"2026-10-02","summary":"TC_PD_026 삭제 (글로벌몰은 한글 미지원 — 사용자 확인), 27→26건. 표시 번호(No.) 재부여(TC ID 불변). 연결 결함 DEF_Oliveyoung Global_024 삭제"},{"version":3,"date":"2026-10-02","summary":"DEF_Oliveyoung Global_001 관련 TC 24건 Fail → N/T 재분류 (AGENTS.md 20-7항) — 실제 원인이 올리브영 자사 analytics(fbapi.oliveyoung.com) CORS 헤더 누락으로 등록된 기존 결함이며, 해결 전까지 깨끗한 Pass/Fail 판정이 불가능함"},{"version":4,"date":"2026-10-02","summary":"results/ 날짜별 스냅샷(2026-10-01)에서 과거 실행 이력을 소급 반영 — TC별 resultHistory 재구성(24건, 사용자 요청)"}],"siteUrl":"https://global.oliveyoung.com/","adminUrl":null,"prdFile":"Oliveyoung Global_PRD.html","resultsIndex":true,"missingRequired":[]};
+const TC_DATA = /*__TC_DATA__*/[{"tcId":"TC_PD_001","majorCategory":"상품","midCategory":"검색","minorCategory":"검색창","platform":"Web","type":"UI","item":"헤더 검색창 및 검색 버튼 노출 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 영역의 검색창과 검색 버튼 확인","expected":"검색창에 placeholder \"Search for a product or brand...\" 노출, 우측에 \"Search\" 검색 버튼 노출","testData":"","result":"Pass","assignee":"","issueSummary":"","issueLink":"","origin":"신규","displayNo":1,"system":"FO","remark":"","verifyNote":"","screenName":"메인 헤더 검색"},{"tcId":"TC_PD_002","majorCategory":"상품","midCategory":"검색","minorCategory":"검색창","platform":"Web","type":"UI","item":"검색창 포커스 시 인기 검색어 레이어 노출 검증","baseDoc":"-","priority":"P3","precondition":"최근 검색어 이력이 없는 신규 브라우저 세션","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창 클릭(포커스)","expected":"\"Popular Searches\" 제목의 인기 검색어 레이어 노출, \"Recent Searches\" 영역은 노출되지 않음","testData":"","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":2,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"관련 결함: DEF_Oliveyoung Global_001"}]},{"tcId":"TC_PD_003","majorCategory":"상품","midCategory":"검색","minorCategory":"인기검색어","platform":"Web","type":"UI","item":"인기 검색어 순위 표기 검증","baseDoc":"-","priority":"P3","precondition":"최근 검색어 이력이 없는 신규 브라우저 세션","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창 클릭(포커스)\n3) 인기 검색어 목록의 순위 번호 확인","expected":"인기 검색어 10개가 순위 1~10 오름차순으로 노출","testData":"","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":3,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"관련 결함: DEF_Oliveyoung Global_002"}]},{"tcId":"TC_PD_004","majorCategory":"상품","midCategory":"검색","minorCategory":"인기검색어","platform":"Web","type":"기능","item":"인기 검색어 클릭 시 해당 키워드 검색 이동 검증","baseDoc":"-","priority":"P2","precondition":"최근 검색어 이력이 없는 신규 브라우저 세션","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창 클릭(포커스)\n3) 인기 검색어 1위 키워드 클릭","expected":"클릭한 키워드를 query 값으로 하는 검색 결과 주소(/kr/search/results?query={키워드})로 이동","testData":"인기 검색어는 수시 변동 — 1위 키워드를 동적으로 사용","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":4,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_003"}]},{"tcId":"TC_PD_005","majorCategory":"상품","midCategory":"검색","minorCategory":"검색어제출","platform":"Web","type":"기능","item":"Enter 키 검색어 제출 이동 검증","baseDoc":"- · 패턴: 검색어제출이동","priority":"P1","precondition":"특이 사전조건 없음","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 검색어 입력\n3) 검색창에서 Enter 키 입력","expected":"/kr/search/results?query=mask 주소로 이동","testData":"검색어=mask","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":5,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_004"}]},{"tcId":"TC_PD_006","majorCategory":"상품","midCategory":"검색","minorCategory":"검색어제출","platform":"Web","type":"기능","item":"검색 버튼 클릭 검색어 제출 이동 검증","baseDoc":"- · 패턴: 검색어제출이동","priority":"P1","precondition":"특이 사전조건 없음","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 검색어 입력\n3) \"Search\" 검색 버튼 클릭","expected":"/kr/search/results?query=serum 주소로 이동","testData":"검색어=serum","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":6,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_005"}]},{"tcId":"TC_PD_007","majorCategory":"상품","midCategory":"검색","minorCategory":"검색어제출","platform":"Web","type":"Boundary","item":"공백만 입력 후 Enter 제출 차단 검증","baseDoc":"- · 패턴: 공백입력차단","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 공백(스페이스) 3칸만 입력\n3) 검색창에서 Enter 키 입력","expected":"검색 결과 주소로 이동하지 않고 글로벌 메인(/)에 머무름","testData":"입력값=공백 3칸","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":7,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"관련 결함: DEF_Oliveyoung Global_006"}]},{"tcId":"TC_PD_008","majorCategory":"상품","midCategory":"검색","minorCategory":"검색어제출","platform":"Web","type":"Boundary","item":"공백만 입력 후 검색 버튼 제출 차단 검증","baseDoc":"- · 패턴: 공백입력차단","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 공백(스페이스) 3칸만 입력\n3) \"Search\" 검색 버튼 클릭","expected":"검색 결과 주소로 이동하지 않고 글로벌 메인(/)에 머무름","testData":"입력값=공백 3칸","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":8,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"관련 결함: DEF_Oliveyoung Global_007"}]},{"tcId":"TC_PD_009","majorCategory":"상품","midCategory":"검색","minorCategory":"검색어제출","platform":"Web","type":"Boundary","item":"검색어 앞뒤 공백 제거 후 제출 검증","baseDoc":"- · 패턴: 검색어제출이동","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 앞뒤 공백이 포함된 검색어 입력\n3) 검색창에서 Enter 키 입력","expected":"공백이 제거된 /kr/search/results?query=mask 주소로 이동","testData":"입력값=\"  mask  \"(앞뒤 공백 2칸)","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":9,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_008"}]},{"tcId":"TC_PD_010","majorCategory":"상품","midCategory":"검색","minorCategory":"검색어제출","platform":"Web","type":"보안","item":"SQL 구문 형태 검색어 URL 인코딩 제출 검증","baseDoc":"- · 패턴: 검색어제출이동","priority":"P1","precondition":"특이 사전조건 없음","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 SQL 구문 형태 문자열 입력\n3) 검색창에서 Enter 키 입력","expected":"오류 없이 입력값이 URL 인코딩된 /kr/search/results?query=%27%20OR%201%3D1%20-- 주소로 이동","testData":"입력값=' OR 1=1 --","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":10,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_009"}]},{"tcId":"TC_PD_011","majorCategory":"상품","midCategory":"검색","minorCategory":"검색어제출","platform":"Web","type":"보안","item":"스크립트 태그 검색어 최근 검색어 텍스트 표시 검증","baseDoc":"-","priority":"P1","precondition":"최근 검색어 이력이 없는 신규 브라우저 세션","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 스크립트 태그 문자열 입력 후 Enter 키 입력\n3) 글로벌 메인으로 돌아와 헤더 검색창 클릭(포커스)\n4) \"Recent Searches\" 영역 확인","expected":"입력한 문자열이 태그 해석 없이 텍스트 그대로 표시되고, 스크립트 실행(alert 다이얼로그) 및 script 요소 생성이 발생하지 않음","testData":"입력값=\u003cscript>alert(1)\u003c/script>","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":11,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_010"}]},{"tcId":"TC_PD_012","majorCategory":"상품","midCategory":"검색","minorCategory":"검색어제출","platform":"Web","type":"Boundary","item":"[확인필요] 200자 장문 검색어 제출 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 영문 \"a\" 200자 입력\n3) 검색창에서 Enter 키 입력","expected":"검색 결과 주소로 이동하지 않고 글로벌 메인(/)에 머무름","testData":"입력값=\"a\" × 200자","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":12,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 모바일 입력창 maxlength=165와의 관계 포함 확인 필요","verifyNote":"관찰 시 PC 검색창에는 maxlength가 없어 200자가 입력되나 제출 시 이동하지 않음 — 의도된 길이 제한 정책인지 스펙 확정 필요","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"모바일 입력창 maxlength=165와의 관계 포함 확인 필요; 관련 결함: DEF_Oliveyoung Global_011"}]},{"tcId":"TC_PD_013","majorCategory":"상품","midCategory":"검색","minorCategory":"검색어제출","platform":"Web","type":"Boundary","item":"모바일 화면 검색 입력창 최대 입력 길이 검증","baseDoc":"-","priority":"P3","precondition":"모바일 뷰포트(390x844)","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더의 모바일 검색 입력창 확인\n3) 입력창의 최대 입력 가능 글자수(maxlength) 확인","expected":"모바일 검색 입력창(searchIptMo)이 노출되고 최대 입력 길이가 165자로 제한","testData":"뷰포트=390x844","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":13,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 개발자도구 Elements 탭에서 입력창 maxlength 속성 확인 (F12)","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"개발자도구 Elements 탭에서 입력창 maxlength 속성 확인 (F12); 관련 결함: DEF_Oliveyoung Global_026"}]},{"tcId":"TC_PD_014","majorCategory":"상품","midCategory":"검색","minorCategory":"최근검색어","platform":"Web","type":"기능","item":"검색 이력 최근 검색어 저장 및 노출 검증","baseDoc":"- · 패턴: 최근검색어세팅","priority":"P2","precondition":"최근 검색어 이력이 없는 신규 브라우저 세션","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 검색어 입력 후 Enter 키 입력\n3) 글로벌 메인으로 돌아와 헤더 검색창 클릭(포커스)","expected":"\"Recent Searches\" 영역에 직전 검색어가 노출되고 \"Clear All\" 버튼 노출","testData":"검색어=mask","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":14,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_012"}]},{"tcId":"TC_PD_015","majorCategory":"상품","midCategory":"검색","minorCategory":"최근검색어","platform":"Web","type":"기능","item":"최근 검색어 최신순 정렬 검증","baseDoc":"- · 패턴: 최근검색어세팅","priority":"P2","precondition":"최근 검색어 이력이 없는 신규 브라우저 세션","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 검색어 \"mask\" 검색 후 글로벌 메인 복귀\n3) 검색어 \"serum\" 검색 후 글로벌 메인 복귀\n4) 헤더 검색창 클릭(포커스)","expected":"\"Recent Searches\" 목록이 serum, mask 순(마지막 검색어가 맨 위)으로 노출","testData":"검색어=mask → serum","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":15,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_013"}]},{"tcId":"TC_PD_016","majorCategory":"상품","midCategory":"검색","minorCategory":"최근검색어","platform":"Web","type":"기능","item":"동일 검색어 재검색 시 최근 검색어 중복 제거 검증","baseDoc":"- · 패턴: 최근검색어세팅","priority":"P3","precondition":"최근 검색어 이력이 없는 신규 브라우저 세션","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 검색어 \"mask\", \"serum\" 순서로 검색 후 글로벌 메인 복귀\n3) 검색어 \"mask\"를 다시 검색 후 글로벌 메인 복귀\n4) 헤더 검색창 클릭(포커스)","expected":"\"Recent Searches\" 목록이 mask, serum 순으로 노출되며 mask는 1건만 존재","testData":"검색어=mask → serum → mask","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":16,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_014"}]},{"tcId":"TC_PD_017","majorCategory":"상품","midCategory":"검색","minorCategory":"최근검색어","platform":"Web","type":"기능","item":"최근 검색어 클릭 시 해당 키워드 검색 이동 검증","baseDoc":"- · 패턴: 검색어제출이동","priority":"P2","precondition":"최근 검색어 이력이 없는 신규 브라우저 세션","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 검색어 \"mask\" 검색 후 글로벌 메인 복귀\n3) 헤더 검색창 클릭(포커스) 후 \"Recent Searches\"의 mask 클릭","expected":"/kr/search/results?query=mask 주소로 이동","testData":"검색어=mask","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":17,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_015"}]},{"tcId":"TC_PD_018","majorCategory":"상품","midCategory":"검색","minorCategory":"최근검색어","platform":"Web","type":"기능","item":"최근 검색어 개별 삭제 검증","baseDoc":"- · 패턴: 최근검색어세팅","priority":"P2","precondition":"최근 검색어 이력이 없는 신규 브라우저 세션","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 검색어 \"mask\", \"serum\", \"toner\" 순서로 검색 후 글로벌 메인 복귀\n3) 헤더 검색창 클릭(포커스) 후 두 번째 항목(serum)의 삭제(X) 버튼 클릭\n4) 페이지 새로고침 후 헤더 검색창 클릭(포커스)","expected":"3) \"Recent Searches\"에서 serum만 사라지고 toner, mask가 순서대로 남음\n4) 삭제 상태가 유지되어 toner, mask만 노출","testData":"검색어=mask → serum → toner","result":"Fail","assignee":"","issueSummary":"메인 헤더 검색 > 테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)","issueLink":"","origin":"신규","displayNo":18,"system":"FO","remark":"검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_016","verifyNote":"","screenName":"메인 헤더 검색"},{"tcId":"TC_PD_019","majorCategory":"상품","midCategory":"검색","minorCategory":"최근검색어","platform":"Web","type":"기능","item":"최근 검색어 전체 삭제(Clear All) 검증","baseDoc":"- · 패턴: 최근검색어세팅","priority":"P2","precondition":"최근 검색어 이력이 없는 신규 브라우저 세션","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 검색어 \"mask\", \"serum\" 순서로 검색 후 글로벌 메인 복귀\n3) 헤더 검색창 클릭(포커스) 후 \"Clear All\" 클릭\n4) 페이지 새로고침 후 헤더 검색창 클릭(포커스)","expected":"3) \"Recent Searches\" 영역이 사라지고 \"Popular Searches\"는 그대로 노출\n4) \"Recent Searches\" 영역이 노출되지 않고 삭제 상태 유지","testData":"검색어=mask → serum","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":19,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_017"}]},{"tcId":"TC_PD_020","majorCategory":"상품","midCategory":"검색","minorCategory":"자동완성","platform":"Web","type":"기능","item":"검색어 입력 시 자동완성 레이어 노출 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 검색어 \"mask\" 입력(Enter 입력 없음)","expected":"자동완성 레이어가 노출되고 \"Brand\" 구분의 브랜드 항목과 상품명 항목이 함께 노출","testData":"검색어=mask","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":20,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"관련 결함: DEF_Oliveyoung Global_018"}]},{"tcId":"TC_PD_021","majorCategory":"상품","midCategory":"검색","minorCategory":"자동완성","platform":"Web","type":"UI","item":"자동완성 일치 문자열 강조 표시 검증","baseDoc":"-","priority":"P3","precondition":"특이 사전조건 없음","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 검색어 \"mask\" 입력(Enter 입력 없음)\n3) 자동완성 항목의 입력어 일치 부분 확인","expected":"각 자동완성 항목에서 입력어와 일치하는 문자열이 강조(highlight) 처리되어 노출","testData":"검색어=mask","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":21,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"관련 결함: DEF_Oliveyoung Global_019"}]},{"tcId":"TC_PD_022","majorCategory":"상품","midCategory":"검색","minorCategory":"자동완성","platform":"Web","type":"기능","item":"자동완성 대소문자 비구분 동일 결과 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 \"mask\" 입력 후 자동완성 항목 확인\n3) 검색창을 비우고 \"MASK\" 입력 후 자동완성 항목 확인","expected":"\"mask\" 입력 시와 동일한 자동완성 항목 목록이 같은 순서로 노출","testData":"검색어=mask / MASK","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":22,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"관련 결함: DEF_Oliveyoung Global_020"}]},{"tcId":"TC_PD_023","majorCategory":"상품","midCategory":"검색","minorCategory":"자동완성","platform":"Web","type":"기능","item":"자동완성 브랜드 항목 클릭 시 브랜드 페이지 이동 검증","baseDoc":"-","priority":"P2","precondition":"특이 사전조건 없음","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 검색어 \"mask\" 입력(Enter 입력 없음)\n3) 자동완성의 \"Brand\" 구분 첫 번째 항목 클릭","expected":"선택한 브랜드의 브랜드 페이지(/kr/brands/{브랜드}) 주소로 이동","testData":"검색어=mask","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":23,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"관련 결함: DEF_Oliveyoung Global_021"}]},{"tcId":"TC_PD_024","majorCategory":"상품","midCategory":"검색","minorCategory":"자동완성","platform":"Web","type":"기능","item":"검색 결과가 없는 검색어 입력 시 자동완성 미노출 검증","baseDoc":"-","priority":"P3","precondition":"최근 검색어 이력이 없는 신규 브라우저 세션","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 존재하지 않을 임의 문자열 입력(Enter 입력 없음)","expected":"자동완성 레이어가 노출되지 않고 \"Popular Searches\" 레이어가 유지됨","testData":"검색어=zzxxqqnoresult123","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":24,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"관련 결함: DEF_Oliveyoung Global_022"}]},{"tcId":"TC_PD_025","majorCategory":"상품","midCategory":"검색","minorCategory":"자동완성","platform":"Web","type":"기능","item":"입력값 삭제 시 인기 검색어 레이어 복귀 검증","baseDoc":"-","priority":"P3","precondition":"최근 검색어 이력이 없는 신규 브라우저 세션","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창에 검색어 \"mask\" 입력 후 자동완성 노출 확인\n3) 검색창의 입력값을 모두 삭제","expected":"자동완성 레이어가 사라지고 \"Popular Searches\" 레이어가 다시 노출","testData":"검색어=mask","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":25,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"관련 결함: DEF_Oliveyoung Global_023"}]},{"tcId":"TC_PD_027","majorCategory":"상품","midCategory":"검색","minorCategory":"자동완성","platform":"Web","type":"UI","item":"Esc 키 입력 시 검색 레이어 닫힘 검증","baseDoc":"-","priority":"P3","precondition":"최근 검색어 이력이 없는 신규 브라우저 세션","steps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창 클릭(포커스)하여 \"Popular Searches\" 레이어 노출 확인\n3) 키보드 Esc 키 입력","expected":"검색 레이어(인기 검색어)가 닫힘","testData":"","result":"N/T","assignee":"","issueSummary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","issueLink":"","origin":"신규","displayNo":26,"system":"FO","remark":"해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)","verifyNote":"","screenName":"메인 헤더 검색","resultHistory":[{"round":1,"date":"2026-10-01","result":"Fail","remark":"관련 결함: DEF_Oliveyoung Global_025"}]}];
+const DEFECT_DATA = /*__DEFECT_DATA__*/[{"defectId":"DEF_Oliveyoung Global_001","tcId":"TC_PD_002","module":"상품","screenName":"메인 헤더 검색","severity":"Minor","status":"신규","summary":"메인 헤더 검색 > Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","testEnv":"","testSteps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 헤더 검색창 클릭(포커스)","actualResult":"콘솔 에러:\n  Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\nError: 콘솔/네트워크 에러가 감지되어 실패 처리합니다.\n- 콘솔 에러:\n  Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n- 스크린샷: D:\\QA\\tc-automation\\_scratch\\test-results\\Oliveyoung Global\\project-Oliveyoung Global--d284d--검색창-포커스-시-인기-검색어-레이어-노출-검증-chromium\\console-error-screenshot.png","expectedResult":"\"Popular Searches\" 제목의 인기 검색어 레이어 노출, \"Recent Searches\" 영역은 노출되지 않음","detectedAt":"2026-10-01","source":"automation","screenshot":"TC/defects/DEF_Oliveyoung Global_001.png","consoleLog":"TC/defects/DEF_Oliveyoung Global_001.console.json","assignee":"","issueLink":"","history":[{"at":"2026-10-01","status":"신규","note":"테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"},{"at":"2026-10-01","status":"처리중","note":"상태 변경: 신규 → 처리중 (대시보드에서 직접 수정)"},{"at":"2026-10-01","status":"신규","note":"상태 변경: 처리중 → 신규 (대시보드에서 직접 수정)"},{"at":"2026-10-01","status":"처리중","note":"상태 변경: 신규 → 처리중 (대시보드에서 직접 수정)"},{"at":"2026-10-01","status":"신규","note":"상태 변경: 처리중 → 신규 (대시보드에서 직접 수정)"},{"at":"2026-10-02","status":"신규","note":"동일 원인 결함 23건을 1건으로 통합(관련 TC 24건, 심각도는 관련 TC 중 최고 우선순위 적용): DEF_Oliveyoung Global_002(TC_PD_003), DEF_Oliveyoung Global_003(TC_PD_004), DEF_Oliveyoung Global_004(TC_PD_005), DEF_Oliveyoung Global_005(TC_PD_006), DEF_Oliveyoung Global_006(TC_PD_007), DEF_Oliveyoung Global_007(TC_PD_008), DEF_Oliveyoung Global_008(TC_PD_009), DEF_Oliveyoung Global_009(TC_PD_010), DEF_Oliveyoung Global_010(TC_PD_011), DEF_Oliveyoung Global_011(TC_PD_012), DEF_Oliveyoung Global_012(TC_PD_014), DEF_Oliveyoung Global_013(TC_PD_015), DEF_Oliveyoung Global_014(TC_PD_016), DEF_Oliveyoung Global_015(TC_PD_017), DEF_Oliveyoung Global_017(TC_PD_019), DEF_Oliveyoung Global_018(TC_PD_020), DEF_Oliveyoung Global_019(TC_PD_021), DEF_Oliveyoung Global_020(TC_PD_022), DEF_Oliveyoung Global_021(TC_PD_023), DEF_Oliveyoung Global_022(TC_PD_024), DEF_Oliveyoung Global_023(TC_PD_025), DEF_Oliveyoung Global_025(TC_PD_027), DEF_Oliveyoung Global_026(TC_PD_013)"},{"at":"2026-10-02","status":"신규","note":"TC_PD_026 연결 누락 보완 — 동일 원인(CORS 분석 스크립트 에러)으로 Fail 처리됐으나 tcIds에서 빠져 있던 것을 발견해 추가"},{"at":"2026-10-02","status":"신규","note":"심각도 재조정: Critical → Minor — 실제 원인이 자사 analytics(fbapi.oliveyoung.com) CORS 헤더 누락이며 검색 등 핵심 기능 자체는 정상 동작함을 확인, 서비스 중단/핵심 플로우 차단에 해당하지 않음"},{"at":"2026-10-02","status":"신규","note":"정정: 바로 위 TC_PD_026 연결 추가는 오류였음 — 해당 TC는 v2(2026-10-02)에서 이미 삭제된 TC(글로벌몰 한글 미지원, 사용자 확인)였고, 오래된 10-01 results 스냅샷만 보고 현재 TC 정의와 대조하지 않아 발생한 실수. tcIds에서 제거함"}],"tcIds":["TC_PD_002","TC_PD_003","TC_PD_004","TC_PD_005","TC_PD_006","TC_PD_007","TC_PD_008","TC_PD_009","TC_PD_010","TC_PD_011","TC_PD_012","TC_PD_014","TC_PD_015","TC_PD_016","TC_PD_017","TC_PD_019","TC_PD_020","TC_PD_021","TC_PD_022","TC_PD_023","TC_PD_024","TC_PD_025","TC_PD_027","TC_PD_013"]},{"defectId":"DEF_Oliveyoung Global_016","tcId":"TC_PD_018","module":"상품","screenName":"메인 헤더 검색","severity":"Major","status":"신규","summary":"메인 헤더 검색 > 테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)","testEnv":"","testSteps":"1) 글로벌 메인 진입 후 위치 안내 팝업(Choose Your Location)이 노출되면 닫기(X)\n2) 검색어 \"mask\", \"serum\", \"toner\" 순서로 검색 후 글로벌 메인 복귀\n3) 헤더 검색창 클릭(포커스) 후 두 번째 항목(serum)의 삭제(X) 버튼 클릭\n4) 페이지 새로고침 후 헤더 검색창 클릭(포커스)","actualResult":"테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)\n콘솔 에러:\n  Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin\n  Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\n  Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\n  Failed to load resource: net::ERR_FAILED\nTest timeout of 30000ms exceeded.","expectedResult":"3) \"Recent Searches\"에서 serum만 사라지고 toner, mask가 순서대로 남음\n4) 삭제 상태가 유지되어 toner, mask만 노출","detectedAt":"2026-10-01","source":"automation","screenshot":"TC/defects/DEF_Oliveyoung Global_016.png","consoleLog":"TC/defects/DEF_Oliveyoung Global_016.console.json","assignee":"","issueLink":"","history":[{"at":"2026-10-01","status":"신규","note":"테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"}]}];
+// DEFECT_CONSOLE: { 결함ID: { consoleErrors:[...], failedRequests:[...] } } — TC/defects/{결함ID}.console.json 내용(표시 전용, "결함 저장" 시 defects.json에 쓰지 않음)
+const DEFECT_CONSOLE = /*__DEFECT_CONSOLE__*/{"DEF_Oliveyoung Global_001":{"consoleErrors":["Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.","Failed to load resource: net::ERR_FAILED","Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.","Failed to load resource: net::ERR_FAILED"],"failedRequests":[]},"DEF_Oliveyoung Global_016":{"consoleErrors":["Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.","Failed to load resource: net::ERR_FAILED","Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.","Failed to load resource: net::ERR_FAILED","Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.","Failed to load resource: net::ERR_FAILED","Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.","Failed to load resource: net::ERR_FAILED","Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.","Failed to load resource: net::ERR_FAILED","Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.","Failed to load resource: net::ERR_FAILED","Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.","Failed to load resource: net::ERR_FAILED","Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin","Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.","Failed to load resource: net::ERR_FAILED","Access to fetch at 'https://fbapi.oliveyoung.com/events/f69289361b382b7040f7b31bd4ce6988b0cdf57877ef88e983a0eadd2d29fb9d' from origin 'https://global.oliveyoung.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.","Failed to load resource: net::ERR_FAILED"],"failedRequests":[]}};
+const EXTRA_MODALS = /*__EXTRA_MODALS__*/[{"id":"accMatrixModal","label":"👤 테스트 계정 매트릭스","title":"테스트 계정 매트릭스","html":"\u003cdiv class=\"modal-note\">※ 등록된 테스트 계정이 없습니다. 범위: 검색 모듈 1개 (대시보드 기능 검증 목적, 로그인 불필요 공개 페이지만) 로그인이 필요한 기능은 [확인필요]이거나 TC 범위에서 제외됩니다.\u003c/div>"},{"id":"flowMapModal","label":"🧭 User Flow Map","title":"User Flow Map (메인 헤더 검색 기준)","html":"\u003ctable>\u003cthead>\u003ctr>\u003cth>단계\u003c/th>\u003cth>내용\u003c/th>\u003cth>확인 상태\u003c/th>\u003c/tr>\u003c/thead>\u003ctbody>\u003ctr>\u003ctd>1. 메인 진입\u003c/td>\u003ctd>\u003ccode>https://global.oliveyoung.com/\u003c/code> 진입 → \"Choose Your Location\" 위치 안내 팝업이 노출되면 닫기(X). 헤더에 검색창과 \"Search\" 버튼 노출\u003c/td>\u003ctd class=\"status-confirmed\">Playwright 관측 확인 (검색창 TC_PD_001~002)\u003c/td>\u003c/tr>\u003ctr>\u003ctd>2. 검색창 포커스\u003c/td>\u003ctd>최근 검색어가 없으면 \"Popular Searches\"(인기 검색어 1~10위 + 기준 시각) 레이어 노출. 인기 검색어 클릭 → \u003ccode>/kr/search/results?query={키워드}\u003c/code> 이동\u003c/td>\u003ctd class=\"status-confirmed\">Playwright 관측 확인 (인기검색어 TC_PD_003~004)\u003c/td>\u003c/tr>\u003ctr>\u003ctd>3. 검색어 입력\u003c/td>\u003ctd>영문 입력 시 브랜드·상품명 자동완성 노출(대소문자 무관, 1~2글자에서도 노출). 결과 없는 검색어는 자동완성 미노출 + 인기 검색어 유지. 입력값 삭제 시 인기 검색어 레이어로 복귀\u003c/td>\u003ctd class=\"status-confirmed\">Playwright 관측 확인 (자동완성 TC_PD_020~027)\u003c/td>\u003c/tr>\u003ctr>\u003ctd>4. 자동완성 항목 선택\u003c/td>\u003ctd>브랜드 항목 클릭 → 브랜드 페이지(\u003ccode>/kr/brands/masklab\u003c/code>)로 이동\u003c/td>\u003ctd class=\"status-confirmed\">Playwright 관측 확인 (TC_PD_023)\u003c/td>\u003c/tr>\u003ctr>\u003ctd>5. 검색 실행\u003c/td>\u003ctd>Enter / Search 버튼 → \u003ccode>/kr/search/results?query={검색어}\u003c/code> 이동(앞뒤 공백 제거, 특수문자 URL 인코딩). 빈/공백 검색어는 이동하지 않고 메인 유지\u003c/td>\u003ctd class=\"status-confirmed\">Playwright 관측 확인 (검색어제출 TC_PD_005~013) — 이동 URL까지\u003c/td>\u003c/tr>\u003ctr>\u003ctd>6. 검색 결과 페이지\u003c/td>\u003ctd>결과 목록 · 정렬/필터 · 페이지네이션 · 결과 없음 문구\u003c/td>\u003ctd class=\"status-unconfirmed\">[확인필요] 미관찰 — Cloudflare 봇 방어(&quot;Just a moment…&quot; / 403)로 자동화 접근 차단\u003c/td>\u003c/tr>\u003ctr>\u003ctd>7. 최근 검색어 관리\u003c/td>\u003ctd>검색 실행 시 \"Recent Searches\"에 최신순 누적(중복은 맨 위로). 항목 삭제/Clear All 가능, 새로고침 후에도 유지. 스크립트 문구는 텍스트로만 표시\u003c/td>\u003ctd class=\"status-confirmed\">Playwright 관측 확인 (최근검색어 TC_PD_014~019)\u003c/td>\u003c/tr>\u003ctr>\u003ctd>8. 검색 레이어 닫기\u003c/td>\u003ctd>Esc 입력 시 닫힘. 레이어 바깥 클릭 시에는 닫히지 않는 것으로 관찰됨\u003c/td>\u003ctd class=\"status-unconfirmed\">[확인필요] Esc는 관측 확인(TC_PD_027), 바깥 클릭은 스펙 확정 필요\u003c/td>\u003c/tr>\u003c/tbody>\u003c/table>\u003cdiv class=\"modal-note\">※ \"확인 상태\"가 [확인필요]인 단계는 관찰하지 못했거나 스펙이 확정되지 않아 추측으로 채우지 않았습니다 (AGENTS.md 7항). 한글 검색어는 글로벌몰이 지원하지 않아(사용자 확인 2026-10-02) 범위에서 제외했습니다. 자세한 내용은 PRD 참조.\u003c/div>"}];
+
+const PROJECT = META.project;
+const FILE_BASE = `${META.project}_TC_${META.module}`;
+const DEFECT_TAB = '🐞 결함현황';
+// 탭/통계표 분류 기준: 중분류가 2개 이상이면 중분류, 1개뿐이면 소분류로 나눈다(탭이 '전체'+1개로 무의미해지는 것 방지)
+const IS_FULL = META.mode === 'full'; // 통합(Full) 뷰어: 모든 모듈을 합쳐 보여주는 읽기 중심 뷰(AGENTS.md 10항) — 탭/통계가 모듈 단위
+const MODULE_CODES = IS_FULL ? (META.modules || []).map((m) => m.code).filter((c) => TC_DATA.some((t) => t.module === c)) : [];
+const MODULE_NAME = Object.fromEntries((META.modules || []).map((m) => [m.code, m.name]));
+const TAB_KEY = IS_FULL ? 'module' : (new Set(TC_DATA.map((t) => t.midCategory)).size >= 2 ? 'midCategory' : 'minorCategory');
+const TAB_LABEL = IS_FULL ? '모듈' : (TAB_KEY === 'midCategory' ? '중분류' : '소분류');
+const groupLabel = (g) => (IS_FULL ? `${g} (${MODULE_NAME[g] || ''})` : g);
+const TC_RESULTS = ['', 'Pass', 'Fail', 'N/A', 'N/T'];
+let currentTab = '전체';
+// URL 해시(#결함현황)로 결함현황 탭을 바로 열 수 있게 함 — 대시보드의 "결함 목록 상세보기" 링크가 이 해시를 붙여 연결
+if (decodeURIComponent(location.hash || '').replace(/^#/, '').includes('결함현황')) currentTab = DEFECT_TAB;
+let filterState = { keyword: '', system: '', priority: '', type: '', origin: '' };
+let defectFilterStatus = '전체';
+const selected = new Set();
+let lastFiltered = [];
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// 검색어를 하이라이트(배경 마킹) 처리. esc() 이후 텍스트에 <mark>를 삽입.
+function hl(s, kw) {
+  const escaped = esc(s);
+  if (!kw) return escaped;
+  const idx = escaped.toLowerCase().indexOf(kw.toLowerCase());
+  if (idx === -1) return escaped;
+  return escaped.slice(0, idx) + '<mark>' + escaped.slice(idx, idx + kw.length) + '</mark>' + escaped.slice(idx + kw.length);
+}
+
+// 기대결과 셀: verifyNote가 있으면 RED 폰트로 "[확인필요-...]" 를 결과 위에 표시
+function expectedCell(t) {
+  if (!t.verifyNote) return esc(t.expected);
+  return `<div class="verify-note">[확인필요-${esc(t.verifyNote)}]</div>${esc(t.expected)}`;
+}
+
+// "비"+검색어(예: 검색어="회원" → "비회원")로 매칭된 항목은 일반 매칭보다 후순위로 정렬.
+function isSecondaryMatch(t, kw) {
+  const text = (t.tcId + ' ' + t.item).toLowerCase();
+  const k = kw.toLowerCase();
+  let idx = text.indexOf(k);
+  let hasPrimary = false, hasSecondary = false;
+  while (idx !== -1) {
+    if (idx > 0 && text[idx - 1] === '비') hasSecondary = true;
+    else hasPrimary = true;
+    idx = text.indexOf(k, idx + 1);
+  }
+  return hasSecondary && !hasPrimary;
+}
+
+function statRow(label, items, cls) {
+  const total = items.length;
+  const c = (r) => items.filter((t) => t.result === r).length;
+  const pass = c('Pass'), fail = c('Fail'), na = c('N/A'), nt = c('N/T');
+  const none = items.filter((t) => !t.result).length;
+  const executed = total - none;
+  const pct = (a, b) => (b ? ((a / b) * 100).toFixed(0) : 0) + '%';
+  return `<tr class="${cls || ''}"><td class="modname">${esc(label)}</td><td>${total}</td><td>${pass}</td><td>${fail}</td><td>${na}</td><td>${nt}</td><td>${none}</td><td>${pct(executed, total)}</td><td>${pct(pass, executed)}</td><td>${pct(fail, executed)}</td></tr>`;
+}
+
+function setupFilterBar() {
+  const prioritySel = document.getElementById('filterPriority');
+  const typeSel = document.getElementById('filterType');
+  const originSel = document.getElementById('filterOrigin');
+  const systemSel = document.getElementById('filterSystem');
+  systemSel.hidden = !IS_FULL; // system 필터는 통합 뷰어에서만(기준 뷰어와 동일)
+  [...new Set(TC_DATA.map((t) => t.system))].filter(Boolean).sort().forEach((v) => {
+    systemSel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`);
+  });
+  [...new Set(TC_DATA.map((t) => t.priority))].sort().forEach((v) => {
+    prioritySel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`);
+  });
+  [...new Set(TC_DATA.map((t) => t.type))].sort().forEach((v) => {
+    typeSel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`);
+  });
+  const origins = [...new Set(TC_DATA.map((t) => t.origin).filter(Boolean))];
+  origins.forEach((v) => originSel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`));
+  originSel.hidden = origins.length === 0; // 레거시 이전 프로젝트(기존/신규 구분)에서만 노출
+
+  document.getElementById('searchInput').addEventListener('input', (e) => { filterState.keyword = e.target.value.trim().toLowerCase(); render(); });
+  systemSel.addEventListener('change', (e) => { filterState.system = e.target.value; render(); });
+  prioritySel.addEventListener('change', (e) => { filterState.priority = e.target.value; render(); });
+  typeSel.addEventListener('change', (e) => { filterState.type = e.target.value; render(); });
+  originSel.addEventListener('change', (e) => { filterState.origin = e.target.value; render(); });
+  document.getElementById('btnResetFilter').addEventListener('click', () => {
+    filterState = { keyword: '', system: '', priority: '', type: '', origin: '' };
+    document.getElementById('searchInput').value = '';
+    systemSel.value = ''; prioritySel.value = ''; typeSel.value = ''; originSel.value = '';
+    render();
+  });
+}
+
+function render() {
+  const tabsEl = document.getElementById('tabs');
+  const groups = IS_FULL ? MODULE_CODES : [...new Set(TC_DATA.map((t) => t[TAB_KEY]))];
+  const subs = ['전체', ...groups, DEFECT_TAB];
+  const tabText = (s) => (IS_FULL && groups.includes(s) ? `${s} (${TC_DATA.filter((t) => t.module === s).length})` : s); // 통합 뷰어: 모듈 탭에 건수 표시
+  tabsEl.innerHTML = subs.map((s) => `<button class="tab-btn ${s === currentTab ? 'active' : ''} ${s === DEFECT_TAB ? 'tab-defect' : ''}" data-tab="${esc(s)}">${esc(tabText(s))}</button>`).join('');
+  tabsEl.querySelectorAll('.tab-btn').forEach((b) => b.onclick = () => { currentTab = b.dataset.tab; render(); });
+
+  const defectMode = currentTab === DEFECT_TAB;
+  ['statsWrapBlock', 'kpis', 'filterBarBlock', 'toolbarBlock', 'tcTableWrap', 'runNotice', 'runPanel'].forEach((id) => {
+    const n = document.getElementById(id);
+    if (defectMode) n.dataset.prevDisplay = n.style.display, n.style.display = 'none';
+    else n.style.display = (id === 'runNotice' || id === 'runPanel') ? (n.dataset.keep || '') : '';
+  });
+  document.getElementById('defectPanel').style.display = defectMode ? '' : 'none';
+  if (defectMode) { renderDefects(); return; }
+
+  let filtered = currentTab === '전체' ? TC_DATA : TC_DATA.filter((t) => t[TAB_KEY] === currentTab);
+  if (filterState.keyword) {
+    const kw = filterState.keyword;
+    filtered = filtered.filter((t) => (t.tcId + ' ' + t.item).toLowerCase().includes(kw));
+    filtered = [...filtered].sort((a, b) => isSecondaryMatch(a, kw) - isSecondaryMatch(b, kw));
+  }
+  if (filterState.system) filtered = filtered.filter((t) => t.system === filterState.system);
+  if (filterState.priority) filtered = filtered.filter((t) => t.priority === filterState.priority);
+  if (filterState.type) filtered = filtered.filter((t) => t.type === filterState.type);
+  if (filterState.origin) filtered = filtered.filter((t) => t.origin === filterState.origin);
+  lastFiltered = filtered;
+  document.getElementById('filteredCount').textContent = `${filtered.length}건 표시 중 (전체 ${TC_DATA.length}건) · 선택 ${selected.size}건`;
+
+  document.getElementById('kpiTotal').textContent = TC_DATA.length;
+  ['P1', 'P2', 'P3'].forEach((p) => { document.getElementById('kpi' + p).textContent = TC_DATA.filter((t) => t.priority === p).length; });
+
+  const mids = IS_FULL ? MODULE_CODES : [...new Set(TC_DATA.map((t) => t[TAB_KEY]))];
+  document.getElementById('statsBody').innerHTML =
+    mids.map((m) => statRow(groupLabel(m), TC_DATA.filter((t) => t[TAB_KEY] === m))).join('') + statRow(IS_FULL ? '전체 합계' : '합계', TC_DATA, 'stats-total');
+
+  const kw = filterState.keyword;
+  document.getElementById('tcBody').innerHTML = filtered.map((t) => `
+    <tr data-id="${esc(t.tcId)}">
+      <td class="center"><input type="checkbox" class="chk" ${selected.has(t.tcId) ? 'checked' : ''}></td>
+      <td class="center">${esc(t.displayNo)}</td>
+      <td>${hl(t.tcId, kw)}</td>
+      <td class="center"><span class="badge ${t.system === 'BO' ? 'P1' : 'P3'}">${esc(t.system || 'FO')}</span></td>
+      ${IS_FULL ? `<td class="center"><span class="badge mod">${esc(t.module)}</span></td>` : ''}
+      <td>${esc(t.majorCategory)}</td>
+      <td>${esc(t.midCategory)}</td>
+      <td>${esc(t.minorCategory || '')}</td>
+      <td class="center">${esc(t.platform)}</td>
+      <td class="center">${esc(t.type)}</td>
+      <td>${hl(t.item, kw)}</td>
+      <td>${esc(t.baseDoc || '-')}</td>
+      <td class="center"><span class="badge ${esc(t.priority)}">${esc(t.priority)}</span></td>
+      <td>${esc(t.testData || '')}</td>
+      <td>${esc(t.precondition === '특이 사전조건 없음' ? '' : t.precondition)}</td>
+      <td>${esc(t.steps)}</td>
+      <td>${expectedCell(t)}</td>
+      <td>${resultSelect(t)}</td>
+      <td><input class="free-input assignee" value="${esc(t.assignee || '')}"></td>
+      <td>${esc(t.issueSummary || '')}</td>
+      <td><input class="free-input issuelink" value="${esc(t.issueLink || '')}"></td>
+      <td><input class="free-input remark" value="${esc(t.remark || '')}"></td>
+    </tr>
+  `).join('');
+  const byId = (tr) => TC_DATA.find((t) => t.tcId === tr.dataset.id);
+  const tbody = document.getElementById('tcBody');
+  tbody.querySelectorAll('input.chk').forEach((c) => c.onchange = () => {
+    const id = c.closest('tr').dataset.id;
+    c.checked ? selected.add(id) : selected.delete(id);
+    updateRunState();
+  });
+  tbody.querySelectorAll('input.remark').forEach((inp) => inp.onchange = () => { byId(inp.closest('tr')).remark = inp.value; });
+  tbody.querySelectorAll('input.assignee').forEach((inp) => inp.onchange = () => { byId(inp.closest('tr')).assignee = inp.value; });
+  tbody.querySelectorAll('input.issuelink').forEach((inp) => inp.onchange = () => { byId(inp.closest('tr')).issueLink = inp.value; });
+  tbody.querySelectorAll('select.result-select').forEach((sel) => {
+    sel.onchange = () => {
+      const item = byId(sel.closest('tr'));
+      item.result = sel.value;
+      sel.dataset.val = sel.value;
+      render();
+    };
+  });
+  updateRunState();
+}
+
+let runInProgress = false;
+function updateRunState() {
+  const btn = document.getElementById('btnRun');
+  btn.disabled = selected.size === 0 || runInProgress;
+  btn.textContent = selected.size ? `▶ 선택 TC 테스트 실행 (${selected.size}건)` : '▶ 선택 TC 테스트 실행';
+  const all = document.getElementById('chkAll');
+  all.checked = lastFiltered.length > 0 && lastFiltered.every((t) => selected.has(t.tcId));
+  const cnt = document.getElementById('filteredCount');
+  cnt.textContent = cnt.textContent.replace(/ · 선택 \d+건/, '') + ` · 선택 ${selected.size}건`;
+}
+
+function resultSelect(t) {
+  const sel = `<select class="result-select" data-val="${esc(t.result || '')}">${TC_RESULTS.map((o) => `<option value="${o}" ${t.result === o ? 'selected' : ''}>${o || '미실행'}</option>`).join('')}</select>`;
+  // [추가 2026-10-02] 재검증(2차 이상) 회차 표시 — resultHistory가 있으면(과거 회차가 보관돼 있으면)
+  // 현재 결과가 몇 차 결과인지 배지로 보여주고, hover 시 과거 회차 이력을 확인할 수 있습니다.
+  const hist = t.resultHistory || [];
+  if (!hist.length) return sel;
+  const round = hist.length + 1;
+  const tooltip = hist.map((h) => `${h.round}차(${h.date}): ${h.result || '미실행'}${h.remark ? ' — ' + h.remark : ''}`).join('\n');
+  return `${sel}<span class="result-round" title="${esc(tooltip)}">${round}차</span>`;
+}
+
+function handleThumbError(img) {
+  img.outerHTML = '<span style="color:var(--muted);font-size:11px;">스크린샷 없음</span>';
+}
+
+// 결함 1건에 관련 TC가 여러 개(tcIds)일 수 있음 — tcIds가 없는 기존 레코드는 [tcId]로 간주
+const defectTcIds = (d) => (Array.isArray(d.tcIds) && d.tcIds.length ? d.tcIds : [d.tcId]).filter(Boolean);
+
+function defectTcCell(def) {
+  const ids = defectTcIds(def);
+  const links = ids.map((id) => `<a href="#" class="defect-tc-link" data-tcid="${esc(id)}">${esc(id)}</a>`);
+  if (ids.length <= 3) return links.join('<br>');
+  return `<details class="defect-tcs"><summary>TC ${ids.length}건</summary>${links.join('<br>')}</details>`;
+}
+
+function defectConsoleHtml(def) {
+  const c = DEFECT_CONSOLE[def.defectId];
+  if (!c) return def.consoleLog ? `<div class="modal-note">※ 콘솔 로그(${esc(def.consoleLog)})를 불러오지 못했습니다.</div>` : '';
+  const list = (arr) => (arr && arr.length ? `<pre class="con-log">${arr.map(esc).join('\n')}</pre>` : '<div class="modal-note">없음</div>');
+  return `<div class="modal-note">콘솔 에러 (${(c.consoleErrors || []).length}건)</div>${list(c.consoleErrors)}` +
+    `<div class="modal-note">실패한 네트워크 요청 (${(c.failedRequests || []).length}건)</div>${list(c.failedRequests)}`;
+}
+
+function defectDetailCell(def) {
+  const sections = [];
+  if (def.testEnv) sections.push(['환경', def.testEnv]);
+  if (def.testSteps) sections.push(['절차', def.testSteps]);
+  if (def.actualResult) sections.push(['실제결과', def.actualResult]);
+  if (def.expectedResult) sections.push(['기대결과', def.expectedResult]);
+  const con = DEFECT_CONSOLE[def.defectId];
+  if (con) sections.push(['콘솔/네트워크', `콘솔 에러 ${(con.consoleErrors || []).length}건 · 실패 요청 ${(con.failedRequests || []).length}건 (행을 클릭하면 상세 표시)`]);
+  return sections.map(([label, text]) =>
+    `<div class="defect-section"><span class="defect-section-label">[${esc(label)}]</span><div class="defect-section-body">${esc(text)}</div></div>`
+  ).join('');
+}
+
+function defectStatusSelect(def) {
+  const opts = ['신규', '처리중', '재검증대기', '완료', '보류', '재발생'];
+  return `<select class="defect-status-select" data-val="${esc(def.status)}">${opts.map((o) => `<option value="${o}" ${def.status === o ? 'selected' : ''}>${o}</option>`).join('')}</select>`;
+}
+
+function renderDefects() {
+  const total = DEFECT_DATA.length;
+  const byStatus = (s) => DEFECT_DATA.filter((d) => d.status === s).length;
+  document.getElementById('defKpiTotal').textContent = total;
+  document.getElementById('defKpiNew').textContent = byStatus('신규');
+  document.getElementById('defKpiProgress').textContent = byStatus('처리중');
+  document.getElementById('defKpiDone').textContent = byStatus('완료');
+
+  const pillsEl = document.getElementById('defectFilterPills');
+  const statuses = ['전체', '신규', '처리중', '재검증대기', '완료', '보류', '재발생'];
+  pillsEl.innerHTML = statuses.map((s) => `<button class="tab-btn ${s === defectFilterStatus ? 'active' : ''}" data-status="${esc(s)}">${esc(s)} (${s === '전체' ? total : byStatus(s)})</button>`).join('');
+  pillsEl.querySelectorAll('.tab-btn').forEach((b) => b.onclick = () => { defectFilterStatus = b.dataset.status; renderDefects(); });
+
+  const filtered = defectFilterStatus === '전체' ? DEFECT_DATA : DEFECT_DATA.filter((d) => d.status === defectFilterStatus);
+  document.getElementById('defectFilteredCount').textContent = `${filtered.length}건 표시 중 (전체 ${total}건)`;
+
+  const tbody = document.getElementById('defectBody');
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px;">등록된 결함이 없습니다.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = filtered.map((def) => `
+    <tr data-defid="${esc(def.defectId)}">
+      <td>${esc(def.defectId)}</td>
+      <td class="center">${esc(def.module)}</td>
+      <td class="center"><span class="badge ${esc(def.severity)}">${esc(def.severity)}</span></td>
+      <td>${defectStatusSelect(def)}</td>
+      <td>${esc(def.summary)}</td>
+      <td>${defectDetailCell(def)}</td>
+      <td>${def.screenshot ? `<img class="def-thumb" src="defects/${esc(def.defectId)}.png" alt="${esc(def.defectId)} 스크린샷" onerror="handleThumbError(this)">` : ''}</td>
+      <td class="center">${esc(def.detectedAt || '')}</td>
+      <td>${defectTcCell(def)}</td>
+      <td><input class="free-input def-issuelink" value="${esc(def.issueLink || '')}"></td>
+    </tr>
+  `).join('');
+
+  tbody.querySelectorAll('select.defect-status-select').forEach((sel) => {
+    sel.onclick = (e) => e.stopPropagation();
+    sel.onchange = (e) => {
+      e.stopPropagation();
+      DEFECT_DATA.find((dd) => dd.defectId === sel.closest('tr').dataset.defid).status = sel.value;
+      renderDefects();
+    };
+  });
+  tbody.querySelectorAll('input.def-issuelink').forEach((inp) => {
+    inp.onclick = (e) => e.stopPropagation();
+    inp.onchange = (e) => { e.stopPropagation(); DEFECT_DATA.find((dd) => dd.defectId === inp.closest('tr').dataset.defid).issueLink = inp.value; };
+  });
+  tbody.querySelectorAll('details.defect-tcs').forEach((dt) => { dt.onclick = (e) => e.stopPropagation(); });
+  tbody.querySelectorAll('a.defect-tc-link').forEach((a) => {
+    a.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const tcId = a.dataset.tcid;
+      const tc = TC_DATA.find((t) => t.tcId === tcId);
+      if (!tc) { alert(tcId + ' 항목을 TC 목록에서 찾을 수 없습니다.'); return; }
+      currentTab = tc[TAB_KEY];
+      filterState.keyword = tcId.toLowerCase();
+      render();
+      document.getElementById('searchInput').value = tcId;
+      setTimeout(() => {
+        const row = document.querySelector('#tcBody tr[data-id="' + tcId + '"]');
+        if (row) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    };
+  });
+  tbody.querySelectorAll('tr[data-defid]').forEach((tr) => {
+    tr.onclick = () => openDefectModal(DEFECT_DATA.find((dd) => dd.defectId === tr.dataset.defid));
+  });
+}
+
+function openDefectModal(def) {
+  const tcIds = defectTcIds(def);
+  document.getElementById('defectModalTitle').textContent = `${def.defectId} — ${tcIds.length > 1 ? `관련 TC ${tcIds.length}건` : tcIds[0]}`;
+  document.getElementById('defectModalTcs').textContent = tcIds.length > 1 ? `관련 TC ${tcIds.length}건: ${tcIds.join(', ')}` : '';
+  document.getElementById('defectModalConsole').innerHTML = defectConsoleHtml(def);
+  document.getElementById('defectModalSummary').textContent = def.summary;
+  const img = document.getElementById('defectModalImg');
+  img.style.display = '';
+  document.getElementById('defectModalImgMissing').style.display = 'none';
+  img.src = 'defects/' + def.defectId + '.png';
+  document.getElementById('defectModalHistory').innerHTML = (def.history || []).map((h) => `<li>[${esc(h.at)}] ${esc(h.status)} — ${esc(h.note)}</li>`).join('');
+  document.getElementById('defectModalOverlay').classList.add('open');
+}
+
+// ── 헤더/모달 구성 (META·EXTRA_MODALS 기반) ──
+function buildChrome() {
+  const last = (META.changeHistory || []).slice(-1)[0];
+  if (IS_FULL) {
+    document.title = `${META.project} QA TC 뷰어 - 전체 통합`;
+    document.getElementById('headerBadge').textContent = '🗂️';
+    document.getElementById('pageTitle').innerHTML =
+      `${esc(META.project)} QA TC 뷰어 <span style="color:var(--accent);">Full v${esc(META.version)}</span> — 전체 통합`;
+    document.getElementById('pageSub').textContent =
+      `${MODULE_CODES.length}개 모듈 통합 · 총 ${TC_DATA.length}건 · ${(META.sourceModules || []).join(' / ')}`;
+    // 읽기 중심 스냅샷: 결함 파일 저장/연결 툴바는 두지 않고, 설명 문구를 통합 뷰어용으로 표시
+    document.getElementById('defectFileToolbar').style.display = 'none';
+    document.getElementById('defectFootnote').textContent = '※ 결함 행 클릭 시 스크린샷을 확인할 수 있습니다. "관련 TC ID"를 클릭하면 해당 TC의 모듈 탭으로 이동 후 목록 위치로 스크롤됩니다.';
+    const fn = document.getElementById('fullNote');
+    fn.hidden = false;
+    fn.innerHTML = `※ 이 뷰어는 ${esc(MODULE_CODES.join('/'))} ${MODULE_CODES.length}개 모듈 파일을 하나로 합쳐 보여주는 <b>통합(Full) 뷰어</b>입니다. 실제 편집·버전관리는 각 모듈별 개별 파일(<code>${esc(META.project)}_TC_{모듈코드}.json/html</code>)에서 이루어지며, 이 뷰어는 그 결과를 한눈에 조회하기 위한 읽기 중심 뷰입니다. 모듈 파일이 변경될 때마다 재생성됩니다.<br>`;
+  } else {
+    document.getElementById('thModule').remove();
+    document.title = `${META.project} QA TC 뷰어 - ${META.moduleName} ${META.module}`;
+    document.getElementById('pageTitle').innerHTML =
+      `${esc(META.project)} QA TC 뷰어 <span style="color:var(--accent);">v${esc(META.version)}</span> — ${esc(META.moduleName)} · ${esc(META.module)}`;
+    document.getElementById('pageSub').textContent =
+      `Interactive TC Viewer · 총 ${TC_DATA.length}건 · v${META.version}` + (last ? ` · 최근 변경: ${last.summary}` : '');
+  }
+  // 필수 산출물 누락 경고(렌더러가 META.missingRequired 로 전달) — 헤더 부제 옆에 빨간 글씨로 표시
+  if ((META.missingRequired || []).length) {
+    const warn = document.createElement('span');
+    warn.style.cssText = 'color:var(--fail);font-weight:700;margin-left:8px;';
+    warn.textContent = '⚠ 필수 산출물 누락: ' + META.missingRequired.join(', ');
+    document.getElementById('pageSub').appendChild(warn);
+  }
+  document.getElementById('statsLabel').textContent = TAB_LABEL;
+  document.getElementById('statsColLabel').textContent = TAB_LABEL;
+  if (META.siteUrl) {
+    const a = document.getElementById('linkSite'); a.href = META.siteUrl; a.hidden = false;
+    if (!META.adminUrl) document.getElementById('btnSite').textContent = '🔗 테스트사이트 바로가기';
+  }
+  if (META.adminUrl) { const a = document.getElementById('linkAdmin'); a.href = META.adminUrl; a.hidden = false; }
+  if (META.prdFile) { const a = document.getElementById('linkPrd'); a.href = '../Analysis/' + encodeURIComponent(META.prdFile); a.hidden = false; }
+  if (META.resultsIndex) document.getElementById('linkResults').hidden = false;
+
+  // 변경 이력: 데모사이트 뷰어와 같이 하단 각주에 한 줄로 표시(오래된 순)
+  document.getElementById('versionNote').textContent = IS_FULL
+    ? `통합 뷰어 생성 (${(META.sourceModules || []).join(', ')}) — 총 ${TC_DATA.length}건`
+    : 'meta.changeHistory: ' + (META.changeHistory || []).map((h) => `v${h.version}(${h.date}) ${h.summary}`).join(' / ');
+
+  const btns = document.getElementById('extraButtons');
+  const mods = document.getElementById('extraModals');
+  EXTRA_MODALS.forEach((m) => {
+    btns.insertAdjacentHTML('beforeend', `<button data-open-modal="${esc(m.id)}">${esc(m.label)}</button>`);
+    mods.insertAdjacentHTML('beforeend',
+      `<div class="modal-overlay" id="${esc(m.id)}"><div class="modal"><button class="modal-close">닫기</button><h2>${esc(m.title || m.label)}</h2>${m.html || ''}</div></div>`);
+  });
+}
+
+buildChrome();
+document.getElementById('btnTheme').onclick = () => {
+  const html = document.documentElement;
+  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+};
+document.getElementById('statsToggle').onclick = () => {
+  const wrap = document.getElementById('statsTableWrap');
+  const open = wrap.style.display !== 'none';
+  wrap.style.display = open ? 'none' : '';
+  document.getElementById('statsToggleIcon').textContent = open ? '▶' : '▼';
+};
+document.querySelectorAll('[data-open-modal]').forEach((b) => b.onclick = () => document.getElementById(b.dataset.openModal).classList.add('open'));
+document.querySelectorAll('.modal-close').forEach((btn) => btn.onclick = (e) => e.target.closest('.modal-overlay').classList.remove('open'));
+document.querySelectorAll('.modal-overlay').forEach((ov) => ov.onclick = (e) => { if (e.target === ov) ov.classList.remove('open'); });
+
+document.getElementById('chkAll').onchange = (e) => {
+  lastFiltered.forEach((t) => e.target.checked ? selected.add(t.tcId) : selected.delete(t.tcId));
+  render();
+};
+
+// ── 선택 TC 테스트 실행 (대시보드 WebSocket runTests, scope=custom) ──
+// 대시보드(4000/4001 등)를 통해 열었을 때만 동작한다. 파일(file://)로 열면 안내 문구만 표시한다.
+let activeRunWs = null;
+const btnRunCancel = document.getElementById('btnRunCancel');
+function setRunActive(active) {
+  runInProgress = active;
+  btnRunCancel.hidden = !active;
+  updateRunState();
+}
+document.getElementById('btnRun').addEventListener('click', () => {
+  if (!selected.size) return;
+  const panel = document.getElementById('runPanel');
+  panel.style.display = 'block'; panel.dataset.keep = 'block'; panel.textContent = '';
+  const log = (s) => { panel.textContent += s + '\n'; panel.scrollTop = panel.scrollHeight; };
+  if (location.protocol === 'file:') { log('[오류] 대시보드를 통해 이 뷰어를 열어야 실행할 수 있습니다 (파일로 직접 연 상태에서는 실행 불가).'); return; }
+  const ws = new WebSocket((location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/ws/chat');
+  activeRunWs = ws;
+  setRunActive(true);
+  ws.onopen = () => ws.send(JSON.stringify({ type: 'runTests', project: PROJECT, scope: 'custom', tcIds: [...selected] }));
+  ws.onmessage = (ev) => {
+    const m = JSON.parse(ev.data);
+    if (m.type === 'queueAck') log('[시작] ' + m.plan.map((p) => p.moduleCode + '(' + p.count + '건)').join(', '));
+    else if (m.type === 'queueModuleStart') log('[모듈 시작] ' + m.moduleCode);
+    else if (m.type === 'queueLog') log(m.line);
+    else if (m.type === 'queueModuleDone') log('[모듈 완료] ' + m.moduleCode);
+    else if (m.type === 'queueError') { log('[오류] ' + m.error); ws.close(); activeRunWs = null; setRunActive(false); }
+    else if (m.type === 'queueDone') { log(m.cancelled ? '[중단됨]' : '[전체 완료]'); const n = document.getElementById('runNotice'); n.dataset.keep = 'block'; n.style.display = 'block'; ws.close(); activeRunWs = null; setRunActive(false); }
+  };
+  ws.onerror = () => { log('[오류] WebSocket 연결 실패'); activeRunWs = null; setRunActive(false); };
+});
+btnRunCancel.addEventListener('click', () => {
+  document.getElementById('runPanel').textContent += '[중단 요청을 보냈습니다…]\n';
+  if (activeRunWs && activeRunWs.readyState === WebSocket.OPEN) {
+    activeRunWs.send(JSON.stringify({ type: 'cancelTests', project: PROJECT }));
+    return;
+  }
+  // [추가 2026-10-02] 새로고침으로 재연결된 뒤에는(아래 복원 로직) 이 페이지가 연 WebSocket이
+  // 없으므로, 취소 메시지 한 번 보내기 위한 짧은 연결을 새로 엽니다(서버는 project 기준으로
+  // 실행을 찾으므로 실행을 시작한 소켓과 같을 필요가 없습니다).
+  const cancelWs = new WebSocket((location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/ws/chat');
+  cancelWs.onopen = () => { cancelWs.send(JSON.stringify({ type: 'cancelTests', project: PROJECT })); cancelWs.close(); };
+});
+
+// ── 새로고침 재연결 시 진행 중이던 실행 상태 복원 (2026-10-02 추가) ──
+// testQueueRuns는 서버 쪽 전역 상태라 WebSocket 연결과 무관하게 완료 전까지 유지됩니다 —
+// 새로고침해도 테스트 자체는 계속 돌지만, 이 페이지는 그 사실을 몰라 "유휴" 상태로 보였습니다
+// (사용자 리포트). 로드 시 한 번 확인하고, 진행 중이면 완료될 때까지 주기적으로 재확인합니다.
+let runRecoveryTimer = null;
+function pollRunRecovery() {
+  runRecoveryTimer = setTimeout(async () => {
+    runRecoveryTimer = null;
+    let running = false;
+    try {
+      const res = await fetch(`/api/${encodeURIComponent(PROJECT)}/test-queue/status`);
+      running = !!(await res.json()).running;
+    } catch { /* 네트워크 일시 오류 — 다음 주기에 재시도 */ }
+    if (running) { pollRunRecovery(); return; }
+    document.getElementById('runPanel').textContent += '[완료] 새로고침 전 시작된 실행이 끝났습니다 — 최신 결과는 TC/defects.json에 반영되어 있습니다.\n';
+    const n = document.getElementById('runNotice'); n.dataset.keep = 'block'; n.style.display = 'block';
+    setRunActive(false);
+  }, 4000);
+}
+if (location.protocol !== 'file:') {
+  fetch(`/api/${encodeURIComponent(PROJECT)}/test-queue/status`)
+    .then((r) => r.json())
+    .then((data) => {
+      if (!data.running) return;
+      const panel = document.getElementById('runPanel');
+      panel.style.display = 'block'; panel.dataset.keep = 'block';
+      panel.textContent += '[진행 중] 새로고침 전 시작된 실행이 아직 진행 중입니다 — 과거 로그는 다시 볼 수 없지만, 완료되면 이 창에 자동으로 표시됩니다.\n';
+      setRunActive(true);
+      pollRunRecovery();
+    })
+    .catch(() => {});
+}
+
+// ── 다운로드 / 저장 ──
+function buildSummaryRows() {
+  const mids = IS_FULL ? MODULE_CODES : [...new Set(TC_DATA.map((t) => t[TAB_KEY]))];
+  return mids.map((m) => {
+    const items = TC_DATA.filter((t) => t[TAB_KEY] === m);
+    const total = items.length;
+    const c = (r) => items.filter((t) => t.result === r).length;
+    const none = items.filter((t) => !t.result).length;
+    const executed = total - none;
+    const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0) + '%';
+    return { [TAB_LABEL]: groupLabel(m), '전체': total, 'Pass': c('Pass'), 'Fail': c('Fail'), 'N/A': c('N/A'), 'N/T': c('N/T'), '미실행': none,
+      '수행율': pct(executed, total), 'Pass율': pct(c('Pass'), executed), 'Fail율': pct(c('Fail'), executed) };
+  });
+}
+function tcExportRows() {
+  return TC_DATA.map((t) => ({
+    'No.': t.displayNo, 'TC ID': t.tcId, 'system': t.system, ...(IS_FULL ? { '모듈': t.module } : {}), '대분류': t.majorCategory, '중분류': t.midCategory,
+    '소분류': t.minorCategory, '플랫폼': t.platform, '유형': t.type, '테스트 항목': t.item, '기준문서': t.baseDoc,
+    '우선순위': t.priority, '테스트 데이터': t.testData, '사전조건': t.precondition, '테스트 수행 절차': t.steps,
+    '기대 결과': t.expected, '실행결과': t.result, '담당자': t.assignee, '이슈내용': t.issueSummary,
+    '이슈링크': t.issueLink, '비고': t.remark,
+  }));
+}
+function downloadBlob(blob, filename) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+function downloadJson(content, filename) { downloadBlob(new Blob([content], { type: 'application/json' }), filename); }
+
+
+document.getElementById('btnXlsx').onclick = () => {
+  if (typeof XLSX === 'undefined') { alert('XLSX 라이브러리를 불러오지 못했습니다(인터넷 연결 필요). JSON 저장을 이용하세요.'); return; }
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(buildSummaryRows()), 'Summary');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(tcExportRows()), 'TC');
+  const defectRows = DEFECT_DATA.map((d) => ({
+    '결함ID': d.defectId, '모듈': d.module, '심각도': d.severity, '상태': d.status, '요약': d.summary,
+    '환경': d.testEnv, '절차': d.testSteps, '실제결과': d.actualResult, '기대결과': d.expectedResult,
+    '발견일': d.detectedAt, '관련TC': defectTcIds(d).join(', '), '이슈링크': d.issueLink,
+  }));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(defectRows), 'Defect');
+  XLSX.writeFile(wb, FILE_BASE + '.xlsx');
+};
+
+const FS_ACCESS_SUPPORTED = 'showOpenFilePicker' in window;
+let tcFileHandle = null;
+let defectFileHandle = null;
+const JSON_PICKER_OPTS = { types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }] };
+
+async function writeToHandle(handle, content) {
+  const writable = await handle.createWritable();
+  await writable.write(content);
+  await writable.close();
+}
+
+function applyLoadedTcItems(items) {
+  let n = 0;
+  items.forEach((li) => {
+    const t = TC_DATA.find((x) => x.tcId === li.tcId);
+    if (t) { t.result = li.result; t.assignee = li.assignee; t.issueSummary = li.issueSummary; t.issueLink = li.issueLink; t.remark = li.remark; t.resultHistory = li.resultHistory; t.resultDate = li.resultDate; n++; }
+  });
+  render();
+  return n;
+}
+
+document.getElementById('btnJsonSave').onclick = async () => {
+  const out = {
+    meta: IS_FULL
+      ? { project: META.project, module: META.module, moduleName: META.moduleName, version: META.version, generatedAt: META.generatedAt, sourceModules: META.sourceModules, note: META.note }
+      : { project: META.project, module: META.module, moduleName: META.moduleName, version: META.version, changeHistory: META.changeHistory },
+    items: TC_DATA,
+  };
+  const content = JSON.stringify(out, null, 2);
+  if (tcFileHandle) {
+    try { await writeToHandle(tcFileHandle, content); alert('저장 완료: ' + tcFileHandle.name); return; }
+    catch (err) { alert('직접 저장 실패, 다운로드로 대체합니다: ' + err.message); }
+  }
+  downloadJson(content, FILE_BASE + '.json');
+};
+
+document.getElementById('btnJsonLoad').onclick = async () => {
+  if (!FS_ACCESS_SUPPORTED) { document.getElementById('jsonFileInput').click(); return; }
+  try {
+    const [handle] = await window.showOpenFilePicker(JSON_PICKER_OPTS);
+    const perm = await handle.requestPermission({ mode: 'readwrite' });
+    const file = await handle.getFile();
+    const loaded = JSON.parse(await file.text());
+    const n = applyLoadedTcItems(loaded.items || loaded);
+    if (perm === 'granted') {
+      tcFileHandle = handle;
+      document.getElementById('tcFileStatus').textContent = '🔗 연결됨: ' + handle.name;
+      alert('연결 완료 (' + handle.name + ') · ' + n + '건 불러옴 — 이제 "JSON 저장" 클릭 시 이 파일에 바로 저장됩니다.');
+    } else {
+      alert('읽기 전용으로 ' + n + '건 불러왔습니다 (쓰기 권한 거부 — 저장은 다운로드로 대체됩니다).');
+    }
+  } catch (err) {
+    if (err.name !== 'AbortError') alert('파일 연결/불러오기 실패: ' + err.message);
+  }
+};
+document.getElementById('jsonFileInput').onchange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const n = applyLoadedTcItems((JSON.parse(reader.result)).items || JSON.parse(reader.result));
+      alert(n + '건 불러옴 (이 브라우저는 직접 저장을 지원하지 않아 저장은 다운로드로 진행됩니다)');
+    } catch (err) { alert('JSON 파싱 실패: ' + err.message); }
+  };
+  reader.readAsText(file);
+};
+
+document.getElementById('btnDefectSave').onclick = async () => {
+  const content = JSON.stringify(DEFECT_DATA, null, 2);
+  if (defectFileHandle) {
+    try { await writeToHandle(defectFileHandle, content); alert('저장 완료: ' + defectFileHandle.name); return; }
+    catch (err) { alert('직접 저장 실패, 다운로드로 대체합니다: ' + err.message); }
+  }
+  downloadJson(content, 'defects.json');
+};
+
+document.getElementById('btnDefectFileConnect').onclick = async () => {
+  if (!FS_ACCESS_SUPPORTED) { alert('이 브라우저는 파일 직접 연결을 지원하지 않습니다 (Chrome/Edge 최신 버전 권장). 저장은 다운로드로 진행됩니다.'); return; }
+  try {
+    const [handle] = await window.showOpenFilePicker(JSON_PICKER_OPTS);
+    const perm = await handle.requestPermission({ mode: 'readwrite' });
+    const file = await handle.getFile();
+    const loaded = JSON.parse(await file.text());
+    DEFECT_DATA.length = 0;
+    DEFECT_DATA.push(...loaded);
+    renderDefects();
+    if (perm === 'granted') {
+      defectFileHandle = handle;
+      document.getElementById('defectFileStatus').textContent = '🔗 연결됨: ' + handle.name;
+      alert('연결 완료 (' + handle.name + ') · ' + loaded.length + '건 불러옴 — 이제 "결함 저장" 클릭 시 이 파일에 바로 저장됩니다.');
+    } else {
+      alert('읽기 전용으로 ' + loaded.length + '건 불러왔습니다 (쓰기 권한 거부 — 저장은 다운로드로 대체됩니다).');
+    }
+  } catch (err) {
+    if (err.name !== 'AbortError') alert('파일 연결/불러오기 실패: ' + err.message);
+  }
+};
+
+setupFilterBar();
+render();
+</script>
+</body>
+</html>

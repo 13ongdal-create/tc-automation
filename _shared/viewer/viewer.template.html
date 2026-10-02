@@ -90,6 +90,7 @@
   select.result-select{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
   select.result-select[data-val="Pass"]{color:var(--pass);font-weight:600;}
   select.result-select[data-val="Fail"]{color:var(--fail);font-weight:600;}
+  .result-round{display:block;margin-top:3px;font-size:9.5px;color:var(--muted);cursor:help;border:1px solid var(--border);border-radius:8px;padding:0 5px;text-align:center;white-space:nowrap;}
   input.free-input{width:100%;font-size:11.5px;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);}
 
   .col-chk{width:2%} .col-no{width:2.5%} .col-id{width:5.5%} .col-system{width:2.5%} .col-cat{width:3%} .col-mod{width:3.5%} .col-sub{width:3.5%}
@@ -97,6 +98,8 @@
   .col-priority{width:2.5%} .col-testdata{width:5%} .col-precond{width:5.5%} .col-proc{width:8.5%} .col-expected{width:8.5%}
   .col-result{width:4.5%} .col-assignee{width:3.5%} .col-issue{width:8%} .col-issuelink{width:8%} .col-remark{width:8%}
 
+  .col-module{width:2.8%}
+  .badge.mod{background:var(--accent);}
   .col-def-id{width:9%} .col-def-mod{width:6%} .col-def-sev{width:5%} .col-def-status{width:8%}
   .col-def-summary{width:18%} .col-def-detail{width:24%} .col-def-thumb{width:8%} .col-def-date{width:7%} .col-def-tc{width:7%} .col-def-link{width:8%}
   img.def-thumb{width:100%;max-height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer;display:block;}
@@ -139,7 +142,7 @@
 <body>
 <header>
   <div class="header-title">
-    <div class="header-badge">🧪</div>
+    <div class="header-badge" id="headerBadge">🧪</div>
     <div>
       <h1 id="pageTitle"></h1>
       <div class="sub" id="pageSub"></div>
@@ -187,6 +190,7 @@
 
   <div class="filter-bar" id="filterBarBlock">
     <input id="searchInput" type="text" placeholder="TC ID / 테스트 항목 키워드 검색">
+    <select id="filterSystem" hidden><option value="">system 전체</option></select>
     <select id="filterPriority"><option value="">우선순위 전체</option></select>
     <select id="filterType"><option value="">유형 전체</option></select>
     <select id="filterOrigin" hidden><option value="">구분 전체</option></select>
@@ -195,6 +199,7 @@
 
   <div class="toolbar" id="toolbarBlock">
     <button id="btnRun" class="primary" disabled>▶ 선택 TC 테스트 실행</button>
+    <button id="btnRunCancel" hidden>■ 중단</button>
     <div class="count" id="filteredCount"></div>
   </div>
   <div id="runNotice">TC/defects.json과 results는 갱신됐지만 이 HTML(생성 시점 스냅샷)은 자동 반영되지 않습니다 — 채팅에 '뷰어 갱신해줘'로 재생성을 요청하세요.</div>
@@ -208,6 +213,7 @@
           <th class="col-no">No.</th>
           <th class="col-id">TC ID</th>
           <th class="col-system">system</th>
+          <th class="col-module" id="thModule">모듈</th>
           <th class="col-cat">대분류</th>
           <th class="col-mod">중분류</th>
           <th class="col-sub">소분류</th>
@@ -241,7 +247,7 @@
 
     <div class="tabs" id="defectFilterPills"></div>
 
-    <div class="toolbar" style="gap:8px;">
+    <div class="toolbar" id="defectFileToolbar" style="gap:8px;">
       <button id="btnDefectSave" class="primary">💾 결함 저장</button>
       <button id="btnDefectFileConnect">📂 defects.json 파일 연결/불러오기</button>
       <span id="defectFileStatus" style="font-size:11px;color:var(--muted);">미연결 (저장 시 다운로드)</span>
@@ -270,10 +276,11 @@
         <tbody id="defectBody"></tbody>
       </table>
     </div>
-    <div class="footnote">※ 결함 행 클릭 시 스크린샷을 확인할 수 있습니다 (상태/이슈링크 입력란 클릭 시에는 열리지 않습니다). "관련 TC ID"를 클릭하면 해당 TC 목록 위치로 이동합니다.</div>
+    <div class="footnote" id="defectFootnote">※ 결함 행 클릭 시 스크린샷을 확인할 수 있습니다 (상태/이슈링크 입력란 클릭 시에는 열리지 않습니다). "관련 TC ID"를 클릭하면 해당 TC 목록 위치로 이동합니다.</div>
   </div>
 
   <div class="footnote">
+    <span id="fullNote" hidden></span>
     ※ 실행결과/담당자/이슈내용/이슈링크/결함 상태는 기본적으로 브라우저 메모리에만 저장되어 새로고침 시 초기화됩니다. "JSON 파일 연결/불러오기"로 원본 파일을 한 번 연결하면, 이후 "저장" 클릭 시 다운로드 없이 그 파일에 바로 반영됩니다(Chrome/Edge 등 File System Access API 지원 브라우저 한정 — 미지원 브라우저는 다운로드로 대체).<br>
     ※ [확인필요] 태그가 붙은 TC는 근거 문서/화면이 아직 확보되지 않은 항목입니다 (AGENTS.md 7항). 스펙 확정 시 재검증이 필요합니다.<br>
     <span class="version-note" id="versionNote"></span>
@@ -300,6 +307,8 @@
 <script>
 // ── 주입 지점 4곳 (렌더러가 `/*__NAME__*/` 뒤 기본값을 JSON으로 교체) ──
 // META: { project, module, moduleName, version, changeHistory:[{version,date,summary}], siteUrl?, adminUrl?, prdFile?, resultsIndex?, missingRequired? }
+//   통합(Full) 뷰어는 추가로 { mode:'full', modules:[{code,name,version,total}], sourceModules:['PD v22(130건)',…], generatedAt, note } 를 가지며,
+//   TC_DATA 각 항목에 module / moduleName 필드가 있다(렌더러가 모듈 파일들을 합쳐 주입).
 // EXTRA_MODALS: 프로젝트별 참고표 버튼 [{ id, label, title, html }] — html은 신뢰된 정적 표 마크업만 (예: 테스트 계정 매트릭스, User Flow Map)
 const META = /*__META__*/{ project: '', module: '', moduleName: '', version: 1, changeHistory: [] };
 const TC_DATA = /*__TC_DATA__*/[];
@@ -312,11 +321,17 @@ const PROJECT = META.project;
 const FILE_BASE = `${META.project}_TC_${META.module}`;
 const DEFECT_TAB = '🐞 결함현황';
 // 탭/통계표 분류 기준: 중분류가 2개 이상이면 중분류, 1개뿐이면 소분류로 나눈다(탭이 '전체'+1개로 무의미해지는 것 방지)
-const TAB_KEY = new Set(TC_DATA.map((t) => t.midCategory)).size >= 2 ? 'midCategory' : 'minorCategory';
-const TAB_LABEL = TAB_KEY === 'midCategory' ? '중분류' : '소분류';
+const IS_FULL = META.mode === 'full'; // 통합(Full) 뷰어: 모든 모듈을 합쳐 보여주는 읽기 중심 뷰(AGENTS.md 10항) — 탭/통계가 모듈 단위
+const MODULE_CODES = IS_FULL ? (META.modules || []).map((m) => m.code).filter((c) => TC_DATA.some((t) => t.module === c)) : [];
+const MODULE_NAME = Object.fromEntries((META.modules || []).map((m) => [m.code, m.name]));
+const TAB_KEY = IS_FULL ? 'module' : (new Set(TC_DATA.map((t) => t.midCategory)).size >= 2 ? 'midCategory' : 'minorCategory');
+const TAB_LABEL = IS_FULL ? '모듈' : (TAB_KEY === 'midCategory' ? '중분류' : '소분류');
+const groupLabel = (g) => (IS_FULL ? `${g} (${MODULE_NAME[g] || ''})` : g);
 const TC_RESULTS = ['', 'Pass', 'Fail', 'N/A', 'N/T'];
 let currentTab = '전체';
-let filterState = { keyword: '', priority: '', type: '', origin: '' };
+// URL 해시(#결함현황)로 결함현황 탭을 바로 열 수 있게 함 — 대시보드의 "결함 목록 상세보기" 링크가 이 해시를 붙여 연결
+if (decodeURIComponent(location.hash || '').replace(/^#/, '').includes('결함현황')) currentTab = DEFECT_TAB;
+let filterState = { keyword: '', system: '', priority: '', type: '', origin: '' };
 let defectFilterStatus = '전체';
 const selected = new Set();
 let lastFiltered = [];
@@ -369,6 +384,11 @@ function setupFilterBar() {
   const prioritySel = document.getElementById('filterPriority');
   const typeSel = document.getElementById('filterType');
   const originSel = document.getElementById('filterOrigin');
+  const systemSel = document.getElementById('filterSystem');
+  systemSel.hidden = !IS_FULL; // system 필터는 통합 뷰어에서만(기준 뷰어와 동일)
+  [...new Set(TC_DATA.map((t) => t.system))].filter(Boolean).sort().forEach((v) => {
+    systemSel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`);
+  });
   [...new Set(TC_DATA.map((t) => t.priority))].sort().forEach((v) => {
     prioritySel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`);
   });
@@ -380,21 +400,24 @@ function setupFilterBar() {
   originSel.hidden = origins.length === 0; // 레거시 이전 프로젝트(기존/신규 구분)에서만 노출
 
   document.getElementById('searchInput').addEventListener('input', (e) => { filterState.keyword = e.target.value.trim().toLowerCase(); render(); });
+  systemSel.addEventListener('change', (e) => { filterState.system = e.target.value; render(); });
   prioritySel.addEventListener('change', (e) => { filterState.priority = e.target.value; render(); });
   typeSel.addEventListener('change', (e) => { filterState.type = e.target.value; render(); });
   originSel.addEventListener('change', (e) => { filterState.origin = e.target.value; render(); });
   document.getElementById('btnResetFilter').addEventListener('click', () => {
-    filterState = { keyword: '', priority: '', type: '', origin: '' };
+    filterState = { keyword: '', system: '', priority: '', type: '', origin: '' };
     document.getElementById('searchInput').value = '';
-    prioritySel.value = ''; typeSel.value = ''; originSel.value = '';
+    systemSel.value = ''; prioritySel.value = ''; typeSel.value = ''; originSel.value = '';
     render();
   });
 }
 
 function render() {
   const tabsEl = document.getElementById('tabs');
-  const subs = ['전체', ...new Set(TC_DATA.map((t) => t[TAB_KEY])), DEFECT_TAB];
-  tabsEl.innerHTML = subs.map((s) => `<button class="tab-btn ${s === currentTab ? 'active' : ''} ${s === DEFECT_TAB ? 'tab-defect' : ''}" data-tab="${esc(s)}">${esc(s)}</button>`).join('');
+  const groups = IS_FULL ? MODULE_CODES : [...new Set(TC_DATA.map((t) => t[TAB_KEY]))];
+  const subs = ['전체', ...groups, DEFECT_TAB];
+  const tabText = (s) => (IS_FULL && groups.includes(s) ? `${s} (${TC_DATA.filter((t) => t.module === s).length})` : s); // 통합 뷰어: 모듈 탭에 건수 표시
+  tabsEl.innerHTML = subs.map((s) => `<button class="tab-btn ${s === currentTab ? 'active' : ''} ${s === DEFECT_TAB ? 'tab-defect' : ''}" data-tab="${esc(s)}">${esc(tabText(s))}</button>`).join('');
   tabsEl.querySelectorAll('.tab-btn').forEach((b) => b.onclick = () => { currentTab = b.dataset.tab; render(); });
 
   const defectMode = currentTab === DEFECT_TAB;
@@ -412,6 +435,7 @@ function render() {
     filtered = filtered.filter((t) => (t.tcId + ' ' + t.item).toLowerCase().includes(kw));
     filtered = [...filtered].sort((a, b) => isSecondaryMatch(a, kw) - isSecondaryMatch(b, kw));
   }
+  if (filterState.system) filtered = filtered.filter((t) => t.system === filterState.system);
   if (filterState.priority) filtered = filtered.filter((t) => t.priority === filterState.priority);
   if (filterState.type) filtered = filtered.filter((t) => t.type === filterState.type);
   if (filterState.origin) filtered = filtered.filter((t) => t.origin === filterState.origin);
@@ -421,9 +445,9 @@ function render() {
   document.getElementById('kpiTotal').textContent = TC_DATA.length;
   ['P1', 'P2', 'P3'].forEach((p) => { document.getElementById('kpi' + p).textContent = TC_DATA.filter((t) => t.priority === p).length; });
 
-  const mids = [...new Set(TC_DATA.map((t) => t[TAB_KEY]))];
+  const mids = IS_FULL ? MODULE_CODES : [...new Set(TC_DATA.map((t) => t[TAB_KEY]))];
   document.getElementById('statsBody').innerHTML =
-    mids.map((m) => statRow(m, TC_DATA.filter((t) => t[TAB_KEY] === m))).join('') + statRow('합계', TC_DATA, 'stats-total');
+    mids.map((m) => statRow(groupLabel(m), TC_DATA.filter((t) => t[TAB_KEY] === m))).join('') + statRow(IS_FULL ? '전체 합계' : '합계', TC_DATA, 'stats-total');
 
   const kw = filterState.keyword;
   document.getElementById('tcBody').innerHTML = filtered.map((t) => `
@@ -432,6 +456,7 @@ function render() {
       <td class="center">${esc(t.displayNo)}</td>
       <td>${hl(t.tcId, kw)}</td>
       <td class="center"><span class="badge ${t.system === 'BO' ? 'P1' : 'P3'}">${esc(t.system || 'FO')}</span></td>
+      ${IS_FULL ? `<td class="center"><span class="badge mod">${esc(t.module)}</span></td>` : ''}
       <td>${esc(t.majorCategory)}</td>
       <td>${esc(t.midCategory)}</td>
       <td>${esc(t.minorCategory || '')}</td>
@@ -472,9 +497,10 @@ function render() {
   updateRunState();
 }
 
+let runInProgress = false;
 function updateRunState() {
   const btn = document.getElementById('btnRun');
-  btn.disabled = selected.size === 0;
+  btn.disabled = selected.size === 0 || runInProgress;
   btn.textContent = selected.size ? `▶ 선택 TC 테스트 실행 (${selected.size}건)` : '▶ 선택 TC 테스트 실행';
   const all = document.getElementById('chkAll');
   all.checked = lastFiltered.length > 0 && lastFiltered.every((t) => selected.has(t.tcId));
@@ -483,7 +509,17 @@ function updateRunState() {
 }
 
 function resultSelect(t) {
-  return `<select class="result-select" data-val="${esc(t.result || '')}">${TC_RESULTS.map((o) => `<option value="${o}" ${t.result === o ? 'selected' : ''}>${o || '미실행'}</option>`).join('')}</select>`;
+  const sel = `<select class="result-select" data-val="${esc(t.result || '')}">${TC_RESULTS.map((o) => `<option value="${o}" ${t.result === o ? 'selected' : ''}>${o || '미실행'}</option>`).join('')}</select>`;
+  // [추가 2026-10-02] 재검증(2차 이상) 회차 표시 — resultHistory가 있으면(과거 회차가 보관돼 있으면)
+  // 현재 결과가 몇 차 결과인지 배지로 보여주고, hover 시 과거 회차 이력을 확인할 수 있습니다.
+  const hist = t.resultHistory || [];
+  if (!hist.length) return sel;
+  const round = hist.length + 1;
+  // [수정 2026-10-02] 과거 회차만 나열해 "N차인데 N-1개만 보인다"는 혼란이 있었음(사용자 리포트) —
+  // 현재 회차도 "(현재)" 표시로 함께 나열해 전체 N개가 한 번에 보이도록 수정.
+  const rows = hist.map((h) => `${h.round}차(${h.date}): ${h.result || '미실행'}${h.remark ? ' — ' + h.remark : ''}`);
+  rows.push(`${round}차(${t.resultDate || '날짜 미상'}): ${t.result || '미실행'}${t.remark ? ' — ' + t.remark : ''} (현재)`);
+  return `${sel}<span class="result-round" title="${esc(rows.join('\n'))}">${round}차</span>`;
 }
 
 function handleThumbError(img) {
@@ -614,11 +650,27 @@ function openDefectModal(def) {
 // ── 헤더/모달 구성 (META·EXTRA_MODALS 기반) ──
 function buildChrome() {
   const last = (META.changeHistory || []).slice(-1)[0];
-  document.title = `${META.project} QA TC 뷰어 - ${META.moduleName} ${META.module}`;
-  document.getElementById('pageTitle').innerHTML =
-    `${esc(META.project)} QA TC 뷰어 <span style="color:var(--accent);">v${esc(META.version)}</span> — ${esc(META.moduleName)} · ${esc(META.module)}`;
-  document.getElementById('pageSub').textContent =
-    `Interactive TC Viewer · 총 ${TC_DATA.length}건 · v${META.version}` + (last ? ` · 최근 변경: ${last.summary}` : '');
+  if (IS_FULL) {
+    document.title = `${META.project} QA TC 뷰어 - 전체 통합`;
+    document.getElementById('headerBadge').textContent = '🗂️';
+    document.getElementById('pageTitle').innerHTML =
+      `${esc(META.project)} QA TC 뷰어 <span style="color:var(--accent);">Full v${esc(META.version)}</span> — 전체 통합`;
+    document.getElementById('pageSub').textContent =
+      `${MODULE_CODES.length}개 모듈 통합 · 총 ${TC_DATA.length}건 · ${(META.sourceModules || []).join(' / ')}`;
+    // 읽기 중심 스냅샷: 결함 파일 저장/연결 툴바는 두지 않고, 설명 문구를 통합 뷰어용으로 표시
+    document.getElementById('defectFileToolbar').style.display = 'none';
+    document.getElementById('defectFootnote').textContent = '※ 결함 행 클릭 시 스크린샷을 확인할 수 있습니다. "관련 TC ID"를 클릭하면 해당 TC의 모듈 탭으로 이동 후 목록 위치로 스크롤됩니다.';
+    const fn = document.getElementById('fullNote');
+    fn.hidden = false;
+    fn.innerHTML = `※ 이 뷰어는 ${esc(MODULE_CODES.join('/'))} ${MODULE_CODES.length}개 모듈 파일을 하나로 합쳐 보여주는 <b>통합(Full) 뷰어</b>입니다. 실제 편집·버전관리는 각 모듈별 개별 파일(<code>${esc(META.project)}_TC_{모듈코드}.json/html</code>)에서 이루어지며, 이 뷰어는 그 결과를 한눈에 조회하기 위한 읽기 중심 뷰입니다. 모듈 파일이 변경될 때마다 재생성됩니다.<br>`;
+  } else {
+    document.getElementById('thModule').remove();
+    document.title = `${META.project} QA TC 뷰어 - ${META.moduleName} ${META.module}`;
+    document.getElementById('pageTitle').innerHTML =
+      `${esc(META.project)} QA TC 뷰어 <span style="color:var(--accent);">v${esc(META.version)}</span> — ${esc(META.moduleName)} · ${esc(META.module)}`;
+    document.getElementById('pageSub').textContent =
+      `Interactive TC Viewer · 총 ${TC_DATA.length}건 · v${META.version}` + (last ? ` · 최근 변경: ${last.summary}` : '');
+  }
   // 필수 산출물 누락 경고(렌더러가 META.missingRequired 로 전달) — 헤더 부제 옆에 빨간 글씨로 표시
   if ((META.missingRequired || []).length) {
     const warn = document.createElement('span');
@@ -637,8 +689,9 @@ function buildChrome() {
   if (META.resultsIndex) document.getElementById('linkResults').hidden = false;
 
   // 변경 이력: 데모사이트 뷰어와 같이 하단 각주에 한 줄로 표시(오래된 순)
-  document.getElementById('versionNote').textContent = 'meta.changeHistory: ' +
-    (META.changeHistory || []).map((h) => `v${h.version}(${h.date}) ${h.summary}`).join(' / ');
+  document.getElementById('versionNote').textContent = IS_FULL
+    ? `통합 뷰어 생성 (${(META.sourceModules || []).join(', ')}) — 총 ${TC_DATA.length}건`
+    : 'meta.changeHistory: ' + (META.changeHistory || []).map((h) => `v${h.version}(${h.date}) ${h.summary}`).join(' / ');
 
   const btns = document.getElementById('extraButtons');
   const mods = document.getElementById('extraModals');
@@ -671,6 +724,13 @@ document.getElementById('chkAll').onchange = (e) => {
 
 // ── 선택 TC 테스트 실행 (대시보드 WebSocket runTests, scope=custom) ──
 // 대시보드(4000/4001 등)를 통해 열었을 때만 동작한다. 파일(file://)로 열면 안내 문구만 표시한다.
+let activeRunWs = null;
+const btnRunCancel = document.getElementById('btnRunCancel');
+function setRunActive(active) {
+  runInProgress = active;
+  btnRunCancel.hidden = !active;
+  updateRunState();
+}
 document.getElementById('btnRun').addEventListener('click', () => {
   if (!selected.size) return;
   const panel = document.getElementById('runPanel');
@@ -678,6 +738,8 @@ document.getElementById('btnRun').addEventListener('click', () => {
   const log = (s) => { panel.textContent += s + '\n'; panel.scrollTop = panel.scrollHeight; };
   if (location.protocol === 'file:') { log('[오류] 대시보드를 통해 이 뷰어를 열어야 실행할 수 있습니다 (파일로 직접 연 상태에서는 실행 불가).'); return; }
   const ws = new WebSocket((location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/ws/chat');
+  activeRunWs = ws;
+  setRunActive(true);
   ws.onopen = () => ws.send(JSON.stringify({ type: 'runTests', project: PROJECT, scope: 'custom', tcIds: [...selected] }));
   ws.onmessage = (ev) => {
     const m = JSON.parse(ev.data);
@@ -685,15 +747,60 @@ document.getElementById('btnRun').addEventListener('click', () => {
     else if (m.type === 'queueModuleStart') log('[모듈 시작] ' + m.moduleCode);
     else if (m.type === 'queueLog') log(m.line);
     else if (m.type === 'queueModuleDone') log('[모듈 완료] ' + m.moduleCode);
-    else if (m.type === 'queueError') { log('[오류] ' + m.error); ws.close(); }
-    else if (m.type === 'queueDone') { log('[전체 완료]'); const n = document.getElementById('runNotice'); n.dataset.keep = 'block'; n.style.display = 'block'; ws.close(); }
+    else if (m.type === 'queueError') { log('[오류] ' + m.error); ws.close(); activeRunWs = null; setRunActive(false); }
+    else if (m.type === 'queueDone') { log(m.cancelled ? '[중단됨]' : '[전체 완료]'); const n = document.getElementById('runNotice'); n.dataset.keep = 'block'; n.style.display = 'block'; ws.close(); activeRunWs = null; setRunActive(false); }
   };
-  ws.onerror = () => log('[오류] WebSocket 연결 실패');
+  ws.onerror = () => { log('[오류] WebSocket 연결 실패'); activeRunWs = null; setRunActive(false); };
 });
+btnRunCancel.addEventListener('click', () => {
+  document.getElementById('runPanel').textContent += '[중단 요청을 보냈습니다…]\n';
+  if (activeRunWs && activeRunWs.readyState === WebSocket.OPEN) {
+    activeRunWs.send(JSON.stringify({ type: 'cancelTests', project: PROJECT }));
+    return;
+  }
+  // [추가 2026-10-02] 새로고침으로 재연결된 뒤에는(아래 복원 로직) 이 페이지가 연 WebSocket이
+  // 없으므로, 취소 메시지 한 번 보내기 위한 짧은 연결을 새로 엽니다(서버는 project 기준으로
+  // 실행을 찾으므로 실행을 시작한 소켓과 같을 필요가 없습니다).
+  const cancelWs = new WebSocket((location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/ws/chat');
+  cancelWs.onopen = () => { cancelWs.send(JSON.stringify({ type: 'cancelTests', project: PROJECT })); cancelWs.close(); };
+});
+
+// ── 새로고침 재연결 시 진행 중이던 실행 상태 복원 (2026-10-02 추가) ──
+// testQueueRuns는 서버 쪽 전역 상태라 WebSocket 연결과 무관하게 완료 전까지 유지됩니다 —
+// 새로고침해도 테스트 자체는 계속 돌지만, 이 페이지는 그 사실을 몰라 "유휴" 상태로 보였습니다
+// (사용자 리포트). 로드 시 한 번 확인하고, 진행 중이면 완료될 때까지 주기적으로 재확인합니다.
+let runRecoveryTimer = null;
+function pollRunRecovery() {
+  runRecoveryTimer = setTimeout(async () => {
+    runRecoveryTimer = null;
+    let running = false;
+    try {
+      const res = await fetch(`/api/${encodeURIComponent(PROJECT)}/test-queue/status`);
+      running = !!(await res.json()).running;
+    } catch { /* 네트워크 일시 오류 — 다음 주기에 재시도 */ }
+    if (running) { pollRunRecovery(); return; }
+    document.getElementById('runPanel').textContent += '[완료] 새로고침 전 시작된 실행이 끝났습니다 — 최신 결과는 TC/defects.json에 반영되어 있습니다.\n';
+    const n = document.getElementById('runNotice'); n.dataset.keep = 'block'; n.style.display = 'block';
+    setRunActive(false);
+  }, 4000);
+}
+if (location.protocol !== 'file:') {
+  fetch(`/api/${encodeURIComponent(PROJECT)}/test-queue/status`)
+    .then((r) => r.json())
+    .then((data) => {
+      if (!data.running) return;
+      const panel = document.getElementById('runPanel');
+      panel.style.display = 'block'; panel.dataset.keep = 'block';
+      panel.textContent += '[진행 중] 새로고침 전 시작된 실행이 아직 진행 중입니다 — 과거 로그는 다시 볼 수 없지만, 완료되면 이 창에 자동으로 표시됩니다.\n';
+      setRunActive(true);
+      pollRunRecovery();
+    })
+    .catch(() => {});
+}
 
 // ── 다운로드 / 저장 ──
 function buildSummaryRows() {
-  const mids = [...new Set(TC_DATA.map((t) => t[TAB_KEY]))];
+  const mids = IS_FULL ? MODULE_CODES : [...new Set(TC_DATA.map((t) => t[TAB_KEY]))];
   return mids.map((m) => {
     const items = TC_DATA.filter((t) => t[TAB_KEY] === m);
     const total = items.length;
@@ -701,13 +808,13 @@ function buildSummaryRows() {
     const none = items.filter((t) => !t.result).length;
     const executed = total - none;
     const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0) + '%';
-    return { [TAB_LABEL]: m, '전체': total, 'Pass': c('Pass'), 'Fail': c('Fail'), 'N/A': c('N/A'), 'N/T': c('N/T'), '미실행': none,
+    return { [TAB_LABEL]: groupLabel(m), '전체': total, 'Pass': c('Pass'), 'Fail': c('Fail'), 'N/A': c('N/A'), 'N/T': c('N/T'), '미실행': none,
       '수행율': pct(executed, total), 'Pass율': pct(c('Pass'), executed), 'Fail율': pct(c('Fail'), executed) };
   });
 }
 function tcExportRows() {
   return TC_DATA.map((t) => ({
-    'No.': t.displayNo, 'TC ID': t.tcId, 'system': t.system, '대분류': t.majorCategory, '중분류': t.midCategory,
+    'No.': t.displayNo, 'TC ID': t.tcId, 'system': t.system, ...(IS_FULL ? { '모듈': t.module } : {}), '대분류': t.majorCategory, '중분류': t.midCategory,
     '소분류': t.minorCategory, '플랫폼': t.platform, '유형': t.type, '테스트 항목': t.item, '기준문서': t.baseDoc,
     '우선순위': t.priority, '테스트 데이터': t.testData, '사전조건': t.precondition, '테스트 수행 절차': t.steps,
     '기대 결과': t.expected, '실행결과': t.result, '담당자': t.assignee, '이슈내용': t.issueSummary,
@@ -724,7 +831,7 @@ function downloadJson(content, filename) { downloadBlob(new Blob([content], { ty
 
 
 document.getElementById('btnXlsx').onclick = () => {
-  if (typeof XLSX === 'undefined') { alert('XLSX 라이브러리를 불러오지 못했습니다(인터넷 연결 필요). CSV 다운로드를 이용하세요.'); return; }
+  if (typeof XLSX === 'undefined') { alert('XLSX 라이브러리를 불러오지 못했습니다(인터넷 연결 필요). JSON 저장을 이용하세요.'); return; }
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(buildSummaryRows()), 'Summary');
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(tcExportRows()), 'TC');
@@ -752,14 +859,19 @@ function applyLoadedTcItems(items) {
   let n = 0;
   items.forEach((li) => {
     const t = TC_DATA.find((x) => x.tcId === li.tcId);
-    if (t) { t.result = li.result; t.assignee = li.assignee; t.issueSummary = li.issueSummary; t.issueLink = li.issueLink; t.remark = li.remark; n++; }
+    if (t) { t.result = li.result; t.assignee = li.assignee; t.issueSummary = li.issueSummary; t.issueLink = li.issueLink; t.remark = li.remark; t.resultHistory = li.resultHistory; t.resultDate = li.resultDate; n++; }
   });
   render();
   return n;
 }
 
 document.getElementById('btnJsonSave').onclick = async () => {
-  const out = { meta: { project: META.project, module: META.module, moduleName: META.moduleName, version: META.version, changeHistory: META.changeHistory }, items: TC_DATA };
+  const out = {
+    meta: IS_FULL
+      ? { project: META.project, module: META.module, moduleName: META.moduleName, version: META.version, generatedAt: META.generatedAt, sourceModules: META.sourceModules, note: META.note }
+      : { project: META.project, module: META.module, moduleName: META.moduleName, version: META.version, changeHistory: META.changeHistory },
+    items: TC_DATA,
+  };
   const content = JSON.stringify(out, null, 2);
   if (tcFileHandle) {
     try { await writeToHandle(tcFileHandle, content); alert('저장 완료: ' + tcFileHandle.name); return; }

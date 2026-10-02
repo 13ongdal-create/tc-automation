@@ -1232,7 +1232,37 @@ el.btnTcUploadSubmit.addEventListener('click', async () => {
 // ── ▶ 테스트 실행 큐 (zero-token — claude 미사용, Playwright 직접 실행) ──────────────────
 let tqModules = []; // 현재 프로젝트에서 실행 가능한(자동화 코드가 있는) 모듈 목록
 let tqRunning = false;
+let tqPollTimer = null;
 const tqRows = {}; // moduleCode -> 큐 목록의 행 엘리먼트
+
+// [추가 2026-10-02] scheduleChatPoll과 동일한 패턴 — 새로고침으로 재연결된 뒤에도 서버에서
+// 여전히 진행 중인 실행이 끝날 때까지 주기적으로 상태를 확인하고, 끝나면 화면을 최신화합니다.
+function scheduleTqPoll(project) {
+  if (tqPollTimer) clearTimeout(tqPollTimer);
+  tqPollTimer = setTimeout(async () => {
+    tqPollTimer = null;
+    if (el.projectSelect.value !== project) return; // 그 사이 다른 프로젝트로 전환됨 — 중단
+    const stillRunning = await fetchTqRunning(project);
+    if (stillRunning) {
+      scheduleTqPoll(project);
+      return;
+    }
+    tqSetRunning(false);
+    el.tqStatus.textContent = '대기 중 (새로고침 전 실행이 완료됨 — 최신 결과 반영)';
+    loadDefects(project);
+    loadKpi(project);
+  }, 4000);
+}
+
+async function fetchTqRunning(project) {
+  try {
+    const res = await fetch(`/api/${encodeURIComponent(project)}/test-queue/status`);
+    const data = await res.json();
+    return !!data.running;
+  } catch {
+    return false;
+  }
+}
 
 /**
  * 현재 선택 조합 기준으로 "이 값을 고르면 몇 건인지"(facets)를 반영해, 골라도 0건인 선택지는
@@ -1258,6 +1288,7 @@ function applyTqFacets(facets) {
 });
 
 async function loadTestQueueModules(project) {
+  if (tqPollTimer) { clearTimeout(tqPollTimer); tqPollTimer = null; }
   tqModules = [];
   el.tqModule.innerHTML = '<option value="">불러오는 중…</option>';
   try {
@@ -1280,7 +1311,14 @@ async function loadTestQueueModules(project) {
   el.tqModuleQueue.innerHTML = '';
   el.tqLog.hidden = true;
   el.tqLog.textContent = '';
-  tqSetRunning(false);
+  // [추가 2026-10-02] 새로고침 전 시작한 실행이 서버에 여전히 진행 중일 수 있음 — 복원해 폴링 시작.
+  if (await fetchTqRunning(project)) {
+    tqSetRunning(true);
+    el.tqStatus.textContent = '실행 중… (새로고침 전 시작된 실행 — 로그는 다시 볼 수 없지만 완료되면 자동 반영됩니다)';
+    scheduleTqPoll(project);
+  } else {
+    tqSetRunning(false);
+  }
   refreshTqPreview();
 }
 

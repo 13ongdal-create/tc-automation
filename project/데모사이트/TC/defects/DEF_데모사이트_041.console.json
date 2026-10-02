@@ -1,0 +1,9 @@
+{
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "[uncaught exception] Request failed with status code 500"
+  ],
+  "failedRequests": [
+    "500 http://192.168.10.116:30280/api/v1.0/agent/manage/agents?pageNum=1&rowsPerPage=30"
+  ]
+}

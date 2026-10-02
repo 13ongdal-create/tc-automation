@@ -444,7 +444,8 @@ TC 수행에 필요한 구체적 입력값을 별도 컬럼으로 분리하여 �
 ## 14. Phase 4 — HTML Interactive Viewer 스펙
 
 <!-- [추가 2026-10-02] 뷰어를 매번 직접 작성하던 방식을 공용 템플릿 방식으로 전환(AGENTS.md 10항). 이 절의 스펙은 아래 템플릿이 구현하며 기존 스펙 문구는 변경하지 않음. -->
-> **뷰어는 직접 작성하지 않고 공용 템플릿으로 생성합니다** — `node _shared/viewer/render-viewer.js "project/{프로젝트명}" {모듈코드} "<출력 HTML>"` (AGENTS.md 10항, `_shared\viewer\README.md`). 이 절의 스펙은 `_shared\viewer\viewer.template.html`에 구현되어 있으며, 프로젝트별 차이는 데이터(META/EXTRA_MODALS)로만 표현합니다.
+<!-- [수정 전 2026-10-02] > **뷰어는 직접 작성하지 않고 공용 템플릿으로 생성합니다** — `node _shared/viewer/render-viewer.js "project/{프로젝트명}" {모듈코드} "<출력 HTML>"` (AGENTS.md 10항, `_shared\viewer\README.md`). 이 절의 스펙은 `_shared\viewer\viewer.template.html`에 구현되어 있으며, 프로젝트별 차이는 데이터(META/EXTRA_MODALS)로만 표현합니다. -->
+> **뷰어는 직접 작성하지 않고 공용 템플릿으로 생성합니다** — `node _shared/viewer/render-viewer.js "project/{프로젝트명}" {모듈코드} "<출력 HTML>"` (AGENTS.md 10항, `_shared\viewer\README.md`). 이 절의 스펙은 `_shared\viewer\viewer.template.html`에 구현되어 있으며, 프로젝트별 차이는 데이터(META/EXTRA_MODALS)로만 표현합니다. 모듈이 2개 이상이면 통합(Full) 뷰어도 같은 도구로 생성합니다(`… 전체 "<출력 HTML>" --strict`, AGENTS.md 10항).
 
 ### 디자인 테마 (GitHub Dark — 옵션A)
 ```css

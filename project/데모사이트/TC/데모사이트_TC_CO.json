@@ -3,7 +3,7 @@
     "project": "데모사이트",
     "module": "CO",
     "moduleName": "시스템(공통)",
-    "version": 13,
+    "version": 14,
     "changeHistory": [
       {
         "version": 1,
@@ -69,6 +69,11 @@
         "version": 13,
         "date": "2026-09-30",
         "summary": "TC_CO_021, TC_CO_023, TC_CO_026, TC_CO_028, TC_CO_029, TC_CO_030, TC_CO_031, TC_CO_034, TC_CO_036, TC_CO_038, TC_CO_039, TC_CO_040, TC_CO_042, TC_CO_043, TC_CO_044, TC_CO_045, TC_CO_047, TC_CO_048: DEF_데모사이트_011(Admin 로그인 ko-KR 결함)에 막혀 N/T였던 UI/데이터 유형 TC를 미실행으로 초기화 — ko-KR 격리 조치(전역 locale 고정 해제) 이후 더 이상 이 결함에 막히지 않으므로 재실행 대상으로 전환(직전 배치의 기능 유형 23건과 동일 사유, 사용자 요청으로 범위 확대). 실제 Pass/Fail은 다음 테스트 실행 큐 수행 시 반영."
+      },
+      {
+        "version": 14,
+        "date": "2026-10-02",
+        "summary": "results/ 날짜별 스냅샷(2026-08-21, 2026-08-24, 2026-09-29, 2026-10-01, 2026-10-02)에서 과거 실행 이력을 소급 반영 — TC별 resultHistory 재구성(50건, 사용자 요청)"
       }
     ]
   },
@@ -87,16 +92,37 @@
       "steps": "1) 헤더 \"🇰🇷 한국어\" 버튼 클릭",
       "expected": "지원 언어 목록이 드롭다운으로 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "Fail",
       "assignee": "",
-      "issueSummary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
+      "issueSummary": "시스템 > [DEF_007 파급 노이즈로 종결] Failed to load resource: the server responded with a status of 404 (No",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 1,
       "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_024는 완료 처리).",
       "verifyNote": "",
-      "screenName": ""
+      "screenName": "",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_024"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Pass",
+          "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_024는 완료 처리)."
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_002",
@@ -112,16 +138,37 @@
       "steps": "1) 언어선택 드롭다운에서 한국어 외 다른 언어 선택",
       "expected": "화면 텍스트가 선택한 언어로 전환된다",
       "testData": "",
-      "result": "Pass",
+      "result": "Fail",
       "assignee": "",
-      "issueSummary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
+      "issueSummary": "시스템 > [DEF_007 파급 노이즈로 종결] Failed to load resource: the server responded with a status of 404 (No",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 2,
       "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_025는 완료 처리).",
       "verifyNote": "실제 지원 언어 목록 및 전환 범위 확인 필요",
-      "screenName": ""
+      "screenName": "",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_025"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Pass",
+          "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_025는 완료 처리)."
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_003",
@@ -137,16 +184,37 @@
       "steps": "1) 언어 전환 후 브라우저 새로고침(F5)",
       "expected": "새로고침 후에도 전환된 언어가 유지된다",
       "testData": "",
-      "result": "Pass",
+      "result": "Fail",
       "assignee": "",
-      "issueSummary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
+      "issueSummary": "시스템 > [DEF_007 파급 노이즈로 종결] Failed to load resource: the server responded with a status of 404 (No",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 3,
       "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_026는 완료 처리).",
       "verifyNote": "저장 방식(쿠키/localStorage) 확인 필요",
-      "screenName": ""
+      "screenName": "",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_026"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Pass",
+          "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_026는 완료 처리)."
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_004",
@@ -164,14 +232,35 @@
       "testData": "",
       "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "시스템 > 헤더 검색 아이콘 클릭 시 검색창으로 포커스가 이동하지 않음",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 4,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_021)",
       "verifyNote": "",
-      "screenName": ""
+      "screenName": "",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_021)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_021)"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_021)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_005",
@@ -189,14 +278,35 @@
       "testData": "",
       "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "시스템 > 이미지검색 아이콘이 완전히 비기능 상태 (파일선택 다이얼로그 미동작, 업로드해도 무반응)",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 5,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)",
       "verifyNote": "실제 동작 방식 미확인",
-      "screenName": ""
+      "screenName": "",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_006",
@@ -214,14 +324,35 @@
       "testData": "업로드 파일=sample.txt",
       "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 6,
-      "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)",
+      "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020); 관련 결함: DEF_데모사이트_027",
       "verifyNote": "실제 안내 문구 및 허용 확장자 확인 필요",
-      "screenName": ""
+      "screenName": "",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_007",
@@ -239,14 +370,35 @@
       "testData": "업로드 파일=product.jpg",
       "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 7,
-      "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)",
+      "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020); 관련 결함: DEF_데모사이트_027",
       "verifyNote": "실제 이미지 인식/매칭 로직 미확인",
-      "screenName": ""
+      "screenName": "",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_020)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_008",
@@ -262,16 +414,37 @@
       "steps": "1) 헤더 장바구니 아이콘 클릭",
       "expected": "/cart 페이지로 이동한다",
       "testData": "",
-      "result": "N/T",
+      "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "시스템 > Failed to load resource: the server responded with a status of 404 (No",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 8,
-      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)",
+      "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_027",
       "verifyNote": "",
-      "screenName": ""
+      "screenName": "",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_009",
@@ -296,7 +469,28 @@
       "displayNo": 9,
       "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 헤더 메뉴 구성이 기대결과와 불일치 (관련 결함 DEF_데모사이트_027, 신규 유지).",
       "verifyNote": "",
-      "screenName": "메인"
+      "screenName": "메인",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_027"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 헤더 메뉴 구성이 기대결과와 불일치 (관련 결함 DEF_데모사이트_027, 신규 유지)."
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_010",
@@ -321,7 +515,28 @@
       "displayNo": 10,
       "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 모바일 뷰포트에서 반응형 헤더 전환 미구현 (관련 결함 DEF_데모사이트_028, 신규 유지).",
       "verifyNote": "[확인필요] 모바일 헤더 UI 존재 여부 실측 필요",
-      "screenName": ""
+      "screenName": "",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_028"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 모바일 뷰포트에서 반응형 헤더 전환 미구현 (관련 결함 DEF_데모사이트_028, 신규 유지)."
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_011",
@@ -346,7 +561,28 @@
       "displayNo": 11,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_029",
       "verifyNote": "",
-      "screenName": "메인"
+      "screenName": "메인",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_029"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_029"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_012",
@@ -371,7 +607,28 @@
       "displayNo": 12,
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_030",
       "verifyNote": "실제 오프라인 처리 UX 미확인",
-      "screenName": ""
+      "screenName": "",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_030"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_030"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_013",
@@ -396,7 +653,28 @@
       "displayNo": 13,
       "remark": "",
       "verifyNote": "실제 적용 여부 미확인",
-      "screenName": ""
+      "screenName": "",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "Pass",
+          "remark": ""
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Pass",
+          "remark": ""
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Pass",
+          "remark": ""
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_014",
@@ -421,7 +699,28 @@
       "displayNo": 14,
       "remark": "",
       "verifyNote": "",
-      "screenName": ""
+      "screenName": "",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "Pass",
+          "remark": ""
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Pass",
+          "remark": ""
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Pass",
+          "remark": ""
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_015",
@@ -437,16 +736,37 @@
       "steps": "1) 메인(/) 진입\n2) Tab 키로 검색/장바구니/언어선택 버튼 순차 이동",
       "expected": "각 요소에 포커스 시 시각적 포커스 표시(outline 등)가 노출된다",
       "testData": "",
-      "result": "Pass",
+      "result": "Fail",
       "assignee": "",
-      "issueSummary": "품질·비기능 > Failed to load resource: the server responded with a status of 404 (No",
+      "issueSummary": "품질·비기능 > [DEF_007 파급 노이즈로 종결] Failed to load resource: the server responded with a status of 404 (No",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 15,
       "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_031는 완료 처리).",
       "verifyNote": "",
-      "screenName": "메인"
+      "screenName": "메인",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_031"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Pass",
+          "remark": "2026-09-29 재검증: 이전 Fail은 DEF_007(전역 배너 href 프로토콜 누락) 파급 노이즈로 확인됨. 본연의 검증 대상 기능은 정상 동작 확인(관련 결함 DEF_데모사이트_031는 완료 처리)."
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_016",
@@ -464,14 +784,35 @@
       "testData": "",
       "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "메인 > Failed to load resource: the server responded with a status of 404 (No",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 16,
-      "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_022)",
+      "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_022); 관련 결함: DEF_데모사이트_036",
       "verifyNote": "[확인필요] 일부 이미지 alt가 상품명이 아닌 파일명으로 노출됨(TC_SYS_017 참조)",
-      "screenName": "메인"
+      "screenName": "메인",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_022)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_022)"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_022)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_017",
@@ -489,14 +830,35 @@
       "testData": "관측 alt=\"df23cd0d-c7f9-4611-abaf-21353e05b873.png\"",
       "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "전시 > 배너/상품 이미지 alt 텍스트가 상품명 대신 원본 파일명(UUID)으로 노출됨",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 17,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_022)",
       "verifyNote": "",
-      "screenName": "메인"
+      "screenName": "메인",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_022)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_022)"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_022)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_018",
@@ -514,14 +876,35 @@
       "testData": "관측 alt=\"H&amp;amp;amp;amp;M\"",
       "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "전시 > 브랜드 로고 alt 텍스트의 앰퍼샌드(&)가 4중으로 중복 인코딩되어 노출됨",
       "issueLink": "",
       "system": "FO",
       "origin": "기존",
       "displayNo": 18,
       "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_023)",
       "verifyNote": "",
-      "screenName": "메인"
+      "screenName": "메인",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_023)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_023)"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "결함 확인용 TC (관련 결함: DEF_데모사이트_023)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_019",
@@ -546,7 +929,28 @@
       "displayNo": 19,
       "remark": "",
       "verifyNote": "",
-      "screenName": "로그인"
+      "screenName": "로그인",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "Pass",
+          "remark": ""
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Pass",
+          "remark": ""
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Pass",
+          "remark": ""
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_020",
@@ -571,7 +975,28 @@
       "displayNo": 20,
       "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 강제 다크 컬러스킴 적용해도 배경 미전환 (관련 결함 DEF_데모사이트_032, 신규 유지).",
       "verifyNote": "다크모드 지원 여부 자체가 미확인 — 미지원 시 라이트 테마 고정 노출이 정상",
-      "screenName": "메인"
+      "screenName": "메인",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007)"
+        },
+        {
+          "round": 2,
+          "date": "2026-09-29",
+          "result": "Fail",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_007); 관련 결함: DEF_데모사이트_032"
+        },
+        {
+          "round": 3,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "2026-09-29 재검증: 콘솔 404 노이즈(DEF_007)와 별개로 실제 결함 확인 — 강제 다크 컬러스킴 적용해도 배경 미전환 (관련 결함 DEF_데모사이트_032, 신규 유지)."
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -586,7 +1011,7 @@
       "steps": "1) Admin 워크플로우관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) ID/워크플로우 명칭/유형 코드/설명/사용여부/등록일 컬럼과 함께 목록이 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -596,7 +1021,28 @@
       "displayNo": 21,
       "tcId": "TC_CO_021",
       "verifyNote": "",
-      "screenName": "Admin 워크플로우관리"
+      "screenName": "Admin 워크플로우관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -611,7 +1057,7 @@
       "steps": "1) Admin 워크플로우관리 진입 2) \"신규 등록\" 버튼 클릭",
       "expected": "1) 2) 신규 워크플로우 등록 화면(폼)으로 이동한다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -621,7 +1067,28 @@
       "displayNo": 22,
       "tcId": "TC_CO_022",
       "verifyNote": "",
-      "screenName": "Admin 워크플로우관리"
+      "screenName": "Admin 워크플로우관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -636,7 +1103,7 @@
       "steps": "1) Admin 모니터링 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) \"진행 중 PO 목록\"이 0건으로 노출된다(PO No/Workflow Name/Version Id/Node Name/Status Code 컬럼 존재)",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -646,7 +1113,28 @@
       "displayNo": 23,
       "tcId": "TC_CO_023",
       "verifyNote": "",
-      "screenName": "Admin 모니터링"
+      "screenName": "Admin 모니터링",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -661,7 +1149,7 @@
       "steps": "1) Admin 공통코드관리 진입 2) 대분류코드 입력 후 \"조회\" 클릭",
       "expected": "1) 2) 입력한 대분류코드에 해당하는 공통코드만 목록에 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -671,7 +1159,28 @@
       "displayNo": 24,
       "tcId": "TC_CO_024",
       "verifyNote": "",
-      "screenName": "Admin 공통코드관리"
+      "screenName": "Admin 공통코드관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -686,7 +1195,7 @@
       "steps": "1) Admin 공통코드관리 진입 2) \"신규코드 등록\" 버튼 클릭",
       "expected": "1) 2) 신규 공통코드 등록 화면(폼)으로 이동한다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -696,7 +1205,28 @@
       "displayNo": 25,
       "tcId": "TC_CO_025",
       "verifyNote": "",
-      "screenName": "Admin 공통코드관리"
+      "screenName": "Admin 공통코드관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -711,7 +1241,7 @@
       "steps": "1) Admin 다국어관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 메시지 키/메시지 그룹 코드/설명/사용여부/작성자/등록일시 컬럼과 함께 목록이 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -721,7 +1251,28 @@
       "displayNo": 26,
       "tcId": "TC_CO_026",
       "verifyNote": "",
-      "screenName": "Admin 다국어관리"
+      "screenName": "Admin 다국어관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -736,7 +1287,7 @@
       "steps": "1) Admin 다국어관리 진입 2) 그룹 코드 선택 후 \"조회\" 클릭",
       "expected": "1) 2) 선택한 그룹 코드에 해당하는 메시지만 목록에 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -746,7 +1297,28 @@
       "displayNo": 27,
       "tcId": "TC_CO_027",
       "verifyNote": "",
-      "screenName": "Admin 다국어관리"
+      "screenName": "Admin 다국어관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -761,17 +1333,38 @@
       "steps": "1) Admin 프로그램관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) \"데이터가 없습니다\" 문구와 함께 조회권한/저장권한/엑셀권한/삭제권한/수정권한 컬럼 구조가 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "Admin 프로그램관리 > Error: expect(locator).toBeVisible() failed",
       "issueLink": "",
       "origin": "신규",
       "system": "BO",
-      "remark": "",
+      "remark": "관련 결함: DEF_데모사이트_037",
       "displayNo": 28,
       "tcId": "TC_CO_028",
       "verifyNote": "",
-      "screenName": "Admin 프로그램관리"
+      "screenName": "Admin 프로그램관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -786,7 +1379,7 @@
       "steps": "1) Admin 메뉴관리 진입 2) 메뉴그룹 선택 후 \"조회\" 클릭",
       "expected": "1) 2) 선택한 메뉴그룹의 메뉴 트리와 메뉴코드/메뉴아이콘/폴더여부/권한코드별(조회/저장/엑셀/삭제/수정) 설정 필드가 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -796,7 +1389,28 @@
       "displayNo": 29,
       "tcId": "TC_CO_029",
       "verifyNote": "",
-      "screenName": "Admin 메뉴관리"
+      "screenName": "Admin 메뉴관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -811,7 +1425,7 @@
       "steps": "1) Admin 화면관리 진입 2) \"Professional Mint\" 프리셋 선택 3) \"저장 및 적용\" 클릭",
       "expected": "1) 2) LIGHT DEFAULT/DARK MODE/MINT FRESH/Professional Mint/Elegant Indigo/Warm Sunset/Soft Pastel/Midnight Emerald/System Dark 프리셋이 노출되고 선택 시 미리보기가 변경된다 3) 저장 시 실제 Admin 화면 테마에 적용된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -821,7 +1435,28 @@
       "displayNo": 30,
       "tcId": "TC_CO_030",
       "verifyNote": "Front 사이트에도 영향을 주는지 여부는 미확인",
-      "screenName": "Admin 화면관리"
+      "screenName": "Admin 화면관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -836,17 +1471,38 @@
       "steps": "1) Admin 화면관리 진입 2) 폰트 크기 \"14PX\" 선택, 버튼 스타일 \"PILL\" 선택",
       "expected": "1) 2) 선택한 옵션이 미리보기 영역에 즉시 반영된다",
       "testData": "",
-      "result": "",
+      "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "Admin 화면관리 > Error: expect(locator).toBeVisible() failed",
       "issueLink": "",
       "origin": "신규",
       "system": "BO",
-      "remark": "",
+      "remark": "관련 결함: DEF_데모사이트_038",
       "displayNo": 31,
       "tcId": "TC_CO_031",
       "verifyNote": "",
-      "screenName": "Admin 화면관리"
+      "screenName": "Admin 화면관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -861,7 +1517,7 @@
       "steps": "1) Admin 대시보드관리 진입 2) \"총 방문자수\" 위젯 숨김으로 전환 3) \"적용하기\" 클릭",
       "expected": "1) 2) 3) 표시 24개/숨김 1개로 카운트가 갱신되고, 실제 대시보드 홈 화면에서 해당 위젯이 숨겨진다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -871,7 +1527,28 @@
       "displayNo": 32,
       "tcId": "TC_CO_032",
       "verifyNote": "[확인필요] 실제 대시보드 홈 화면 반영 여부 미검증",
-      "screenName": "Admin 대시보드관리"
+      "screenName": "Admin 대시보드관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -886,7 +1563,7 @@
       "steps": "1) Admin 대시보드관리 진입 2) \"초기화\" 버튼 클릭",
       "expected": "1) 2) 위젯 순서와 표시/숨김 상태가 기본값으로 복원된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -896,7 +1573,28 @@
       "displayNo": 33,
       "tcId": "TC_CO_033",
       "verifyNote": "",
-      "screenName": "Admin 대시보드관리"
+      "screenName": "Admin 대시보드관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -911,7 +1609,7 @@
       "steps": "1) Admin 권한관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) 권한코드/권한명/기본권한여부/사용여부 컬럼과 함께 권한그룹 목록이 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -921,7 +1619,28 @@
       "displayNo": 34,
       "tcId": "TC_CO_034",
       "verifyNote": "",
-      "screenName": "Admin 권한관리"
+      "screenName": "Admin 권한관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -936,7 +1655,7 @@
       "steps": "1) Admin 권한관리 진입 2) \"신규 등록\" 버튼 클릭",
       "expected": "1) 2) 신규 권한그룹 등록 화면(폼)으로 이동한다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -946,7 +1665,28 @@
       "displayNo": 35,
       "tcId": "TC_CO_035",
       "verifyNote": "",
-      "screenName": "Admin 권한관리"
+      "screenName": "Admin 권한관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -961,17 +1701,38 @@
       "steps": "1) Admin 관리자관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) Login ID/사용자명/직급/직위/Email/사용여부 컬럼과 함께 관리자 목록이 노출된다(devel 계정 포함 여부 확인)",
       "testData": "",
-      "result": "",
+      "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "Admin 관리자관리 > Error: expect(locator).toBeVisible() failed",
       "issueLink": "",
       "origin": "신규",
       "system": "BO",
-      "remark": "",
+      "remark": "관련 결함: DEF_데모사이트_039",
       "displayNo": 36,
       "tcId": "TC_CO_036",
       "verifyNote": "",
-      "screenName": "Admin 관리자관리"
+      "screenName": "Admin 관리자관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -986,7 +1747,7 @@
       "steps": "1) Admin 관리자관리 진입 2) \"신규 등록\" 버튼 클릭",
       "expected": "1) 2) 신규 관리자 계정 등록 화면(폼)으로 이동한다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -996,7 +1757,28 @@
       "displayNo": 37,
       "tcId": "TC_CO_037",
       "verifyNote": "신규 관리자 등록 시 권한 부여 절차/승인 프로세스 존재 여부 미확인",
-      "screenName": "Admin 관리자관리"
+      "screenName": "Admin 관리자관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -1011,7 +1793,7 @@
       "steps": "1) Admin 권한별메뉴 진입 2) 권한그룹에서 임의 권한코드 선택",
       "expected": "1) 2) 선택한 권한코드가 각 메뉴별로 보유한 조회/저장/엑셀/삭제/수정 권한 여부가 매트릭스로 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1021,7 +1803,28 @@
       "displayNo": 38,
       "tcId": "TC_CO_038",
       "verifyNote": "",
-      "screenName": "Admin 권한별메뉴"
+      "screenName": "Admin 권한별메뉴",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -1036,7 +1839,7 @@
       "steps": "1) Admin 메뉴별권한 진입 2) 메뉴그룹에서 임의 메뉴 선택",
       "expected": "1) 2) 선택한 메뉴에 대해 각 권한코드별 조회/저장/엑셀/삭제/수정 권한 매트릭스가 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1046,7 +1849,28 @@
       "displayNo": 39,
       "tcId": "TC_CO_039",
       "verifyNote": "[확인필요] 권한별메뉴(TC_CO_037) 화면에서 설정한 값과 상호 일치하는지(양방향 데이터 정합성) 미검증",
-      "screenName": "Admin 메뉴별권한"
+      "screenName": "Admin 메뉴별권한",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -1061,7 +1885,7 @@
       "steps": "1) Admin 배치관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) JOB Name/JOB Group/Cron/Desc/Params/Prev Fire Time/Next Fire Time/State 컬럼과 하단 \"Schedule Log\" 실행 이력 영역이 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1071,7 +1895,28 @@
       "displayNo": 40,
       "tcId": "TC_CO_040",
       "verifyNote": "",
-      "screenName": "Admin 배치관리"
+      "screenName": "Admin 배치관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -1086,17 +1931,38 @@
       "steps": "1) Admin 배치관리 진입 2) \"SCHEDULE 추가\" 버튼 클릭",
       "expected": "1) 2) 신규 배치 스케줄(Cron) 등록 화면(폼)으로 이동한다",
       "testData": "",
-      "result": "",
+      "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "Admin 배치관리 > 테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)",
       "issueLink": "",
       "origin": "신규",
       "system": "BO",
-      "remark": "",
+      "remark": "관련 결함: DEF_데모사이트_040",
       "displayNo": 41,
       "tcId": "TC_CO_041",
       "verifyNote": "",
-      "screenName": "Admin 배치관리"
+      "screenName": "Admin 배치관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -1111,7 +1977,7 @@
       "steps": "1) Admin 로그인내역조회 진입 2) 사용자명 \"devel\" 입력 후 \"조회\" 클릭",
       "expected": "1) 2) devel 계정의 로그인 시도 이력(성공/실패, Access IP, 등록일시)이 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1121,7 +1987,28 @@
       "displayNo": 42,
       "tcId": "TC_CO_042",
       "verifyNote": "",
-      "screenName": "Admin 로그인내역조회"
+      "screenName": "Admin 로그인내역조회",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -1136,7 +2023,7 @@
       "steps": "1) Admin 관리자로그관리 진입 2) 사용자명 \"devel\" 입력 후 \"조회\" 클릭",
       "expected": "1) 2) devel 계정이 이번 세션 중 수행한 조회/저장 등 작업(API 호출) 이력이 프로그램명별로 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1146,7 +2033,28 @@
       "displayNo": 43,
       "tcId": "TC_CO_043",
       "verifyNote": "",
-      "screenName": "Admin 관리자로그관리"
+      "screenName": "Admin 관리자로그관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -1161,7 +2069,7 @@
       "steps": "1) Admin 검색엔진관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) Health/Status/Index/Time Field/UUID/Pri/Rep/Docs Count/Docs Deleted 컬럼과 함께 인덱스 목록이 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1171,7 +2079,28 @@
       "displayNo": 44,
       "tcId": "TC_CO_044",
       "verifyNote": "Health 상태가 실제 정상(green)인지 확인 필요 — 상품/카테고리 검색 기능과 연계된 인프라이므로 이상 시 Front 검색 기능 영향 가능",
-      "screenName": "Admin 검색엔진관리"
+      "screenName": "Admin 검색엔진관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -1186,17 +2115,38 @@
       "steps": "1) Admin Agent관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) Agent ID/Agent Name/Agent Type/Persona/Icon/Description/Active 컬럼과 함께 목록이 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "Admin Agent관리 > Failed to load resource: the server responded with a status of 500 ()",
       "issueLink": "",
       "origin": "신규",
       "system": "BO",
-      "remark": "",
+      "remark": "관련 결함: DEF_데모사이트_041",
       "displayNo": 45,
       "tcId": "TC_CO_045",
       "verifyNote": "",
-      "screenName": "Admin Agent관리"
+      "screenName": "Admin Agent관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -1211,7 +2161,7 @@
       "steps": "1) Admin Agent관리 진입 2) \"등록\" 버튼 클릭",
       "expected": "1) 2) 신규 Agent 등록 화면(폼)으로 이동한다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1221,7 +2171,28 @@
       "displayNo": 46,
       "tcId": "TC_CO_046",
       "verifyNote": "",
-      "screenName": "Admin Agent관리"
+      "screenName": "Admin Agent관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -1236,17 +2207,38 @@
       "steps": "1) Admin Tool관리 진입 2) \"조회\" 버튼 클릭",
       "expected": "1) 2) \"데이터가 없습니다\" 문구와 함께 Tool ID/Tool Name/Tool Group/Description/Active/Implemented 컬럼 구조가 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "Admin Tool관리 > Failed to load resource: the server responded with a status of 500 ()",
       "issueLink": "",
       "origin": "신규",
       "system": "BO",
-      "remark": "",
+      "remark": "관련 결함: DEF_데모사이트_042",
       "displayNo": 47,
       "tcId": "TC_CO_047",
       "verifyNote": "",
-      "screenName": "Admin Tool관리"
+      "screenName": "Admin Tool관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -1261,7 +2253,7 @@
       "steps": "1) Admin Sample 진입",
       "expected": "전시 시작일/종료일 입력, 브랜드/카테고리 선택, 체크박스(1~3번), 제조사/모델명/가격 데이터그리드(Tesla Model Y 등) 예제가 노출된다\n* 실사용 화면이 아닌 UI 컴포넌트 예시 페이지로 확인됨 — QA 대상에서 제외 검토",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1271,7 +2263,28 @@
       "displayNo": 48,
       "tcId": "TC_CO_048",
       "verifyNote": "",
-      "screenName": "Admin Sample"
+      "screenName": "Admin Sample",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -1286,7 +2299,7 @@
       "steps": "1) Admin PUSH관리 진입 2) 발송상태 필터 선택 후 \"조회\" 클릭",
       "expected": "1) 2) 선택한 발송상태에 해당하는 PUSH 발송 이력만 목록에 노출된다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1296,7 +2309,28 @@
       "displayNo": 49,
       "tcId": "TC_CO_049",
       "verifyNote": "",
-      "screenName": "Admin PUSH관리"
+      "screenName": "Admin PUSH관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "majorCategory": "시스템",
@@ -1311,7 +2345,7 @@
       "steps": "1) Admin PUSH관리 진입 2) \"PUSH 등록\" 버튼 클릭",
       "expected": "1) 2) 신규 PUSH 발송 등록 화면(폼)으로 이동한다",
       "testData": "",
-      "result": "",
+      "result": "Pass",
       "assignee": "",
       "issueSummary": "",
       "issueLink": "",
@@ -1321,7 +2355,28 @@
       "displayNo": 50,
       "tcId": "TC_CO_050",
       "verifyNote": "[확인필요] 실제 발송 시 Front 사용자 단말에 반영되는지 여부는 별도 검증 필요",
-      "screenName": "Admin PUSH관리"
+      "screenName": "Admin PUSH관리",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-08-21",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 2,
+          "date": "2026-08-24",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        },
+        {
+          "round": 3,
+          "date": "2026-09-29",
+          "result": "N/T",
+          "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_011)"
+        }
+      ],
+      "resultDate": "2026-10-02"
     },
     {
       "tcId": "TC_CO_051",
@@ -1337,14 +2392,14 @@
       "steps": "1) 헤더 \"🇰🇷 한국어\" 버튼 클릭\n2) 드롭다운에 노출되는 전체 언어 목록 확인",
       "expected": "지원하는 전체 언어 목록(한국어 포함)이 드롭다운에 노출된다 — 기존 TC_CO_001은 드롭다운 노출 여부만 검증, 이 TC는 노출된 전체 목록 자체를 검증",
       "testData": "",
-      "result": "",
+      "result": "Fail",
       "assignee": "",
-      "issueSummary": "",
+      "issueSummary": "시스템 > 테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)",
       "issueLink": "",
       "system": "FO",
       "origin": "신규",
       "displayNo": 51,
-      "remark": "",
+      "remark": "관련 결함: DEF_데모사이트_043",
       "verifyNote": "",
       "screenName": ""
     }

@@ -3,7 +3,7 @@
     "project": "Oliveyoung Global",
     "module": "PD",
     "moduleName": "상품(검색)",
-    "version": 3,
+    "version": 4,
     "changeHistory": [
       {
         "version": 1,
@@ -19,6 +19,11 @@
         "version": 3,
         "date": "2026-10-02",
         "summary": "DEF_Oliveyoung Global_001 관련 TC 24건 Fail → N/T 재분류 (AGENTS.md 20-7항) — 실제 원인이 올리브영 자사 analytics(fbapi.oliveyoung.com) CORS 헤더 누락으로 등록된 기존 결함이며, 해결 전까지 깨끗한 Pass/Fail 판정이 불가능함"
+      },
+      {
+        "version": 4,
+        "date": "2026-10-02",
+        "summary": "results/ 날짜별 스냅샷(2026-10-01)에서 과거 실행 이력을 소급 반영 — TC별 resultHistory 재구성(24건, 사용자 요청)"
       }
     ]
   },
@@ -71,7 +76,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "관련 결함: DEF_Oliveyoung Global_001"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_003",
@@ -96,7 +109,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "관련 결함: DEF_Oliveyoung Global_002"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_004",
@@ -121,7 +142,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_003"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_005",
@@ -146,7 +175,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_004"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_006",
@@ -171,7 +208,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_005"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_007",
@@ -196,7 +241,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "관련 결함: DEF_Oliveyoung Global_006"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_008",
@@ -221,7 +274,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "관련 결함: DEF_Oliveyoung Global_007"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_009",
@@ -246,7 +307,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_008"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_010",
@@ -271,7 +340,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_009"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_011",
@@ -296,7 +373,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_010"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_012",
@@ -321,7 +406,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 모바일 입력창 maxlength=165와의 관계 포함 확인 필요",
       "verifyNote": "관찰 시 PC 검색창에는 maxlength가 없어 200자가 입력되나 제출 시 이동하지 않음 — 의도된 길이 제한 정책인지 스펙 확정 필요",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "모바일 입력창 maxlength=165와의 관계 포함 확인 필요; 관련 결함: DEF_Oliveyoung Global_011"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_013",
@@ -346,7 +439,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 개발자도구 Elements 탭에서 입력창 maxlength 속성 확인 (F12)",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "개발자도구 Elements 탭에서 입력창 maxlength 속성 확인 (F12); 관련 결함: DEF_Oliveyoung Global_026"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_014",
@@ -371,7 +472,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_012"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_015",
@@ -396,7 +505,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_013"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_016",
@@ -421,7 +538,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_014"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_017",
@@ -446,7 +571,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_015"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_018",
@@ -496,7 +629,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001); 검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "검색 결과 화면은 봇 차단으로 관찰 불가하여 범위 제외 — 이동 URL까지만 검증; 관련 결함: DEF_Oliveyoung Global_017"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_020",
@@ -521,7 +662,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "관련 결함: DEF_Oliveyoung Global_018"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_021",
@@ -546,7 +695,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "관련 결함: DEF_Oliveyoung Global_019"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_022",
@@ -571,7 +728,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "관련 결함: DEF_Oliveyoung Global_020"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_023",
@@ -596,7 +761,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "관련 결함: DEF_Oliveyoung Global_021"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_024",
@@ -621,7 +794,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "관련 결함: DEF_Oliveyoung Global_022"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_025",
@@ -646,7 +827,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "관련 결함: DEF_Oliveyoung Global_023"
+        }
+      ]
     },
     {
       "tcId": "TC_PD_027",
@@ -671,7 +860,15 @@
       "system": "FO",
       "remark": "해당 결함에 따른 테스트 불가 (관련 결함: DEF_Oliveyoung Global_001)",
       "verifyNote": "",
-      "screenName": "메인 헤더 검색"
+      "screenName": "메인 헤더 검색",
+      "resultHistory": [
+        {
+          "round": 1,
+          "date": "2026-10-01",
+          "result": "Fail",
+          "remark": "관련 결함: DEF_Oliveyoung Global_025"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>데모사이트 이벤트/기획전/쿠폰행사 실행결과 스냅샷 (2026-10-02)</title>
+<style>
+  :root{ --bg:#f6f8fa; --panel:#fff; --text:#1f2328; --muted:#656d76; --border:#d0d7de; --accent:#0969da;
+    --p1:#cf222e; --p2:#9a6700; --p3:#0969da; --pass:#1a7f37; --fail:#cf222e; }
+  body{font-family:"Pretendard",sans-serif;background:var(--bg);color:var(--text);margin:0;padding:24px;}
+  h1{font-size:17px;} .sub{font-size:12.5px;color:var(--muted);margin-bottom:16px;}
+  .kpis{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap;}
+  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;min-width:80px;}
+  .kpi .num{font-size:18px;font-weight:700;} .kpi .label{font-size:11.5px;color:var(--muted);}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--panel);}
+  th,td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top;}
+  th{background:var(--bg);text-align:center;}
+  .badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;color:#fff;}
+  .badge.P1{background:var(--p1);} .badge.P2{background:var(--p2);} .badge.P3{background:var(--p3);}
+  .res-Pass{color:var(--pass);font-weight:700;} .res-Fail{color:var(--fail);font-weight:700;}
+  a{color:var(--accent);}
+  .links{margin:10px 0 18px;font-size:12.5px;}
+</style>
+</head>
+<body>
+<h1>데모사이트 · 이벤트/기획전/쿠폰행사(PR) 실행결과 스냅샷</h1>
+<div class="sub">실행일 2026-10-02 · 이 페이지는 그 시점의 읽기 전용 스냅샷입니다(수정 불가) — 최신 편집 가능한 뷰어는 아래 링크를 이용하세요.</div>
+<div class="links">
+  <a href="index.html">← 실행 이력 목록</a> ·
+  <a href="../데모사이트_TC_PR.html">최신 TC 뷰어(PR)</a>
+</div>
+<div class="kpis">
+  <div class="kpi"><div class="num">13</div><div class="label">전체</div></div>
+  <div class="kpi"><div class="num">5</div><div class="label">Pass</div></div>
+  <div class="kpi"><div class="num">6</div><div class="label">Fail</div></div>
+  <div class="kpi"><div class="num">2</div><div class="label">N/A</div></div>
+  <div class="kpi"><div class="num">0</div><div class="label">N/T</div></div>
+  <div class="kpi"><div class="num">0</div><div class="label">미실행</div></div>
+</div>
+<table>
+<thead><tr><th>No.</th><th>TC ID</th><th>대분류</th><th>중분류</th><th>화면명</th><th>우선순위</th><th>테스트항목</th><th>실행결과</th><th>이슈내용</th><th>비고</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td><td>TC_PR_001</td><td>구매프로세스</td><td>Admin쿠폰관리</td>
+<td>Admin 쿠폰관리</td><td><span class="badge P1">P1</span></td>
+<td>Admin 쿠폰관리 등록된 쿠폰 행사 목록 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>2</td><td>TC_PR_002</td><td>구매프로세스</td><td>Admin쿠폰관리</td>
+<td>Admin 쿠폰관리</td><td><span class="badge P2">P2</span></td>
+<td>쿠폰유형 구분(상품쿠폰/즉시할인/장바구니쿠폰) 데이터 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>3</td><td>TC_PR_003</td><td>구매프로세스</td><td>Admin쿠폰관리</td>
+<td>Admin 쿠폰관리</td><td><span class="badge P2">P2</span></td>
+<td>쿠폰유형/사용여부/기간 필터 조회 동작 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>4</td><td>TC_PR_004</td><td>구매프로세스</td><td>Admin쿠폰관리</td>
+<td>Admin 쿠폰관리</td><td><span class="badge P2">P2</span></td>
+<td>&quot;등록&quot; 버튼 클릭 시 쿠폰 행사 등록 화면 이동 검증</td><td class="res-Pass">Pass</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>5</td><td>TC_PR_005</td><td>구매프로세스</td><td>Admin쿠폰관리</td>
+<td></td><td><span class="badge P1">P1</span></td>
+<td>[확인필요] Admin에 등록된 쿠폰이 Front 마이페이지 쿠폰함(MY_012)에 실제 반영되는지 검증</td><td class="res-Fail">Fail</td>
+<td>구매프로세스 &gt; 테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)</td><td>해당 결함에 따른 테스트 불가 (관련 결함: DEF_데모사이트_001, DEF_데모사이트_002); 관련 결함: DEF_데모사이트_044</td>
+</tr>
+<tr>
+<td>6</td><td>TC_PR_006</td><td>전시</td><td>메인배너</td>
+<td>메인</td><td><span class="badge P2">P2</span></td>
+<td>&quot;99% 쿠폰 드로우&quot; 배너 상세보기 CTA 이동 경로 검증</td><td class="res-Fail">Fail</td>
+<td>사이트 전반 &gt; 프로토콜 누락된 배너/링크(www.naver.com 등)가 내부 경로로 오인식되어 다수 화면에서 404 발생</td><td>관련 결함: DEF_데모사이트_007</td>
+</tr>
+<tr>
+<td>7</td><td>TC_PR_007</td><td>전시</td><td>메인배너</td>
+<td>메인</td><td><span class="badge P2">P2</span></td>
+<td>&quot;지금 사야 입어요&quot; 배너 상세보기 CTA 이동 경로 검증</td><td class="res-Fail">Fail</td>
+<td>메인 &gt; Failed to load resource: the server responded with a status of 404 (No</td><td>관련 결함: DEF_데모사이트_036</td>
+</tr>
+<tr>
+<td>8</td><td>TC_PR_008</td><td>전시</td><td>메인배너</td>
+<td>메인</td><td><span class="badge P2">P2</span></td>
+<td>&quot;라이프 블프&quot; 배너 상세보기 CTA 이동 경로 검증</td><td class="res-Fail">Fail</td>
+<td>메인 &gt; Failed to load resource: the server responded with a status of 404 (No</td><td>관련 결함: DEF_데모사이트_036</td>
+</tr>
+<tr>
+<td>9</td><td>TC_PR_009</td><td>구매프로세스</td><td>Admin대행사관리</td>
+<td>Admin 대행사관리</td><td><span class="badge P3">P3</span></td>
+<td>Admin 대행사관리 목록 컬럼 노출 검증</td><td class="res-Pass">Pass</td>
+<td></td><td>2026-09-30 ko-KR 로케일 격리(전역 locale 고정 해제) 적용 후 재실행 — DEF_데모사이트_011에 막히지 않고 5.1초 만에 정상 Pass 확인</td>
+</tr>
+<tr>
+<td>10</td><td>TC_PR_010</td><td>구매프로세스</td><td>Front-Admin정합성</td>
+<td></td><td><span class="badge P2">P2</span></td>
+<td>[확인필요] Admin 가격할인관리(소행사관리) 등록 행사가 Front 상품 할인가에 반영되는지 검증</td><td class="res-Fail">Fail</td>
+<td>구매프로세스 &gt; Error: expect(received).toBe(expected) // Object.is equality</td><td>관련 결함: DEF_데모사이트_045</td>
+</tr>
+<tr>
+<td>11</td><td>TC_PR_011</td><td>구매프로세스</td><td>쿠폰E2E</td>
+<td>Admin 쿠폰관리</td><td><span class="badge P2">P2</span></td>
+<td>Admin 쿠폰 발급 처리 검증</td><td class="res-N/A">N/A</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>12</td><td>TC_PR_012</td><td>구매프로세스</td><td>쿠폰E2E</td>
+<td>마이페이지 쿠폰</td><td><span class="badge P1">P1</span></td>
+<td>Admin 발급 쿠폰의 Front 마이페이지 쿠폰함 반영 검증</td><td class="res-N/A">N/A</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td>13</td><td>TC_PR_013</td><td>구매프로세스</td><td>쿠폰E2E</td>
+<td>결제하기</td><td><span class="badge P3">P3</span></td>
+<td>[확인필요] 결제하기 화면 쿠폰 적용 시 할인 금액 반영 검증</td><td class="res-Fail">Fail</td>
+<td>결제하기 &gt; 테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)</td><td>관련 결함: DEF_데모사이트_046</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
