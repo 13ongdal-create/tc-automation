@@ -242,12 +242,18 @@
         "at": "2026-09-29",
         "status": "신규",
         "note": "CO 모듈 케이스 고도화 조사 중 재확인: 언어선택/헤더메뉴/반응형/크로스브라우저/오프라인/키보드포커스/다크모드 등 전혀 무관한 기능을 검증하던 TC 9건(TC_CO_001/002/003/009/010/011/012/015/020)이 이 결함과 동일 시그니처(www.naver.com!?_rsc=... 404)로 개별 결함(DEF_024~032)이 자동 등록됐음을 확인. 근본원인 동일하여 DEF_024~032는 이 결함으로 통합 관리(아래 각 레코드 참조). 재현율은 여전히 간헐적(같은 날 재관찰 시 일부 TC에서만 재현)."
+      },
+      {
+        "at": "2026-10-02",
+        "status": "신규",
+        "note": "테스트 실행 큐 재실행에서도 동일하게 실패"
       }
     ],
     "testEnv": "Chromium (Playwright), http://192.168.10.116:30180",
     "testSteps": "1) 메인(/) 진입\n2) 배너 1~3번 각각의 \"상세보기\" 버튼 클릭\n3) /event, /events, /promotion, /campaign, /coupon, /coupon-event 직접 접속 시도",
     "actualResult": "배너 3종(\"99% 쿠폰 드로우\"/\"지금 사야 입어요\"/\"라이프 블프\")의 \"상세보기\" CTA href가 각각 www.naver.com!, www.3top.co.kr, www.google.com(프로토콜 없음)으로 설정되어 사이트 내부 상대경로로 오인식되어 3건 모두 404 발생. 대체 목적지 경로(/event, /events, /promotion, /campaign, /coupon, /coupon-event) 6종도 전수 확인했으나 모두 404 — 2026-08-21 Phase 5 전체 재실행 중 동일 원인(href 프로토콜 누락)이 메인배너 외에도 카테고리 하이라이트 배너(TC_PD_092~094), 브랜드관 히어로 CTA(TC_PD_104/105), 입점 브랜드 링크(TC_PD_102), 푸터(TC_PD_120), 비로그인/로그인 GNB(TC_MB_036/043, TC_MY_013) 등 사이트 전반의 공유 배너/푸터 컴포넌트에서 광범위하게 발생함을 확인 — 메인 페이지 국한 이슈가 아니라 사이트 전역 영향.",
-    "expectedResult": "각 배너에 대응하는 이벤트/기획전 상세 페이지로 정상 이동해야 함"
+    "expectedResult": "각 배너에 대응하는 이벤트/기획전 상세 페이지로 정상 이동해야 함",
+    "consoleLog": "TC/defects/DEF_데모사이트_007.console.json"
   },
   {
     "defectId": "DEF_데모사이트_008",
@@ -1145,11 +1151,13 @@
     "defectId": "DEF_데모사이트_036",
     "tcId": "TC_CO_016",
     "tcIds": [
-      "TC_CO_016"
+      "TC_CO_016",
+      "TC_PR_007",
+      "TC_PR_008"
     ],
     "module": "품질·비기능",
     "screenName": "메인",
-    "severity": "Minor",
+    "severity": "Major",
     "status": "신규",
     "summary": "메인 > Failed to load resource: the server responded with a status of 404 (No",
     "testEnv": "",
@@ -1167,6 +1175,16 @@
         "at": "2026-10-02",
         "status": "신규",
         "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      },
+      {
+        "at": "2026-10-02",
+        "status": "신규",
+        "note": "동일 원인으로 관련 TC 추가: TC_PR_007 (자동 통합)"
+      },
+      {
+        "at": "2026-10-02",
+        "status": "신규",
+        "note": "동일 원인으로 관련 TC 추가: TC_PR_008 (자동 통합)"
       }
     ]
   },
@@ -1363,6 +1381,93 @@
     "source": "automation",
     "screenshot": "TC/defects/DEF_데모사이트_043.png",
     "consoleLog": "TC/defects/DEF_데모사이트_043.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-10-02",
+        "status": "신규",
+        "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      }
+    ]
+  },
+  {
+    "defectId": "DEF_데모사이트_044",
+    "tcId": "TC_PR_005",
+    "tcIds": [
+      "TC_PR_005"
+    ],
+    "module": "구매프로세스",
+    "screenName": "",
+    "severity": "Critical",
+    "status": "신규",
+    "summary": "구매프로세스 > 테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)",
+    "testEnv": "",
+    "testSteps": "1) Admin에서 쿠폰 행사 발급 대상/조건 확인 2) jspark81로 Front 로그인 후 마이페이지 쿠폰(/mypage쿠폰(/coupon)) 진입",
+    "actualResult": "테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)\n콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n실패 요청:\n  404 http://192.168.10.116:30180/forgot-password?_rsc=asqg6\n  404 http://192.168.10.116:30180/policy?_rsc=asqg6\n  404 http://192.168.10.116:30180/service?_rsc=asqg6\nTest timeout of 30000ms exceeded.",
+    "expectedResult": "1) 2) 발급 조건에 해당하면 Front 마이페이지 쿠폰함에 쿠폰이 노출되어야 하나, 현재 jspark81의 쿠폰함은 비어있음(TC_MY_012)",
+    "detectedAt": "2026-10-02",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_데모사이트_044.png",
+    "consoleLog": "TC/defects/DEF_데모사이트_044.console.json",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-10-02",
+        "status": "신규",
+        "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      }
+    ]
+  },
+  {
+    "defectId": "DEF_데모사이트_045",
+    "tcId": "TC_PR_010",
+    "tcIds": [
+      "TC_PR_010"
+    ],
+    "module": "구매프로세스",
+    "screenName": "",
+    "severity": "Major",
+    "status": "신규",
+    "summary": "구매프로세스 > Error: expect(received).toBe(expected) // Object.is equality",
+    "testEnv": "",
+    "testSteps": "1) [BO] Admin 가격할인관리에서 임의 상품에 가격할인 행사 등록\n2) [FO] Front 해당 상품 PDP·카테고리 목록에서 할인가/할인율 배지 확인",
+    "actualResult": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false",
+    "expectedResult": "1) 2) Admin에 등록한 할인율이 Front 상품가·배지(예: \"-32%\")에 정확히 반영되어야 함",
+    "detectedAt": "2026-10-02",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_데모사이트_045.png",
+    "consoleLog": "",
+    "assignee": "",
+    "issueLink": "",
+    "history": [
+      {
+        "at": "2026-10-02",
+        "status": "신규",
+        "note": "테스트 실행 큐(Playwright) 자동 실행 중 최초 발견"
+      }
+    ]
+  },
+  {
+    "defectId": "DEF_데모사이트_046",
+    "tcId": "TC_PR_013",
+    "tcIds": [
+      "TC_PR_013"
+    ],
+    "module": "구매프로세스",
+    "screenName": "결제하기",
+    "severity": "Minor",
+    "status": "신규",
+    "summary": "결제하기 > 테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)",
+    "testEnv": "",
+    "testSteps": "1) 결제하기(/checkout) 화면 진입\n2) 쿠폰 적용 UI에서 보유 쿠폰 선택",
+    "actualResult": "테스트 타임아웃 발생 (지정된 시간 내 완료되지 않음)\n콘솔 에러:\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n  Failed to load resource: the server responded with a status of 404 (Not Found)\n실패 요청:\n  404 http://192.168.10.116:30180/forgot-password?_rsc=asqg6\n  404 http://192.168.10.116:30180/policy?_rsc=asqg6\n  404 http://192.168.10.116:30180/service?_rsc=asqg6\nTest timeout of 30000ms exceeded.",
+    "expectedResult": "[확인필요] 쿠폰 할인이 총 결제 금액에 반영되어야 할 것으로 예상되나, 2026-09-29 관찰 결과 결제하기 화면에 쿠폰 적용 UI 자체가 확인되지 않음(결제수단 선택 UI 부재와 같은 맥락, TC_OP_033 참조) — 재관찰 필요",
+    "detectedAt": "2026-10-02",
+    "source": "automation",
+    "screenshot": "TC/defects/DEF_데모사이트_046.png",
+    "consoleLog": "TC/defects/DEF_데모사이트_046.console.json",
     "assignee": "",
     "issueLink": "",
     "history": [
