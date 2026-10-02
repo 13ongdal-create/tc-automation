@@ -515,11 +515,8 @@ function resultSelect(t) {
   const hist = t.resultHistory || [];
   if (!hist.length) return sel;
   const round = hist.length + 1;
-  // [수정 2026-10-02] 과거 회차만 나열해 "N차인데 N-1개만 보인다"는 혼란이 있었음(사용자 리포트) —
-  // 현재 회차도 "(현재)" 표시로 함께 나열해 전체 N개가 한 번에 보이도록 수정.
-  const rows = hist.map((h) => `${h.round}차(${h.date}): ${h.result || '미실행'}${h.remark ? ' — ' + h.remark : ''}`);
-  rows.push(`${round}차(${t.resultDate || '날짜 미상'}): ${t.result || '미실행'}${t.remark ? ' — ' + t.remark : ''} (현재)`);
-  return `${sel}<span class="result-round" title="${esc(rows.join('\n'))}">${round}차</span>`;
+  const tooltip = hist.map((h) => `${h.round}차(${h.date}): ${h.result || '미실행'}${h.remark ? ' — ' + h.remark : ''}`).join('\n');
+  return `${sel}<span class="result-round" title="${esc(tooltip)}">${round}차</span>`;
 }
 
 function handleThumbError(img) {
